@@ -1,0 +1,74 @@
+---
+title: "Data Sharing Guidelines"
+author: "Julian Gan and Brett Johnson"
+date: "August 28, 2017"
+output: html_document
+---
+
+# Hakai Institute Juvenile Salmon Program Data Sharing Guidelines
+## Policy on Data Sharing
+This guideline applies to any researcher or collaborator who has worked with the Hakai Juvenile Salmon Program (JSP), or has collected data from samples collected using resources provided by the Hakai Institute. It is expected that all data generated from sample processing be shared with the Hakai Institute. This data may be incorporated into the open access Hakai Ecological Information Management System (EIMS), receive a digital object identifier (DOI) and ultimately become a citable data package that includes appropriate attribution to the author and any conditions the author may request. The goal of this guide is to provide a framework for collaborators to organize their raw data into a tidy data set to facilitate this process.
+
+Collaborators, including graduate students, should make their data available following the publication of their research paper. When submitting information, you should present a tidy data set (Wickham 2014), as well as a code book describing each variable in the tidy data set. We recommend you follow these guidelines from the very start of your project, laying out your tidy data tables before you start collecting data. 
+
+## The Tidy Data Table
+The purpose of having tidy data is to enable seamless integration with other associated JSP data in the Hakai EIMS. It is compiled from raw data obtained from sample processing, which has been cleaned and organized into a standardized format. The raw data should have already undergone quality assurance/quality control; however, beyond that, data values should not have undergone any other form of modification (e.g. summarization, removals, or omissions). The general structure of a tidy data table is as follows:
+
+1. Each variable measured should be in one column
+2. Each different observation of that variable should be in a different row
+3. Each type of observation unit (or variable type) should be a separate table
+4. If you have multiple tables, each table should include a column that allows them to be joined or merged. This collection of tidy data tables forms a tidy data set..
+
+### Organizing data
+For each data table, what constitutes an ‘observation’ and therefore a row, may be different. It is better to store data that are at different levels in a relational hierarchy like this, in separate tables, so that each table is tidy. For example, it is common, but not ideal, to enter all your data from a survey on one row like this:
+
+survey.id | date | sea.state | cloud.cover | temp.0m | temp.1m
+--- | --- | --- | --- | --- | ---
+D123 | 2017-07-01 | 1 | 25 | 13.4 | 12.2
+D124 | 2017-07-02 | 2 | 100 | 15.5| 14.5
+
+In the above example, the unit of observation is a survey. Including the temperature data in the survey table, as above, makes the temperature data table not tidy—there is more than one observation of the temperature variable in the same row. Therefore, variables which have multiple observations per survey, must be stored in a separate data table, as in the example below. The unit of observation in this table is a temperature measurement. Dividing up data into different tables, depending on what you classify as a unit of observation is the foundation of creating tidy data tables. 
+
+survey.id | depth | temp
+--- | --- | ---
+D123 | 0 | 13.4
+D123 | 1 | 12.2
+D124 | 0 | 15.5
+D124 | 1 | 14.5
+
+Lastly, each data table must have one column in common—a primary key column— that allows you to join data tables (survey.id in this case). Aside from having a column to relate each observation to a primary key, avoid having more than one common variable between tables, in order to minimize unnecessary data replication. 
+
+### Cleaning and formatting data
+
+If an observation does not have a recorded variable (i.e., a blank cell), that cell should be filled with NA
+Dates and times should follow the ISO format. Dates should be expressed as `yyyy-mm-dd` and times should be in 24-hour as `hh:mm:ss`.
+The top row of each column should be a header, and follow an unambiguous naming scheme, e.g. `ageclass` instead of `AC`. Do not use spaces in column header names (periods or underscores are acceptable), and avoid capitalization.
+
+### File formatting
+If you’re using excel, each tidy data table should be in a separate .CSV file (not multiple worksheets in an .xlsx workbook). The files should not have any macros applied to the data, and no columns/cells should be highlighted, emboldened, italicized, colour coded, etc.
+
+## Code Book
+Included along with the submission of the tidy data set is a code book, which contains information about each variable:
+
+* The full name of the variable
+* Unit of measurement
+* Full description of collection method (equipment, protocol, methods). You may want to cite papers that have full method description that you followed, or point to a manufacturer's website for the piece of equipment you used.
+* Notes: Can be anything you think is relevant. For example, how the variable should or should not be used during analysis.
+
+The code book can be presented as either a Word or Excel file and should be broken up so that it’s clear what data table each variable resides in. For example:
+
+
+#### Survey Data Table
+Variable | Unit | Method | Notes
+--- | --- | --- | ---
+| | |
+
+#### Oceanographic Data Table
+Variable | Unit | Method | Notes
+--- | --- | --- | ---
+| | |
+
+
+#### Literature Cited:
+
+Wickham, H. (2014). Tidy Data. Journal of Statistical Software. Vol. 89.10:1–23.

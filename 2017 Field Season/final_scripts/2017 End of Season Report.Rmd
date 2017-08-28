@@ -1,0 +1,383 @@
+---
+title: "2017 End of Season Report"
+author: "Brett Johnson"
+date: "8/9/2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(lubridate)
+library(tidyverse)
+library(knitr)
+library(googlesheets)
+library(ggjoy)
+knitr::opts_chunk$set(echo = TRUE)
+theme_set(theme_bw())
+#source("./data import scripts/import_lab_data.R")
+#source("./data_import_scripts/import_2017_field_data.R")
+
+
+```
+
+```{r import data}
+
+field_data_workbook_2017 <- gs_title("field_data_2017")
+field_2017 <- gs_read(field_data_workbook_2017,ws = "field_data_2017")
+field_2017 <- field_2017 [-1, ] 
+write_csv(field_2017, "../raw_data/field_2017.csv")
+field_2017 <- read_csv("../raw_data/field_data_2017.csv") 
+field_2017$sampling.week <- NA
+field_2017$sampling.week[field_2017$date >= as.Date("2017-05-03") & field_2017$date <= as.Date("2017-05-08")] <- 1
+field_2017$sampling.week[field_2017$date >= as.Date("2017-05-09") & field_2017$date <= as.Date("2017-05-15")] <- 2
+field_2017$sampling.week[field_2017$date >= as.Date("2017-05-16") & field_2017$date <= as.Date("2017-05-22")] <- 3
+field_2017$sampling.week[field_2017$date >= as.Date("2017-05-23") & field_2017$date <= as.Date("2017-06-29")] <- 4
+field_2017$sampling.week[field_2017$date >= as.Date("2017-05-30") & field_2017$date <= as.Date("2017-06-05")] <- 5
+field_2017$sampling.week[field_2017$date >= as.Date("2017-06-06") & field_2017$date <= as.Date("2017-06-12")] <- 6
+field_2017$sampling.week[field_2017$date >= as.Date("2017-06-13") & field_2017$date <= as.Date("2017-06-19")] <- 7
+field_2017$sampling.week[field_2017$date >= as.Date("2017-06-20") & field_2017$date <= as.Date("2017-06-26")] <- 8
+field_2017$sampling.week[field_2017$date >= as.Date("2017-06-27") & field_2017$date <= as.Date("2017-07-03")] <- 9
+field_2017$sampling.week[field_2017$date >= as.Date("2017-07-04") & field_2017$date <= as.Date("2017-07-10")] <- 10
+field_2017$sampling.week[field_2017$date >= as.Date("2017-07-11") & field_2017$date <= as.Date("2017-07-18")] <- 11
+
+field_2017$sampling.week <- as.factor(field_2017$sampling.week)
+
+sea_lice_2017 <- gs_read(field_data_workbook_2017, ws = "sea_lice")
+sea_lice_2017 <- sea_lice_2017[-1,]
+getwd()
+write_csv(sea_lice_2017, "../raw_data/sea_lice_2017.csv")
+sea_lice_2017 <- read_csv("../raw_data/sea_lice_2017.csv")
+
+package_2017 <- gs_read(field_data_workbook_2017, ws = "package_inventory")
+package_2017 <- package_2017[-1,]
+write_csv(package_2017, "../raw_data/package_2017.csv")
+package_2017 <- read_csv("../raw_data/package_2017.csv")
+```
+
+```{r zone effort}
+zone_effort <- field_2017 %>%
+  filter(region == "DI") %>% 
+  select(survey.id, zone) %>% 
+  distinct(survey.id, .keep_all = TRUE) %>%  
+  filter(!survey.id %in% c("DE457","DE458","DE459","DE460","DE461","DE462","DE463","DE464")) %>%
+  # The line above removes Sam James's MSc seines from this analysis becuse they are outside the 
+  # standardized effort required for cumulative abundance analysis to be unbiased. 
+  group_by(zone) %>% 
+  summarize(n = n())
+
+kable(zone_effort)  
+  
+so_cpue <- field_2017 %>%
+  replace(is.na(.),0) %>%
+  filter(!survey.id %in% c("DE457","DE458","DE459","DE460","DE461","DE462","DE463","DE464")) %>%
+  # The line above removes Sam James's MSc seines from this analysis becuse they are outside the 
+  # standardized effort required for cumulative abundance analysis to be unbiased. 
+  filter(region == "DI") %>% 
+  group_by(zone) %>% 
+  summarise(so.cpue = mean(so.total, na.rm = TRUE))
+
+kable(so_cpue)
+
+effort_cpue <- left_join(so_cpue, zone_effort)
+effort_cpue_plot <- ggplot(effort_cpue, aes(x = so.cpue, y = n)) +
+  geom_point() +
+  geom_smooth(method = lm)
+effort_cpue_plot + ggtitle("effort vs CPUE")
+```
+
+```{r time each of the first ten sockeye are out of the water}
+head(sea_lice_2017)
+
+sea_lice_duration_out <- sea_lice_2017 %>% 
+  select(ufn.or.no, region, time.out, time.dewar) %>% 
+  mutate(duration.out = (time.dewar - time.out)/60) %>% 
+  na.omit()
+(mean(sea_lice_duration_out$duration.out))
+ggplot(sea_lice_duration_out, aes(x = duration.out)) +
+  geom_histogram(binwidth = 2)+
+  xlim(2,25) +
+  xlab("Duration Out (minutes)")+
+  ylab("Count")
+
+ggsave("../exploratory_figures/first_ten_sockeye_out_duration.png", width = 5, height = 3)
+```
+
+```{r package time}
+package_duration <- package_2017 %>% 
+  select(survey.id, time.dewar, time.out) %>% 
+  mutate(duration = (time.dewar - time.out)/60) %>% 
+  na.omit() %>% 
+  filter(duration < 50)
+
+package_duration_gt_10 <- package_2017 %>% 
+  filter(number.of.fish == 10) %>% 
+  select(survey.id, time.dewar, time.out) %>% 
+  mutate(duration = (time.dewar - time.out)/60) %>% 
+  na.omit() %>% 
+  filter(duration < 50)
+
+(package_duration_mean <- mean(package_duration$duration)) # mean processing time of all packages that didn't get sea liced regardless of how many fish there are.
+(mean(package_duration_gt_10$duration)) # mean processing time of packages with 10 fish that didn't get sea liced.
+
+ggplot(package_duration, aes(x = duration)) +
+  geom_histogram(binwidth = 3) +
+  xlim(0,40) +
+  xlab("Duration (mins)")
+ggsave("../exploratory_figures/package_duration.png", width = 5, height = 3)
+
+package_duration_outliers <- package_duration %>% 
+  filter(duration <= 0 | duration > 50)
+
+head(package_2017)
+head(package_duration)
+
+# Calculate the time required for sea-licing 10 sockeye
+
+# First find out which packages didn't have 10 sockeye
+lice_package <- sea_lice_2017 %>% 
+  filter(!is.na(time.out)) %>% 
+  group_by(package.id) %>% 
+  summarise(n = n())
+
+# Calculate processing time
+lice_package <- sea_lice_2017 %>% 
+  filter(!is.na(time.out)) %>%
+  filter(!package.id %in% c("DP129", "DP25", "DP89", "JP81")) %>% # Filters out packages with < 10 fish
+  group_by(package.id) %>% 
+  filter(time.out == min(time.out)) %>%
+  select(date, package.id, time.out, time.dewar) %>% 
+  mutate(diff = (time.dewar - time.out)/60)
+
+ggplot(lice_package, aes(x=diff)) +
+  geom_histogram(binwidth = 3)
+
+(mean(lice_package$diff))
+
+```
+
+```{r processing time}
+
+field_package <- field_2017 %>% 
+  select(region, seine.id, time, so.taken, pi.taken, cu.taken, he.taken, co.taken, ck.taken) %>% 
+  dplyr::rename(SO = so.taken, PI = pi.taken, CU = cu.taken, HE = he.taken, CO = co.taken, CK = ck.taken) %>% 
+  gather(SO, PI, CU, HE, CO, CK, key = species, value = "n") %>% 
+  na.omit() %>% 
+  mutate(id = paste(seine.id,"-", species))
+
+time <- package_2017 %>% 
+  filter(field.liced.status == "N") %>% 
+  select(seine.id, time.dewar, species) %>% 
+  na.omit() %>% 
+  mutate(id = paste(seine.id,"-", species))
+
+field_times <- left_join(field_package, time, by = "id") %>% 
+  select(seine.id.y, time, time.dewar) %>% 
+  na.omit()
+
+process_time <- field_times %>% 
+  mutate(diff = ((time.dewar - time)/60)/60) %>% 
+  group_by(seine.id.y) %>% 
+  filter(diff == max(diff)) %>% 
+  rename(seine.id = seine.id.y)
+
+ggplot(process_time, aes(x = diff)) +
+  geom_histogram(binwidth = .2) +
+  xlim(0, 3) +
+  xlab("Processing Time (hrs)")
+ggsave("../exploratory_figures/processing_histo.png")
+
+n_fish_per_seine <- field_package %>% 
+  group_by(seine.id) %>% 
+  mutate(total.fish = sum(n)) %>% 
+  distinct(seine.id, .keep_all = T) %>% 
+  select(seine.id, total.fish, region)
+
+process_time <- left_join(process_time, n_fish_per_seine, by = "seine.id")
+
+ggplot(process_time, aes(x = diff, y = total.fish)) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  xlim(0,3.5) +
+  ylim(0,75)+
+  xlab("Processing Time (hrs)")+
+  ylab("Number of Fish Processed")
+
+ggsave("../exploratory_figures/total_fish_process_time_lm.png")
+
+```
+
+```{r number of sea lice seines}
+
+sea_lice_seines <- sea_lice_2017 %>% 
+  select(date, region, species, seine.id, time.out) %>% 
+  filter(is.na(time.out)) %>% # this removes the seines that were strictly retention seines and not sea-lice seines.
+  group_by(region, date, seine.id, species) %>% 
+  summarize(n = n())
+  
+ggplot(sea_lice_seines, aes(x = seine.id, y = species, colour = n)) +
+  geom_point(size = 3) +
+  scale_color_gradient() +
+  facet_wrap(~ region, scales = 'free_x') +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggsave("../exploratory_figures/sea_lice_seine_distribution.png", height = 3, width = 5)
+
+head(sea_lice_seines)
+```
+
+```{r Catch Statistics}
+
+field_2017_sites_spp_summary <- field_2017 %>%
+  select(date, site.id, so.taken, pi.taken, cu.taken, co.taken, he.taken, ck.taken, region, zone) %>% 
+  gather(so.taken, pi.taken, cu.taken, co.taken, he.taken, ck.taken, key = "species", value = "n") %>% 
+  replace(is.na(.),0) %>% 
+  filter(n < 55 & n >= 0)
+
+ggplot(field_2017_sites_spp_summary, aes(x = date, y = site.id, fill = n)) +
+  geom_point(size = 3, shape = 21) +
+  scale_fill_gradient(low = "white", high = "black") +
+  facet_wrap( ~ species) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggsave("../exploratory_figures/site_success.png", width = 6, height = 6)
+
+
+collection_summary_site_spp <- field_2017_sites_spp_summary %>% 
+  group_by(site.id, species) %>% 
+  summarize(n = sum(n)) 
+
+kable(collection_summary_site_spp)
+
+#Sockeye by Zone
+
+field_2017_zone_so_summary <- field_2017 %>%
+  select(date, region, zone, so.taken) %>% 
+  na.omit()
+
+sockeye_zone_success <- ggplot(field_2017_zone_so_summary, aes(x = date, y = zone, colour = so.taken)) +
+  geom_point(size = 3) +
+  scale_colour_gradient() +
+  facet_wrap( ~ region, scales = "free_y")
+
+sockeye_zone_success         
+ggsave("../exploratory_figures/sockeye_zone_success.png", width = 6, height = 3)
+
+collection_summary_zone_sp <- field_2017_sites_spp_summary %>%
+  filter(species == "so.taken") %>% 
+  group_by(region,zone, species) %>% 
+  summarize(n = sum(n))
+
+kable(collection_summary_zone_sp, type = "markdown")
+
+collection_summary_spp <- field_2017_sites_spp_summary %>% 
+  group_by(species) %>% 
+  summarize(n = sum(n)) %>% 
+  add_row (species = "Total", n = 1112)
+
+kable(collection_summary_spp, type = "markdown")
+
+collection_summary_spp_sites <- field_2017_sites_spp_summary %>% 
+  group_by(site.id, species) %>% 
+  summarize(n = sum(n, na.rm = T)) %>% 
+  filter(n != 0)
+
+kable(collection_summary_spp_sites, type = "markdown")
+write_csv(collection_summary_spp_sites, "../processed_data/2017_sites_spp_summary.csv")
+```
+
+```{r Set time of day}
+
+time_of_sets <- field_2017 %>%
+  filter(!survey.id %in% c("DE457","DE458","DE459","DE460","DE461","DE462","DE463","DE464")) %>%
+  filter(!is.na(time)) %>% 
+  select(date, site.id, time) %>% 
+  filter(site.id %in% c("D09", "D27", "J03", "J09"))
+  
+class(time_of_sets$site.id)
+
+ggplot(time_of_sets, aes(x = time, y = site.id, group = site.id)) +
+  geom_joy()
+ggsave("../exploratory_figures/time_of_sets_joy_plot.png", width = 7, height = 5)
+```
+
+```{r Ordered logistic regression model}
+library(MASS)
+library(reshape2)
+
+sreg <- field_2017 %>% 
+  filter(!is.na(seine.id)) %>% 
+  dplyr::select(set.sliders, so.total, cu.total)
+
+sreg$set.sliders <-as.factor(sreg$set.sliders)
+slider <- sreg$set.sliders
+sototal <- sreg$so.total
+
+
+### Perforoming Ordered Logisitic Regression on clider activity and total sockey catch.
+slider.so.logit <- polr(slider ~ sototal, data = sreg, Hess = T)
+summary (slider.so.logit)
+oddsratio <- exp(coef(slider.so.logit)) #coeffecients are log odds so i exponentitate them (with base e) to get odds ratio 
+oddsratio
+##storing table
+(slider.so.table <- coef(summary(slider.so.logit)))
+slider.so.p <- pnorm(abs(slider.so.table[,"t value"]), lower.tail = FALSE) * 2
+(slider.so.table <- cbind(slider.so.table, "p value" = slider.so.p))
+(slider.so.ci <- confint(slider.so.logit))
+exp(cbind(OR = coef(slider.so.logit), slider.so.ci))
+
+
+####Creating Graph
+prob <- data.frame(
+  sototal = rep(seq(from = 0, to = 3000, length.out = 3000), 1))
+prob <-cbind(prob, predict(slider.so.logit,prob, type = "probs")) # this created a new data frame which allowed to to assig probabilities to each number of fish
+head (prob)
+
+slider.so.prob <- melt(prob, id.vars = c("sototal"),
+               variable.name = "Surface_Activity", value.name = "probability") #this reshaped the dataframe to make it easier to graph
+head(slider.so.prob)
+
+sweetgraph <- ggplot (slider.so.prob, aes(x = sototal, y = probability, colour = Surface_Activity,)) + geom_line() + xlab("Sockeye Catch") + ylab("Probability") + theme_classic()# This made a sweet graph
+
+sweetgraph + scale_colour_discrete(name = "Visual Assessment of
+Sockeye Abundance") +
+  theme(legend.justification=c(1,0),
+        legend.position=c(.9,0.3)) + theme(legend.text = element_text(colour="black", size = 14)) + theme(legend.title = element_text(colour="black", size = 14)) + theme(axis.text=element_text(size=14),
+                                           axis.title=element_text(size=14,face="bold"))
+
+```
+
+```{r Sockeye CPUE for all three years}
+seine_catches_all_years <- gs_title("Database_WIP")
+seines <- gs_read(seine_catches_all_years,ws = "seine_data")
+survey <- gs_read(seine_catches_all_years, ws = "survey_data")
+
+# To do: consider whether or not to exclude unsuccessful sites and only calculate CPUE at core sites that have been consistent over the years.
+so_cpue <- left_join(seines, survey, by = "survey.id") %>% 
+  select(survey.date, region, zone, site.id, so.total) %>%
+  filter(site.id %in% c("D07", "D09", "D22", "D27", "D10", "D08", "D34", "D20","J03", "J02", "J09", "J11")) %>%  
+  replace_na(list(so.total = 0)) %>% 
+  mutate(week = lubridate::week(survey.date)) %>% 
+  mutate(year = lubridate::year(survey.date)) %>%
+  group_by(year, region, week) %>% 
+  dplyr::summarise(so.cpue = mean(so.total, na.rm = FALSE),
+            so.cpue.sd = sd(so.total, na.rm = FALSE),
+            n = n())
+
+so_cpue$year <- as.factor(so_cpue$year)
+
+so_cpue_plot <- ggplot(data = so_cpue, aes(x = week, y = so.cpue, colour = year, group = year))+
+  facet_wrap(~ region, nrow = 2, scales = 'free_y') +
+  #geom_smooth(se = F)+
+  geom_line()+
+  geom_point(position = position_dodge(width = 0.05)) +
+  #geom_errorbar(aes(ymin = so.cpue - SE, ymax = so.cpue + SE), width = 0.2, position = position_dodge(width = 0.15))+
+  xlab("Date") +
+  ylab("Sockeye CPUE") +
+  theme(legend.justification=c(1,0), legend.position=c(.8,.8),
+        legend.background = element_rect(fill="white")) + 
+  theme(legend.text = element_text(colour="black", size = 12)) +                         theme(axis.text=element_text(size=12),                                                                                              axis.title=element_text(size=12,face="bold"))
+so_cpue_plot        
+ggsave("../final_figures/Sockeye_all_years_CPUE.png")
+
+
+```
+
