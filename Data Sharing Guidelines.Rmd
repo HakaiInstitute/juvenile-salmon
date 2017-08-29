@@ -22,14 +22,14 @@ The purpose of having tidy data is to enable seamless integration with other ass
 ### Organizing data
 For each data table, what constitutes an ‘observation’ and therefore a row, may be different. It is better to store data that are at different levels in a relational hierarchy like this, in separate tables, so that each table is tidy. For example, it is common, but not ideal, to enter all your data from a survey on one row like this:
 
-survey.id | date | sea.state | cloud.cover | temp.0m | temp.1m
+survey_id | date | sea_state | cloud_cover | temp_0m | temp_1m
 --- | --- | --- | --- | --- | ---
 D123 | 2017-07-01 | 1 | 25 | 13.4 | 12.2
 D124 | 2017-07-02 | 2 | 100 | 15.5| 14.5
 
 In the above example, the unit of observation is a survey. Including the temperature data in the survey table, as above, makes the temperature data table not tidy—there is more than one observation of the temperature variable in the same row. Therefore, variables which have multiple observations per survey, must be stored in a separate data table, as in the example below. The unit of observation in this table is a temperature measurement. Dividing up data into different tables, depending on what you classify as a unit of observation is the foundation of creating tidy data tables. 
 
-survey.id | depth | temp
+survey_id | depth | temp
 --- | --- | ---
 D123 | 0 | 13.4
 D123 | 1 | 12.2
@@ -42,7 +42,7 @@ Lastly, each data table must have one column in common—a primary key column—
 
 If an observation does not have a recorded variable (i.e., a blank cell), that cell should be filled with NA
 Dates and times should follow the ISO format. Dates should be expressed as `yyyy-mm-dd` and times should be in 24-hour as `hh:mm:ss`.
-The top row of each column should be a header, and follow an unambiguous naming scheme, e.g. `ageclass` instead of `AC`. Do not use spaces in column header names (periods or underscores are acceptable), and avoid capitalization.
+The top row of each column should be a header, and follow an unambiguous naming scheme, e.g. `age_class` instead of `AC`. Do not use spaces in column header names (underscores are preffered), and avoid capitalization at all costs.
 
 ### File formatting
 If you’re using excel, each tidy data table should be in a separate .CSV file (not multiple worksheets in an .xlsx workbook). The files should not have any macros applied to the data, and no columns/cells should be highlighted, emboldened, italicized, colour coded, etc.
