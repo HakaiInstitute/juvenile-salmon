@@ -13,33 +13,14 @@ library(googlesheets)
 library(ggjoy)
 knitr::opts_chunk$set(echo = TRUE)
 theme_set(theme_bw())
-#source("./data import scripts/import_lab_data.R")
-#source("./data_import_scripts/import_2017_field_data.R")
-
-
 ```
 
 ```{r import data}
-
 field_data_workbook_2017 <- gs_title("field_data_2017")
 field_2017 <- gs_read(field_data_workbook_2017,ws = "field_data_2017")
 field_2017 <- field_2017 [-1, ] 
 write_csv(field_2017, "../raw_data/field_2017.csv")
 field_2017 <- read_csv("../raw_data/field_data_2017.csv") 
-field_2017$sampling.week <- NA
-field_2017$sampling.week[field_2017$date >= as.Date("2017-05-03") & field_2017$date <= as.Date("2017-05-08")] <- 1
-field_2017$sampling.week[field_2017$date >= as.Date("2017-05-09") & field_2017$date <= as.Date("2017-05-15")] <- 2
-field_2017$sampling.week[field_2017$date >= as.Date("2017-05-16") & field_2017$date <= as.Date("2017-05-22")] <- 3
-field_2017$sampling.week[field_2017$date >= as.Date("2017-05-23") & field_2017$date <= as.Date("2017-06-29")] <- 4
-field_2017$sampling.week[field_2017$date >= as.Date("2017-05-30") & field_2017$date <= as.Date("2017-06-05")] <- 5
-field_2017$sampling.week[field_2017$date >= as.Date("2017-06-06") & field_2017$date <= as.Date("2017-06-12")] <- 6
-field_2017$sampling.week[field_2017$date >= as.Date("2017-06-13") & field_2017$date <= as.Date("2017-06-19")] <- 7
-field_2017$sampling.week[field_2017$date >= as.Date("2017-06-20") & field_2017$date <= as.Date("2017-06-26")] <- 8
-field_2017$sampling.week[field_2017$date >= as.Date("2017-06-27") & field_2017$date <= as.Date("2017-07-03")] <- 9
-field_2017$sampling.week[field_2017$date >= as.Date("2017-07-04") & field_2017$date <= as.Date("2017-07-10")] <- 10
-field_2017$sampling.week[field_2017$date >= as.Date("2017-07-11") & field_2017$date <= as.Date("2017-07-18")] <- 11
-
-field_2017$sampling.week <- as.factor(field_2017$sampling.week)
 
 sea_lice_2017 <- gs_read(field_data_workbook_2017, ws = "sea_lice")
 sea_lice_2017 <- sea_lice_2017[-1,]
@@ -55,29 +36,33 @@ package_2017 <- read_csv("../raw_data/package_2017.csv")
 
 ```{r zone effort}
 zone_effort <- field_2017 %>%
-  filter(region == "DI") %>% 
-  select(survey.id, zone) %>% 
-  distinct(survey.id, .keep_all = TRUE) %>%  
-  filter(!survey.id %in% c("DE457","DE458","DE459","DE460","DE461","DE462","DE463","DE464")) %>%
-  # The line above removes Sam James's MSc seines from this analysis becuse they are outside the 
-  # standardized effort required for cumulative abundance analysis to be unbiased. 
-  group_by(zone) %>% 
+  filter(region == "DI") %>%
+  dplyr::select(survey.id, zone) %>%
+  distinct(survey.id, .keep_all = TRUE) %>%
+  filter(!survey.id %in% c("DE457", "DE458", "DE459", "DE460", "DE461", "DE462",
+                           "DE463", "DE464")) %>%
+  # The line above removes Sam James's MSc seines from this analysis becuse
+  # they are outside the standardized effort required for cumulative abundance
+  # analysis to be unbiased.
+  group_by(zone) %>%
   summarize(n = n())
 
-kable(zone_effort)  
+kable(zone_effort)
   
-so_cpue <- field_2017 %>%
-  replace(is.na(.),0) %>%
-  filter(!survey.id %in% c("DE457","DE458","DE459","DE460","DE461","DE462","DE463","DE464")) %>%
-  # The line above removes Sam James's MSc seines from this analysis becuse they are outside the 
-  # standardized effort required for cumulative abundance analysis to be unbiased. 
-  filter(region == "DI") %>% 
-  group_by(zone) %>% 
+so_cpue_zone <- field_2017 %>%
+  replace(is.na(.), 0) %>%
+  filter(!survey.id %in% c("DE457", "DE458", "DE459", "DE460", "DE461", "DE462",
+                           "DE463", "DE464")) %>%
+  # The line above removes Sam James's MSc seines from this analysis because
+  # they are outside the standardized effort required for cumulative
+  #abundance analysis to be unbiased.
+  filter(region == "DI") %>%
+  group_by(zone) %>%
   summarise(so.cpue = mean(so.total, na.rm = TRUE))
 
-kable(so_cpue)
+kable(so_cpue_zone)
 
-effort_cpue <- left_join(so_cpue, zone_effort)
+effort_cpue <- left_join(so_cpue_zone, zone_effort)
 effort_cpue_plot <- ggplot(effort_cpue, aes(x = so.cpue, y = n)) +
   geom_point() +
   geom_smooth(method = lm)
@@ -343,41 +328,97 @@ Sockeye Abundance") +
         legend.position=c(.9,0.3)) + theme(legend.text = element_text(colour="black", size = 14)) + theme(legend.title = element_text(colour="black", size = 14)) + theme(axis.text=element_text(size=14),
                                            axis.title=element_text(size=14,face="bold"))
 
+detach("package:MASS", unload = TRUE)
 ```
 
 ```{r Sockeye CPUE for all three years}
 seine_catches_all_years <- gs_title("Database_WIP")
-seines <- gs_read(seine_catches_all_years,ws = "seine_data")
+seines <- gs_read(seine_catches_all_years, ws = "seine_data")
 survey <- gs_read(seine_catches_all_years, ws = "survey_data")
 
-# To do: consider whether or not to exclude unsuccessful sites and only calculate CPUE at core sites that have been consistent over the years.
+# I use this giant block of code to assign week numbers to the same date range
+# from year to year. Using week of the year does not work because, the date
+# range from any given week changes from year to year.
+#2017
+survey$sampling.week <- NA
+survey$sampling.week[survey$survey.date >= as.Date("2017-05-02") & survey$survey.date <= as.Date("2017-05-08")] <- 1
+survey$sampling.week[survey$survey.date >= as.Date("2017-05-09") & survey$survey.date <= as.Date("2017-05-15")] <- 2
+survey$sampling.week[survey$survey.date >= as.Date("2017-05-16") & survey$survey.date <= as.Date("2017-05-22")] <- 3
+survey$sampling.week[survey$survey.date >= as.Date("2017-05-23") & survey$survey.date <= as.Date("2017-06-29")] <- 4
+survey$sampling.week[survey$survey.date >= as.Date("2017-05-30") & survey$survey.date <= as.Date("2017-06-05")] <- 5
+survey$sampling.week[survey$survey.date >= as.Date("2017-06-06") & survey$survey.date <= as.Date("2017-06-12")] <- 6
+survey$sampling.week[survey$survey.date >= as.Date("2017-06-13") & survey$survey.date <= as.Date("2017-06-19")] <- 7
+survey$sampling.week[survey$survey.date >= as.Date("2017-06-20") & survey$survey.date <= as.Date("2017-06-26")] <- 8
+survey$sampling.week[survey$survey.date >= as.Date("2017-06-27") & survey$survey.date <= as.Date("2017-07-03")] <- 9
+survey$sampling.week[survey$survey.date >= as.Date("2017-07-04") & survey$survey.date <= as.Date("2017-07-10")] <- 10
+survey$sampling.week[survey$survey.date >= as.Date("2017-07-11") & survey$survey.date <= as.Date("2017-07-18")] <- 11
+#2016
+survey$sampling.week[survey$survey.date >= as.Date("2016-05-02") & survey$survey.date <= as.Date("2016-05-08")] <- 1
+survey$sampling.week[survey$survey.date >= as.Date("2016-05-09") & survey$survey.date <= as.Date("2016-05-15")] <- 2
+survey$sampling.week[survey$survey.date >= as.Date("2016-05-16") & survey$survey.date <= as.Date("2016-05-22")] <- 3
+survey$sampling.week[survey$survey.date >= as.Date("2016-05-23") & survey$survey.date <= as.Date("2016-06-29")] <- 4
+survey$sampling.week[survey$survey.date >= as.Date("2016-05-30") & survey$survey.date <= as.Date("2016-06-05")] <- 5
+survey$sampling.week[survey$survey.date >= as.Date("2016-06-06") & survey$survey.date <= as.Date("2016-06-12")] <- 6
+survey$sampling.week[survey$survey.date >= as.Date("2016-06-13") & survey$survey.date <= as.Date("2016-06-19")] <- 7
+survey$sampling.week[survey$survey.date >= as.Date("2016-06-20") & survey$survey.date <= as.Date("2016-06-26")] <- 8
+survey$sampling.week[survey$survey.date >= as.Date("2016-06-27") & survey$survey.date <= as.Date("2016-07-03")] <- 9
+survey$sampling.week[survey$survey.date >= as.Date("2016-07-04") & survey$survey.date <= as.Date("2016-07-10")] <- 10
+survey$sampling.week[survey$survey.date >= as.Date("2016-07-11") & survey$survey.date <= as.Date("2016-07-18")] <- 11
+#2015
+survey$sampling.week[survey$survey.date >= as.Date("2015-05-02") & survey$survey.date <= as.Date("2015-05-08")] <- 1
+survey$sampling.week[survey$survey.date >= as.Date("2015-05-09") & survey$survey.date <= as.Date("2015-05-15")] <- 2
+survey$sampling.week[survey$survey.date >= as.Date("2015-05-16") & survey$survey.date <= as.Date("2015-05-22")] <- 3
+survey$sampling.week[survey$survey.date >= as.Date("2015-05-23") & survey$survey.date <= as.Date("2015-06-29")] <- 4
+survey$sampling.week[survey$survey.date >= as.Date("2015-05-30") & survey$survey.date <= as.Date("2015-06-05")] <- 5
+survey$sampling.week[survey$survey.date >= as.Date("2015-06-06") & survey$survey.date <= as.Date("2015-06-12")] <- 6
+survey$sampling.week[survey$survey.date >= as.Date("2015-06-13") & survey$survey.date <= as.Date("2015-06-19")] <- 7
+survey$sampling.week[survey$survey.date >= as.Date("2015-06-20") & survey$survey.date <= as.Date("2015-06-26")] <- 8
+survey$sampling.week[survey$survey.date >= as.Date("2015-06-27") & survey$survey.date <= as.Date("2015-07-03")] <- 9
+survey$sampling.week[survey$survey.date >= as.Date("2015-07-04") & survey$survey.date <= as.Date("2015-07-10")] <- 10
+survey$sampling.week[survey$survey.date >= as.Date("2015-07-11") & survey$survey.date <= as.Date("2015-07-18")] <- 11
+
+survey$sampling.week <- as.factor(survey$sampling.week)
+
+# To do: consider whether or not to exclude unsuccessful sites and only 
+# calculate CPUE at core sites that have been consistent over the years.
 so_cpue <- left_join(seines, survey, by = "survey.id") %>% 
-  select(survey.date, region, zone, site.id, so.total) %>%
-  filter(site.id %in% c("D07", "D09", "D22", "D27", "D10", "D08", "D34", "D20","J03", "J02", "J09", "J11")) %>%  
-  replace_na(list(so.total = 0)) %>% 
-  mutate(week = lubridate::week(survey.date)) %>% 
+  select(survey.date, sampling.week, region, zone, site.id, so.total) %>%
+  filter(site.id %in% c("D07", "D09", "D22", "D27", "D10", "D08", "D34", "D20",
+                        "J03", "J02", "J09", "J11")) %>%
+  # I only included the above sites, because they have been consistent
+  # over the last few years.
   mutate(year = lubridate::year(survey.date)) %>%
-  group_by(year, region, week) %>% 
-  dplyr::summarise(so.cpue = mean(so.total, na.rm = FALSE),
+  replace_na(list(so.total = 0)) %>% 
+  group_by(year, region, sampling.week) %>% 
+  summarise(so.cpue = mean(so.total, na.rm = FALSE),
             so.cpue.sd = sd(so.total, na.rm = FALSE),
             n = n())
 
 so_cpue$year <- as.factor(so_cpue$year)
+labels <- c(DI = "Discovery Islands", JS = "Johnstone Strait")
 
-so_cpue_plot <- ggplot(data = so_cpue, aes(x = week, y = so.cpue, colour = year, group = year))+
-  facet_wrap(~ region, nrow = 2, scales = 'free_y') +
-  #geom_smooth(se = F)+
-  geom_line()+
-  geom_point(position = position_dodge(width = 0.05)) +
-  #geom_errorbar(aes(ymin = so.cpue - SE, ymax = so.cpue + SE), width = 0.2, position = position_dodge(width = 0.15))+
+so_cpue_plot <- ggplot(data = so_cpue, aes(x = sampling.week, y = so.cpue,
+                                           colour = year, group = year)) +
+  facet_wrap(~ region, nrow = 2, scales = "free_y", 
+             labeller = labeller(region = labels)) +
+    theme(strip.text.x = element_text(size=12)) +
+  geom_line(size = 1.5) +
+  geom_point(size = 2, position = position_dodge(width = 0.05)) +
   xlab("Date") +
   ylab("Sockeye CPUE") +
-  theme(legend.justification=c(1,0), legend.position=c(.8,.8),
-        legend.background = element_rect(fill="white")) + 
-  theme(legend.text = element_text(colour="black", size = 12)) +                         theme(axis.text=element_text(size=12),                                                                                              axis.title=element_text(size=12,face="bold"))
-so_cpue_plot        
-ggsave("../final_figures/Sockeye_all_years_CPUE.png")
-
+  theme(legend.justification = c(1, 0), legend.position = c(.8, .7)) +
+  theme(legend.title=element_blank()) +
+  theme(legend.text = element_text(colour = "black", size = 12)) +
+  theme(axis.text = element_text(size = 12),
+        axis.text.x = element_text(angle = 45, vjust = 0.5),
+        axis.title = element_text(size = 12, face = "bold")) +
+  scale_x_discrete(breaks=c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"),
+                   labels=c("May 5", "May 12", "May 19", "May 26", "June 2", "June 9",
+                          "June 23", "June 16", "June 30", "July 7", "July 14"))
+    # The dates assigned to the scale breaks represent the middle of the 
+    # categorical week assigned in the giant block above.
+so_cpue_plot
+ggsave("../final_figures/Sockeye_all_years_CPUE.png", width = 6, height = 5)
 
 ```
 
