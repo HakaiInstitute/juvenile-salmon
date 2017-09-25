@@ -1,2 +1,2 @@
 # juvenile-salmon
-All analyses and summaries related to the Juvenile Salmon Program (the program formerly known as SEMSP).
+Analyses and summaries related to Juvenile Salmon Program.
