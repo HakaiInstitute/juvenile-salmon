@@ -1,0 +1,218 @@
+---
+title: "Juvenile Salmon Survival Program Time Series"
+author: "Brett Johnson"
+date: "October 13, 2017"
+output: html_document
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(lubridate)
+library(plotly)
+library(googlesheets)
+library(tidyverse)
+library(ggridges)
+```
+
+```{r, cache = FALSE}
+fish_data <- read_csv("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Time Series Report/raw_data/fish_data.csv")
+package_data <- read_csv("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Time Series Report/raw_data/package_data.csv")
+sealice_field <- read_csv("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Time Series Report/raw_data/sealice_field.csv")
+sealice_lab <- read_csv("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Time Series Report/raw_data/sealice_lab.csv")
+seines <- read_csv("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Time Series Report/raw_data/seines.csv")
+stock_id <- read_csv("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Time Series Report/raw_data/stock_id.csv")
+survey_data <- read_csv("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Time Series Report/raw_data/survey_data.csv")
+ysi <- read_csv("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Time Series Report/raw_data/ysi.csv")
+zoop_tows <- read_csv("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Time Series Report/raw_data/zoop_tows.csv")
+
+# Below are joins that create views of the data to work with directly
+survey_seines <- full_join(survey_data, seines, by = "survey_id")
+survey_seines_fish <- full_join(survey_seines, fish_data, by = "seine_id")
+
+# I should add this function to my own package because it's pretty useful
+mutate_cond <- function(.data, condition, ..., envir = parent.frame()) {
+  condition <- eval(substitute(condition), .data, envir)
+  .data[condition, ] <- .data[condition, ] %>% mutate(...)
+  .data
+}
+
+# Because we haven't measured weight or length of fish in the lab yet, I replace
+# NA lab weights or lengths with field weights or lengths if they were taken.
+# This comparison may not be the best because the difference in weight between
+# lab and field is unknown. Therefore weights and condition are not publishable
+# at this stage.
+
+survey_seines_fish <- survey_seines_fish %>% 
+  mutate_cond(is.na(weight), weight = as.numeric(weight_field)) %>% 
+  mutate_cond(is.na(fork_length), fork_length = as.numeric(fork_length_field))
+  
+
+```
+
+## Aim 
+
+To present time series of juvenile Fraser salmon migration catch statistics, health indices, and oceanographic conditions in the northern Strait of Georgia to Johnstone Strait region. 
+
+## Background
+
+The Hakai Institute Juvenile Salmon Program was launched in the spring of 2015 in a collaborative partnership with UBC, SFU, Salmon Coast, Pacific Salmon Foundation, and DFO. The program operates in the Discovery Islands and Johnstone Strait (Figure 1) and thus provides information on the health of juvenile Fraser River salmon after passage through: 
+
+1) Strait of Georgia – stratified high plankton biomass zone; and 
+
+2) Discovery Islands & Johnstone Strait – highly-mixed low-plankton-biomass zone, and area of high wild-farmed fish interactions.
+
+## Program Objectives
+
+1) Determine migration timing and pathways; 
+
+2) Migration habitat mapping - oceanographic conditions along the migration route;
+
+3) Understand the dynamics of the plankton food-webs that underpin juvenile salmon growth and
+health;
+
+4) Understand parasite and pathogen infection dynamics and their impact on juvenile salmon growth and
+health.
+
+## Key Parameters Reported
+* Catch Statistics
+* Parasite Loads
+* Sockeye Length and Weight
+* Oceanographic Conditions
+
+The following plots are subject to change as the underlying data are preliminary and subject to further quality assurance. 
+
+We are endeavouring to provide useful information for the entire salmon research community. As such we welcome any feedback. Please direct questions or comments to Brian Hunt (B.Hunt@oceans.ubc.ca) and/or Brett Johnson (Brett.Johnson@hakai.org). 
+
+
+## Migration Timing
+
+You can embed Shiny inputs and outputs in your document. Outputs are automatically updated whenever inputs change. This demonstrates how a standard R plot can be made interactive by wrapping it in the Shiny `renderPlot` function. The `selectInput` and `sliderInput` functions create the input widgets used to drive the plot.
+
+
+```{r, CPUE}
+    cpue <-  select(survey_seines, survey_date, sampling_week, region, zone,
+                    site_id, so_total) %>%
+    filter(site_id %in% c("D07", "D09", "D22", "D27", "D10", "D08", "D34",
+                          "D20", "J03", "J02", "J09", "J11")) %>%
+    # I only included the above sites, because they have been consistent
+    # over the last few years.
+    mutate(year = lubridate::year(survey_date)) %>%
+    replace_na(list(so_total = 0)) %>% 
+    group_by(year, region, sampling_week) %>% 
+    summarise(cpue = mean(so_total, na.rm = FALSE),
+              cpue.sd = sd(so_total, na.rm = FALSE),
+              n = n()
+              )
+  
+  cpue$year <- as.factor(cpue$year)
+  labels <- c(DI = "Discovery Islands", JS = "Johnstone Strait")
+  cpue$sampling_week <- as.factor(cpue$sampling_week)
+  
+  cpue_plot <- ggplot(data = cpue, aes(x = sampling_week, y = cpue,
+                                             colour = year, group = year)) + 
+    facet_wrap(~ region, nrow = 2, scales = "free_y", 
+               labeller = labeller(region = labels)) +
+    theme(strip.text.x = element_text(size=12)) +
+    geom_line(size = 1.5) +
+    geom_point(size = 2, position = position_dodge(width = 0.05)) +
+    xlab("Date") +
+    ylab("Sockeye CPUE") +
+    theme(legend.justification = c(1, 0), legend.position = c(.8, .7)) +
+    theme(legend.title=element_blank()) +
+    theme(legend.text = element_text(colour = "black", size = 12)) +
+    theme(axis.text = element_text(size = 12),
+          axis.text.x = element_text(angle = 45, vjust = 0.5),
+          axis.title = element_text(size = 12, face = "bold")) +
+    scale_x_discrete(breaks = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"),
+                     labels=c("May 5", "May 12", "May 19", "May 26", "June 2", "June 9",
+                              "June 23", "June 16", "June 30", "July 7", "July 14"))
+  
+ggplotly(cpue_plot)
+
+    # The dates assigned to the scale breaks represent the middle of the 
+    # categorical week assigned in the giant block above.
+#so_cpue_plot
+#ggsave("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Time Series Report/raw_data/figures/so_cpue.png", width = 6, height = 5)
+
+```
+
+## Fish Weight
+
+Select the species, and histogram parameters you wish to visualize.
+
+```{r}
+inputPanel(
+  selectInput("species2", label = "Species",
+              choices = c("Sockeye" = "SO", "Pink" = "PI",
+                          "Chum" = "CU"), 
+              selected = "Sockeye"),
+  
+  sliderInput("bw_adjust", label = "Bin Width:",
+              min = 1, max = 10, value = 5, step = 0.5)
+  )
+
+renderPlot({
+  length_histo_tbl <- survey_seines_fish %>% 
+    filter(species == input$species2)
+# Once lab data is in the WIP, change the length to be lab length not field  
+(length_histo <- ggplot(length_histo_tbl, aes(x = as.numeric(fork_length_field)))+
+  geom_histogram(aes(y=5*..density..*100),
+                 alpha=1, position='identity', binwidth = input$bw_adjust)+
+  xlab("Fork Length (mm)")+
+  ylab("Frequency (%)")+
+  coord_cartesian(x= 60:170) +
+  theme(legend.text = element_text(colour="black", size = 12)) +                  
+  theme(axis.text=element_text(size=12),
+                axis.title=element_text(size=12,face="bold"))) +
+    facet_wrap(~ region, nrow = 2)
+  }, outputArgs = list(width = "800px", 
+                     height = "500px")
+)
+
+```
+
+# Fish Weight, Length, and Condition
+
+```{r, length, weight, condition}
+inputPanel(
+  selectInput("species3", label = "Species:",
+              choices = c("Sockeye" = "SO", "Chum" = "CU", "Pink" = "PI", "Coho" = "CO", "Herring" = "HE")),
+  
+  selectInput("parameter", label = "Parameter:",
+              choices = c("Weight" = "weight", "Length" = "fork_length", "Condition" = "k"), selected = "weight"
+)
+)
+
+renderPlot({
+  distributions_tbl <- survey_seines_fish %>% 
+    filter(species == input$species3) %>% 
+    mutate(year = lubridate::year(survey_date)) %>% 
+    select(species, weight, fork_length, year) %>% 
+    mutate(k = 10^5*(weight / fork_length ^ 3)) %>% 
+    na.omit()
+  ggplot(distributions_tbl, aes(x=get(input$parameter), y = year, group = year)) +
+    geom_density_ridges()
+  })
+
+```
+
+```{r eruptions, echo=FALSE}
+inputPanel(
+  selectInput("n_breaks", label = "Number of bins:",
+              choices = c(10, 20, 35, 50), selected = 20),
+  
+  sliderInput("bw_adjust", label = "Bandwidth adjustment:",
+              min = 1, max = 10, value = 1, step = 0.5)
+)
+
+renderPlot({
+  hist(faithful$eruptions, probability = TRUE, breaks = as.numeric(input$n_breaks),
+       xlab = "Duration (minutes)", main = "Geyser eruption duration")
+  
+  dens <- density(faithful$eruptions, adjust = input$bw_adjust)
+  lines(dens, col = "blue")
+})
+```
+
