@@ -4,7 +4,7 @@
 
 The Hakai Institute Juvenile Salmon Program was launched in the spring of 2015 in a
 collaborative partnership with UBC, SFU, Salmon Coast, Pacific Salmon Foundation, and
-DFO. The program operates in the Discovery Islands and Johnstone Strait (Figure 1) and
+DFO. The program operates in the Discovery Islands and Johnstone Strait of Coastal British Columbia and
 thus provides information on the health of juvenile Fraser River salmon after passage through:
 1) Strait of Georgia – stratified high plankton biomass zone; and
 2) Discovery Islands & Johnstone Strait – highly-mixed low-plankton-biomass zone, and
