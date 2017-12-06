@@ -12,24 +12,8 @@ library(tidyverse)
 library(lubridate)
 library(plotly)
 library(googlesheets)
-library(tidyverse)
 library(ggridges)
-```
-
-```{r, cache = FALSE}
-fish_data <- read_csv("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Time Series Report/raw_data/fish_data.csv")
-package_data <- read_csv("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Time Series Report/raw_data/package_data.csv")
-sealice_field <- read_csv("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Time Series Report/raw_data/sealice_field.csv")
-sealice_lab <- read_csv("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Time Series Report/raw_data/sealice_lab.csv")
-seines <- read_csv("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Time Series Report/raw_data/seines.csv")
-stock_id <- read_csv("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Time Series Report/raw_data/stock_id.csv")
-survey_data <- read_csv("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Time Series Report/raw_data/survey_data.csv")
-ysi <- read_csv("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Time Series Report/raw_data/ysi.csv")
-zoop_tows <- read_csv("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Time Series Report/raw_data/zoop_tows.csv")
-
-# Below are joins that create views of the data to work with directly
-survey_seines <- full_join(survey_data, seines, by = "survey_id")
-survey_seines_fish <- full_join(survey_seines, fish_data, by = "seine_id")
+library(forcats)
 
 # I should add this function to my own package because it's pretty useful
 mutate_cond <- function(.data, condition, ..., envir = parent.frame()) {
@@ -38,17 +22,56 @@ mutate_cond <- function(.data, condition, ..., envir = parent.frame()) {
   .data
 }
 
+```
+
+```{r, cache = FALSE}
+fish_lab_data <- read_csv("fish_lab_data.csv")
+fish_field_data <- read_csv("fish_field_data.csv")
+package_data <- read_csv("package_data.csv")
+sealice_field <- read_csv("sealice_field.csv")
+sealice_lab_motiles <- read_csv("sealice_lab_motiles.csv")
+seine_data <- read_csv("seine_data.csv")
+stock_id <- read_csv("stock_id.csv")
+survey_data <- read_csv("survey_data.csv")
+ysi <- read_csv("ysi.csv")
+zoop_tows <- read_csv("zoop_tows.csv")
+
+date_order <- c("May 5", "May 12", "May 19", "May 26", "June 2", "June 9",
+                "June 16", "June 23", "June 30", "July 6", "July 13")
+
+survey_data$sampling_week <- factor(survey_data$sampling_week, levels = date_order)
+
+# Below are joins that create views of the data to work with directly
+survey_seines <- left_join(seine_data, survey_data, by = "survey_id")
+fish_data <- left_join(fish_field_data, fish_lab_data)
+survey_seines_fish <- left_join(fish_data, survey_seines, by = "seine_id")
+
+
 # Because we haven't measured weight or length of fish in the lab yet, I replace
 # NA lab weights or lengths with field weights or lengths if they were taken.
 # This comparison may not be the best because the difference in weight between
 # lab and field is unknown. Therefore weights and condition are not publishable
 # at this stage.
-
 survey_seines_fish <- survey_seines_fish %>% 
   mutate_cond(is.na(weight), weight = as.numeric(weight_field)) %>% 
-  mutate_cond(is.na(fork_length), fork_length = as.numeric(fork_length_field))
+  mutate_cond(is.na(fork_length), fork_length = as.numeric(fork_length_field)) %>% 
+  mutate(k = 10^5*(weight / fork_length ^ 3)) 
   
+survey_seines_fish_stock <- left_join(survey_seines_fish, stock_id)
+```
 
+
+```{r}
+survey_data %>% 
+  count(survey_id) %>% 
+  filter(n > 1)
+
+stock_id %>% 
+  count(ufn) %>% 
+  filter(n > 1)
+
+survey_seines_fish_stock %>% 
+  filter(k < .4)
 ```
 
 ## Aim 
@@ -77,8 +100,8 @@ health.
 
 ## Key Parameters Reported
 * Catch Statistics
-* Parasite Loads
-* Sockeye Length and Weight
+* Sockeye Genetic Stock ID Proportions
+* Fish Length, Weight, and Condition
 * Oceanographic Conditions
 
 The following plots are subject to change as the underlying data are preliminary and subject to further quality assurance. 
@@ -86,50 +109,48 @@ The following plots are subject to change as the underlying data are preliminary
 We are endeavouring to provide useful information for the entire salmon research community. As such we welcome any feedback. Please direct questions or comments to Brian Hunt (B.Hunt@oceans.ubc.ca) and/or Brett Johnson (Brett.Johnson@hakai.org). 
 
 
+# Catch Statistics
+
 ## Migration Timing
-
-You can embed Shiny inputs and outputs in your document. Outputs are automatically updated whenever inputs change. This demonstrates how a standard R plot can be made interactive by wrapping it in the Shiny `renderPlot` function. The `selectInput` and `sliderInput` functions create the input widgets used to drive the plot.
-
-
 ```{r, CPUE}
-    cpue <-  select(survey_seines, survey_date, sampling_week, region, zone,
-                    site_id, so_total) %>%
-    filter(site_id %in% c("D07", "D09", "D22", "D27", "D10", "D08", "D34",
-                          "D20", "J03", "J02", "J09", "J11")) %>%
-    # I only included the above sites, because they have been consistent
-    # over the last few years.
-    mutate(year = lubridate::year(survey_date)) %>%
-    replace_na(list(so_total = 0)) %>% 
-    group_by(year, region, sampling_week) %>% 
-    summarise(cpue = mean(so_total, na.rm = FALSE),
-              cpue.sd = sd(so_total, na.rm = FALSE),
-              n = n()
-              )
+    cpue <-  select(survey_seines, survey_date, sampling_week, site_id, region, so_total) %>%
+  filter(site_id %in% c("D07", "D09", "D22", "D27", "D10", "D08", "D34",
+                        "D20", "J03", "J02", "J09", "J11")) %>%
+  # I only included the above sites, because they have been consistent
+  # over the last few years.
+  mutate(year = year(survey_date)) %>%
+  select(-site_id, -survey_date) %>% 
+  replace_na(list(so_total = 0)) %>% 
+  group_by(year, region, sampling_week) %>% 
+  summarise_each(funs(mean, sd, cpue.se=sd(.) / sqrt(n())))
   
-  cpue$year <- as.factor(cpue$year)
-  labels <- c(DI = "Discovery Islands", JS = "Johnstone Strait")
-  cpue$sampling_week <- as.factor(cpue$sampling_week)
+
+cpue$year <- as.factor(cpue$year)
+labels <- c(DI = "Discovery Islands", JS = "Johnstone Strait")
+cpue$sampling_week <- as_factor(cpue$sampling_week)
+dodge <- position_dodge(width=0.5)
   
-  cpue_plot <- ggplot(data = cpue, aes(x = sampling_week, y = cpue,
-                                             colour = year, group = year)) + 
-    facet_wrap(~ region, nrow = 2, scales = "free_y", 
-               labeller = labeller(region = labels)) +
-    theme(strip.text.x = element_text(size=12)) +
-    geom_line(size = 1.5) +
-    geom_point(size = 2, position = position_dodge(width = 0.05)) +
-    xlab("Date") +
-    ylab("Sockeye CPUE") +
-    theme(legend.justification = c(1, 0), legend.position = c(.8, .7)) +
-    theme(legend.title=element_blank()) +
-    theme(legend.text = element_text(colour = "black", size = 12)) +
-    theme(axis.text = element_text(size = 12),
-          axis.text.x = element_text(angle = 45, vjust = 0.5),
-          axis.title = element_text(size = 12, face = "bold")) +
-    scale_x_discrete(breaks = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"),
-                     labels=c("May 5", "May 12", "May 19", "May 26", "June 2", "June 9",
-                              "June 23", "June 16", "June 30", "July 7", "July 14"))
-  
-ggplotly(cpue_plot)
+cpue_plot_error_bars <- ggplot(data = cpue, aes(x = sampling_week, y = mean,
+                                     colour = year, group = year)) +
+  geom_errorbar(aes(ymin = mean - cpue.se, ymax = mean + cpue.se),
+  position = position_dodge(width = 0.15),
+  width = 0.3) +
+  facet_wrap(~ region, nrow = 2, scales = "free_y",
+             labeller = labeller(region = labels)) +
+  theme(strip.text.x = element_text(size=12)) +
+  geom_line(size = 1.5) +
+  geom_point(size = 2, position = position_dodge(width = 0.15)) +
+  xlab("Date") +
+  ylab("Sockeye CPUE") +
+  theme(legend.justification = c(1, 0), legend.position = c(.83, .67)) +
+  theme(legend.title = element_blank()) +
+  theme(legend.text = element_text(colour = "black", size = 12)) +
+  theme(axis.text = element_text(size = 12),
+        axis.text.x = element_text(angle = 45, vjust = 0.5),
+        axis.title = element_text(size = 12, face = "bold")) 
+
+
+cpue_plot_error_bars
 
     # The dates assigned to the scale breaks represent the middle of the 
     # categorical week assigned in the giant block above.
@@ -138,42 +159,80 @@ ggplotly(cpue_plot)
 
 ```
 
-## Fish Weight
 
-Select the species, and histogram parameters you wish to visualize.
+## Species Catch Proportions
 
-```{r}
-inputPanel(
-  selectInput("species2", label = "Species",
-              choices = c("Sockeye" = "SO", "Pink" = "PI",
-                          "Chum" = "CU"), 
-              selected = "Sockeye"),
-  
-  sliderInput("bw_adjust", label = "Bin Width:",
-              min = 1, max = 10, value = 5, step = 0.5)
-  )
-
-renderPlot({
-  length_histo_tbl <- survey_seines_fish %>% 
-    filter(species == input$species2)
-# Once lab data is in the WIP, change the length to be lab length not field  
-(length_histo <- ggplot(length_histo_tbl, aes(x = as.numeric(fork_length_field)))+
-  geom_histogram(aes(y=5*..density..*100),
-                 alpha=1, position='identity', binwidth = input$bw_adjust)+
-  xlab("Fork Length (mm)")+
-  ylab("Frequency (%)")+
-  coord_cartesian(x= 60:170) +
-  theme(legend.text = element_text(colour="black", size = 12)) +                  
-  theme(axis.text=element_text(size=12),
-                axis.title=element_text(size=12,face="bold"))) +
-    facet_wrap(~ region, nrow = 2)
-  }, outputArgs = list(width = "800px", 
-                     height = "500px")
-)
+```{r Catch Proportions}
 
 ```
 
-# Fish Weight, Length, and Condition
+# Sockeye Genetic Stock Proportions
+
+Fifty six unique stocks of Sockeye have been identified as having migrated
+through the discovery Islands and Johnstone Strait. 
+
+To see which stocks have 
+been the most numerous each year, have a look at the figure below. The number of stocks you
+select to view will filter a ranked list of top stock contributions for each year.
+Ie. select 3 and you will see the proportion of total yearly catch for top 3 most commonly caught genetic stocks, and the remaining stocks proporortions will be lumped as NA.
+
+```{r GSI, echo=FALSE}
+
+inputPanel(
+  sliderInput("n_stocks", label = h4("Select the number of stocks"), 
+              min = 1, 
+        max = 56, value = 5, step = 1)
+    )
+
+renderPlot({
+contribs_all_years <- survey_seines_fish_stock %>% 
+  drop_na(site_id) %>% 
+  drop_na(stock_1) %>% 
+  mutate(year = as.factor(year(survey_date))) %>% 
+  group_by(year, stock_1) %>% 
+  summarize(n = n()) %>% 
+  mutate(proportion = n / sum(n)) %>% 
+  arrange(desc(n)) %>% 
+  slice(1:input$n_stocks) %>% 
+  ungroup()
+  
+prop_remaining_2016_tbl <- contribs_all_years %>%
+  filter(year == 2016) 
+
+prop_remaining_2015_tbl <- contribs_all_years %>% 
+  filter(year == 2015)
+
+remain_2016 <- 1 - sum(prop_remaining_2016_tbl$proportion)
+remain_2015 <- 1 - sum(prop_remaining_2015_tbl$proportion)
+
+
+contribs_all_years_w_others <- contribs_all_years %>% 
+  add_row(year = 2015, stock_1 = NA, proportion = remain_2015) %>% 
+  add_row(year = 2016, stock_1 = NA , proportion = remain_2016)
+
+# stock_levels <- c(NA, "Chilko", "L_Adams", "Horsefly", "L_Shuswap", "MiddleShuswap",
+#                   "Mitchell", "Pitt", "Quesnel_Horsef", "Scotch")
+# 
+# contribs_all_years_w_others$stock_1 <- factor(contribs_all_years_w_others$stock_1,
+#                                            levels = stock_levels)
+
+
+
+big_contribs_plot <- 
+  ggplot(contribs_all_years_w_others, aes(x = year,
+                                 y = proportion, fill = stock_1)) +
+  geom_bar(colour="black", stat="identity", position = 'stack') + 
+  # scale_fill_discrete(name  ="Genetic Stock",
+  #                           breaks=c("NA"),
+  #                           labels=c("Other")) +
+  ggtitle("Genetic Stock Contribution to Total Catch")
+
+big_contribs_plot}, width = 800, height = 800)
+
+
+```
+
+# Fish Length, Weight, and Condition
 
 ```{r, length, weight, condition}
 inputPanel(
@@ -189,30 +248,52 @@ renderPlot({
   distributions_tbl <- survey_seines_fish %>% 
     filter(species == input$species3) %>% 
     mutate(year = lubridate::year(survey_date)) %>% 
-    select(species, weight, fork_length, year) %>% 
-    mutate(k = 10^5*(weight / fork_length ^ 3)) %>% 
+    select(species, weight, fork_length, k, year) %>% 
     na.omit()
+    
   ggplot(distributions_tbl, aes(x=get(input$parameter), y = year, group = year)) +
     geom_density_ridges()
-  })
+  }, width = 800, height = 600)
 
 ```
 
-```{r eruptions, echo=FALSE}
+
+
+
+```{r}
 inputPanel(
-  selectInput("n_breaks", label = "Number of bins:",
-              choices = c(10, 20, 35, 50), selected = 20),
-  
-  sliderInput("bw_adjust", label = "Bandwidth adjustment:",
-              min = 1, max = 10, value = 1, step = 0.5)
-)
+  selectInput("arranged", label = "Facet Arrangement",
+              choices = c("Years on Top" = "region ~ year", "Region on Top" =
+                            "year ~ region",
+                          "Compare Years (regions combined)" = "year ~ .", "Compare Regions (years combined)" = "region ~ ."
+                           ),
+              selected = "Years on Top")
+  )
 
 renderPlot({
-  hist(faithful$eruptions, probability = TRUE, breaks = as.numeric(input$n_breaks),
-       xlab = "Duration (minutes)", main = "Geyser eruption duration")
-  
-  dens <- density(faithful$eruptions, adjust = input$bw_adjust)
-  lines(dens, col = "blue")
-})
+  so_stock_cond_tbl <- survey_seines_fish_stock %>%
+  drop_na(stock_1) %>%
+  filter(prob_1 >= .5) %>%
+  filter(stock_1 %in% c("Chilko", "L_Adams",
+                          "Horsefly", "L_Shuswap",
+                          "MiddleShuswap", "Mitchell",
+                          "Pitt" , "Quesnel_Horsef",
+                          "Scotch")) %>%
+  mutate(year = year(survey_date)) %>%
+  select(stock_1, sampling_week, region, k, year) %>%
+  drop_na(k) %>% 
+  drop_na(year)
+
+
+so_cond_plot <- ggplot(data = so_stock_cond_tbl, aes(x = k, y = as.factor(stock_1), fill = stock_1)) +
+           geom_density_ridges() +
+  facet_grid(input$arranged) +
+  xlim(.5:1.5)
+
+so_cond_plot
+
+  },width = 1000, height = 1000)
+
+
 ```
 
