@@ -17,7 +17,7 @@ The purpose of having tidy data is to enable seamless integration with other ass
 1. Each variable measured should be in one column
 2. Each unique observation of variables should be in a different row
 3. Different observational units should be stored in a separate table, ie. survey data stored seperately from fish data.
-4. Each table should have only one 'type' of variables (eg. length measurements stored seperately from weather), each table should include a common column that allows them to be joined. This collection of tidy data tables forms a tidy data set.
+4. Each table should have only one 'type' of variables (eg. length measurements stored seperately from weather), each table should include a common column that allows them to be joined. This collection of tidy data tables forms a tidy data set with a relational database structure.
 
 ### Organizing data
 For each data table, what constitutes an ‘observation’ and therefore a row, may be different. It is better to store data that are at different levels in a relational hierarchy like this, in separate tables, so that each table is tidy. For example, it is common, but not ideal, to enter all your data from a survey on one row like this:
@@ -63,6 +63,10 @@ Table | Variable name | Units or Categories | Description
 --- | --- | --- | ---
 | | |
 
+#### Resources
+* [Hakai Institute R Stats Guide](https://goose.hakai.org/rguide/#)
+* [Tidy Data Tables](http://r4ds.had.co.nz/tidy-data.html)
+* [Reltational Data](http://r4ds.had.co.nz/relational-data.html)
 
 #### Literature Cited:
 
