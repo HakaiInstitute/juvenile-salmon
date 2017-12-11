@@ -63,11 +63,11 @@ Table | Variable name | Units or Categories | Description
 --- | --- | --- | ---
 | | |
 
-#### Resources
+## Resources
 * [Hakai Institute R Stats Guide](https://goose.hakai.org/rguide/#)
 * [Tidy Data Tables](http://r4ds.had.co.nz/tidy-data.html)
 * [Reltational Data](http://r4ds.had.co.nz/relational-data.html)
 
-#### Literature Cited:
+## Literature Cited:
 
 Wickham, H. (2014). Tidy Data. Journal of Statistical Software. Vol. 89.10:1–23.
