@@ -7,7 +7,7 @@ output: html_document
 
 # Hakai Institute Juvenile Salmon Program Data Sharing Guidelines
 ## Policy on Data Sharing
-This guideline is relevant to researchers and collaborators who has worked with the Hakai Institute Juvenile Salmon Program (JSP), or has collected data from samples collected using resources provided by the Hakai Institute. It is expected that all data generated from sample processing be shared with the Hakai Institute. This data will be incorporated into the open access Hakai Ecological Information Management System (EIMS), receive a digital object identifier (DOI) and ultimately become part of a citable data package that includes appropriate attribution to the author and conditions the author may request. The goal of this guide is to provide a framework for collaborators to organize their raw data into a tidy data set to facilitate this process.
+This guideline is relevant to researchers and collaborators who have worked with the Hakai Institute Juvenile Salmon Program (JSP), or have collected data from samples collected using resources provided by the Hakai Institute. It is expected that data generated from sample processing be shared with the Hakai Institute. This data will be incorporated into the open access Hakai Ecological Information Management System (EIMS), receive a digital object identifier (DOI) and ultimately become part of a citable data package that includes appropriate attribution to the author and conditions the author may request. The goal of this guide is to provide a framework for collaborators to organize their raw data into a tidy data set to facilitate this process.
 
 Collaborators, including graduate students, should make their data available following the publication of their research papers, thesis, or dissertations. When submitting data, you should provide a tidy data set (Wickham 2014), as well as a metadata code book describing each variable in the tidy data set. We recommend you follow these guidelines as soon as possible after the start of your project, to make laying out your tidy data table framework as easy as possible.
 
@@ -40,7 +40,7 @@ Lastly, each data table must have one column in common—a primary key— that a
 
 ### Cleaning and formatting data
 
-If an observation does not have a recorded variable (i.e., a blank cell), that cell should be filled with NA
+If an observation does not have a recorded variable (i.e., a blank cell), that cell should be filled with NA.
 Dates and times should follow the ISO format. Dates should be expressed as `yyyy-mm-dd` and times should be in 24-hour as `hh:mm:ss`.
 The top row of each column should be a header, and follow an unambiguous naming scheme, e.g. `age_class` instead of `AC`. Do not use spaces in column header names (underscores are preffered), and avoid capitalization at all costs.
 
@@ -66,7 +66,7 @@ Table | Variable name | Units or Categories | Description
 ## Resources
 * [Hakai Institute R Stats Guide](https://goose.hakai.org/rguide/#)
 * [Tidy Data Tables](http://r4ds.had.co.nz/tidy-data.html)
-* [Reltational Data](http://r4ds.had.co.nz/relational-data.html)
+* [Relational Data](http://r4ds.had.co.nz/relational-data.html)
 
 ## Literature Cited:
 
