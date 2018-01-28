@@ -322,9 +322,7 @@ rm(all_CU_by_week_by_org)
 ```
 
 ### Weight
-It seems weird that the sockeye weight appears to be greater for Hakai fish
-compared with DFO fish. I need to see if this is a result of some difference
-of how we weigh the fish. I can determine this by looking at the difference 
-in weights of 2017 fish based on field measurements and lab measurements.
-It's possible that the difference in the condition of fish may be attributed to 
-weight measurements, or a difference in the length measurement DFO uses.
+Before working with the weight data, I needt to understand the potential bias
+in our lab weight measurements by comparing the weights to what was measured in
+the field.
+
