@@ -1,0 +1,330 @@
+# Fine Scale Migration Dynamics Notebook
+## Concept
+
+Draft Title: Fine scale migration dynamics of juvenile salmon
+
+Focus on fine scale spatial distribution of outmigrating sockeye, pink and chum salmon, including:
+* Size structure
+* Stock composition
+* Migration timing?
+* Detailed descriptions of net design and operation.  
+* Measurement process - make sure that these are aligned!
+
+Data needs:
+* DFO lat and longs
+
+## Literature Review
+  __Gerbrandt, N., Sc, B., & Routledge, R. (2013). Early Marine Distribution of Out-Migrating Juvenile Sockeye Salmon ( Oncorhynchus nerka ). M.Sc. Thesis, Simon Fraser University.__
+
+Most sockeye swim within 2 m of surface
+Bigger fish enter more saline water
+Systems that enter directly into highly saline waters have higher proportion of 2 year olds.
+Populations migrating through systems with no surface freshwater layer actually swam deeper than populations with a fresh surface water layer.
+Surface salinity and day of year were significant predictors of fork length
+Beamish, R. J., Pearsall, I. a, & Healey, M. C. (2003). A history of the research on the early marine life of Pacific salmon off Canada’s Pacific coast. NPAFC Bulletin, 3(3), 1–40.
+
+__Brodeur, R. D., Myers, K. W., & Helle, J. H. (2003). Research conducted by the United States on the early ocean life history of Pacific salmon. North Pacific Anadromous Fish Commission Bulletin Number 3, (3), 89–131.__
+
+To read:
+Brodeur and Pearcy (1986)
+Pearcy and FIsher 1990
+Straty 1974: Looks like a good one
+Farley et al. (1999, 2000a, 2001a, c)
+Straty and Jaenicke 1980
+Straty 1981
+
+"Historical marking studies indicate some separa-
+tion in major stocks of juvenile Bristol Bay sockeye salmon as far seaward as Port Moller (Straty 1974). Differences that may contribute to stock-specific dis- tributions include time of outmigration, travel dis- tance from the lake system of origin, age, and size."
+  - This is more related to once they reach open ocean. 
+
+## Notebook
+```{r setup}
+library(hakaisalmon)
+library(here)
+library(tidyverse)
+library(ggridges)
+library(lubridate)
+library(knitr)
+library(broom)
+
+# read in dfo data that Chrys Neville provided that I tidied up first in excel
+dfo_data <- read_csv(here::here("data","dfo_data.csv"))
+
+# create a table of hakai data from the same site that I want to compare to
+# dfo.
+hakai_okisollo <- survey_seines_fish_stock_id %>% 
+  filter(site_id == "D09") %>% 
+  select(survey_date, site_id, species, fork_length, weight, stock_1, prob_1) %>% 
+  mutate(org = "hakai")
+
+okisollo <- rbind(hakai_okisollo, dfo_data) %>%
+  # categorize sampling events into categorical week and recod the categories so
+  # that the middle of the week is the label
+  mutate(sampling_week = as.numeric((yday(survey_date) + 4) %/% 7)) %>%
+  mutate(
+  sampling_week = recode_factor(sampling_week,
+  `18` = "May 5",
+  `19` = "May 12" ,
+  `20` = "May 19",
+  `21` = "May 26",
+  `22` = "June 2",
+  `23` = "June 9",
+  `24` = "June 16",
+  `25` = "June 23",
+  `26` = "June 30",
+  `27` = "July 6",
+  `28` = "July 13"
+  )
+  ) %>% 
+  mutate(k = 10^5*(weight / fork_length ^ 3)) %>% 
+  mutate(year = year(survey_date))
+
+# remove the old, now joined, tables
+rm(dfo_data)
+rm(hakai_okisollo)
+```
+### GSI
+One of the first things I want to do is simply look at the stock ID proportions
+across the whole year for both organizations to see very grossly if there are
+obvious differences. 
+
+It becomes clear that DFO caught a greater proportion of chilko (0.370) compared to Hakai (0.165). Also, DFO caught next to no Lower or Middle Shuswap while those
+stocks comprised 23.5% of the hakai catch.
+```{r annual gsi, fig.cap= "Genetic stock proportions of all stocks of sockeye captured in 2015 in Okisollo channel"}
+gsi_2015_okisollo <- okisollo %>% 
+  filter(year == 2015) %>% 
+  drop_na(site_id) %>% 
+  drop_na(stock_1) %>%
+  filter(prob_1 > 0.5) %>% 
+  group_by(org, stock_1) %>% 
+  summarize(n = n()) %>% 
+  mutate(proportion = n / sum(n)) %>% 
+  arrange(org) %>% 
+  filter(proportion >= 0.04) %>% 
+  ungroup()
+
+prop_remaining <- gsi_2015_okisollo  %>% 
+  group_by(org) %>% 
+  summarize(remaining = 1 - sum(proportion))
+
+dfo_prop_remaining <- as.numeric(prop_remaining[1,2])
+hakai_prop_remaining <- as.numeric(prop_remaining[2,2])
+
+gsi_2015_okisollo <- gsi_2015_okisollo %>% 
+  add_row(org = "DFO", stock_1 = NA, proportion = dfo_prop_remaining) %>% 
+  add_row(org = "hakai", stock_1 = NA, proportion = hakai_prop_remaining)
+  
+ggplot(gsi_2015_okisollo, aes(x = org, y = proportion, fill = stock_1)) +
+  geom_bar(colour="black", stat="identity", position = 'stack') + 
+  ggtitle("2015 Genetic Stock Proportions for DFO and Hakai at Okisollo")
+
+rm(prop_remaining)
+rm(gsi_2015_okisollo)
+```
+
+TODO: Check what the deal is with the stock labelled Middle in DFO data
+
+### Lenghts
+#### Stellako Lengths
+
+Its interesting that so many Stellako stocks were caught in deeper water by DFO.
+Could it be that the Stellako stocks are somehow different than the rest of the
+fish caught by both programs? Are they longer?
+
+```{r averaged over entire season}
+stellako <- okisollo %>% 
+  filter(stock_1 == "Stellako") %>% 
+  filter(year == 2015) %>% 
+  mutate(stock_group = "stellako")
+
+other <- okisollo %>% 
+  filter(year == 2015) %>% 
+  filter(stock_1 != "Stellako") %>% 
+  mutate(stock_group = "all_others")
+
+stellako <- rbind(stellako, other)
+
+ggplot(stellako, aes(x = fork_length, fill = stock_group)) +
+  geom_density(alpha = 0.5) +
+  ggtitle("Stellako Sockeye Length Distribution")
+
+t.test(fork_length ~ stock_group, data = stellako)
+
+# Demonstrate temporal sampling regime
+ggplot(stellako, aes(x = survey_date, y = stock_group)) +
+         geom_density_ridges()
+
+ggplot(stellako, aes(x = fork_length, y = sampling_week, fill = stock_group)) +
+  geom_density_ridges(alpha = 0.5) +
+  ggtitle("Stellako Sockeye Length Distribution")
+
+```
+
+When averaged over the length of the season Stellako fish appear to be longer.
+However, because there is general increase in fork_length over the length of the
+season, we could be biased if the temporal sampling is not the same. This needs
+to be addressed.
+
+Plot the temporal sampling distributions of stellako stocks and all
+others to see if there is a difference. I then conduct a paired t-test on the
+difference in lenghts on a per week basis to remove bias of sampling at
+different times of the season.
+
+```{r averaged by week}
+
+stellako_by_week <- stellako %>% 
+  group_by(sampling_week, stock_group) %>% 
+  summarize(mean = mean(fork_length, na.rm = TRUE)) %>% 
+  spread(key = stock_group, value = mean) %>% 
+  drop_na("stellako")
+
+stel <- as.numeric(stellako_by_week$stellako)
+oth <- as.numeric(stellako_by_week$all_others)
+
+t.test(stel, oth, paired = TRUE)
+
+rm(stellako_by_week)
+rm(other)
+rm(stellako)
+```
+
+The mean length of stellako stocks is longer on average than the rest of the 
+stocks, but there is not statistically significant difference.
+
+#### Chilko lengths
+
+```{r averaged by week}
+Chilko <- okisollo %>% 
+  filter(stock_1 == "Chilko") %>% 
+  filter(year == 2015) %>% 
+  mutate(stock_group = "Chilko")
+
+other <- okisollo %>% 
+  filter(year == 2015) %>% 
+  filter(stock_1 != "Chilko") %>% 
+  mutate(stock_group = "all_others")
+
+Chilko <- rbind(Chilko, other)
+
+# Plot samplind distribution to see if temporal sampling overlaps sufficiently
+# to remove the bias incurred from increasing fork_length over the season. 
+ggplot(Chilko, aes(x = survey_date, fill = stock_group)) +
+         geom_density(alpha = 0.5)
+
+# Plot length distributions by week
+ggplot(Chilko, aes(x = fork_length, y = sampling_week, fill = stock_group)) +
+  geom_density_ridges(alpha = 0.5) +
+  ggtitle("Chilko Sockeye Length Distribution")
+
+Chilko_by_week <- Chilko %>% 
+  group_by(sampling_week, stock_group) %>% 
+  summarize(mean = mean(fork_length, na.rm = TRUE)) %>% 
+  spread(key = stock_group, value = mean) %>% 
+  drop_na("Chilko") %>% 
+  mutate(diff = Chilko - all_others)
+
+# I noticed the difference in means of chilko lengths compared to all other
+# lengths seemed to increase over the season so I plotted the difference over
+# time and it is an intersting trend that I can't explain:
+ggplot(Chilko_by_week, aes(x = sampling_week, y = diff)) +
+    geom_point() 
+
+chil <- as.numeric(Chilko_by_week$Chilko)
+oth <- as.numeric(Chilko_by_week$all_others)
+
+t.test(chil, oth, paired = TRUE)
+
+rm(stel)
+rm(oth)
+rm(Chilko)
+rm(Chilko_by_week)
+rm(other)
+```
+
+#### Length frequencies of all stocks 
+```{r sockeye averaged by week}
+all_SO_by_week_by_org <- okisollo %>% 
+  filter(year == 2015, species == "SO") %>% 
+  group_by(sampling_week, org) %>% 
+  summarize(mean = mean(fork_length, na.rm = TRUE)) %>% 
+  spread(key = org, value = mean) %>% 
+  mutate(diff = DFO - hakai)
+
+# I noticed the difference in means of chilko lengths compared to all other
+# lengths seemed to increase over the season so I plotted the difference over
+# time and it is an intersting trend that I can't explain.
+ggplot(all_SO_by_week_by_org, aes(x = sampling_week, y = diff)) +
+    geom_point() 
+
+dfo <- as.numeric(all_SO_by_week_by_org$DFO)
+hakai <- as.numeric(all_SO_by_week_by_org$hakai)
+
+(SO_lengths_by_week_t_test <- tidy(t.test(dfo, hakai, paired = TRUE)))
+
+rm(dfo)
+rm(hakai)
+rm(SO_lengths_by_week_t_test)
+rm(all_SO_by_week_by_org)
+```
+
+```{r pink averaged by week}
+all_PI_by_week_by_org <- okisollo %>% 
+  filter(year == 2015, species == "PI") %>% 
+  filter(fork_length < 480) %>% # There was a dfo pink that was 480 mm caught 
+  # which is not the same age class so I filter it out.
+  group_by(sampling_week, org) %>% 
+  summarize(mean = mean(fork_length, na.rm = TRUE)) %>% 
+  spread(key = org, value = mean) %>% 
+  mutate(diff = DFO - hakai)
+
+# I noticed the difference in means of chilko lengths compared to all other
+# lengths seemed to increase over the season so I plotted the difference over
+# time and it is an intersting trend that I can't explain.
+ggplot(all_PI_by_week_by_org, aes(x = sampling_week, y = diff)) +
+    geom_point() 
+
+dfo <- as.numeric(all_PI_by_week_by_org$DFO)
+hakai <- as.numeric(all_PI_by_week_by_org$hakai)
+
+
+(PI_lengths_by_week_t_test <- tidy(t.test(dfo, hakai, paired = TRUE)))
+
+rm(dfo)
+rm(hakai)
+rm(PI_lengths_by_week_t_test)
+rm(all_PI_by_week_by_org)
+```
+
+```{r chum averaged by week}
+all_CU_by_week_by_org <- okisollo %>% 
+  filter(year == 2015, species == "CU") %>% 
+  group_by(sampling_week, org) %>% 
+  summarize(mean = mean(fork_length, na.rm = TRUE)) %>% 
+  spread(key = org, value = mean) %>% 
+  mutate(diff = DFO - hakai)
+
+# I noticed the difference in means of chilko lengths compared to all other
+# lengths seemed to increase over the season so I plotted the difference over
+# time and it is an intersting trend that I can't explain.
+ggplot(all_CU_by_week_by_org, aes(x = sampling_week, y = diff)) +
+    geom_point() 
+
+dfo <- as.numeric(all_CU_by_week_by_org$DFO)
+hakai <- as.numeric(all_CU_by_week_by_org$hakai)
+
+
+(CU_lengths_by_week_t_test <- tidy(t.test(dfo, hakai, paired = TRUE)))
+
+rm(dfo)
+rm(hakai)
+rm(CU_lengths_by_week_t_test)
+rm(all_CU_by_week_by_org)
+```
+
+### Weight
+It seems weird that the sockeye weight appears to be greater for Hakai fish
+compared with DFO fish. I need to see if this is a result of some difference
+of how we weigh the fish. I can determine this by looking at the difference 
+in weights of 2017 fish based on field measurements and lab measurements.
+It's possible that the difference in the condition of fish may be attributed to 
+weight measurements, or a difference in the length measurement DFO uses.
