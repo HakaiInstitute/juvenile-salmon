@@ -27,14 +27,14 @@ __Brodeur, R. D., Myers, K. W., & Helle, J. H. (2003). Research conducted by the
 
 To read:
 Brodeur and Pearcy (1986)
-Pearcy and FIsher 1990
+Pearcy and Fisher 1990
 Straty 1974: Looks like a good one
 Farley et al. (1999, 2000a, 2001a, c)
 Straty and Jaenicke 1980
 Straty 1981
 
 "Historical marking studies indicate some separa-
-tion in major stocks of juvenile Bristol Bay sockeye salmon as far seaward as Port Moller (Straty 1974). Differences that may contribute to stock-specific dis- tributions include time of outmigration, travel dis- tance from the lake system of origin, age, and size."
+tion in major stocks of juvenile Bristol Bay sockeye salmon as far seaward as Port Moller (Straty 1974). Differences that may contribute to stock-specific dis- tributions include time of out migration, travel dis- tance from the lake system of origin, age, and size."
   - This is more related to once they reach open ocean. 
 
 ## Notebook
@@ -50,11 +50,15 @@ library(broom)
 # read in dfo data that Chrys Neville provided that I tidied up first in excel
 dfo_data <- read_csv(here::here("data","dfo_data.csv"))
 
+dfo_data <- dfo_data %>% 
+  add_column(ufn = "ufn", .before = "org")
+
 # create a table of hakai data from the same site that I want to compare to
 # dfo.
 hakai_okisollo <- survey_seines_fish_stock_id %>% 
   filter(site_id == "D09") %>% 
-  select(survey_date, site_id, species, fork_length, weight, stock_1, prob_1) %>% 
+  select(survey_date, site_id, species, fork_length, weight, stock_1, prob_1,
+         ufn) %>% 
   mutate(org = "hakai")
 
 okisollo <- rbind(hakai_okisollo, dfo_data) %>%
@@ -79,9 +83,6 @@ okisollo <- rbind(hakai_okisollo, dfo_data) %>%
   mutate(k = 10^5*(weight / fork_length ^ 3)) %>% 
   mutate(year = year(survey_date))
 
-# remove the old, now joined, tables
-rm(dfo_data)
-rm(hakai_okisollo)
 ```
 ### GSI
 One of the first things I want to do is simply look at the stock ID proportions
@@ -95,7 +96,7 @@ gsi_2015_okisollo <- okisollo %>%
   filter(year == 2015) %>% 
   drop_na(site_id) %>% 
   drop_na(stock_1) %>%
-  filter(prob_1 > 0.5) %>% 
+  filter(prob_1 > 0.6) %>% 
   group_by(org, stock_1) %>% 
   summarize(n = n()) %>% 
   mutate(proportion = n / sum(n)) %>% 
@@ -122,7 +123,46 @@ rm(prop_remaining)
 rm(gsi_2015_okisollo)
 ```
 
-TODO: Check what the deal is with the stock labelled Middle in DFO data
+Something that is important is to try to increase the sample size of hakai 
+fish identified from a few key seines that dfo conducted on the same day.
+```{r addtional possible stock_ids}
+hakai_so <- survey_seines_fish_stock_id %>% 
+  filter(site_id == "D09") %>% 
+  select(survey_date, site_id, species, fork_length, weight, stock_1, prob_1,
+         ufn, semsp_id) %>% 
+  mutate(org = "hakai")
+
+same_date <- semi_join(hakai_so, dfo_data, by = "survey_date") %>% 
+  filter(weight != "NA") %>% # removes fish that haven't been dissected
+  filter(is.na(prob_1)) # removes fish that have already been stock ID'd 
+
+# summarize how many fish DFO have stock ID'd per sampling event
+dfo_same_date <- semi_join(dfo_data, same_date, by = "survey_date") %>% 
+  filter(prob_1 != "NA") %>% 
+  group_by(survey_date) %>% 
+  summarize(n = n())
+
+hakai_same_date <- same_date %>% 
+  group_by(survey_date) %>% 
+  summarise(n_hakai = n())
+
+dates_worth_comparing <- full_join(dfo_same_date, hakai_same_date, by = "survey_date") %>% 
+  drop_na(n) %>% 
+  mutate(diff = n - n_hakai) %>% 
+  filter(diff > 0)
+
+dates_worth_comparing <- as.Date(dates_worth_comparing$survey_date)
+
+additional_hakai_fish <- same_date %>% 
+  filter(survey_date %in% dates_worth_comparing)
+```
+
+Based on the seines that DFO has done stock IDs, there is opportunity to stock ID an additional `r nrow(additional_hakai_fish)` fish from the Hakai collection.
+
+If analyzing additional DFO fish is an option, then I should redo the above analysis.
+
+---
+
 
 ### Lenghts
 #### Stellako Lengths
@@ -157,13 +197,14 @@ ggplot(stellako, aes(x = survey_date, y = stock_group)) +
 ggplot(stellako, aes(x = fork_length, y = sampling_week, fill = stock_group)) +
   geom_density_ridges(alpha = 0.5) +
   ggtitle("Stellako Sockeye Length Distribution")
-
 ```
 
 When averaged over the length of the season Stellako fish appear to be longer.
 However, because there is general increase in fork_length over the length of the
 season, we could be biased if the temporal sampling is not the same. This needs
 to be addressed.
+
+
 
 Plot the temporal sampling distributions of stellako stocks and all
 others to see if there is a difference. I then conduct a paired t-test on the
@@ -193,7 +234,7 @@ stocks, but there is not statistically significant difference.
 
 #### Chilko lengths
 
-```{r averaged by week}
+```{r averaged by-week}
 Chilko <- okisollo %>% 
   filter(stock_1 == "Chilko") %>% 
   filter(year == 2015) %>% 
@@ -326,3 +367,6 @@ Before working with the weight data, I needt to understand the potential bias
 in our lab weight measurements by comparing the weights to what was measured in
 the field.
 
+### CPUE
+It would be interesting to plot cpue for 1 week periods and do a linear regression between Hakai and DFO data to see if we capture migration timing
+similarly. 
