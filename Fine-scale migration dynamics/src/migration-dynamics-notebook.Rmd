@@ -38,6 +38,7 @@ tion in major stocks of juvenile Bristol Bay sockeye salmon as far seaward as Po
   - This is more related to once they reach open ocean. 
 
 ## Notebook
+
 ```{r setup}
 library(hakaisalmon)
 library(here)
@@ -84,6 +85,7 @@ okisollo <- rbind(hakai_okisollo, dfo_data) %>%
   mutate(year = year(survey_date))
 
 ```
+
 ### GSI
 One of the first things I want to do is simply look at the stock ID proportions
 across the whole year for both organizations to see very grossly if there are
@@ -91,6 +93,7 @@ obvious differences.
 
 It becomes clear that DFO caught a greater proportion of chilko (0.370) compared to Hakai (0.165). Also, DFO caught next to no Lower or Middle Shuswap while those
 stocks comprised 23.5% of the hakai catch.
+
 ```{r annual gsi, fig.cap= "Genetic stock proportions of all stocks of sockeye captured in 2015 in Okisollo channel"}
 gsi_2015_okisollo <- okisollo %>% 
   filter(year == 2015) %>% 
@@ -126,18 +129,17 @@ rm(gsi_2015_okisollo)
 Something that is important is to try to increase the sample size of hakai 
 fish identified from a few key seines that dfo conducted on the same day.
 
+To do that I calculate the number of fish that are currently compared, and 
+identify where we have additional un-dissected fish.
+
 
 ```{r addtional possible stock_ids}
 dfo_so <- dfo_data %>% 
   filter(species == "SO")
 
-n_packages <-package_data %>% 
-  distinct(package_id)
-
 hakai_so <- left_join(survey_seines_fish_stock_id, package_data) %>% 
   filter(site_id == "D09", species == "SO") %>% 
-  
-select(survey_date, site_id, species, fork_length, weight, stock_1,
+  select(survey_date, site_id, species, fork_length, weight, stock_1,
          prob_1, ufn, semsp_id, package_id) %>% 
   mutate(org = "hakai")
 
@@ -155,7 +157,8 @@ hakai_same_date_summary <- hakai_same_date %>%
   group_by(survey_date) %>% 
   summarise(n_hakai = n())
 
-dates_worth_comparing <- full_join(dfo_same_date, hakai_same_date_summary, by = "survey_date") %>% 
+dates_worth_comparing <- full_join(dfo_same_date, hakai_same_date_summary, 
+                                   by = "survey_date") %>% 
   drop_na(n) %>% 
   mutate(diff = n - n_hakai) %>% 
   filter(diff > 0)
@@ -168,7 +171,7 @@ additional_2015_hakai_fish <- hakai_same_date %>%
 # I didn't get the package IDs to populate, which may be because these fish 
 # never assigned a package_ID or for some other reasion
 
-rm(dfo_same_date, hakai_okisollo, hakai_same_date, dates_worth_comparing, same_date, hakai_so, summary_same_date)
+rm(dfo_same_date, hakai_okisollo, hakai_same_date, dates_worth_comparing, dfo_so, hakai_so, hakai_same_date_summary)
 ```
 
 Based on the seines that DFO has done stock IDs, there is opportunity to stock ID an additional `r nrow(additional_2015_hakai_fish)` fish from the Hakai collection, although none of these fish have actually been dissected.
@@ -177,9 +180,37 @@ If analyzing additional DFO fish is an option, then I should redo the above anal
 
 Also I should consider how important it is to compare the proportion of stocks observed by organization on the same date. If I only summarize proportions by the entire sampling season then it is not neccessary.
 
-TODO Consider what type of statistical test to use to classify difference in proportions. 
 
----
+#### Stock Proportions
+
+I need to develop a method to paramaterize the difference in proportions
+of stocks sampled. The simplest way to do this would be to summarize the stock proportions caught over the entire year. However, because we often sampled at different times of the season, ie our temporal distribution is
+dissimilar, an integration of stock proportions caught would likely show a difference in proportions caught but would be influenced mainly by the temporal distribution of sampling. Therefore, I want to compare proportions of stocks caught by both groups on the same day in the best case. This is sort of like a repeated measure, except from one week to the next I expect very different stock proportions. I therefore need to do  multiple proportion tests and parameterize the difference of each seine, and then average that parameter from every comparison I make. 
+
+I will try to do this will a chi square test.
+
+To do that, I need to convert proportions to integers by multiplying them by 100.
+```{r proportions test}
+
+okisollo_2015 <- okisollo %>% 
+  filter(year(survey_date) == 2015, species == "SO") %>% 
+  mutate(n = round(k * 100, 0)) %>% 
+  dplyr::select(org, stock_1, n) %>% 
+  drop_na(stock_1) %>% 
+  drop_na(n) %>% 
+  filter(n > 0)
+
+df <- as.data.frame(okisollo_2015)
+
+df.expanded <- df[rep(row.names(df), df$n), 1:2]
+
+table <- table(df.expanded$org, df.expanded$stock_1)
+head(table)
+
+(x2 <- chisq.test(table))
+```
+
+According to the chi square test the two methods are not independent.
 
 ### Lenghts
 #### Stellako Lengths
