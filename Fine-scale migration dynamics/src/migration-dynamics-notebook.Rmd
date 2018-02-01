@@ -125,44 +125,61 @@ rm(gsi_2015_okisollo)
 
 Something that is important is to try to increase the sample size of hakai 
 fish identified from a few key seines that dfo conducted on the same day.
+
+
 ```{r addtional possible stock_ids}
-hakai_so <- survey_seines_fish_stock_id %>% 
-  filter(site_id == "D09") %>% 
-  select(survey_date, site_id, species, fork_length, weight, stock_1, prob_1,
-         ufn, semsp_id) %>% 
+dfo_so <- dfo_data %>% 
+  filter(species == "SO")
+
+n_packages <-package_data %>% 
+  distinct(package_id)
+
+hakai_so <- left_join(survey_seines_fish_stock_id, package_data) %>% 
+  filter(site_id == "D09", species == "SO") %>% 
+  
+select(survey_date, site_id, species, fork_length, weight, stock_1,
+         prob_1, ufn, semsp_id, package_id) %>% 
   mutate(org = "hakai")
 
-same_date <- semi_join(hakai_so, dfo_data, by = "survey_date") %>% 
-  filter(weight != "NA") %>% # removes fish that haven't been dissected
+hakai_same_date <- semi_join(hakai_so, dfo_so, by = "survey_date") %>% 
+  #filter(weight != "NA") %>% # removes fish that haven't been dissected
   filter(is.na(prob_1)) # removes fish that have already been stock ID'd 
 
 # summarize how many fish DFO have stock ID'd per sampling event
-dfo_same_date <- semi_join(dfo_data, same_date, by = "survey_date") %>% 
+dfo_same_date <- semi_join(dfo_so, hakai_same_date, by = "survey_date") %>% 
   filter(prob_1 != "NA") %>% 
   group_by(survey_date) %>% 
   summarize(n = n())
 
-hakai_same_date <- same_date %>% 
+hakai_same_date_summary <- hakai_same_date %>% 
   group_by(survey_date) %>% 
   summarise(n_hakai = n())
 
-dates_worth_comparing <- full_join(dfo_same_date, hakai_same_date, by = "survey_date") %>% 
+dates_worth_comparing <- full_join(dfo_same_date, hakai_same_date_summary, by = "survey_date") %>% 
   drop_na(n) %>% 
   mutate(diff = n - n_hakai) %>% 
   filter(diff > 0)
 
 dates_worth_comparing <- as.Date(dates_worth_comparing$survey_date)
 
-additional_hakai_fish <- same_date %>% 
-  filter(survey_date %in% dates_worth_comparing)
+additional_2015_hakai_fish <- hakai_same_date %>% 
+  filter(survey_date %in% dates_worth_comparing) %>% 
+  left_join(package_data, additional_2015_hakai_fish, by = "package_id")
+# I didn't get the package IDs to populate, which may be because these fish 
+# never assigned a package_ID or for some other reasion
+
+rm(dfo_same_date, hakai_okisollo, hakai_same_date, dates_worth_comparing, same_date, hakai_so, summary_same_date)
 ```
 
-Based on the seines that DFO has done stock IDs, there is opportunity to stock ID an additional `r nrow(additional_hakai_fish)` fish from the Hakai collection.
+Based on the seines that DFO has done stock IDs, there is opportunity to stock ID an additional `r nrow(additional_2015_hakai_fish)` fish from the Hakai collection, although none of these fish have actually been dissected.
 
 If analyzing additional DFO fish is an option, then I should redo the above analysis.
 
----
+Also I should consider how important it is to compare the proportion of stocks observed by organization on the same date. If I only summarize proportions by the entire sampling season then it is not neccessary.
 
+TODO Consider what type of statistical test to use to classify difference in proportions. 
+
+---
 
 ### Lenghts
 #### Stellako Lengths
