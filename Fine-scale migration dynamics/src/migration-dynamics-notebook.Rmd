@@ -26,8 +26,6 @@ Beamish, R. J., Pearsall, I. a, & Healey, M. C. (2003). A history of the researc
 __Brodeur, R. D., Myers, K. W., & Helle, J. H. (2003). Research conducted by the United States on the early ocean life history of Pacific salmon. North Pacific Anadromous Fish Commission Bulletin Number 3, (3), 89–131.__
 
 To read:
-Brodeur and Pearcy (1986)
-Pearcy and Fisher 1990
 Straty 1974: Looks like a good one
 Farley et al. (1999, 2000a, 2001a, c)
 Straty and Jaenicke 1980
@@ -36,6 +34,16 @@ Straty 1981
 "Historical marking studies indicate some separa-
 tion in major stocks of juvenile Bristol Bay sockeye salmon as far seaward as Port Moller (Straty 1974). Differences that may contribute to stock-specific dis- tributions include time of out migration, travel dis- tance from the lake system of origin, age, and size."
   - This is more related to once they reach open ocean. 
+  __Farley, E. V, Murphy, J. M., Wing, B. W., Moss, J. H., & Middleton, A. (2005). Distribution , Migration Pathways , and Size of Western Alaska Juvenile Salmon Along the Eastern Bering Sea Shelf. Alaska Fishery Research Bulletin, 11(1), 15–26.__
+  
+This paper used a GAM with distance from shore, distance from river mouth, and Julian date to understand what was affecting fork length
+To read:
+Hartt and Dell 1986; 
+Isakson et al. 1986; 
+Straty 1974
+
+For pink, chum, chinook, and sockeye.
+"In general, length of juvenile salmon increased with the distance from freshwater rearing locations (Figures 4a–e; 5a–c). The length of juvenile age-1.0 and -2.0 sockeye salmon increased with distance from river mouth and displayed a bell shaped curve offshore from the southern shoreline of the SBS region, with the largest fish distributed within middle Bristol Bay and the smallest fish along the southern and northern shorelines (Figures 4a and b)."
 
 ## Notebook
 
@@ -83,16 +91,12 @@ okisollo <- rbind(hakai_okisollo, dfo_data) %>%
   ) %>% 
   mutate(k = 10^5*(weight / fork_length ^ 3)) %>% 
   mutate(year = year(survey_date))
-
 ```
 
 ### GSI
 One of the first things I want to do is simply look at the stock ID proportions
 across the whole year for both organizations to see very grossly if there are
 obvious differences. 
-
-It becomes clear that DFO caught a greater proportion of chilko (0.370) compared to Hakai (0.165). Also, DFO caught next to no Lower or Middle Shuswap while those
-stocks comprised 23.5% of the hakai catch.
 
 ```{r annual gsi, fig.cap= "Genetic stock proportions of all stocks of sockeye captured in 2015 in Okisollo channel"}
 gsi_2015_okisollo <- okisollo %>% 
@@ -125,6 +129,8 @@ ggplot(gsi_2015_okisollo, aes(x = org, y = proportion, fill = stock_1)) +
 rm(prop_remaining)
 rm(gsi_2015_okisollo)
 ```
+It becomes clear that DFO caught a greater proportion of chilko (0.370) compared to Hakai (0.165). Also, DFO caught next to no Lower or Middle Shuswap while those
+stocks comprised 23.5% of the hakai catch.
 
 Something that is important is to try to increase the sample size of hakai 
 fish identified from a few key seines that dfo conducted on the same day.
@@ -144,7 +150,6 @@ hakai_so <- left_join(survey_seines_fish_stock_id, package_data) %>%
   mutate(org = "hakai")
 
 hakai_same_date <- semi_join(hakai_so, dfo_so, by = "survey_date") %>% 
-  #filter(weight != "NA") %>% # removes fish that haven't been dissected
   filter(is.na(prob_1)) # removes fish that have already been stock ID'd 
 
 # summarize how many fish DFO have stock ID'd per sampling event
@@ -168,13 +173,11 @@ dates_worth_comparing <- as.Date(dates_worth_comparing$survey_date)
 additional_2015_hakai_fish <- hakai_same_date %>% 
   filter(survey_date %in% dates_worth_comparing) %>% 
   left_join(package_data, additional_2015_hakai_fish, by = "package_id")
-# I didn't get the package IDs to populate, which may be because these fish 
-# never assigned a package_ID or for some other reasion
 
 rm(dfo_same_date, hakai_okisollo, hakai_same_date, dates_worth_comparing, dfo_so, hakai_so, hakai_same_date_summary)
 ```
 
-Based on the seines that DFO has done stock IDs, there is opportunity to stock ID an additional `r nrow(additional_2015_hakai_fish)` fish from the Hakai collection, although none of these fish have actually been dissected.
+Based on the seines that DFO has done stock IDs, there is opportunity to stock ID an additional `r nrow(additional_2015_hakai_fish)` fish from the Hakai collection, although none of these fish have actually been dissected. Identifying
 
 If analyzing additional DFO fish is an option, then I should redo the above analysis.
 
@@ -192,6 +195,7 @@ I will try to do this will a chi square test.
 To do that, I need to convert proportions to integers by multiplying them by 100.
 ```{r proportions test}
 
+# First, test proportion over the whole year
 okisollo_2015 <- okisollo %>% 
   filter(year(survey_date) == 2015, species == "SO") %>% 
   mutate(n = round(k * 100, 0)) %>% 
@@ -208,9 +212,40 @@ table <- table(df.expanded$org, df.expanded$stock_1)
 head(table)
 
 (x2 <- chisq.test(table))
+
+# Then, test proportions over each week
+#TODO: Figure out if the chi square test is the best way to test this, it may
+# be sufficient to plot this by date.
+#TODO: Test proportions over each week.
 ```
 
-According to the chi square test the two methods are not independent.
+According to the chi square test for the entire seasons proportions, the two methods are not independent.
+
+```{r plot proportions by week}
+
+comparable_dates <- c(as_date("2015-06-01"), as_date("2015-06-09"), as_date("2015-06-22"), as_date("2015-06-29"),
+                            as_date("2015-07-06"), as_date("2015-07-07"))
+okisollo %>% 
+  drop_na(site_id) %>% 
+  drop_na(stock_1) %>%
+  filter(prob_1 > 0.5) %>% 
+  filter(survey_date %in% comparable_dates) %>% 
+  group_by(org, survey_date, stock_1) %>% 
+  summarize(n = n()) %>% 
+  mutate(proportion = n / sum(n)) %>% 
+  arrange(org) %>% 
+  ggplot(aes(x = org, y = proportion, fill = stock_1, label = n)) +
+    geom_bar(colour="black", stat="identity", position = 'stack') +
+   geom_text(size = 3, position = position_stack(vjust = 0.5)) +
+  facet_wrap(~ survey_date) + 
+  scale_x_discrete(breaks=c("DFO", "hakai"),
+                      labels=c("Deep", "Shallow"))+
+  xlab("Habitat") +
+  ylab("Proportion")
+
+ggsave(here::here("figs", "gsi_props_by_week.png"))
+```
+
 
 ### Lenghts
 #### Stellako Lengths
@@ -348,11 +383,11 @@ ggplot(all_SO_by_week_by_org, aes(x = sampling_week, y = diff)) +
 dfo <- as.numeric(all_SO_by_week_by_org$DFO)
 hakai <- as.numeric(all_SO_by_week_by_org$hakai)
 
-(SO_lengths_by_week_t_test <- tidy(t.test(dfo, hakai, paired = TRUE)))
+(SO_lengths_by_week_t_test <- tidy(t.test(dfo, hakai, paired = TRUE)) %>% 
+    mutate(species = "SO"))
 
 rm(dfo)
 rm(hakai)
-rm(SO_lengths_by_week_t_test)
 rm(all_SO_by_week_by_org)
 ```
 
@@ -376,11 +411,11 @@ dfo <- as.numeric(all_PI_by_week_by_org$DFO)
 hakai <- as.numeric(all_PI_by_week_by_org$hakai)
 
 
-(PI_lengths_by_week_t_test <- tidy(t.test(dfo, hakai, paired = TRUE)))
+(PI_lengths_by_week_t_test <- tidy(t.test(dfo, hakai, paired = TRUE)) %>% 
+    mutate(species = "PI"))
 
 rm(dfo)
 rm(hakai)
-rm(PI_lengths_by_week_t_test)
 rm(all_PI_by_week_by_org)
 ```
 
@@ -402,12 +437,36 @@ dfo <- as.numeric(all_CU_by_week_by_org$DFO)
 hakai <- as.numeric(all_CU_by_week_by_org$hakai)
 
 
-(CU_lengths_by_week_t_test <- tidy(t.test(dfo, hakai, paired = TRUE)))
+(CU_lengths_by_week_t_test <- tidy(t.test(dfo, hakai, paired = TRUE)) %>% 
+    mutate(species = "CU"))
 
+
+rm(CU_lengths_by_week_t_test)
+rm(PI_lengths_by_week_t_test)
+rm(SO_lengths_by_week_t_test)  
 rm(dfo)
 rm(hakai)
-rm(CU_lengths_by_week_t_test)
 rm(all_CU_by_week_by_org)
+```
+
+```{r barplot of all species lengths}
+
+lengths_2015 <- okisollo %>% 
+  filter(year == 2015, fork_length < 300, species %in% c("SO", "PI", "CU", "CO")) %>%
+  group_by(org, species) %>% 
+  summarise(mean = mean(fork_length, na.rm = T),
+            sd = sd(fork_length, na.rm = T), 
+            n = n()) %>% 
+  mutate(CI = 1.96 * (sd/sqrt(n)))
+
+lengths_2015 %>% ggplot(aes(x = species, y = mean, fill = org)) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+    geom_errorbar(position = position_dodge(.9), width = .25, aes(ymin = mean - CI, ymax = mean +
+                        CI)) +
+  ylab("Fork Length (mm)") +
+  xlab("Species")
+
+ggsave(here::here("figs", "fork_length_barplot.png"))
 ```
 
 ### Weight
