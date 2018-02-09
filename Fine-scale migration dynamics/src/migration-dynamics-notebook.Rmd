@@ -3,14 +3,13 @@ title: "Fine Scale Migration Dynamics"
 author: "Brett Johnson"
 date: "February 5, 2018"
 output: 
-  html_document:
+  bookdown::html_document2:
     theme: "sandstone"
     code_folding: hide
     toc: true
     toc_float: true
     toc_depth: 3
 ---
-# Concept
 
 Draft Title: Fine scale migration dynamics of juvenile salmon
 
@@ -24,7 +23,8 @@ Focus on fine scale spatial distribution of outmigrating sockeye, pink and chum 
 Data needs:
 * DFO lat and longs
 
-# Literature Review
+Lit Review:
+
 __Gerbrandt, N., Sc, B., & Routledge, R. (2013). Early Marine Distribution of Out-Migrating Juvenile Sockeye Salmon ( Oncorhynchus nerka ). M.Sc. Thesis, Simon Fraser University.__
 
 Most sockeye swim within 2 m of surface
@@ -56,7 +56,6 @@ Straty 1974
 For pink, chum, chinook, and sockeye.
 "In general, length of juvenile salmon increased with the distance from freshwater rearing locations (Figures 4a–e; 5a–c). The length of juvenile age-1.0 and -2.0 sockeye salmon increased with distance from river mouth and displayed a bell shaped curve offshore from the southern shoreline of the SBS region, with the largest fish distributed within middle Bristol Bay and the smallest fish along the southern and northern shorelines (Figures 4a and b)."
 
-# Analysis Notebook
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, error = FALSE)
@@ -105,9 +104,11 @@ okisollo <- rbind(hakai_okisollo, dfo_data) %>%
   mutate(year = year(survey_date))
 ```
 
-## GSI {.tabset}
+# GSI 
 
-### Annual Proportion
+## Stock Proportions {.tabset}
+
+### Annual proportion
 One of the first things I want to do is simply look at the stock ID proportions
 across the whole year for both organizations to see very grossly if there are
 obvious differences. 
@@ -143,7 +144,10 @@ ggplot(gsi_2015_okisollo, aes(x = org, y = proportion, fill = stock_1)) +
 rm(prop_remaining)
 rm(gsi_2015_okisollo)
 ```
+
 It becomes clear that DFO caught a greater proportion of chilko (0.370) compared to Hakai (0.165). Also, DFO caught 20 % Stellako while Hakai caught a very low proportion.
+
+### Additional stock ID
 
 Something that is important is to try to increase the sample size of hakai 
 fish identified from a few key seines that dfo conducted on the same day.
@@ -204,9 +208,9 @@ I need to develop a method to paramaterize the difference in proportions
 of stocks sampled. The simplest way to do this would be to summarize the stock proportions caught over the entire year. However, because we often sampled at different times of the season, ie our temporal distribution is
 dissimilar, an integration of stock proportions caught would likely show a difference in proportions caught but would be influenced mainly by the temporal distribution of sampling. Therefore, I want to compare proportions of stocks caught by both groups on the same day in the best case. This is sort of like a repeated measure, except from one week to the next I expect very different stock proportions. I therefore need to do  multiple proportion tests and parameterize the difference of each seine, and then average that parameter from every comparison I make. 
 
-I will try to do this will a chi square test.
+I will try to do this fitst by calculating stock proportion over the whole year, with a chi square test. This should serve as a test case that I expect to show that these fish were sampled from different populations.
 
-To do that, I need to convert proportions to integers by multiplying them by 100.
+First, I need to convert proportions to integers by multiplying them by 100.
 ```{r proportions test}
 
 # First, test proportion over the whole year
@@ -235,7 +239,7 @@ rm(okisollo_2015, x2, df, df.expanded)
 #TODO: Test proportions over each week.
 ```
 
-According to the chi square test for the entire seasons proportions, the two methods are not independent.
+According to the chi square test for the entire seasons proportions, the two methods of sampling are not independent. Given that I really didn't expect this result, and given that when I plot the proportions annually it is clear that they are quite different, I'm not sure that a chi square test is the appropriate statistical test to use.
 
 ### Stock Proportions by Week
 
@@ -264,13 +268,12 @@ okisollo %>%
 ggsave(here::here("figs", "gsi_props_by_week.png"))
 ```
 
-
-## Lenghts {.tabset}
-### Stellako Lengths
+# Lenghts 
+## Stellako Lengths {.tabset}
 
 Its interesting that so many Stellako stocks were caught in deeper water by DFO. I propose two questions:
 
-#### 1. Are the stellako fish caught by each organization different than each other?
+### Are the stellako fish caught by each organization different than each other?
 
 ```{r compare stellako fish by org}
 stellako_length_dist_by_org <- okisollo %>% 
@@ -287,7 +290,7 @@ ggplot(stellako_length_dist_by_org, aes(x = fork_length, y = org)) +
 
 #### 2. Are stellako different than other stocks?
 
-```{r compare stellako from both orgs to all other stocks}
+```{r fig.cap= "Stellako from both orgs temporal sampling distribution"}
 stellako <- okisollo %>% 
   filter(stock_1 == "Stellako") %>% 
   filter(year == 2015) %>% 
@@ -304,60 +307,61 @@ stellako <- rbind(stellako, other)
 ggplot(stellako, aes(x = survey_date, y = stock_group)) +
          geom_density_ridges() +
   ggtitle("Stellako (from both orgs) temporal sampling distribution")
+```
 
+```{r, fig.cap="Stellako sockeye length distribution"}
+# Demonstrate lengthe frequency distribution by stock by week
 ggplot(stellako, aes(x = fork_length, y = sampling_week, fill = stock_group)) +
   geom_density_ridges(alpha = 0.5) +
   ggtitle("Stellako sockeye length distribution")
-
-# Because the temporal sampling frequency is so different between stellako and other fish, I average lengths by week
-
-stellako_by_week <- stellako %>% 
-  group_by(year, stock_group, sampling_week) %>% 
-  summarize(mean_fl = mean(fork_length, na.rm = T))
-
-ggplot(stellako_by_week, aes(x = mean_fl, fill = stock_group)) +
-  geom_density(alpha = 0.5) +
-  ggtitle("Stellako sockeye length distribution from both organizations compared to all other stocks not including stellako")
-
-#TODO: make sure that this t-test is taking into account sampling_week. I think I need to filter out events where there isn't a match.
-t.test(mean_fl ~ stock_group, data = stellako_by_week)
-
 ```
 
-When averaged over the length of the season Stellako fish appear to be longer.
-However, because there is general increase in fork_length over the length of the
-season, we could be biased if the temporal sampling is not the same. __This needs
-to be addressed.__ 
-
-
-Plot the temporal sampling distributions of stellako stocks and all
-others to see if there is a difference. I then conduct a paired t-test on the
-difference in lenghts on a per week basis to remove bias of sampling at
-different times of the season.
-
-```{r averaged by week}
+```{r, Stellako sockeye length distribution from both organizations compared to all other stocks not including stellako}
+# Because the temporal sampling frequency is so different between stellako and other fish, I average lengths by week so that I can do a t-test on a comparable sample
 
 stellako_by_week <- stellako %>% 
   group_by(sampling_week, stock_group) %>% 
-  summarize(mean = mean(fork_length, na.rm = TRUE)) %>% 
-  spread(key = stock_group, value = mean) %>% 
-  drop_na("stellako")
+  summarize(mean_fl = mean(fork_length, na.rm = TRUE)) 
 
+ggplot(stellako_by_week, aes(x = mean_fl, fill = stock_group)) +
+  geom_density(alpha = 0.5) +
+  ggtitle("")
+
+stellako_by_week <- stellako %>% 
+  group_by(sampling_week, stock_group) %>% 
+  summarize(mean_fl = mean(fork_length, na.rm = TRUE)) %>% 
+  spread(key = stock_group, value = mean_fl) %>% 
+  drop_na("stellako") %>% 
+  mutate(diff = stellako - all_others)
+
+ggplot(stellako_by_week, aes(x = sampling_week, y = diff)) +
+  geom_point() +
+  ggtitle("Diff of stellako lengths and all other stocks")
+
+```
+
+```{r}
 stel <- as.numeric(stellako_by_week$stellako)
 oth <- as.numeric(stellako_by_week$all_others)
 
-t.test(stel, oth, paired = TRUE)
+t.test(stel, oth, paired = FALSE)
 
 rm(stellako_by_week)
 rm(other)
 rm(stellako)
 ```
+
+
+```{r averaged by week}
+
+```
+
 TODO: I should look at DFOs Stellako lengths to see if maybe they were catching a higher proportion of
 2 year olds.
 
-### Chilko lengths
+## Chilko lengths {.tabset}
 
-```{r averaged by-week}
+```{r sampling distributions}
 Chilko <- okisollo %>% 
   filter(stock_1 == "Chilko") %>% 
   filter(year == 2015) %>% 
@@ -368,36 +372,53 @@ other <- okisollo %>%
   filter(stock_1 != "Chilko") %>% 
   mutate(stock_group = "all_others")
 
-Chilko <- rbind(Chilko, other)
+chilko_and_other <- rbind(Chilko, other)
 
 # Plot samplind distribution to see if temporal sampling overlaps sufficiently
 # to remove the bias incurred from increasing fork_length over the season. 
-ggplot(Chilko, aes(x = survey_date, fill = stock_group)) +
-         geom_density(alpha = 0.5)
+ggplot(chilko_and_other, aes(x = survey_date, fill = stock_group)) +
+         geom_density(alpha = 0.5) +
+  ggtitle("sampling distribution of stock groups")
 
 # Plot length distributions by week
-ggplot(Chilko, aes(x = fork_length, y = sampling_week, fill = stock_group)) +
+ggplot(chilko_and_other, aes(x = fork_length, y = sampling_week, fill = stock_group)) +
   geom_density_ridges(alpha = 0.5) +
   ggtitle("Chilko Sockeye Length Distribution")
+```
 
-Chilko_by_week <- Chilko %>% 
+```{r diff in lengths of chilko compared to all others}
+chilko_by_week <- chilko_and_other %>% 
   group_by(sampling_week, stock_group) %>% 
   summarize(mean = mean(fork_length, na.rm = TRUE)) %>% 
   spread(key = stock_group, value = mean) %>% 
   drop_na("Chilko") %>% 
   mutate(diff = Chilko - all_others)
-
 # I noticed the difference in means of chilko lengths compared to all other
 # lengths seemed to increase over the season so I plotted the difference over
 # time and it is an intersting trend that I can't explain:
-ggplot(Chilko_by_week, aes(x = sampling_week, y = diff)) +
-    geom_point() 
+ggplot(chilko_by_week, aes(x = sampling_week, y = diff)) +
+    geom_point() +
+  ggtitle("Diff in lengths of Chilko vs other stocks")
 
-chil <- as.numeric(Chilko_by_week$Chilko)
-oth <- as.numeric(Chilko_by_week$all_others)
+chil <- as.numeric(chilko_by_week$Chilko)
+oth <- as.numeric(chilko_by_week$all_others)
 
-t.test(chil, oth, paired = TRUE)
+t.test(chil, oth, paired = FALSE)
+```
 
+```{r diff in lengths of chilko between orgs}
+Chilko %>% 
+  group_by(org, sampling_week) %>% 
+  summarise(mean_fl = mean(fork_length, na.rm = TRUE)) %>% 
+  spread(key = org, value = mean_fl) %>% 
+  mutate(diff = DFO - hakai) %>% 
+  drop_na() %>% 
+  ggplot(aes(x = sampling_week, y = diff)) +
+  geom_point() +
+  geom_smooth() + 
+  ggtitle("Diff in lengths of chilko between hakai and dfo")
+
+#TODO: t-test to see if Chilko stocks from hakai are shorter than dfo
 rm(stel)
 rm(oth)
 rm(Chilko)
@@ -405,7 +426,7 @@ rm(Chilko_by_week)
 rm(other)
 ```
 
-### T-test lengths
+### T-test lengths (species x org)
 
 Here I compute the average fork length for each species by week and then calculate the difference in average lengths for each week. I then conduct a t-test on the averaged length for each week, for each species.
 I do this in an attempt to standardize the sampling over time, because we know fish are growing longer over time, and having unequal temporal sampling distribution would skew the results.
@@ -431,7 +452,14 @@ hakai <- as.numeric(all_SO_by_week_by_org$hakai)
 (SO_lengths_by_week_t_test <- tidy(t.test(dfo, hakai, paired = TRUE)) %>% 
     mutate(species = "SO"))
 
-
+okisollo_2015_so_lengths <- okisollo %>% 
+  filter(year == "2015") %>% 
+  filter(fork_length < 300, species == "SO") 
+  
+ggplot(okisollo_2015_so_lengths, aes(x = survey_date, y = fork_length, colour = species)) +
+  geom_point() +
+  geom_smooth(method = lm)+ 
+  facet_grid(org~.)
 ```
 
 ```{r pink averaged by week}
@@ -523,7 +551,9 @@ were  longer than shallow caught fish. This is just based on the annual average 
 
 It's possible that I need to use a more complicated model to include the variation that is introduced by the time variable.
 
-## Weight {.tabset}
+# Weight 
+
+## Weight averaged annualy by region {.tabset}
 Before working with the weight data, I needt to understand the potential bias
 in our lab weight measurements by comparing the weights to what was measured in
 the field.
