@@ -71,13 +71,14 @@ library(broom)
 dfo_data <- read_csv(here::here("data","dfo_data.csv"))
 
 dfo_data <- dfo_data %>% 
-  add_column(ufn = "ufn", .before = "org")
+  add_column(ufn = "ufn", .before = "org") %>% 
+  select(-prob_1)
 
 # create a table of hakai data from the same site that I want to compare to
 # dfo.
 hakai_okisollo <- survey_seines_fish_stock_id %>% 
-  filter(site_id == "D09") %>% 
-  select(survey_date, site_id, lat, lon, species, fork_length, weight, stock_1, prob_1,
+  filter(site_id == "D09", prob_1 > 0.6) %>% 
+  select(survey_date, site_id, lat, lon, species, fork_length, weight, stock_1,
          ufn) %>% 
   add_column(org = "hakai", .after = "ufn") %>% 
   add_column(DNA = NA, .after = "weight") %>% 
@@ -116,36 +117,39 @@ across the whole year for both organizations to see very grossly if there are
 obvious differences. 
 
 ```{r annual gsi, fig.cap= "Genetic stock proportions of all stocks of sockeye captured in 2015 in Okisollo channel"}
-gsi_2015_okisollo <- okisollo %>% 
-  filter(year == 2015) %>% 
+gsi_okisollo <- okisollo %>% 
   drop_na(site_id) %>% 
   drop_na(stock_1) %>%
-  filter(prob_1 > 0.6) %>% 
-  group_by(org, stock_1) %>% 
+  group_by(year, org, stock_1) %>% 
   summarize(n = n()) %>% 
   mutate(proportion = n / sum(n)) %>% 
   arrange(org) %>% 
   filter(proportion >= 0.04) %>% 
   ungroup()
 
-prop_remaining <- gsi_2015_okisollo  %>% 
-  group_by(org) %>% 
+prop_remaining <- gsi_okisollo  %>% 
+  group_by(year, org) %>% 
   summarize(remaining = 1 - sum(proportion))
 
-dfo_prop_remaining <- as.numeric(prop_remaining[1,2])
-hakai_prop_remaining <- as.numeric(prop_remaining[2,2])
+dfo_prop_remaining_2015 <- as.numeric(prop_remaining[1,3])
+hakai_prop_remaining_2015 <- as.numeric(prop_remaining[2,3])
+dfo_prop_remaining_2016 <- as.numeric(prop_remaining[3,3])
+hakai_prop_remaining_2016 <- as.numeric(prop_remaining[4,3])
 
-gsi_2015_okisollo <- gsi_2015_okisollo %>% 
-  add_row(org = "DFO", stock_1 = NA, proportion = dfo_prop_remaining) %>% 
-  add_row(org = "hakai", stock_1 = NA, proportion = hakai_prop_remaining)
+gsi_okisollo <- gsi_okisollo %>% 
+  add_row(year = 2015, org = "DFO", stock_1 = NA, proportion = dfo_prop_remaining_2015) %>% 
+  add_row(year= 2015, org = "hakai", stock_1 = NA, proportion = hakai_prop_remaining_2015) %>%
+  add_row(year= 2016, org = "DFO", stock_1 = NA, proportion = dfo_prop_remaining_2016) %>% 
+  add_row(year= 2016, org = "hakai", stock_1 = NA, proportion = hakai_prop_remaining_2016)
   
-ggplot(gsi_2015_okisollo, aes(x = org, y = proportion, fill = stock_1)) +
+ggplot(gsi_okisollo, aes(x = org, y = proportion, fill = stock_1)) +
   geom_bar(colour="black", stat="identity", position = 'stack') + 
-  ggtitle("2015 Genetic Stock Proportions for DFO and Hakai at Okisollo")
+  ggtitle("2015 Genetic Stock Proportions for DFO and Hakai at Okisollo") +
+  facet_grid(~year)
 
 ggsave(here::here("figs", "annual_gsi.png"))
 rm(prop_remaining)
-rm(gsi_2015_okisollo)
+rm(gsi_okisollo)
 ```
 
 It becomes clear that DFO caught a greater proportion of chilko (0.370) compared to Hakai (0.165). Also, DFO caught 20 % Stellako while Hakai caught a very low proportion.
