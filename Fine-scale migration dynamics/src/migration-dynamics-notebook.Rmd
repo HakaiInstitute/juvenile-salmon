@@ -178,7 +178,7 @@ hakai_same_date <- semi_join(hakai_so, dfo_so, by = "survey_date") %>%
 
 # summarize how many fish DFO have stock ID'd per sampling event
 dfo_same_date <- semi_join(dfo_so, hakai_same_date, by = "survey_date") %>% 
-  filter(prob_1 != "NA") %>% 
+  filter(stock_1 != "NA") %>% 
   group_by(survey_date) %>% 
   summarize(n = n())
 
@@ -200,7 +200,7 @@ additional_2015_hakai_fish <- hakai_same_date %>%
 
 print(additional_2015_hakai_fish)
 
-rm(dfo_same_date, hakai_okisollo, hakai_same_date, dates_worth_comparing, dfo_so, hakai_so, hakai_same_date_summary)
+rm(dfo_same_date, hakai_same_date, dates_worth_comparing, dfo_so, hakai_so, hakai_same_date_summary)
 ```
 
 Based on the seines that DFO has done stock IDs, there is opportunity to stock ID an additional `r nrow(additional_2015_hakai_fish)` fish from the Hakai collection, although none of these fish have actually been dissected.
@@ -219,7 +219,7 @@ I will try to do this fitst by calculating stock proportion over the whole year,
 
 First, I need to convert proportions to integers by multiplying them by 100.
 ```{r proportions test}
-
+#TODO: re-work this whole section
 # First, test proportion over the whole year
 okisollo_2015 <- okisollo %>% 
   filter(year(survey_date) == 2015, species == "SO") %>% 
@@ -251,14 +251,17 @@ According to the chi square test for the entire seasons proportions, the two met
 ### Stock Proportions by Week
 
 ```{r plot proportions by week}
+comp_dates <- semi_join(dfo_data, hakai_okisollo, by = "survey_date") %>% 
+  filter(species == "SO", stock_1 != "NA") %>% 
+  group_by(survey_date) %>% 
+  summarize(n = n())
 
-comparable_dates <- c(as_date("2015-06-01"), as_date("2015-06-09"), as_date("2015-06-22"), as_date("2015-06-29"),
-                            as_date("2015-07-06"), as_date("2015-07-07"))
+comparable_dates <- as.list(comp_dates$survey_date)
+
 okisollo %>% 
   drop_na(site_id) %>% 
   drop_na(stock_1) %>%
-  filter(prob_1 > 0.5) %>% 
-  filter(survey_date %in% comparable_dates) %>% 
+  filter(survey_date %in% comparable_dates, stock_1 != "x") %>% 
   group_by(org, survey_date, stock_1) %>% 
   summarize(n = n()) %>% 
   mutate(proportion = n / sum(n)) %>% 
@@ -271,6 +274,9 @@ okisollo %>%
                       labels=c("Deep", "Shallow"))+
   xlab("Habitat") +
   ylab("Proportion")
+
+#TODO: Label stocks on bar plots
+#TODO: sort out 2016 dfo stock cateegorizations
 
 ggsave(here::here("figs", "gsi_props_by_week.png"))
 ```
