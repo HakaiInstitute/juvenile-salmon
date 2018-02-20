@@ -270,101 +270,14 @@ ggsave(here::here("figs", "gsi_props_by_week.png"))
 ```
 
 # Lenghts 
-## Stellako Lengths {.tabset}
-
-Its interesting that so many Stellako stocks were caught in deeper water by DFO. I propose two questions:
-
-### Are the stellako fish caught by each organization different than each other?
-
-```{r compare stellako fish by org}
-stellako_length_dist_by_org <- okisollo %>% 
-  filter(year == "2015", stock_1 == "Stellako")
-
-ggplot(stellako_length_dist_by_org, aes(x = survey_date, y = org)) +
-  geom_density_ridges() +
-  ggtitle("Stellako sockeye temporal sampling distribution by org")
-
-ggplot(stellako_length_dist_by_org, aes(x = fork_length, y = org)) +
-  geom_density_ridges() +
-  ggtitle("Stellako sockeye fork length frequency distribution by organization")
-```
-
-#### 2. Are stellako different than other stocks?
-
-```{r fig.cap= "Stellako from both orgs temporal sampling distribution"}
-stellako <- okisollo %>% 
-  filter(stock_1 == "Stellako") %>% 
-  filter(year == 2015) %>% 
-  mutate(stock_group = "stellako")
-
-other <- okisollo %>% 
-  filter(year == 2015) %>% 
-  filter(stock_1 != "Stellako") %>% 
-  mutate(stock_group = "all_others")
-
-stellako <- rbind(stellako, other)
-
-# Demonstrate temporal sampling regime
-ggplot(stellako, aes(x = survey_date, y = stock_group)) +
-         geom_density_ridges() +
-  ggtitle("Stellako (from both orgs) temporal sampling distribution")
-```
-
-```{r, fig.cap="Stellako sockeye length distribution"}
-# Demonstrate lengthe frequency distribution by stock by week
-ggplot(stellako, aes(x = fork_length, y = sampling_week, fill = stock_group)) +
-  geom_density_ridges(alpha = 0.5) +
-  ggtitle("Stellako sockeye length distribution")
-```
-
-```{r, Stellako sockeye length distribution from both organizations compared to all other stocks not including stellako}
-# Because the temporal sampling frequency is so different between stellako and other fish, I average lengths by week so that I can do a t-test on a comparable sample
-
-stellako_by_week <- stellako %>% 
-  group_by(sampling_week, stock_group) %>% 
-  summarize(mean_fl = mean(fork_length, na.rm = TRUE)) 
-
-ggplot(stellako_by_week, aes(x = mean_fl, fill = stock_group)) +
-  geom_density(alpha = 0.5) +
-  ggtitle("")
-
-stellako_by_week <- stellako %>% 
-  group_by(sampling_week, stock_group) %>% 
-  summarize(mean_fl = mean(fork_length, na.rm = TRUE)) %>% 
-  spread(key = stock_group, value = mean_fl) %>% 
-  drop_na("stellako") %>% 
-  mutate(diff = stellako - all_others)
-
-ggplot(stellako_by_week, aes(x = sampling_week, y = diff)) +
-  geom_point() +
-  ggtitle("Diff of stellako lengths and all other stocks")
-
-```
-
-```{r}
-stel <- as.numeric(stellako_by_week$stellako)
-oth <- as.numeric(stellako_by_week$all_others)
-
-t.test(stel, oth, paired = FALSE)
-
-rm(stellako_by_week)
-rm(other)
-rm(stellako)
-```
-
-
-```{r averaged by week}
-
-```
-
-TODO: I should look at DFOs Stellako lengths to see if maybe they were catching a higher proportion of
-2 year olds.
 
 ## Chilko lengths {.tabset}
 
+### Sampling distributions
+
 ```{r sampling distributions}
 okisollo %>%
-  filter(year == 2015)
+  filter(year == 2015) %>% 
   ggplot(aes(x = survey_date, y = org)) +
   geom_density_ridges() +
     ggtitle("DFO and Hakai temportal sampling distribution in 2015")
