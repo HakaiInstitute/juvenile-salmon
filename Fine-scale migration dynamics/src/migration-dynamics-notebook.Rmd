@@ -77,9 +77,11 @@ dfo_data <- dfo_data %>%
 # dfo.
 hakai_okisollo <- survey_seines_fish_stock_id %>% 
   filter(site_id == "D09") %>% 
-  select(survey_date, site_id, species, fork_length, weight, stock_1, prob_1,
+  select(survey_date, site_id, lat, lon, species, fork_length, weight, stock_1, prob_1,
          ufn) %>% 
-  mutate(org = "hakai")
+  add_column(org = "hakai", .after = "ufn") %>% 
+  add_column(DNA = NA, .after = "weight") %>% 
+  add_column(year_tow = NA, .before = "survey_date")
 
 okisollo <- rbind(hakai_okisollo, dfo_data) %>%
   # categorize sampling events into categorical week and recod the categories so
