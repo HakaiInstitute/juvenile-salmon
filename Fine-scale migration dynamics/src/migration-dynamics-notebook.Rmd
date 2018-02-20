@@ -304,13 +304,23 @@ ggplot(chilko_and_other, aes(x = survey_date, fill = stock_group)) +
 ggplot(chilko_and_other, aes(x = fork_length, y = sampling_week, fill = stock_group)) +
   geom_density_ridges(alpha = 0.5) +
   ggtitle("Chilko Sockeye Length Distribution")
+```
 
+### Chilko lengths within habitats
+
+Chilko lake sockeye caught by DFO are significantly longer than other stocks caught by dfo.
+
+```{r compare chilko lengths to other stocks within each habitat}
 chilko_and_other_annual_dfo <- chilko_and_other %>% 
   # Remove first and last week becayse may 12 doesn't have comparison to chilko, and July 13 was a number of what I think were 1 year old fish that were identified as Lower Adams Sockeye.
   filter(sampling_week != "July 13", sampling_week != "May 12", org == "DFO",  year == 2015) 
 
 t.test(fork_length ~ stock_group, data = chilko_and_other_annual_dfo)
+```
 
+Chilko lake sockeye caught by Hakai are significantly longer than other stocks caught by Hakai.
+
+```{r}
 chilko_and_other_annual_hakai <- chilko_and_other %>% 
   # Remove first and last week becayse may 12 doesn't have comparison to chilko, and July 13 was a number of what I think were 1 year old fish that were identified as Lower Adams Sockeye.
   filter(sampling_week != "July 13", sampling_week != "May 12", org == "hakai", year == 2015) 
@@ -318,9 +328,8 @@ chilko_and_other_annual_hakai <- chilko_and_other %>%
 t.test(fork_length ~ stock_group, data = chilko_and_other_annual_hakai)
 ```
 
-Looks like there is no significant trend over time in the difference between chilko and other stocks when each habitat is compared separately. 
-
-```{r diff in lengths of chilko compared to all others}
+There is no significant trend over time in the difference between chilko and other stocks when each habitat is compared separately
+```{r trend in difference in lengths within habitats over time}
 chilko_by_day_dfo <- chilko_and_other %>% 
   filter(org == "DFO") %>% 
   group_by(survey_date, stock_group) %>% 
@@ -328,9 +337,7 @@ chilko_by_day_dfo <- chilko_and_other %>%
   spread(key = stock_group, value = mean) %>% 
   drop_na("Chilko") %>% 
   mutate(diff = Chilko - all_others)
-# I noticed the difference in means of chilko lengths compared to all other
-# lengths seemed to increase over the season so I plotted the difference over
-# time and it is an intersting trend that I can't explain:
+
 ggplot(chilko_by_day_dfo, aes(x = survey_date, y = diff)) +
     geom_point() +
   geom_smooth(method = lm)+
@@ -346,9 +353,7 @@ chilko_by_day_hakai <- chilko_and_other %>%
   spread(key = stock_group, value = mean) %>% 
   drop_na("Chilko") %>% 
   mutate(diff = Chilko - all_others)
-# I noticed the difference in means of chilko lengths compared to all other
-# lengths seemed to increase over the season so I plotted the difference over
-# time and it is an intersting trend that I can't explain:
+
 ggplot(chilko_by_day_hakai, aes(x = survey_date, y = diff)) +
     geom_point() +
   geom_smooth(method = lm)+
@@ -358,7 +363,10 @@ lm_hakai <- lm(diff ~ survey_date, data = chilko_by_day_hakai)
 summary(lm_hakai)
 ```
 
-There is a significant difference in the lenth of chilko sockeye caught by DFO compared to chilko sockeye caught by hakai. No significant trend in the difference between hakai and dfo sockeye over time.
+### Chilko lengths amongst habitats
+
+There is no significant trend in the difference between hakai and dfo chilko sockeye over time.
+
 ```{r diff in lengths of chilko between orgs}
 chilko_lengths_hakai_dfo <- Chilko %>% 
   group_by(org, sampling_week) %>% 
@@ -372,20 +380,27 @@ ggplot(chilko_lengths_hakai_dfo, aes(x = sampling_week, y = diff)) +
   geom_point() +
   ggtitle("Diff in lengths of chilko between hakai and dfo")
 
-t.test(fork_length ~ org, data = Chilko)
-
 lm_dfo_hakai_chilko <- lm(diff ~ sampling_week, data = chilko_lengths_hakai_dfo)
 summary(lm_dfo_hakai_chilko)
+```
+
+There is a significant difference in the lenth of chilko sockeye caught by DFO compared to length of chilko sockeye caught by hakai. 
+
+```{r fork length t-test by org}
+t.test(fork_length ~ org, data = Chilko)
+
 rm(Chilko_by_week)
 rm(other)
 ```
 
-## Species length comparison
+## Sockeye, pink, chum length comparison {.tabset}
 
 Here I compute the average fork length for each species by week and then calculate the difference in average lengths for each week. I then conduct a t-test on the averaged length for each week, for each species.
 I do this in an attempt to standardize the sampling over time, because we know fish are growing longer over time, and having unequal temporal sampling distribution would skew the results.
-```{r sockeye averaged by week}
 
+### Sockeye
+There is a significant trend of an increasing difference in lengths of Hakai and DFO sockeye over the season.
+```{r sockeye averaged by week}
 
 all_SO_by_week_by_org <- okisollo %>% 
   filter(year == 2015, species == "SO") %>% 
@@ -394,67 +409,100 @@ all_SO_by_week_by_org <- okisollo %>%
   spread(key = org, value = mean) %>% 
   mutate(diff = DFO - hakai)
 
-# I noticed the difference in means of chilko lengths compared to all other
-# lengths seemed to increase over the season so I plotted the difference over
-# time and it is an intersting trend that I can't explain.
-ggplot(all_SO_by_week_by_org, aes(x = sampling_week, y = diff)) +
-    geom_point() 
+all_SO_by_week_by_org$numeric_sampling_week <- c(1,2,3,4,5,6,7,8,9,10)
+ggplot(all_SO_by_week_by_org, aes(x = numeric_sampling_week, y = diff)) +
+    geom_point() +
+  geom_smooth(method = lm)
 
+lm_hakai_dfo_sockeye <- lm(diff ~ numeric_sampling_week, data = all_SO_by_week_by_org)
+summary(lm_hakai_dfo_sockeye)
+
+okisollo_2015_so_lengths <- okisollo %>% 
+  filter(year == "2015") %>% 
+  filter(fork_length < 300, species == "SO")  %>% 
+  # filter out the first week of sampling which was likely two years olds, and filter out the last week of sampling which were ocean-type sockeye, also filter out adult sockeye that DFO caught
+  filter(survey_date > "2015-05-15" & survey_date < "2015-07-12", fork_length < 180) %>% 
+ggplot(aes(x = survey_date, y = fork_length, colour = species)) +
+  geom_point() +
+  geom_smooth(method = lm)+ 
+  facet_grid(~org)
+```
+
+DFO sockeye are significantly longer than Hakai sockeye
+```{r}
 dfo <- as.numeric(all_SO_by_week_by_org$DFO)
 hakai <- as.numeric(all_SO_by_week_by_org$hakai)
 
 (SO_lengths_by_week_t_test <- tidy(t.test(dfo, hakai, paired = TRUE)) %>% 
     mutate(species = "SO"))
 
-okisollo_2015_so_lengths <- okisollo %>% 
-  filter(year == "2015") %>% 
-  filter(fork_length < 300, species == "SO") 
-  
-ggplot(okisollo_2015_so_lengths, aes(x = survey_date, y = fork_length, colour = species)) +
-  geom_point() +
-  geom_smooth(method = lm)+ 
-  facet_grid(org~.)
+#TODO: prove to myself that the difference in lengths isn't due to unequal temporal sampling distributions
 ```
 
+### Pink
+
+There doesn't appear to be a trend in the difference of pink lengths over time
 ```{r pink averaged by week}
 all_PI_by_week_by_org <- okisollo %>% 
   filter(year == 2015, species == "PI") %>% 
-  filter(fork_length < 480) %>% # There was a dfo pink that was 480 mm caught 
-  # which is not the same age class so I filter it out.
+  # There was a dfo pink that was 480 mm caught which is not the same age class so I filter it out.
+  filter(fork_length < 480) %>%
   group_by(sampling_week, org) %>% 
   summarize(mean = mean(fork_length, na.rm = TRUE)) %>% 
   spread(key = org, value = mean) %>% 
-  mutate(diff = DFO - hakai)
+  mutate(diff = DFO - hakai) %>% 
+  drop_na()
+
+all_PI_by_week_by_org$numeric_sampling_week <- c(1,2,3,4,5,6)
 
 # I noticed the difference in means of chilko lengths compared to all other
 # lengths seemed to increase over the season so I plotted the difference over
 # time and it is an intersting trend that I can't explain.
-ggplot(all_PI_by_week_by_org, aes(x = sampling_week, y = diff)) +
-    geom_point() 
+ggplot(all_PI_by_week_by_org, aes(x = numeric_sampling_week, y = diff)) +
+    geom_point() +
+  geom_smooth(method = lm)
 
+lm_dfo_hakai_pink <- lm(diff ~ numeric_sampling_week, data = all_PI_by_week_by_org)
+summary(lm_dfo_hakai_pink)
+```
+
+DFO Pink are not statistically longer than Hakai pink, though the average DFO pink is longer than Hakai Pinks
+```{r}
 dfo <- as.numeric(all_PI_by_week_by_org$DFO)
 hakai <- as.numeric(all_PI_by_week_by_org$hakai)
-
 
 (PI_lengths_by_week_t_test <- tidy(t.test(dfo, hakai, paired = TRUE)) %>% 
     mutate(species = "PI"))
 
 ```
 
-```{r chum averaged by week}
+### Chum
+
+There is no signnificant trend in the difference in chum over time.
+```{r}
 all_CU_by_week_by_org <- okisollo %>% 
   filter(year == 2015, species == "CU") %>% 
   group_by(sampling_week, org) %>% 
   summarize(mean = mean(fork_length, na.rm = TRUE)) %>% 
   spread(key = org, value = mean) %>% 
-  mutate(diff = DFO - hakai)
+  mutate(diff = DFO - hakai) %>% 
+  drop_na()
 
+all_CU_by_week_by_org$numeric_sampling_week <- c(1,2,3,4,5,6,7,8)
 # I noticed the difference in means of chilko lengths compared to all other
 # lengths seemed to increase over the season so I plotted the difference over
 # time and it is an intersting trend that I can't explain.
-ggplot(all_CU_by_week_by_org, aes(x = sampling_week, y = diff)) +
-    geom_point() 
+ggplot(all_CU_by_week_by_org, aes(x = numeric_sampling_week, y = diff)) +
+    geom_point() +
+  geom_smooth(method = lm)
 
+
+lm_hakai_dfo_chum <- lm(diff ~ numeric_sampling_week, data = all_CU_by_week_by_org) 
+summary(lm_hakai_dfo_chum)
+```
+
+Chum caught by DFO were significantly longer than chum caught by Hakai
+```{r}
 dfo <- as.numeric(all_CU_by_week_by_org$DFO)
 hakai <- as.numeric(all_CU_by_week_by_org$hakai)
 
@@ -477,7 +525,14 @@ rm(all_SO_by_week_by_org)
 
 When looking at the average difference in length between deep and shallow water of fish for each week we see that chum and sockeye are significantly different between deep and shallow. Pink however, are not significantly different.
 
-### Barplot species lengths annually by region
+### Species lengths annually by region
+
+In this barplot I don't average lengths by week to make sure that temporal distribution is comparable. Instead I just plot the average for the whole season.
+
+When simply plotting the length of each species, you can see that deep fish 
+were  longer than shallow caught fish. This is just based on the annual average for each species. A potential confounder with this comparison is that the temporal sampling distribution was not equal, and we know that over the length of the season, fish get longer.
+
+It's possible that I need to use a more complicated model to include the variation that is introduced by the time variable.
 
 ```{r barplot of all species lengths}
 lengths_2015 <- okisollo %>% 
@@ -497,22 +552,3 @@ lengths_2015 %>% ggplot(aes(x = species, y = mean, fill = org)) +
 
 ggsave(here::here("figs", "fork_length_barplot.png"))
 ```
-
-In this barplot I don't average lengths by week to make sure that temporal distribution is comparable. Instead I just plot the average for the whole season.
-
-When simply plotting the length of each species, you can see that deep fish 
-were  longer than shallow caught fish. This is just based on the annual average for each species. A potential confounder with this comparison is that the temporal sampling distribution was not equal, and we know that over the length of the season, fish get longer.
-
-It's possible that I need to use a more complicated model to include the variation that is introduced by the time variable.
-
-# Weight 
-
-## Weight averaged annualy by region {.tabset}
-Before working with the weight data, I needt to understand the potential bias
-in our lab weight measurements by comparing the weights to what was measured in
-the field.
-
-## CPUE {.tabset}
-It would be interesting to plot cpue for 1 week periods and do a linear regression between Hakai and DFO data to see if we capture migration timing
-similarly. 
-
