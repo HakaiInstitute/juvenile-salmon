@@ -67,12 +67,48 @@ library(lubridate)
 library(knitr)
 library(broom)
 
+mutate_cond <- function(.data, condition, ..., envir = parent.frame()) {
+  condition <- eval(substitute(condition), .data, envir)
+  .data[condition, ] <- .data[condition, ] %>% mutate(...)
+  .data
+}
+
+collapse_fraser_sockeye_stocks_neville_pdf <- function(x) {
+ as.factor(x) %>% 
+    forcats::fct_collapse(x,
+      Early_Stuart = c("Driftwood", "Narrows", "Dust", "Bivouac", "Rossette",
+                       "Sinta", "Porter_Cr", "Forfar", "Blackwater", "Gluskie", 
+                       "Paula", "Felix", "Kynock", "Hudson_Bay", "Sandpoint",
+                       "FiveMile", "early stuart"),
+      Chilliwack = c("Chilliw_lake", "DollyVarden_Cr"),
+      Pitt = c("Pitt"),
+      Nadina_Gates_Bowron_Nahatlatch = c("Nadina", "Gates_Cr", "Bowron",
+                                                "Nahatlatch"),
+      Early_Thompson = c("Seymour", "Scotch", "Eagle", "U_Adams", "Cayenne",
+                         "Fennell", "early thompson"),
+      Harrison_Widgeon = c("Harrison", "WidgeonSlough"),
+      Late_Stuart_Stellako = c("Middle", "Pinchi_Cr", "Tachie", "Stellako",
+                               "Kuzkwa_Cr", "late stuart"),
+      Chilko = c("Chilko", "Chilko-North", "Chilko_south"),
+      Quesnel = c("L_Horsefly", "U_Horsefly", "Horsefly", "McKinley", 
+                  "Mitchell", "Wasko_Cr", "Blue_Lead_Ck", "Quesnel_Decept",
+                  "Quesnel_Horsef", "Quesnel_Mitche", "Roaring", "quesnel", "Quesnel"),
+      Raft_North_Thompson = c("Raft", "Thompson_N"),
+      Birkenhead_Big_Silver = c("Birkenhead", "Big_Silver"),
+      Late_Shuswap_Portage = c("Eagle_L", "Little", "L_Shuswap", "MiddleShuswap",
+                               "L_Adams", "Portage_Cr", "late shuswap", "shuswap"),
+      Weaver_Cultus = c("Weaver", "Cultus_Lake")
+    )
+}
+
 # read in dfo data that Chrys Neville provided that I tidied up first in excel
 dfo_data <- read_csv(here::here("data","dfo_data.csv"))
 
 dfo_data <- dfo_data %>% 
   add_column(ufn = "ufn", .before = "org") %>% 
-  select(-prob_1)
+  select(-prob_1) %>% 
+  mutate(collapsed_fraser_stocks = collapse_fraser_sockeye_stocks_neville_pdf(stock_1)) %>% 
+  filter(collapsed_fraser_stocks != 0, collapsed_fraser_stocks != "")
 
 # create a table of hakai data from the same site that I want to compare to
 # dfo.
@@ -82,7 +118,9 @@ hakai_okisollo <- survey_seines_fish_stock_id %>%
          ufn) %>% 
   add_column(org = "hakai", .after = "ufn") %>% 
   add_column(DNA = NA, .after = "weight") %>% 
-  add_column(year_tow = NA, .before = "survey_date")
+  add_column(year_tow = NA, .before = "survey_date") %>% 
+  mutate(collapsed_fraser_stocks = collapse_fraser_sockeye_stocks_neville_pdf(stock_1)) %>% 
+  filter(collapsed_fraser_stocks != 0, collapsed_fraser_stocks != "")
 
 okisollo <- rbind(hakai_okisollo, dfo_data) %>%
   # categorize sampling events into categorical week and recod the categories so
@@ -105,6 +143,14 @@ okisollo <- rbind(hakai_okisollo, dfo_data) %>%
   ) %>% 
   mutate(k = 10^5*(weight / fork_length ^ 3)) %>% 
   mutate(year = year(survey_date))
+
+test <- survey_seines_fish_stock_id %>% 
+  filter(stock_1 != "NA") %>% 
+  select(stock_1)
+
+dfo_sockeye_stocks <- dfo_data %>% 
+  select(stock_1) %>% 
+  distinct()
 ```
 
 # GSI 
@@ -116,46 +162,79 @@ One of the first things I want to do is simply look at the stock ID proportions
 across the whole year for both organizations to see very grossly if there are
 obvious differences. 
 
+It becomes clear that DFO caught a greater proportion of chilko (0.370) compared to Hakai (0.165). Also, DFO caught 20 % Stellako while Hakai caught a very low proportion.
+
 ```{r annual gsi, fig.cap= "Genetic stock proportions of all stocks of sockeye captured in 2015 in Okisollo channel"}
-gsi_okisollo <- okisollo %>% 
+gsi_okisollo_2015 <- okisollo %>% 
+  filter(year == "2015") %>% 
   drop_na(site_id) %>% 
-  drop_na(stock_1) %>%
-  group_by(year, org, stock_1) %>% 
+  drop_na(collapsed_fraser_stocks) %>%
+  group_by(org, collapsed_fraser_stocks) %>% 
   summarize(n = n()) %>% 
   mutate(proportion = n / sum(n)) %>% 
   arrange(org) %>% 
   filter(proportion >= 0.04) %>% 
   ungroup()
 
-prop_remaining <- gsi_okisollo  %>% 
-  group_by(year, org) %>% 
+prop_remaining <- gsi_okisollo_2015  %>% 
+  group_by(org) %>% 
   summarize(remaining = 1 - sum(proportion))
 
-dfo_prop_remaining_2015 <- as.numeric(prop_remaining[1,3])
-hakai_prop_remaining_2015 <- as.numeric(prop_remaining[2,3])
-dfo_prop_remaining_2016 <- as.numeric(prop_remaining[3,3])
-hakai_prop_remaining_2016 <- as.numeric(prop_remaining[4,3])
+dfo_prop_remaining_2015 <- as.numeric(prop_remaining[1,2])
+hakai_prop_remaining_2015 <- as.numeric(prop_remaining[2,2])
 
-gsi_okisollo <- gsi_okisollo %>% 
-  add_row(year = 2015, org = "DFO", stock_1 = NA, proportion = dfo_prop_remaining_2015) %>% 
-  add_row(year= 2015, org = "hakai", stock_1 = NA, proportion = hakai_prop_remaining_2015) %>%
-  add_row(year= 2016, org = "DFO", stock_1 = NA, proportion = dfo_prop_remaining_2016) %>% 
-  add_row(year= 2016, org = "hakai", stock_1 = NA, proportion = hakai_prop_remaining_2016)
+
+gsi_okisollo_2015 <- gsi_okisollo_2015 %>% 
+  add_row(org = "DFO", collapsed_fraser_stocks = NA, proportion = dfo_prop_remaining_2015) %>% 
+  add_row(org = "hakai", collapsed_fraser_stocks = NA, proportion = hakai_prop_remaining_2015)
   
-ggplot(gsi_okisollo, aes(x = org, y = proportion, fill = stock_1)) +
+ggplot(gsi_okisollo_2015, aes(x = org, y = proportion, fill = collapsed_fraser_stocks)) +
   geom_bar(colour="black", stat="identity", position = 'stack') + 
-  ggtitle("2015 Genetic Stock Proportions for DFO and Hakai at Okisollo") +
-  facet_grid(~year)
+  ggtitle("2015 Genetic Stock Proportions for DFO and Hakai at Okisollo") 
 
-ggsave(here::here("figs", "annual_gsi.png"))
+ggsave(here::here("figs", "2015_annual_gsi.png"))
 
-#TODO: separate years into different graphs so that there are fewer stocks on the legend
+#TODO: update figure lables and include n
 
 rm(prop_remaining)
-rm(gsi_okisollo)
+rm(gsi_okisollo_2015)
 ```
 
-It becomes clear that DFO caught a greater proportion of chilko (0.370) compared to Hakai (0.165). Also, DFO caught 20 % Stellako while Hakai caught a very low proportion.
+```{r annual gsi, fig.cap= "Genetic stock proportions of all stocks of sockeye captured in 2016 in Okisollo channel"}
+gsi_okisollo_2016 <- okisollo %>% 
+  filter(year == "2016") %>% 
+  drop_na(collapsed_fraser_stocks) %>%
+  group_by(org, collapsed_fraser_stocks) %>% 
+  summarize(n = n()) %>% 
+  mutate(proportion = n / sum(n)) %>% 
+  arrange(org) %>% 
+  filter(proportion >= 0.04) %>% 
+  ungroup()
+
+prop_remaining <- gsi_okisollo_2016  %>% 
+  group_by(org) %>% 
+  summarize(remaining = 1 - sum(proportion))
+
+dfo_prop_remaining_2016 <- as.numeric(prop_remaining[1,2])
+hakai_prop_remaining_2016 <- as.numeric(prop_remaining[2,2])
+
+
+gsi_okisollo_2016 <- gsi_okisollo_2016 %>% 
+  add_row(org = "DFO", collapsed_fraser_stocks = NA, proportion = dfo_prop_remaining_2016) %>% 
+  add_row(org = "hakai", collapsed_fraser_stocks = NA, proportion = hakai_prop_remaining_2016)
+  
+ggplot(gsi_okisollo_2016, aes(x = org, y = proportion, fill = collapsed_fraser_stocks)) +
+  geom_bar(colour="black", stat="identity", position = 'stack') + 
+  ggtitle("2016 Genetic Stock Proportions") 
+
+ggsave(here::here("figs", "2016_annual_gsi.png"))
+
+#TODO: update figure labels and include n
+
+rm(prop_remaining, dfo_prop_remaining_2015, dfo_prop_remaining_2016, hakai_prop_remaining_2015, hakai_prop_remaining_2016)
+rm(gsi_okisollo_2016)
+```
+
 
 ### Additional stock ID
 
@@ -255,7 +334,7 @@ According to the chi square test for the entire seasons proportions, the two met
 
 ```{r plot proportions by week}
 comp_dates <- semi_join(dfo_data, hakai_okisollo, by = "survey_date") %>% 
-  filter(species == "SO", stock_1 != "NA") %>% 
+  filter(species == "SO", collapsed_fraser_stocks != "NA") %>% 
   group_by(survey_date) %>% 
   summarize(n = n())
 
@@ -263,13 +342,13 @@ comparable_dates <- as.list(comp_dates$survey_date)
 
 okisollo %>% 
   drop_na(site_id) %>% 
-  drop_na(stock_1) %>%
-  filter(survey_date %in% comparable_dates, stock_1 != "x") %>% 
-  group_by(org, survey_date, stock_1) %>% 
+  drop_na(collapsed_fraser_stocks) %>%
+  filter(survey_date %in% comparable_dates, collapsed_fraser_stocks != "x") %>% 
+  group_by(org, survey_date, collapsed_fraser_stocks) %>% 
   summarize(n = n()) %>% 
   mutate(proportion = n / sum(n)) %>% 
   arrange(org) %>% 
-  ggplot(aes(x = org, y = proportion, fill = stock_1, label = n)) +
+  ggplot(aes(x = org, y = proportion, fill = collapsed_fraser_stocks, label = n)) +
     geom_bar(colour="black", stat="identity", position = 'stack') +
    geom_text(size = 3, position = position_stack(vjust = 0.5)) +
   facet_wrap(~ survey_date) + 
@@ -299,13 +378,13 @@ okisollo %>%
     ggtitle("DFO and Hakai temportal sampling distribution in 2015")
 
 Chilko <- okisollo %>% 
-  filter(stock_1 == "Chilko") %>% 
+  filter(collapsed_fraser_stocks == "Chilko") %>% 
   #filter(year == 2015) %>% 
   mutate(stock_group = "Chilko")
 
 other <- okisollo %>% 
   #filter(year == 2015) %>% 
-  filter(stock_1 != "Chilko") %>% 
+  filter(collapsed_fraser_stocks != "Chilko") %>% 
   mutate(stock_group = "all_others")
 
 chilko_and_other <- rbind(Chilko, other) %>% 
@@ -412,8 +491,8 @@ ggplot(chilko_lengths_hakai_dfo_2015, aes(x = numeric_sampling_week, y = diff)) 
   geom_smooth(method = lm) +
   ggtitle("Diff in lengths of chilko between hakai and dfo")
 
-lm_dfo_hakai_chilko <- lm(diff ~ sampling_week, data = chilko_lengths_hakai_dfo)
-summary(lm_dfo_hakai_chilko)
+lm_dfo_hakai_chilko_2015 <- lm(diff ~ numeric_sampling_week, data = chilko_lengths_hakai_dfo_2015)
+summary(lm_dfo_hakai_chilko_2015)
 ```
 
 There is a significant difference in the lenth of chilko sockeye caught by DFO compared to length of chilko sockeye caught by hakai. 
