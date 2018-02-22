@@ -140,15 +140,11 @@ okisollo <- rbind(hakai_okisollo, dfo_data) %>%
   )
   ) %>% 
   mutate(k = 10^5*(weight / fork_length ^ 3)) %>% 
-  mutate(year = year(survey_date))
+  mutate(year = year(survey_date)) %>% 
+  #Looks like dfo data has errors in it with a fork_length of 9 and 18
+  filter(fork_length > 20)
 
-test <- survey_seines_fish_stock_id %>% 
-  filter(stock_1 != "NA") %>% 
-  select(stock_1)
 
-dfo_sockeye_stocks <- dfo_data %>% 
-  select(stock_1) %>% 
-  distinct()
 ```
 
 # GSI 
@@ -165,39 +161,26 @@ It becomes clear that DFO caught a greater proportion of chilko (0.370) compared
 ```{r 2015 annual gsi, fig.cap= "Genetic stock proportions of all stocks of sockeye captured in 2015 in Okisollo channel"}
 gsi_okisollo_2015 <- okisollo %>%
   filter(collapsed_fraser_stocks != 0, collapsed_fraser_stocks != "") %>% 
-  filter(year == "2015") %>% 
+  #filter(year == "2015") %>% 
   drop_na(site_id) %>% 
   drop_na(collapsed_fraser_stocks) %>%
-  group_by(org, collapsed_fraser_stocks) %>% 
+  group_by(year, org, collapsed_fraser_stocks) %>% 
   summarize(n = n()) %>% 
   mutate(proportion = n / sum(n)) %>% 
-  arrange(org) %>% 
-  filter(proportion >= 0.04) %>% 
-  ungroup()
+  arrange(org)
 
-prop_remaining <- gsi_okisollo_2015  %>% 
-  group_by(org) %>% 
-  summarize(remaining = 1 - sum(proportion))
-
-dfo_prop_remaining_2015 <- as.numeric(prop_remaining[1,2])
-hakai_prop_remaining_2015 <- as.numeric(prop_remaining[2,2])
-
-
-gsi_okisollo_2015 <- gsi_okisollo_2015 %>% 
-  add_row(org = "DFO", collapsed_fraser_stocks = NA, proportion = dfo_prop_remaining_2015) %>% 
-  add_row(org = "hakai", collapsed_fraser_stocks = NA, proportion = hakai_prop_remaining_2015)
   
 ggplot(gsi_okisollo_2015, aes(x = org, y = proportion, fill = collapsed_fraser_stocks)) +
   geom_bar(colour="black", stat="identity", position = 'stack') + 
-  ggtitle("2015 Genetic Stock Proportions for DFO and Hakai at Okisollo") 
+  ggtitle("2015 Genetic Stock Proportions for DFO and Hakai at Okisollo") +
+  facet_grid(~year)
 
-ggsave(here::here("figs", "2015_annual_gsi.png"))
+ggsave(here::here("figs", "annual_gsi.png"))
 
 #TODO: update figure lables and include N
 #TODO: filter hakai prob_1 to > 0.6
 
 rm(prop_remaining)
-rm(gsi_okisollo_2015)
 ```
 
 ```{r 2016 annual gsi, fig.cap= "Genetic stock proportions of all stocks of sockeye captured in 2016 in Okisollo channel"}
@@ -208,21 +191,7 @@ gsi_okisollo_2016 <- okisollo %>%
   group_by(org, collapsed_fraser_stocks) %>% 
   summarize(n = n()) %>% 
   mutate(proportion = n / sum(n)) %>% 
-  arrange(org) %>% 
-  filter(proportion >= 0.04) %>% 
-  ungroup()
-
-prop_remaining <- gsi_okisollo_2016  %>% 
-  group_by(org) %>% 
-  summarize(remaining = 1 - sum(proportion))
-
-dfo_prop_remaining_2016 <- as.numeric(prop_remaining[1,2])
-hakai_prop_remaining_2016 <- as.numeric(prop_remaining[2,2])
-
-
-gsi_okisollo_2016 <- gsi_okisollo_2016 %>% 
-  add_row(org = "DFO", collapsed_fraser_stocks = NA, proportion = dfo_prop_remaining_2016) %>% 
-  add_row(org = "hakai", collapsed_fraser_stocks = NA, proportion = hakai_prop_remaining_2016)
+  arrange(org)
   
 ggplot(gsi_okisollo_2016, aes(x = org, y = proportion, fill = collapsed_fraser_stocks)) +
   geom_bar(colour="black", stat="identity", position = 'stack') + 
@@ -233,7 +202,6 @@ ggsave(here::here("figs", "2016_annual_gsi.png"))
 #TODO: update figure labels and include n
 
 rm(prop_remaining, dfo_prop_remaining_2015, dfo_prop_remaining_2016, hakai_prop_remaining_2015, hakai_prop_remaining_2016)
-rm(gsi_okisollo_2016)
 ```
 
 
@@ -304,29 +272,25 @@ First, I need to convert proportions to integers by multiplying them by 100.
 ```{r proportions test}
 #TODO: re-work this whole section
 # First, test proportion over the whole year
-okisollo_2015 <- okisollo %>% 
-  filter(year(survey_date) == 2015, species == "SO") %>% 
-  mutate(n = round(k * 100, 0)) %>% 
-  dplyr::select(org, stock_1, n) %>% 
-  drop_na(stock_1) %>% 
-  drop_na(n) %>% 
-  filter(n > 0)
-
-df <- as.data.frame(okisollo_2015)
-
-df.expanded <- df[rep(row.names(df), df$n), 1:2]
-
-table <- table(df.expanded$org, df.expanded$stock_1)
-head(table)
-
-(x2 <- chisq.test(table))
+hakai_chilko_prop <- gsi_okisollo_2015 %>% 
+  filter(org == "hakai") %>% 
+  mutate(n = proportion * 10)
 
 
-rm(okisollo_2015, x2, df, df.expanded)
-# Then, test proportions over each week
-#TODO: Figure out if the chi square test is the best way to test this, it may
-# be sufficient to plot this by date.
-#TODO: Test proportions over each week.
+
+dfo_chilko_prop <- gsi_okisollo_2015 %>% 
+  filter(org == "DFO") %>% 
+  mutate(n = proportion * 10)
+
+hakai_n <- hakai_chilko_prop$n
+dfo_n <- dfo_chilko_prop$n
+
+v <- (hakai_n - dfo_n)^2/dfo_n
+chisq <- sum(v[1:11])
+chisq
+
+p <- 1-pchisq(chisq,10)
+
 ```
 
 According to the chi square test for the entire seasons proportions, the two methods of sampling are not independent. Given that I really didn't expect this result, and given that when I plot the proportions annually it is clear that they are quite different, I'm not sure that a chi square test is the appropriate statistical test to use.
@@ -365,7 +329,7 @@ okisollo %>%
 ggsave(here::here("figs", "gsi_props_by_week.png"))
 ```
 
-# Lenghts 
+# Lengths 
 
 ## Chilko lengths {.tabset}
 
@@ -433,9 +397,26 @@ ggplot(chilko_lengths_hakai_dfo_2015, aes(x = numeric_sampling_week, y = diff)) 
 
 lm_dfo_hakai_chilko_2015 <- lm(diff ~ numeric_sampling_week, data = chilko_lengths_hakai_dfo_2015)
 summary(lm_dfo_hakai_chilko_2015)
+
+okisollo %>% 
+  filter(species == "SO", year == "2015",
+         collapsed_fraser_stocks == "Chilko") %>%
+  mutate(year = year(survey_date)) %>% 
+  ggplot(aes(x = fork_length, y = sampling_week, fill = org)) + 
+  geom_density_ridges(alpha = 0.5) + 
+  facet_wrap(~year)
+
+okisollo %>% 
+  filter(species == "SO", year == "2015", !sampling_week %in% c("July 13", "July 6", "May 19"),
+         collapsed_fraser_stocks == "Chilko") %>%
+  mutate(year = year(survey_date)) %>% 
+  ggplot(aes(x = sampling_week , y = fork_length, fill = org)) + 
+  geom_boxplot() +
+  ggtitle("Chilko sockeye lengths in 2015") 
+ggsave(here::here("figs", "chilko_lengths_weekly_boxplot.png"))
 ```
 
-There is a significant difference in the lenth of chilko sockeye caught by DFO compared to length of chilko sockeye caught by hakai. 
+There is no significant difference in the lenth of chilko sockeye caught by DFO compared to length of chilko sockeye caught by hakai. 
 
 ```{r chilko fork length t-test by org}
 dfo_chi_2015 <- as.numeric(chilko_lengths_hakai_dfo_2015$DFO)
@@ -470,8 +451,18 @@ ggplot(shuswap_lengths_hakai_dfo_2016, aes(x = numeric_sampling_week, y = diff))
 lm_dfo_hakai_shuswap_2016 <- lm(diff ~ numeric_sampling_week, data = shuswap_lengths_hakai_dfo_2016)
 summary(lm_dfo_hakai_shuswap_2016)
 
+okisollo %>% 
+  filter(species == "SO", year == "2016", !sampling_week %in% c("July 6", "May 19"),
+         collapsed_fraser_stocks == "Late_Shuswap_Portage") %>%
+  mutate(year = year(survey_date)) %>% 
+  ggplot(aes(x = sampling_week , y = fork_length, fill = org)) + 
+  geom_boxplot() +
+  ggtitle("Late Shuswap and Portage sockeye lengths in 2016")
+
+ggsave(here::here("figs", "shuswap_weekly_lengths_boxplot_2016.png"))
 ```
 
+No significant difference in the length of hakai and dfo shuswap sockeye
 ```{r shuswap fork length t-test by org}
 
 dfo_shu_2016 <- as.numeric(shuswap_lengths_hakai_dfo_2016$DFO)
@@ -498,11 +489,23 @@ all_SO_by_week_by_org_2015 <- okisollo %>%
 all_SO_by_week_by_org_2015$numeric_sampling_week <- c(1,2,3,4,5,6,7,8,9,10)
 ggplot(all_SO_by_week_by_org_2015, aes(x = numeric_sampling_week, y = diff)) +
     geom_point() +
-  geom_smooth(method = lm)
+  geom_smooth(method = lm) +
+  coord_cartesian(xlim = c(3, 10)) + 
+  ylab("Length Difference mm (mid-channel - nearshore)") +
+  xlab("Week") +
+  scale_x_continuous(breaks=c(3, 4, 5, 6, 7, 8, 9, 10),
+                      labels=c("2015-05-26", "2015-06-02", "2015-06-09", 
+                               "2015-06-16", "2015-06-23", "2015-06-30",
+                               "2015-07-06", "2015-07-13
+                               "))
+
+ggsave(here::here("figs", "2015_sockeye_diff_trend.png"))
 
 lm_hakai_dfo_sockeye <- lm(diff ~ numeric_sampling_week, data = all_SO_by_week_by_org_2015)
 summary(lm_hakai_dfo_sockeye)
+```
 
+```{r}
 (okisollo_2015_so_lengths <- okisollo %>% 
   filter(year == "2015") %>% 
   filter(fork_length < 300, species == "SO")  %>% 
@@ -512,6 +515,18 @@ ggplot(aes(x = survey_date, y = fork_length, colour = species)) +
   geom_point() +
   geom_smooth(method = lm)+ 
   facet_grid(~org))
+
+okisollo %>% 
+  filter(species == "SO", year %in% c("2015", "2016"), sampling_week != "May 12",
+         sampling_week != "July 13", sampling_week != "May 19" | year != "2015",
+         sampling_week != "July 6" & sampling_week != "May 19" | year != "2016") %>% 
+  ggplot(aes(x = sampling_week, y = fork_length, fill = org)) +
+    geom_boxplot() +
+    facet_grid(~year, scales = "free")
+
+  
+ggsave(here::here("figs", "sockeye_weekly_boxplot.png"), width = 8, height = 5)
+
 
 ```
 
@@ -526,9 +541,18 @@ all_SO_by_week_by_org_2016 <- okisollo %>%
   mutate(diff = DFO - hakai)
 
 all_SO_by_week_by_org_2016$numeric_sampling_week <- c(1,2,3,4,5,6,7)
+
 ggplot(all_SO_by_week_by_org_2016, aes(x = numeric_sampling_week, y = diff)) +
     geom_point() +
-  geom_smooth(method = lm)
+  geom_smooth(method = lm) +
+  coord_cartesian(xlim = c(2, 6)) + 
+  ylab("Length Difference mm (mid-channel - nearshore)") +
+  xlab("Week") +
+  scale_x_continuous(breaks=c(2, 3, 4, 5, 6),
+                      labels=c("2016-05-20", "2016-05-26", "2016-06-02", "2016-06-09", 
+                               "2016-06-16"))
+
+ggsave(here::here("figs", "2016_sockeye_diff_trend.png"))
 
 lm_hakai_dfo_sockeye <- lm(diff ~ numeric_sampling_week, data = all_SO_by_week_by_org_2016)
 summary(lm_hakai_dfo_sockeye)
@@ -564,6 +588,15 @@ hakai_2016 <- as.numeric(all_SO_by_week_by_org_2016$hakai)
 
 (SO_lengths_by_week_t_test <- tidy(t.test(dfo_2016, hakai_2016, paired = TRUE)) %>% 
     mutate(species = "SO"))
+```
+
+
+```{r}
+dfo_all <- c(dfo_2015, dfo_2016)
+hakai_all <- c(hakai_2015, hakai_2016)
+
+t.test(dfo_all, hakai_all, paired = TRUE)
+
 ```
 
 ### Pink
@@ -690,6 +723,7 @@ It's possible that I need to use a more complicated model to include the variati
 lengths <- okisollo %>% 
   filter(fork_length < 300, species %in% c("SO", "PI", "CU", "CO")) %>%
   mutate(year = year(survey_date)) %>% 
+  filter(!(year == 2016 & species %in% c("PI", "CO"))) %>% 
   group_by(year,org, species) %>% 
   summarise(mean = mean(fork_length, na.rm = T),
             sd = sd(fork_length, na.rm = T), 
