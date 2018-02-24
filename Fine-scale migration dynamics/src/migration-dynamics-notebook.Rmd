@@ -10,7 +10,7 @@ output:
     toc_float: true
     toc_depth: 3
 ---
-
+---
 Draft Title: Fine scale migration dynamics of juvenile salmon
 
 Focus on fine scale spatial distribution of outmigrating sockeye, pink and chum salmon, including:
@@ -55,7 +55,7 @@ Straty 1974
 
 For pink, chum, chinook, and sockeye.
 "In general, length of juvenile salmon increased with the distance from freshwater rearing locations (Figures 4a–e; 5a–c). The length of juvenile age-1.0 and -2.0 sockeye salmon increased with distance from river mouth and displayed a bell shaped curve offshore from the southern shoreline of the SBS region, with the largest fish distributed within middle Bristol Bay and the smallest fish along the southern and northern shorelines (Figures 4a and b)."
-
+---
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, error = FALSE)
@@ -66,7 +66,7 @@ library(ggridges)
 library(lubridate)
 library(knitr)
 library(broom)
-
+library(wesanderson)
 mutate_cond <- function(.data, condition, ..., envir = parent.frame()) {
   condition <- eval(substitute(condition), .data, envir)
   .data[condition, ] <- .data[condition, ] %>% mutate(...)
@@ -101,18 +101,28 @@ collapse_fraser_sockeye_stocks_neville_pdf <- function(x) {
     )
 }
 
+life_aquatic_cont <- wes_palette("Zissou1", 100, type = "continuous")
+life_aquatic_discrete <- wes_palette("Zissou1", 5, type = "discrete")
+
+theme <- theme_classic(base_size = 18)
+theme_set(theme)
 # read in dfo data that Chrys Neville provided that I tidied up first in excel
 dfo_data <- read_csv(here::here("data","dfo_data.csv"))
 
 dfo_data <- dfo_data %>% 
   add_column(ufn = "ufn", .before = "org") %>% 
   select(-prob_1) %>% 
-  mutate(collapsed_fraser_stocks = collapse_fraser_sockeye_stocks_neville_pdf(stock_1)) 
+  mutate(collapsed_fraser_stocks = collapse_fraser_sockeye_stocks_neville_pdf(stock_1)) %>% 
+  # Filter out sits that arent from the same DFO sampling station
+  filter(!year_tow %in% c("2016_109", "2015_78", "2016_34", "2015_5", "2015_73",
+                          "2015_9", "2015_37", "2015_20", "2016-106"))
 
 # create a table of hakai data from the same site that I want to compare to
 # dfo.
 hakai_okisollo <- survey_seines_fish_stock_id %>% 
-  filter(site_id == "D09") %>% 
+  filter(site_id == "D09") %>%
+  # filter out sites that overlaps with DFO, or is very far from shore
+  filter(!seine_id %in% c("DN390", "DN391", "DN401", "DN251", "DN336")) %>% 
   select(survey_date, site_id, lat, lon, species, fork_length, weight, stock_1,
          ufn) %>% 
   add_column(org = "hakai", .after = "ufn") %>% 
@@ -159,9 +169,8 @@ obvious differences.
 It becomes clear that DFO caught a greater proportion of chilko (0.370) compared to Hakai (0.165). Also, DFO caught 20 % Stellako while Hakai caught a very low proportion.
 
 ```{r 2015 annual gsi, fig.cap= "Genetic stock proportions of all stocks of sockeye captured in 2015 in Okisollo channel"}
-gsi_okisollo_2015 <- okisollo %>%
+gsi_okisollo <- okisollo %>%
   filter(collapsed_fraser_stocks != 0, collapsed_fraser_stocks != "") %>% 
-  #filter(year == "2015") %>% 
   drop_na(site_id) %>% 
   drop_na(collapsed_fraser_stocks) %>%
   group_by(year, org, collapsed_fraser_stocks) %>% 
@@ -170,40 +179,22 @@ gsi_okisollo_2015 <- okisollo %>%
   arrange(org)
 
   
-ggplot(gsi_okisollo_2015, aes(x = org, y = proportion, fill = collapsed_fraser_stocks)) +
+ggplot(gsi_okisollo, aes(x = org, y = proportion, fill = collapsed_fraser_stocks)) +
   geom_bar(colour="black", stat="identity", position = 'stack') + 
-  ggtitle("2015 Genetic Stock Proportions for DFO and Hakai at Okisollo") +
-  facet_grid(~year)
+  ggtitle("Genetic Stock Proportions") +
+  facet_grid(~year) +
+  xlab("Habitat") + 
+  scale_x_discrete(breaks=c("DFO", "hakai"),
+                      labels=c("Mid-channel", "Nearshore"))+
+  ylab("Proportion") +
+  scale_fill_discrete(name = "Genetic Stock")
 
-ggsave(here::here("figs", "annual_gsi.png"))
+ggsave(here::here("figs", "annual_gsi.png"), width = 9, height = 6)
 
 #TODO: update figure lables and include N
 #TODO: filter hakai prob_1 to > 0.6
 
-rm(prop_remaining)
 ```
-
-```{r 2016 annual gsi, fig.cap= "Genetic stock proportions of all stocks of sockeye captured in 2016 in Okisollo channel"}
-gsi_okisollo_2016 <- okisollo %>% 
-  filter(collapsed_fraser_stocks != 0, collapsed_fraser_stocks != "") %>% 
-  filter(year == "2016") %>% 
-  drop_na(collapsed_fraser_stocks) %>%
-  group_by(org, collapsed_fraser_stocks) %>% 
-  summarize(n = n()) %>% 
-  mutate(proportion = n / sum(n)) %>% 
-  arrange(org)
-  
-ggplot(gsi_okisollo_2016, aes(x = org, y = proportion, fill = collapsed_fraser_stocks)) +
-  geom_bar(colour="black", stat="identity", position = 'stack') + 
-  ggtitle("2016 Genetic Stock Proportions") 
-
-ggsave(here::here("figs", "2016_annual_gsi.png"))
-
-#TODO: update figure labels and include n
-
-rm(prop_remaining, dfo_prop_remaining_2015, dfo_prop_remaining_2016, hakai_prop_remaining_2015, hakai_prop_remaining_2016)
-```
-
 
 ### Additional stock ID
 
@@ -412,7 +403,13 @@ okisollo %>%
   mutate(year = year(survey_date)) %>% 
   ggplot(aes(x = sampling_week , y = fork_length, fill = org)) + 
   geom_boxplot() +
-  ggtitle("Chilko sockeye lengths in 2015") 
+  ggtitle("Chilko sockeye lengths in 2015") +
+  scale_fill_discrete(name="Habitat",
+                          breaks=c("DFO", "hakai"),
+                         labels=c("Mid-channel", "Nearshore"))+
+  ylab("Fork Length (mm)") +
+  xlab("Week")
+
 ggsave(here::here("figs", "chilko_lengths_weekly_boxplot.png"))
 ```
 
@@ -441,7 +438,7 @@ shuswap_lengths_hakai_dfo_2016 <- Late_Shuswap_Portage %>%
   spread(key = org, value = mean_fl) %>% 
   mutate(diff = DFO - hakai) %>% 
   drop_na() %>% 
-  mutate(numeric_sampling_week = c(1,2,3,4,5))
+  mutate(numeric_sampling_week = c(1,2,3,4))
 
 ggplot(shuswap_lengths_hakai_dfo_2016, aes(x = numeric_sampling_week, y = diff)) +
   geom_point() +
@@ -457,7 +454,12 @@ okisollo %>%
   mutate(year = year(survey_date)) %>% 
   ggplot(aes(x = sampling_week , y = fork_length, fill = org)) + 
   geom_boxplot() +
-  ggtitle("Late Shuswap and Portage sockeye lengths in 2016")
+  ggtitle("Late Shuswap and Portage sockeye lengths in 2016") +
+  scale_fill_discrete(name="Habitat",
+                          breaks=c("DFO", "hakai"),
+                         labels=c("Mid-channel", "Nearshore"))+
+  ylab("Fork Length (mm)") +
+  xlab("Week")
 
 ggsave(here::here("figs", "shuswap_weekly_lengths_boxplot_2016.png"))
 ```
@@ -491,13 +493,13 @@ ggplot(all_SO_by_week_by_org_2015, aes(x = numeric_sampling_week, y = diff)) +
     geom_point() +
   geom_smooth(method = lm) +
   coord_cartesian(xlim = c(3, 10)) + 
-  ylab("Length Difference mm (mid-channel - nearshore)") +
+  ylab("Length Difference (mm)") +
   xlab("Week") +
   scale_x_continuous(breaks=c(3, 4, 5, 6, 7, 8, 9, 10),
                       labels=c("2015-05-26", "2015-06-02", "2015-06-09", 
                                "2015-06-16", "2015-06-23", "2015-06-30",
-                               "2015-07-06", "2015-07-13
-                               "))
+                               "2015-07-06", "2015-07-13")) +
+  ggtitle("2015")
 
 ggsave(here::here("figs", "2015_sockeye_diff_trend.png"))
 
@@ -522,7 +524,13 @@ okisollo %>%
          sampling_week != "July 6" & sampling_week != "May 19" | year != "2016") %>% 
   ggplot(aes(x = sampling_week, y = fork_length, fill = org)) +
     geom_boxplot() +
-    facet_grid(~year, scales = "free")
+    facet_grid(~year, scales = "free") +
+    scale_fill_discrete(name="Habitat",
+                          breaks=c("DFO", "hakai"),
+                         labels=c("Mid-channel", "Nearshore")) +
+  ylab("Fork Length (mm)") +
+  xlab("Week")+
+   theme(axis.text.x  = element_text(angle=45, vjust=0.5))
 
   
 ggsave(here::here("figs", "sockeye_weekly_boxplot.png"), width = 8, height = 5)
@@ -546,11 +554,12 @@ ggplot(all_SO_by_week_by_org_2016, aes(x = numeric_sampling_week, y = diff)) +
     geom_point() +
   geom_smooth(method = lm) +
   coord_cartesian(xlim = c(2, 6)) + 
-  ylab("Length Difference mm (mid-channel - nearshore)") +
+  ylab("Length Difference (mm)") +
   xlab("Week") +
   scale_x_continuous(breaks=c(2, 3, 4, 5, 6),
                       labels=c("2016-05-20", "2016-05-26", "2016-06-02", "2016-06-09", 
-                               "2016-06-16"))
+                               "2016-06-16")) +
+  ggtitle("2016")
 
 ggsave(here::here("figs", "2016_sockeye_diff_trend.png"))
 
@@ -568,6 +577,33 @@ ggplot(aes(x = survey_date, y = fork_length, colour = species)) +
 
 ```
 
+
+```{r length trend all years}
+all_SO_by_week_by_org_2015 <- all_SO_by_week_by_org_2015 %>% 
+  mutate(year = 2015)
+
+all_SO_by_week_by_org_2016 <- all_SO_by_week_by_org_2016 %>% 
+  mutate(year = 2016) 
+
+all_SO_by_week_by_org_2016$numeric_sampling_week <- c(2,3,4,5,6,7,8)
+
+all_diff <- rbind(all_SO_by_week_by_org_2015, all_SO_by_week_by_org_2016) %>% 
+  drop_na()
+
+
+
+ggplot(all_diff, aes(numeric_sampling_week, diff)) +
+  geom_point() +
+  geom_smooth(method = lm)+
+  facet_grid(~year) +
+  ylab("Difference in Lengths (mm)")+
+  xlab("Sampling Week") +
+  ggtitle("Sockeye Length Differences") +
+  theme_classic(base_size = 18)
+
+ggsave(here::here("figs", "sockeye_length_trends.png"), width = 12)
+
+```
 DFO sockeye from 2015 are significantly longer than Hakai sockeye
 ```{r}
 dfo_2015 <- as.numeric(all_SO_by_week_by_org_2015$DFO)
@@ -654,7 +690,15 @@ all_CU_by_week_by_org_2015$numeric_sampling_week <- c(1,2,3,4,5,6,7,8)
 # time and it is an intersting trend that I can't explain.
 ggplot(all_CU_by_week_by_org_2015, aes(x = numeric_sampling_week, y = diff)) +
     geom_point() +
-  geom_smooth(method = lm)
+  geom_smooth(method = lm) +
+  ylab("Length Difference mm (mid-channel - nearshore)") +
+  xlab("Week") +
+  scale_x_continuous(breaks=c(1,2,3, 4, 5, 6, 7, 8),
+                      labels=c("2015-05-26", "2015-06-02", "2015-06-09", 
+                               "2015-06-16", "2015-06-23", "2015-06-30", "2015-07-06", "2015-07-13")) +
+  ggtitle("2015")
+
+ggsave(here::here("figs", "chum_trend_2015.png"))
 
 lm_hakai_dfo_chum_2015 <- lm(diff ~ numeric_sampling_week, data = all_CU_by_week_by_org_2015) 
 summary(lm_hakai_dfo_chum_2015)
@@ -670,7 +714,7 @@ hakai_2015 <- as.numeric(all_CU_by_week_by_org_2015$hakai)
     mutate(species = "CU"))
 ```
 
-There is a significant trend in length difference of chum in 2015
+There is a significant trend in length difference of chum in 2016
 ```{r 2016 lengths trend}
 all_CU_by_week_by_org_2016 <- okisollo %>% 
   filter(year == 2016, species == "CU") %>% 
@@ -680,14 +724,21 @@ all_CU_by_week_by_org_2016 <- okisollo %>%
   mutate(diff = DFO - hakai) %>% 
   drop_na()
 
-all_CU_by_week_by_org_2016$numeric_sampling_week <- c(1,2,3,4,5,6)
+all_CU_by_week_by_org_2016$numeric_sampling_week <- c(1,2,3,4,5)
 # I noticed the difference in means of chilko lengths compared to all other
 # lengths seemed to increase over the season so I plotted the difference over
 # time and it is an intersting trend that I can't explain.
 ggplot(all_CU_by_week_by_org_2016, aes(x = numeric_sampling_week, y = diff)) +
     geom_point() +
-  geom_smooth(method = lm)
+  geom_smooth(method = lm) +
+  ylab("Length Difference mm (mid-channel - nearshore)") +
+  xlab("Week") +
+  scale_x_continuous(breaks=c(1,2,3, 4, 5),
+                      labels=c("2016-05-26", "2016-06-02", 
+                               "2016-06-16", "2016-06-23", "2015-07-06")) +
+  ggtitle("2016")
 
+ggsave(here::here("figs", "chum_trend_2016.png"))
 lm_hakai_dfo_chum_2016 <- lm(diff ~ numeric_sampling_week, data = all_CU_by_week_by_org_2016) 
 summary(lm_hakai_dfo_chum_2016)
 ```
@@ -710,6 +761,33 @@ rm(all_CU_by_week_by_org)
 rm(all_PI_by_week_by_org)
 rm(all_SO_by_week_by_org)
 ```
+
+```{r both years length trend}
+all_cu_diff <- okisollo %>% 
+  filter(species == "CU") %>% 
+  mutate(year = year(survey_date)) %>% 
+  group_by(year, sampling_week, org) %>% 
+  summarize(mean = mean(fork_length, na.rm = TRUE)) %>% 
+  spread(key = org, value = mean) %>% 
+  mutate(diff = DFO - hakai) %>% 
+  drop_na()
+
+all_cu_diff$numeric_sampling_week <- c(3,4,5,6,7,8,9,10,3,4,5,6,7)
+
+ggplot(all_cu_diff, aes(x = numeric_sampling_week, y = diff)) +
+    geom_point() +
+  geom_smooth(method = lm) +
+  ylab("Length Difference (mm)") +
+  xlab("Sampling Week") +
+  #scale_x_continuous(breaks=c(1,2,3, 4, 5),
+                  #    labels=c("2016-05-26", "2016-06-02", 
+                        #       "2016-06-16", "2016-06-23", "2015-07-06")) +
+  ggtitle("Chum Length Differences") +
+  facet_grid(~year)
+
+ggsave(here::here("figs", "chum_length_trend.png"), width = 12)
+```
+
 ### Species lengths annually by region
 
 In this barplot I don't average lengths by week to make sure that temporal distribution is comparable. Instead I just plot the average for the whole season.
@@ -736,7 +814,60 @@ lengths %>% ggplot(aes(x = species, y = mean, fill = org)) +
                         CI)) +
   ylab("Fork Length (mm)") +
   xlab("Species")+
-  facet_grid(~year, scales = "free")
+  facet_grid(~year, scales = "free") +
+  scale_x_discrete(breaks=c("CO", "CU", "PI", "SO"),
+          labels=c("Coho", "Chum", "Pink", "Sockeye")) +
+  scale_fill_discrete(name="Habitat",
+                         breaks=c("DFO", "hakai"),
+                         labels=c("Mid-channel", "Nearshore"))+
+  theme_classic(base_size = 18) +
+  scale_fill_manual(values = wes_palette("Darjeeling1"))+
+  scale_fill_discrete(name="Habitat",
+                          breaks=c("DFO", "hakai"),
+                         labels=c("Mid-channel", "Nearshore"))
 
-ggsave(here::here("figs", "fork_length_barplot.png"))
+ggsave(here::here("figs", "fork_length_barplot.png"), width = 8, height = 7)
+```
+
+## Map
+
+```{r KDE map}
+coords <- googlesheets::gs_title("dfo_hakai_coordinates")
+dfo_coords <- googlesheets::gs_read(coords, ws = "dfo") %>% 
+  mutate(org = "dfo") %>% 
+  select(lat, lon, org, seine_id) 
+  #filter(lat > 50.3, lon < -125.315) 
+
+
+hakai_coords <- googlesheets::gs_read(coords, ws = "semsp")
+  
+hakai_coords <- hakai_coords %>% 
+  mutate(org = "hakai") %>% 
+  select(lat, lon, org, seine_id) %>% 
+  filter(lat > 50.3, lon < -125.315)
+
+both_coords <- rbind(hakai_coords, dfo_coords)
+
+okisollo_get_map <- ggmap::get_map(location = c(lon = -125.315 , lat = 50.300), maptype = "toner", zoom = 12)
+
+
+ggmap::ggmap(okisollo_get_map) +  
+  stat_density2d(data = both_coords, aes(x = lon, y = lat, fill=..level..,alpha=..level..,group = org, colour = org),geom='polygon', na.rm = TRUE)+
+  scale_fill_continuous(low="green",high="red")+
+  ylim(50.303, 50.31) +
+  xlim(-125.340, -125.320) +
+  guides(alpha="none") 
+  
+ggplot(both_coords, aes(x = lon, y = lat, colour = org, group = seine_id)) +
+  geom_point() +
+  stat_density2d(aes(fill=..level..,alpha=..level..,group = org, colour = org),geom='polygon', na.rm = TRUE)+ 
+  scale_fill_continuous(low="green",high="red")+
+  ylim(50.303, 50.31) +
+  xlim(-125.340, -125.320) +
+  guides(alpha="none")
+
+ggsave(here::here("figs", "KDE_map.png"))
+
+same_as_dfo_sites <- survey_seines_fish_stock_id %>%
+ filter(seine_id %in% c("DN391", "DN401", "DN251", "DN336"))
 ```
