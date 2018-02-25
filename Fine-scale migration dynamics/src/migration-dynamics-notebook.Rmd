@@ -263,24 +263,34 @@ First, I need to convert proportions to integers by multiplying them by 100.
 ```{r proportions test}
 #TODO: re-work this whole section
 # First, test proportion over the whole year
-hakai_chilko_prop <- gsi_okisollo_2015 %>% 
-  filter(org == "hakai") %>% 
-  mutate(n = proportion * 10)
+gsi_okisollo_2015_dfo <- okisollo %>%
+  filter(collapsed_fraser_stocks != 0, collapsed_fraser_stocks != "",
+         year == 2015, org == "DFO") %>% 
+  drop_na(site_id) %>% 
+  drop_na(collapsed_fraser_stocks) %>%
+  group_by(collapsed_fraser_stocks) %>% 
+  summarize(n = n()) %>% 
+  mutate(proportion = n / sum(n)) %>% 
+  mutate(dfo_prop_count = as.integer(proportion * 100)) %>% 
+  select(collapsed_fraser_stocks, dfo_prop_count)
+
+gsi_okisollo_2015_hakai <- okisollo %>%
+  filter(collapsed_fraser_stocks != 0, collapsed_fraser_stocks != "",
+         year == 2015, org == "hakai") %>% 
+  drop_na(site_id) %>% 
+  drop_na(collapsed_fraser_stocks) %>%
+  group_by(collapsed_fraser_stocks) %>% 
+  summarize(n = n()) %>% 
+  mutate(proportion = n / sum(n)) %>% 
+  mutate(hakai_prop_count = as.integer(proportion * 100)) %>% 
+  select(collapsed_fraser_stocks, hakai_prop_count)
+
+both_gsi <- left_join(gsi_okisollo_2015_dfo, gsi_okisollo_2015_hakai, by = "collapsed_fraser_stocks") %>% 
+  add_row(collapsed_fraser_stocks =  "other", dfo_prop_count = 2, hakai_prop_count = 4) %>% 
+  filter(!collapsed_fraser_stocks %in% c("Pitt", "Raft_North_Thompson", "Weaver_Cultus"))
 
 
-
-dfo_chilko_prop <- gsi_okisollo_2015 %>% 
-  filter(org == "DFO") %>% 
-  mutate(n = proportion * 10)
-
-hakai_n <- hakai_chilko_prop$n
-dfo_n <- dfo_chilko_prop$n
-
-v <- (hakai_n - dfo_n)^2/dfo_n
-chisq <- sum(v[1:11])
-chisq
-
-p <- 1-pchisq(chisq,10)
+chisq.test(both_gsi$dfo_prop_count, both_gsi$hakai_prop_count)
 
 ```
 
@@ -627,7 +637,7 @@ hakai_2016 <- as.numeric(all_SO_by_week_by_org_2016$hakai)
 ```
 
 
-```{r}
+```{r Both eyars sockeye length}
 dfo_all <- c(dfo_2015, dfo_2016)
 hakai_all <- c(hakai_2015, hakai_2016)
 
@@ -870,4 +880,21 @@ ggsave(here::here("figs", "KDE_map.png"))
 
 same_as_dfo_sites <- survey_seines_fish_stock_id %>%
  filter(seine_id %in% c("DN391", "DN401", "DN251", "DN336"))
+```
+
+
+```{r Tag data}
+tag_workbook <- googlesheets::gs_title("Q_C_mar_dets_OK.xlsx")
+tag_data <- googlesheets::gs_read(tag_workbook, ws ="OK_res_times")
+
+tag_plot <- tag_data %>% 
+  select(res) %>% 
+  drop_na()
+
+ggplot(tag_plot, aes(x = res)) +
+  geom_histogram() +
+  xlab("Okisollo Residency Duration (hh:mm:ss)")+
+  ylab("count")
+
+ggsave(here::here("figs", "okisollo_tag_duration.png"))
 ```
