@@ -2,7 +2,10 @@
 title: "Juvenile Salmon Survival Program Time Series"
 author: "Brett Johnson"
 date: "October 13, 2017"
-output: html_document
+output: 
+  html_document:
+    toc: true
+    toc_float: true
 runtime: shiny
 ---
 
@@ -15,18 +18,14 @@ library(plotly)
 library(googlesheets)
 library(ggridges)
 library(forcats)
-
 ```
-
-```{r, cache = FALSE}
+```{r}
 # Because we haven't measured weight or length of fish in the lab yet, I replace
 # NA lab weights or lengths with field weights or lengths if they were taken.
 # This comparison may not be the best because the difference in weight between
 # lab and field is unknown. Therefore weights and condition are not publishable
 # at this stage.
 survey_seines_fish <- survey_seines_fish %>% 
-  mutate_cond(is.na(weight), weight = as.numeric(weight_field)) %>% 
-  mutate_cond(is.na(fork_length), fork_length = as.numeric(fork_length_field)) %>% 
   mutate(k = 10^5*(weight / fork_length ^ 3)) 
 
 #not sure if this will work or if it needs to be re-written
@@ -81,10 +80,22 @@ The following plots are subject to change as the underlying data are preliminary
 
 We are endeavouring to provide useful information for the entire salmon research community. As such we welcome any feedback. Please direct questions or comments to Brian Hunt (B.Hunt@oceans.ubc.ca) and/or Brett Johnson (Brett.Johnson@hakai.org). 
 
+# Time Series Heatmap
+
+```{r heatmap}
+# I would like this to a be a summary plot showing key parameters in relation to the time series
+# Peak migration date
+# SO CPUE
+# Length
+# SST temp
+# Chl a
+
+```
+
 
 # Catch Statistics
 
-## Migration Timing
+## Migration Timing and Abundance
 ```{r, CPUE}
     cpue <-  select(survey_seines, survey_date, sampling_week, site_id, region, so_total) %>%
   filter(site_id %in% c("D07", "D09", "D22", "D27", "D10", "D08", "D34",
@@ -132,6 +143,46 @@ cpue_plot_error_bars
 
 ```
 
+## Migration Timing
+```{r}
+tidy_catch <- survey_seines %>%
+  # remove ad-hoc collections from migration timing calcs
+  filter(survey_type == "standard") %>% 
+  select(survey_date, seine_id, region, so_total, pi_total, cu_total, co_total, he_total) %>% 
+  mutate(year = year(survey_date)) %>% 
+  # remove instances when the net was not set because no surface activity was observed
+  drop_na() %>% 
+  gather(`so_total`, `pi_total`, `cu_total`, `co_total`, `he_total`, key = "species",
+         value = "n") 
+
+tidy_catch <- as.data.frame(tidy_catch)
+
+# Create one row for every fish ever caught based on a summary by seines
+catch_expanded <- tidy_catch[rep(row.names(tidy_catch), tidy_catch$n), 1:5] %>% 
+  mutate(yday = yday(survey_date), year = year(survey_date)) 
+
+# Calculare mean and standard deviation of the julian date of every fish caught
+so_mt <- catch_expanded %>% 
+  filter(species == "so_total") %>% 
+  group_by(year, region) %>% 
+             summarize(avg_date = mean(yday),
+                       sd = round(sd(yday),0))
+
+# extract mean and sd
+di_mean_date_2015 <- as.numeric(so_mt[1,3])
+di_sd_2015 <- as.numeric(so_mt[1,4])
+js_mean_date_2015 <- as.numeric(so_mt[2,3])
+js_sd_2015 <- as.numeric(so_mt[2,4])
+di_mean_date_2016 <- as.numeric(so_mt[3,3])
+di_sd_2016 <- as.numeric(so_mt[3,4])
+js_mean_date_2016 <- as.numeric(so_mt[4,3])
+js_sd_2016 <- as.numeric(so_mt[4,4])
+di_mean_date_2017 <- as.numeric(so_mt[5,3])
+di_sd_2017 <- as.numeric(so_mt[5,4])
+js_mean_date_2017 <- as.numeric(so_mt[6,3])
+js_sd_2017 <- as.numeric(so_mt[6,4])
+
+```
 
 ## Species Catch Proportions
 
@@ -225,9 +276,9 @@ renderPlot({
     na.omit()
     
   ggplot(distributions_tbl, aes(x=get(input$parameter), y = year, group = year)) +
-    geom_density_ridges()
+    geom_density_ridges() +
+    labs(x = input$parameter)
   }, width = 800, height = 600)
-
 ```
 
 

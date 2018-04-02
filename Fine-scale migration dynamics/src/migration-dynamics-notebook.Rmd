@@ -196,6 +196,30 @@ ggsave(here::here("figs", "annual_gsi.png"), width = 9, height = 6)
 
 ```
 
+```{r 2015 weekly gsi}
+gsi_weekly_okisollo <- okisollo %>%
+  filter(collapsed_fraser_stocks != 0, collapsed_fraser_stocks != "") %>% 
+  drop_na(site_id) %>% 
+  drop_na(collapsed_fraser_stocks) %>%
+  group_by(year, org, sampling_week, collapsed_fraser_stocks) %>% 
+  summarize(n = n()) %>% 
+  mutate(proportion = n / sum(n)) %>% 
+  arrange(org)
+
+  
+ggplot(gsi_weekly_okisollo, aes(x = org, y = proportion, fill = collapsed_fraser_stocks)) +
+  geom_bar(colour="black", stat="identity", position = 'stack') + 
+  ggtitle("Genetic Stock Proportions") +
+  facet_grid(year ~ sampling_week) +
+  xlab("Habitat") + 
+  scale_x_discrete(breaks=c("DFO", "hakai"),
+                      labels=c("Mid-channel", "Nearshore"))+
+  ylab("Proportion") +
+  scale_fill_discrete(name = "Genetic Stock")
+
+ggsave(here::here("figs", "weekly_gsi.png"), width = 15, height = 6)
+
+```
 ### Additional stock ID
 
 Something that is important is to try to increase the sample size of hakai 
@@ -322,7 +346,7 @@ okisollo %>%
   scale_x_discrete(breaks=c("DFO", "hakai"),
                       labels=c("Deep", "Shallow"))+
   xlab("Habitat") +
-  ylab("Proportion")
+  ylab("Proportion")+ theme(legend.position="none")
 
 #TODO: Label stocks on bar plots
 #TODO: sort out 2016 dfo stock cateegorizations

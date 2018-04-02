@@ -1,0 +1,100 @@
+---
+title: "Hakai Institute Juvenile Salmon Program Report"
+output:
+  rmarkdown::pdf_document:
+    
+    fig_caption: yes
+    includes:
+      in_header: figure_opts.tex
+    latex_engine: xelatex
+sansfont: Times New Roman
+fontsize: 12pt
+
+header-includes:
+- \usepackage{booktabs}
+- \usepackage{sectsty} \sectionfont{\centering \emph}
+      
+---
+
+\begin{center}
+\large
+— Hakai Institute Juvenile Salmon Program —
+\end{center}
+
+```{r, include = FALSE}
+library(hakaisalmon)
+library(tidyverse)
+```
+
+# Highlighted Outputs
+
+## Conference presentations and posters
+
+__Johnson, B.T.__, C. Neville, B.P.V. Hunt. 2018. *Fine scale migration dynamics of juvenile sockeye in the Discovery Islands, B.C.* Salmon Ocean Ecology Meeting. Newport, Oregon. *Oral* 
+
+__Hunt, B.P.V.__ 2018. *Integrated biogeochemical approaches to full salmon life history analysis.* Salmon Ocean Ecology Meeting. Newport, Oregon. *Oral*
+
+__James, S.__ 2018. *Characterizing the diets of juvenile Fraser River sockeye salmon across ocean regimes in coastal British Columbia*. Salmon Ocean Ecology Meeting. Newport, Oregon. *Oral*
+
+__Hunt, B.P.V.__, B.T. Johnson. 2017 *[Juvenile Salmon Program update; foraging conditions, migration dynamics, and growth](https://speakerdeck.com/brettjohnson/psf-ssmsp-2017).* Pacific Salmon Foundation Salish Sea Marine Survival Project international conference. Richmond, BC, Canada. *Oral*
+
+__Johnson, B.T.__, J.C.L. Gan, C.V. Janusson, B.P.V. Hunt. 2017. *Hakai Institute Juvenile Salmon Program 2015--2017 Time Series Poster.* Poster presentation at the Pacific Salmon Foundation Salish Sea Marine Survival Project juvenile salmon workgroup. Nanaimo, BC, Canada. *Poster*
+
+__Johnson, B.T.__, J.C.L. Gan, C.V. Janusson, B.P.V. Hunt. 2017. *Hakai Institute Juvenile Salmon Program 2015--2016 Time Series Poster*. Poster presentation at Fisheries and Oceans Canada State of the Pacific Ocean meeting. Sidney, BC, Canada. *Poster*
+
+## Publications
+
+### In preparation
+
+__Johnson, B.T.__, J.C.L. Gan, C.V. Janusson, B.P.V. Hunt. 2018. *Hakai Institute Juvenile Salmon Program migration monitoring 2015 -- 2017 time series* In preparation for the North Pacific Anadromous Fisheries Commission document reports.
+
+__Johnson, B.T.__, C. Neville, B.P.V. Hunt. 2018. *Fine scale migration dynamics of juvenile sockeye salmon in the Discovery Islands, B.C.* In preparation for Marine and Coastal Fisheries journal.
+
+
+## Data
+
+* Salmon program data restructuring for Hakai EIMS database creation
+* [Citable data package](http://dx.doi.org/10.21966/1.566666) produced for collaborators
+* [R package](https://github.com/HakaiInstitute/hakaisalmon) produced for program data and custom functions for summarizing program data
+* Salmon program data now in the Hakai Data Portal
+
+# Lab and Analysis Progress
+
+## Fish dissected and samples created
+```{r include = FALSE}
+n_fish_after_2017 <- as.numeric(survey_seines_fish %>%
+  filter(date_processed > "2017-08-01") %>% 
+  select(ufn, date_processed) %>% 
+  nrow())
+
+library(googlesheets)
+sample_inventory_workbook <- gs_title("SEMSP Current Sample Inventory")
+
+rna_metadata <- gs_read(sample_inventory_workbook, ws = "rna_metadata")
+fa_metadata <- gs_read(sample_inventory_workbook, ws = "da_metadata")
+
+
+
+n_samples_dissected <- rbind(
+  
+n_fish <- as.numeric((survey_seines_fish) %>%
+  select(ufn, date_processed) %>% 
+  drop_na(date_processed) %>% 
+  nrow())
+
+
+```
+
+* Since the 2017 field season finished after August 1 2017, `r n_fish_after_2017` were dissected
+* Since the 2017 field season finished after August 1 2017, 
+* Since the program began exactly `r n_fish` have been dissected.
+
+## Samples processed
+
+## Inventory
+
+# Next Steps
+
+## Field season
+
+## Acoustic tagging
