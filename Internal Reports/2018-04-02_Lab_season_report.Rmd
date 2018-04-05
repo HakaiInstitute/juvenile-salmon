@@ -1,5 +1,6 @@
 ---
-title: "Hakai Institute Juvenile Salmon Program Report"
+title: "2017/2018 Lab Season Report"
+author: Brett Johnson, Carly Janusson, Julian Gan, Brian Hunt
 output:
   rmarkdown::pdf_document:
     
@@ -9,10 +10,6 @@ output:
     latex_engine: xelatex
 sansfont: Times New Roman
 fontsize: 12pt
-
-header-includes:
-- \usepackage{booktabs}
-- \usepackage{sectsty} \sectionfont{\centering \emph}
       
 ---
 
@@ -26,10 +23,9 @@ library(hakaisalmon)
 library(tidyverse)
 library(googlesheets)
 library(lubridate)
-knitr::opts_chunk$set(include = FALSE)
 options(scipen=999)
     
-my_theme <- ggplot2::theme_gray(base_size = 15)
+my_theme <- ggplot2::theme_gray(base_size = 14)
 ggplot2::theme_set(my_theme)
 ```
 
@@ -62,7 +58,7 @@ __Johnson, B.T.__, C. Neville, B.P.V. Hunt. 2018. *Fine scale migration dynamics
 
 * Salmon program data restructuring for Hakai EIMS database creation
 * [Citable data package](http://dx.doi.org/10.21966/1.566666) produced for collaborators
-* [R package](https://github.com/HakaiInstitute/hakaisalmon) produced for program data and custom functions for summarizing program data
+* Update this link to point to GitHUB webpage. [R package](https://github.com/HakaiInstitute/hakaisalmon) produced for program data and custom functions for summarizing program data
 * Salmon program data now in the Hakai Data Portal
 
 # Lab and Analysis Progress
@@ -83,40 +79,46 @@ n_fish <- as.numeric((survey_seines_fish) %>%
   nrow())
   
 
+```
+
+
+```{r, echo = FALSE}
 #Plot the cumulative abundance of fish dissected by date for the lab season
-rm(lab_season_cum_abund)
-(lab_season_cum_abund <- survey_seines_fish %>%
-  #filter(date_processed > "2017-08-01") %>%  
-  group_by(date_processed) %>% 
-  summarise(n = n()) %>% 
-  drop_na(date_processed) %>% 
-  ungroup() %>% 
-  mutate(year = year(date_processed), month = month(date_processed), 
-         day = day(date_processed)) %>%  
-  group_by(year) %>% 
-  transmute(date_processed = date_processed, month = month, day = day, n = n, cumsum = cumsum(n)) %>% 
-  ggplot(aes(x = date_processed, y = cumsum, colour = as.factor(year))) +
-  geom_line()) 
-                
-(lab_season_cum_abund <- survey_seines_fish %>%
+
+lab_season_cum_abund <- survey_seines_fish %>%
   filter(date_processed > "2017-08-01") %>%  
   group_by(date_processed) %>% 
   summarise(n = n()) %>% 
   drop_na(date_processed) %>%
   transmute(date_processed = date_processed, cumsum = cumsum(n)) %>% 
     ggplot(aes(x = date_processed, y = cumsum)) +
-  geom_line()) +
-  xlab("Date") +
-  ylab("Cumulative Sum") +
-  ggtitle("2017/2018 Lab Season Salmon Dissections")
-  
+    geom_line() +
+    xlab("Date") +
+    ylab("Cumulative Dissectios") +
+  ggtitle("2017/2018 Lab Season")
+
+all_time_cum_abund <- survey_seines_fish %>%
+  group_by(date_processed) %>% 
+  summarise(n = n()) %>% 
+  drop_na(date_processed) %>%
+  transmute(date_processed = date_processed, cumsum = cumsum(n)) %>% 
+  ggplot(aes(x = date_processed, y = cumsum)) +
+    geom_line() +
+    xlab("Date") +
+    ylab("Cumulative Dissections") +
+    ggtitle("All Time") + 
+    theme(axis.text.x  = element_text(angle=45, vjust=0.5))
+
+cowplot::plot_grid(lab_season_cum_abund,all_time_cum_abund, align = 'h')
+
+
 ```
 
-* Since the 2017 field season finished on August 1 2017, `r n_fish_after_2017` were dissected
+* Since the 2017 field season finished on August 1 2017, `r n_fish_after_2017` were dissected primarily by the proffessional efforts of Krystal Bachen, Julian Gan, Carly Janusson, and Megan Foss.
 * Since the program began exactly `r n_fish` have been dissected.
 
 ## Samples collected
-```{r samples collected}
+```{r samples collected, include = FALSE}
 sample_inventory_workbook <- gs_key("1Ti5gGvakA4DUTjCUZ_VYHULU_FJCK05-zdly5E80Tzs", lookup = FALSE, visibility = "private")
 
 rna <- gs_read(sample_inventory_workbook, ws = "rna_metadata")
@@ -162,13 +164,44 @@ numeric_samples_dissected_after_2017 <- as.numeric(nrow(n_samples_dissected_afte
 * Since the program began, $`r numeric_total_samples`$ samples have been collected and inventoried
 * Since the 2017 field season finished on August 1 2017, `r numeric_samples_dissected_after_2017` samples have been collected and inventoried from the fish we've dissected.
 
+## Samples analyzed
 
-## Samples processed
+* Dr. Jessica Garzke, a post-doc in Dr. Brian Hunt's Lab at UBC began measuring and analyzing muscle tissue samples from juvenile sockeye to measure the ratio of RNA:DNA as a measure of growth.
+
+* Dr. David Coastalago, a post-doc in Dr. Brian Hunt's Lab at UBC began analyzing muscle tissue samples from juvenile sockeye that have been measured at DFO's West Van Labs to profile muscle lipid content and composition as a measure of fish condition.
+
+* Sam James, a MSc. student co-supervised by Dr. Brian Hunt and Dr. Evgeny Pakhomov at UBC has been identifying juvenile sockeye stomach contents in an effort to understand the foraging ecology of juvenile salmon across ocean regimes.
+
+* Yuliya Kuzmenko, a MSc. student co-supervised by Dr. Brian Hunt and Dr. Evgeny Pakhomov at UBC has been polishing juvenile sockeye otoliths to measure daily growth rates of juvenile sockeye once they enter the marine environment using laser-ablation inductively coupled plasma mass-spectrometry.
+
+* Genetic stock ID of the 2017 sockeye salmon is moving forward pending finalization of the collaborative agreement with DFO.
 
 ## Inventory
 
+* A complete inventory of all `r numeric_total_samples` samples has been completed. This includes: current location, storage medium, sample processing stage, shipping/receiving information, and sample quality remarks.  This was a monumental effort undertaken starting last lab season, and completed this December.
+
+## Genomics
+
+* Carly Janusson has been working with the Molecular Genetics Lab at DFO's Pacific Biological Station (PBS) to develop genomic processing workflows at the Quadra station. Carly spent several days being trained at PBS to extract salmon tissue samples to be run through Dr. Kristi Miller's lab to determine whether fish are in a viral disease development state.
+
 # Next Steps
+
+## Lab directions
+
+* Carly Janusson, in collaboration with Colleen Kellog and Rebecca Piercey, intends to continue developing the in-house capacity for genomics work with salmon in the new Marna Lab at the Quadra Station.
+
+* Dr. Jessica Garzke will be coming to Quadra to train staff to measure fish growth using the fluormeter to analyze fish muscle samples for RNA:DNA ratios.
 
 ## Field season
 
-## Acoustic tagging
+* We are eagerly awaiting the arrival of a new sampling boat for the Juvenile Salmon Program. The vessel is a 23 foot Ironwood with twin 90 hp yamahas, similar to the Good Hope vessels on Calvert. This boat will replace our previous sampling vessel Sloop-Jo, which is no longer available for us to lease. 
+
+* Field sampling officially start May 9th and will run through to July 13th.
+
+* Katie Davidson (formerly of the 100 Islands project) and Sara Tremblay-Boyer will be joining the Salmon Program for this summer starting on April 23rd. Please be sure to say hi if you see them around station!
+
+* Stepehen Johnstone, a MSc. student in the Pacific Salmon Ecology and Conservation Lab with Dr. Scott Hinch at UBC will be joining us on Quadra, along with Christine Stevenson, and Andrew Lotto, to lead the charge on conducting acoustic tagging operations. These tags allow us to track survival, migration rate, and migration route selection through the Discovery Islands and Johnstone Strait giving us a direct measure of survival.
+
+
+
+
