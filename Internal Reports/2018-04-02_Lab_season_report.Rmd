@@ -60,12 +60,12 @@ __Johnson, B.T.__, C. Neville, B.P.V. Hunt. 2018. *Fine scale migration dynamics
 
 ## Data
 
-* Salmon program data restructuring for Hakai EIMS database creation
-* [Citable data package](http://dx.doi.org/10.21966/1.566666) produced for collaborators
+* Salmon program data was restructured for Hakai EIMS database creation
+* A [Citable data package](http://dx.doi.org/10.21966/1.566666) produced for collaborators
 * Update this link to point to GitHUB webpage. [R package](https://github.com/HakaiInstitute/hakaisalmon) produced for program data and custom functions for summarizing program data
 * Salmon program data now in the Hakai Data Portal
 
-# Lab and Analysis Progress
+# Lab Progress
 
 ## Fish dissected
 ```{r include = FALSE}
