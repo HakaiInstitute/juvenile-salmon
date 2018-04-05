@@ -10,6 +10,10 @@ output:
     latex_engine: xelatex
 sansfont: Times New Roman
 fontsize: 12pt
+
+header-includes:
+- \usepackage{booktabs}
+- \usepackage{sectsty} \sectionfont{\centering \emph}
       
 ---
 
@@ -41,7 +45,7 @@ __James, S.__ 2018. *Characterizing the diets of juvenile Fraser River sockeye s
 
 __Hunt, B.P.V.__, B.T. Johnson. 2017 *[Juvenile Salmon Program update; foraging conditions, migration dynamics, and growth](https://speakerdeck.com/brettjohnson/psf-ssmsp-2017).* Pacific Salmon Foundation Salish Sea Marine Survival Project international conference. Richmond, BC, Canada. *Oral*
 
-__Johnson, B.T.__, J.C.L. Gan, C.V. Janusson, B.P.V. Hunt. 2017. *Hakai Institute Juvenile Salmon Program 2015--2017 Time Series Poster.* Poster presentation at the Pacific Salmon Foundation Salish Sea Marine Survival Project juvenile salmon workgroup. Nanaimo, BC, Canada. *Poster*
+__Johnson, B.T.__, J.C.L. Gan, C.V. Janusson, B.P.V. Hunt. 2017. *Hakai Institute Juvenile Salmon Program 2015--2017 Time Series Poster.* Poster presentation at the Pacific Salmon Foundation Salish Sea Marine Survival Project juvenile salmon work group. Nanaimo, BC, Canada. *Poster*
 
 __Johnson, B.T.__, J.C.L. Gan, C.V. Janusson, B.P.V. Hunt. 2017. *Hakai Institute Juvenile Salmon Program 2015--2016 Time Series Poster*. Poster presentation at Fisheries and Oceans Canada State of the Pacific Ocean meeting. Sidney, BC, Canada. *Poster*
 
@@ -114,7 +118,7 @@ cowplot::plot_grid(lab_season_cum_abund,all_time_cum_abund, align = 'h')
 
 ```
 
-* Since the 2017 field season finished on August 1 2017, `r n_fish_after_2017` were dissected primarily by the proffessional efforts of Krystal Bachen, Julian Gan, Carly Janusson, and Megan Foss.
+* Since the 2017 field season finished on August 1 2017, `r n_fish_after_2017` were dissected primarily by the professional efforts of Krystal Bachen, Julian Gan, Carly Janusson, and Megan Foss.
 * Since the program began exactly `r n_fish` have been dissected.
 
 ## Samples collected
@@ -194,13 +198,13 @@ numeric_samples_dissected_after_2017 <- as.numeric(nrow(n_samples_dissected_afte
 
 ## Field season
 
-* We are eagerly awaiting the arrival of a new sampling boat for the Juvenile Salmon Program. The vessel is a 23 foot Ironwood with twin 90 hp yamahas, similar to the Good Hope vessels on Calvert. This boat will replace our previous sampling vessel Sloop-Jo, which is no longer available for us to lease. 
+* We are eagerly awaiting the arrival of a new sampling boat for the Juvenile Salmon Program. The vessel is a 23 foot Ironwood with twin 90 hp Yamahas, similar to the Good Hope vessels on Calvert. This boat will replace our previous sampling vessel Sloop-Jo, which is no longer available for us to lease. 
 
 * Field sampling officially start May 9th and will run through to July 13th.
 
 * Katie Davidson (formerly of the 100 Islands project) and Sara Tremblay-Boyer will be joining the Salmon Program for this summer starting on April 23rd. Please be sure to say hi if you see them around station!
 
-* Stepehen Johnstone, a MSc. student in the Pacific Salmon Ecology and Conservation Lab with Dr. Scott Hinch at UBC will be joining us on Quadra, along with Christine Stevenson, and Andrew Lotto, to lead the charge on conducting acoustic tagging operations. These tags allow us to track survival, migration rate, and migration route selection through the Discovery Islands and Johnstone Strait giving us a direct measure of survival.
+* Stephen Johnston, a MSc. student in the Pacific Salmon Ecology and Conservation Lab with Dr. Scott Hinch at UBC will be joining us on Quadra, along with Christine Stevenson, and Andrew Lotto, to lead the charge on conducting acoustic tagging operations. These tags allow us to track survival, migration rate, and migration route selection through the Discovery Islands and Johnstone Strait giving us a direct measure of survival.
 
 
 
