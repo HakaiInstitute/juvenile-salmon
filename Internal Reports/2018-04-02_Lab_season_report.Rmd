@@ -1,0 +1,174 @@
+---
+title: "Hakai Institute Juvenile Salmon Program Report"
+output:
+  rmarkdown::pdf_document:
+    
+    fig_caption: yes
+    includes:
+      in_header: figure_opts.tex
+    latex_engine: xelatex
+sansfont: Times New Roman
+fontsize: 12pt
+
+header-includes:
+- \usepackage{booktabs}
+- \usepackage{sectsty} \sectionfont{\centering \emph}
+      
+---
+
+\begin{center}
+\large
+— Hakai Institute Juvenile Salmon Program —
+\end{center}
+
+```{r, include = FALSE}
+library(hakaisalmon)
+library(tidyverse)
+library(googlesheets)
+library(lubridate)
+knitr::opts_chunk$set(include = FALSE)
+options(scipen=999)
+    
+my_theme <- ggplot2::theme_gray(base_size = 15)
+ggplot2::theme_set(my_theme)
+```
+
+# Highlighted Outputs
+
+## Conference presentations and posters
+
+__Johnson, B.T.__, C. Neville, B.P.V. Hunt. 2018. *Fine scale migration dynamics of juvenile sockeye in the Discovery Islands, B.C.* Salmon Ocean Ecology Meeting. Newport, Oregon. *Oral* 
+
+__Hunt, B.P.V.__ 2018. *Integrated biogeochemical approaches to full salmon life history analysis.* Salmon Ocean Ecology Meeting. Newport, Oregon. *Oral*
+
+__James, S.__ 2018. *Characterizing the diets of juvenile Fraser River sockeye salmon across ocean regimes in coastal British Columbia*. Salmon Ocean Ecology Meeting. Newport, Oregon. *Oral*
+
+__Hunt, B.P.V.__, B.T. Johnson. 2017 *[Juvenile Salmon Program update; foraging conditions, migration dynamics, and growth](https://speakerdeck.com/brettjohnson/psf-ssmsp-2017).* Pacific Salmon Foundation Salish Sea Marine Survival Project international conference. Richmond, BC, Canada. *Oral*
+
+__Johnson, B.T.__, J.C.L. Gan, C.V. Janusson, B.P.V. Hunt. 2017. *Hakai Institute Juvenile Salmon Program 2015--2017 Time Series Poster.* Poster presentation at the Pacific Salmon Foundation Salish Sea Marine Survival Project juvenile salmon workgroup. Nanaimo, BC, Canada. *Poster*
+
+__Johnson, B.T.__, J.C.L. Gan, C.V. Janusson, B.P.V. Hunt. 2017. *Hakai Institute Juvenile Salmon Program 2015--2016 Time Series Poster*. Poster presentation at Fisheries and Oceans Canada State of the Pacific Ocean meeting. Sidney, BC, Canada. *Poster*
+
+## Publications
+
+### In preparation
+
+__Johnson, B.T.__, J.C.L. Gan, C.V. Janusson, B.P.V. Hunt. 2018. *Hakai Institute Juvenile Salmon Program migration monitoring 2015 -- 2017 time series* In preparation for the North Pacific Anadromous Fisheries Commission document reports.
+
+__Johnson, B.T.__, C. Neville, B.P.V. Hunt. 2018. *Fine scale migration dynamics of juvenile sockeye salmon in the Discovery Islands, B.C.* In preparation for Marine and Coastal Fisheries journal.
+
+
+## Data
+
+* Salmon program data restructuring for Hakai EIMS database creation
+* [Citable data package](http://dx.doi.org/10.21966/1.566666) produced for collaborators
+* [R package](https://github.com/HakaiInstitute/hakaisalmon) produced for program data and custom functions for summarizing program data
+* Salmon program data now in the Hakai Data Portal
+
+# Lab and Analysis Progress
+
+## Fish dissected
+```{r include = FALSE}
+# This section looks into the current inventory to calculate the number of fish dissected and the number of samples collected from those fish. To update this section you simply need to change the date in the filter() argument, to update to the relevant reporting period.
+
+
+n_fish_after_2017 <- as.numeric(survey_seines_fish %>%
+  filter(date_processed > "2017-08-01") %>% 
+  select(ufn, date_processed) %>% 
+  nrow())
+
+n_fish <- as.numeric((survey_seines_fish) %>%
+  select(ufn, date_processed, dissection_status) %>% 
+  filter(dissection_status == "dissected") %>% 
+  nrow())
+  
+
+#Plot the cumulative abundance of fish dissected by date for the lab season
+rm(lab_season_cum_abund)
+(lab_season_cum_abund <- survey_seines_fish %>%
+  #filter(date_processed > "2017-08-01") %>%  
+  group_by(date_processed) %>% 
+  summarise(n = n()) %>% 
+  drop_na(date_processed) %>% 
+  ungroup() %>% 
+  mutate(year = year(date_processed), month = month(date_processed), 
+         day = day(date_processed)) %>%  
+  group_by(year) %>% 
+  transmute(date_processed = date_processed, month = month, day = day, n = n, cumsum = cumsum(n)) %>% 
+  ggplot(aes(x = date_processed, y = cumsum, colour = as.factor(year))) +
+  geom_line()) 
+                
+(lab_season_cum_abund <- survey_seines_fish %>%
+  filter(date_processed > "2017-08-01") %>%  
+  group_by(date_processed) %>% 
+  summarise(n = n()) %>% 
+  drop_na(date_processed) %>%
+  transmute(date_processed = date_processed, cumsum = cumsum(n)) %>% 
+    ggplot(aes(x = date_processed, y = cumsum)) +
+  geom_line()) +
+  xlab("Date") +
+  ylab("Cumulative Sum") +
+  ggtitle("2017/2018 Lab Season Salmon Dissections")
+  
+```
+
+* Since the 2017 field season finished on August 1 2017, `r n_fish_after_2017` were dissected
+* Since the program began exactly `r n_fish` have been dissected.
+
+## Samples collected
+```{r samples collected}
+sample_inventory_workbook <- gs_key("1Ti5gGvakA4DUTjCUZ_VYHULU_FJCK05-zdly5E80Tzs", lookup = FALSE, visibility = "private")
+
+rna <- gs_read(sample_inventory_workbook, ws = "rna_metadata")
+fa <- gs_read(sample_inventory_workbook, ws = "fa_metadata")
+iso <- gs_read(sample_inventory_workbook, ws = "iso_metadata")
+Sys.sleep(30)
+xm <- gs_read(sample_inventory_workbook, ws = "xm_metadata")
+dna <- gs_read(sample_inventory_workbook, ws = "dna_metadata")
+stomach <- gs_read(sample_inventory_workbook, ws = "stomach_metadata")
+Sys.sleep(30)
+otolith <- gs_read(sample_inventory_workbook, ws = "otolith_metadata")
+scale <- gs_read(sample_inventory_workbook, ws = "scale_metadata")
+sealice <- gs_read(sample_inventory_workbook, ws = "sealice_metadata")
+Sys.sleep(30)
+carcass <- gs_read(sample_inventory_workbook, ws = "carcass_metadata")
+finclip <- gs_read(sample_inventory_workbook, ws = "finclip_metadata")
+
+# Count the number of samples dissected since the beginning of the program
+# Each RNA sample in the inventory is actually made up of seven individual tissue types, so I multiple the number of rows by 7
+rna_replicated <- rna[rep(seq_len(nrow(rna)), each=7),]
+total_samples <- rbind(rna_replicated, fa, iso, xm, dna, stomach, otolith, scale, sealice,
+                             carcass, finclip)
+total_samples <- left_join(total_samples, survey_seines_fish)
+
+numeric_total_samples <- as.numeric(nrow(total_samples))
+
+# Count the number of samples dissected since the last report
+rna_after_2017 <- left_join(rna, survey_seines_fish, by = "ufn") %>% 
+  filter(date_processed > "2017-08-01")
+
+# Look at samples dissected after field season
+n_samples_dissected_after_2017 <- rbind(rna_replicated, fa,iso,xm,dna,stomach,otolith,scale,sealice,
+                             carcass, finclip) 
+n_samples_dissected_after_2017 <- left_join(n_samples_dissected_after_2017,
+                                            survey_seines_fish, by = "ufn") %>% 
+  filter(date_processed > "2017-08-01")
+
+
+numeric_samples_dissected_after_2017 <- as.numeric(nrow(n_samples_dissected_after_2017))
+
+```
+
+* Since the program began, $`r numeric_total_samples`$ samples have been collected and inventoried
+* Since the 2017 field season finished on August 1 2017, `r numeric_samples_dissected_after_2017` samples have been collected and inventoried from the fish we've dissected.
+
+
+## Samples processed
+
+## Inventory
+
+# Next Steps
+
+## Field season
+
+## Acoustic tagging
