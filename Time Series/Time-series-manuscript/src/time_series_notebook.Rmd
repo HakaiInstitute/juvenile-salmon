@@ -194,6 +194,7 @@ library(tidyverse)
 library(lubridate)
 library(ggridges)
 library(here)
+theme_set(theme_gray(base_size = 14))
 ```
 
 ## Migration Dynamics {.tabset}
@@ -227,20 +228,17 @@ cpue_plot_error_bars <- ggplot(data = cpue, aes(x = sampling_week, y = mean,
   width = 0.3) +
   facet_wrap(~ region, nrow = 2, scales = "free_y",
              labeller = labeller(region = labels)) +
-  theme(strip.text.x = element_text(size=12)) +
   geom_line(size = 1.5) +
   geom_point(size = 2, position = position_dodge(width = 0.15)) +
   xlab("Date") +
   ylab("Sockeye CPUE") +
   theme(legend.justification = c(1, 0), legend.position = c(.83, .67)) +
   theme(legend.title = element_blank()) +
-  theme(legend.text = element_text(colour = "black", size = 12)) +
-  theme(axis.text = element_text(size = 12),
-        axis.text.x = element_text(angle = 45, vjust = 0.5),
-        axis.title = element_text(size = 12, face = "bold")) 
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
 
 
 cpue_plot_error_bars
+ggsave(here::here("Time Series", "Time-series-manuscript", "figs", "cpue_plot_error_bars.png"), width = 6, height = 4)
 ```
 
 ### Migration Timing
@@ -289,15 +287,15 @@ js_sd_2017 <- as.numeric(so_mt[6,4])
 date_range <- tibble(dates = c(121:182))
 
 # Generate a normal distriubtion by random sampling a random normal distruvution based on annual mean capture date and sd
-di_sim_set <- tibble("2015" = rnorm(100000, di_mean_date_2015, di_sd_2015),
-                      "2016" = rnorm(100000, di_mean_date_2016, di_sd_2016),
-                      "2017" = rnorm(100000, di_mean_date_2017, di_sd_2017),
+di_sim_set <- tibble("2015" = rnorm(1000000, di_mean_date_2015, di_sd_2015),
+                      "2016" = rnorm(1000000, di_mean_date_2016, di_sd_2016),
+                      "2017" = rnorm(1000000, di_mean_date_2017, di_sd_2017),
                      "region" = "DI") %>% 
   gather(`2015`, `2016`, `2017`, key = "year", value = "yday")
 
-js_sim_set <- tibble("2015" = rnorm(100000, js_mean_date_2015, js_sd_2015),
-                      "2016" = rnorm(100000, js_mean_date_2016, js_sd_2016),
-                      "2017" = rnorm(100000, js_mean_date_2017, js_sd_2017),
+js_sim_set <- tibble("2015" = rnorm(1000000, js_mean_date_2015, js_sd_2015),
+                      "2016" = rnorm(1000000, js_mean_date_2016, js_sd_2016),
+                      "2017" = rnorm(1000000, js_mean_date_2017, js_sd_2017),
                      "region" = "JS") %>% 
   gather(`2015`, `2016`, `2017`, key = "year", value = "yday")
 
@@ -308,7 +306,7 @@ cdat <- sim_set %>%
   summarise(mean = mean(yday, na.rm = TRUE))
 
 
-ggplot(sim_set, aes(x = yday, y = region, fill = region)) +
+(ggplot(sim_set, aes(x = yday, y = region, fill = region)) +
          geom_density_ridges(alpha = 0.6)+
   facet_grid(year ~ .) +
   scale_x_continuous(breaks=c(121, 151, 182),
@@ -317,12 +315,10 @@ ggplot(sim_set, aes(x = yday, y = region, fill = region)) +
   xlab("Date") +
   geom_vline(data=cdat, aes(xintercept=mean, colour = year),
                linetype="dashed", size=1) +
-  theme_classic(base_size = 18) +
-  theme(legend.position="none") +
-  ggtitle("Peak sockeye migration")
-ggsave(here::here("figs", "ndist_migration_date.png"))
+  theme_gray(base_size = 14) +
+  theme(legend.position="none"))
+ggsave(here::here("Time Series", "Time-series-manuscript","figs", "ndist_migration_date.png"), width = 6, height = 4)
 
-?scale_x
 
 # TODO format plot with axis breaks that are dates, and adjsut the side label,
 # to make it a top label.
@@ -347,12 +343,24 @@ To assess the abundance of each species I plot the average CPUE
 
 annual_cpue <- tidy_catch %>% 
   group_by(year, region, species) %>% 
-  summarize(mean = mean(n, na.rm = TRUE)) 
+  summarize(mean = mean(n, na.rm = TRUE))
 
-ggplot(annual_cpue, aes(x = year, y = mean, fill = species)) +
+annual_cpue$species <- as_factor(annual_cpue$species) 
+annual_cpue$species <- fct_relevel(annual_cpue$species, "so_total", "cu_total", "pi_total", "co_total", "he_total")
+
+
+
+ggplot(annual_cpue, aes(x = species, y = mean, fill = species)) +
   geom_bar(stat = "identity", position = position_dodge()) +
   ylab("Mean CPUE") +
-  facet_grid(region ~.)
+  xlab("Year") +
+  scale_x_discrete(breaks=c("so_total","cu_total","pi_total","co_total", "he_total"),
+                          labels=c("sockeye", "chum", "pink", "herring", "coho")) +
+  facet_grid(region~year) +
+  theme(legend.position="none") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
+
+ggsave(here::here("Time Series", "Time-series-manuscript", "figs", "annual_abundance.png"), width = 6, height = 4)
 ```
 
 ### Species Composition
@@ -360,13 +368,21 @@ ggplot(annual_cpue, aes(x = year, y = mean, fill = species)) +
 Here I average the proportion each species contributed to the annual species composition. This is based only on instances when the net was set. 
 ```{r}
 proportions <- catch_expanded %>%
-  group_by(year, species) %>%
+  group_by(year, region, species) %>%
   summarize(n = n()) %>%
   mutate(proportion = n / sum(n)) %>%
   ungroup()
 
 ggplot(data = proportions, aes(x = year, y = proportion, fill = species)) +
-      geom_bar(stat="identity", position = 'stack') 
+      geom_bar(stat="identity", position = 'stack') +
+      scale_fill_discrete(name = "Species",
+                          breaks=c("so_total","cu_total","pi_total","co_total", "he_total"),
+                          labels=c("sockeye", "chum", "pink", "herring", "coho")) + 
+  xlab("Year") +
+  ylab("Proportion") +
+  facet_wrap(~region)
+
+ggsave(here::here("Time Series", "Time-series-manuscript", "figs", "annual_proportion.png"), width = 6, height = 4)
            
 ```
 
