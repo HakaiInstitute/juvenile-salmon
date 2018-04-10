@@ -241,7 +241,7 @@ cpue_plot_error_bars
 ggsave(here::here("Time Series", "Time-series-manuscript", "figs", "cpue_plot_error_bars.png"), width = 6, height = 4)
 ```
 
-### Migration Timing
+### Migration Timing and Rate
 
 In an effort to paramaterize migration timing I assign a peak abundance date in each region by averaging the date of capture for the 218,242 fish that we have caught, and plot the mean and standard deviations according to a normal distriubtion. This plot then estimates migration timing, but not abundance as the height of the distribution is infuenced by the standard deviation, and not abundance.
 
@@ -324,7 +324,7 @@ ggsave(here::here("Time Series", "Time-series-manuscript","figs", "ndist_migrati
 # to make it a top label.
 # TODO rm() all the outputs created from this chunk
 # TODO plot anual average?
-# TODO calculate average difference in days between regions
+
 
 diff <- c(so_mt[2,3] - so_mt[1,3], so_mt[4,3] - so_mt[3,3], so_mt[6,3] - so_mt[5,3])
 years <- c(2015, 2016, 2017)
@@ -333,6 +333,25 @@ annual_peak_diff <- tibble(years, mean = round(as.numeric(diff),1))
 
 (average_time <- mean(annual_peak_diff$mean))
 
+```
+
+
+```{r parabla migration rate}
+parabola <-  select(survey_seines, survey_date, sampling_week, site_id, region, so_total) %>%
+   # Only include sites that have been consistently fished over the last few years. This is necessary because our survey effort at other sites was inconsistent.
+  filter(site_id %in% c("D07", "D09", "D22", "D27", "D10", "D08", "D34",
+                        "D20", "J03", "J02", "J09", "J11")) %>%
+  mutate(year = year(survey_date)) %>%
+  select(-site_id) %>% 
+  # Replace surveys that have NA for sockeye, ie. when the net wasn't set from a survey, assume zero fish present
+  replace_na(list(so_total = 0)) %>% 
+  group_by(year, region, survey_date) %>% 
+  summarise_each(funs(mean, sd, cpue.se=sd(.) / sqrt(n())))
+
+ggplot(parabola, aes(x = survey_date, y = log(so_total_mean))) +
+         geom_point() +
+  facet_wrap(region~year, scales = "free_x") +
+  stat_smooth(method = "lm", formula = y ~ x + I(x^2), size = 1)
 ```
 
 ### Migration Abundance
