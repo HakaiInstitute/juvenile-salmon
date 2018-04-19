@@ -1,0 +1,451 @@
+---
+title: "Hakai Institute Juvenile Salmon Report"email Brian Eric, Wayne 
+author: "Brett Johnson"
+date: '`r date()`'
+output:
+ html_document:
+   theme: cosmo
+   code_folding: show
+   toc: true
+   toc_float: true
+   number_sections: true
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, error = FALSE)
+library(hakaisalmon)
+library(tidyverse)
+library(lubridate)
+library(ggridges)
+library(here)
+library(car)
+theme_set(theme_classic(base_size = 14))
+
+version <- as.character(packageVersion('hakaisalmon'))
+```
+
+This is the script used to generate the figures published in Johnson, B.T., J.C.L. Gan, C.V. Janusson, B.P.V. Hunt. 2018. Juvenile salmon migration dynamics in the Discovery Islands and Johnstone Strait; 2015–2017. NPAFC Doc. ####. 10 pp. Hakai Institute, University of British Columbia Institute of the Oceans and Fisheries  (Available at http://www.npafc.org)
+
+The underlying data comes from the Hakai Institute Juvenile Salmon Program dataset, which is loaded into memory when you call library('hakaisalmon'). The version of the hakaisalmon R package is `r version`. This R package version number is the same as the datapackage version of the datapackage that it requestable at http://dx.doi.org/10.21966/1.566666
+
+
+```{r Create tables}
+#survey_seines is a hakaisalmon dataset loaded into memory on calling library('hakaisalmon')
+tidy_catch <- survey_seines %>%
+  # remove ad-hoc collections from migration timing calcs
+  filter(survey_type == "standard", collection_protocol == "SEMSP", set_type == "targeted") %>% 
+  # only include consistently sampled sites with similar catchabilities
+  filter(site_id %in% c("D07", "D09", "D22", "D27", "D10", "D08", "D34",
+                        "D20", "J03", "J02", "J09", "J11")) %>%
+  select(survey_date, seine_id, region, so_total, pi_total, cu_total, co_total, he_total, lat, lon, sampling_week) %>% 
+  # filter out instances when sockeye were not caught because in 2015 we only enumerated sets that had sockeye in them, and moving forward we plan on enumerating all sets. If we included sets that had zero sockeye in 2017 and 2018 then our CPUE of sockeye in 2015 and 2016 would be biased high. Therefore this abundance metrics are strictly based on seines which had sockeye and we are then measuring how many of each species are in a seine, from seines with sockeye, as our metric of all species abundance and proportion. This is the only way to resolved inconsistent sampling strategies between years.
+  filter(so_total > 0) %>% 
+  mutate(year = year(survey_date)) %>% 
+  # remove instances when there was not a complete enumeration of all species in the seine
+  drop_na() %>% 
+  gather(`so_total`, `pi_total`, `cu_total`, `co_total`, `he_total`, key = "species",
+         value = "n") 
+
+tidy_catch <- as.data.frame(tidy_catch)
+# make the unit of observation one fish, based on total catch numbers in seine_data
+catch_expanded <- tidy_catch[rep(row.names(tidy_catch), tidy_catch$n), 1:8] %>% 
+  mutate(yday = yday(survey_date), year = year(survey_date)) 
+
+# Create one row for every sockeye ever caught based on a summary by seines
+tidy_so_catch <- tidy_catch %>% 
+  filter(species == "so_total")
+
+so_catch_expanded <- tidy_so_catch[rep(row.names(tidy_so_catch), tidy_so_catch$n), 1:8] %>% 
+  mutate(yday = yday(survey_date), year = year(survey_date)) 
+
+write_csv(tidy_catch, here("Time Series", "Time-series-manuscript","Johnson_et_al_2018_migration_dynamics_NPAFC", "data", "tidy_catch.csv"))
+
+write_csv(tidy_so_catch, here("Time Series", "Time-series-manuscript","Johnson_et_al_2018_migration_dynamics_NPAFC", "data", "tidy_so_catch.csv"))
+
+write_csv(catch_expanded, here("Time Series", "Time-series-manuscript","Johnson_et_al_2018_migration_dynamics_NPAFC", "data", "catch_expanded.csv"))
+
+write_csv(so_catch_expanded, here("Time Series", "Time-series-manuscript","Johnson_et_al_2018_migration_dynamics_NPAFC", "data", "so_catch_expanded.csv"))
+
+```
+
+
+```{r Mean sockeye catch date}
+# Calculate mean and standard deviation of the julian date of every fish caught
+so_mt <- so_catch_expanded %>% 
+  group_by(year, region) %>% 
+  summarize(avg_date = mean(yday),
+            sd = round(sd(yday),0))
+
+so_mt_avg <- so_mt %>%
+  group_by(region) %>% 
+  summarise(mean = mean(avg_date), sd = sd(avg_date))
+ 
+# extract mean and sd from so_mt
+di_mean_date_2015 <- as.numeric(so_mt[1,3])
+di_sd_2015 <- as.numeric(so_mt[1,4])
+js_mean_date_2015 <- as.numeric(so_mt[2,3])
+js_sd_2015 <- as.numeric(so_mt[2,4])
+di_mean_date_2016 <- as.numeric(so_mt[3,3])
+di_sd_2016 <- as.numeric(so_mt[3,4])
+js_mean_date_2016 <- as.numeric(so_mt[4,3])
+js_sd_2016 <- as.numeric(so_mt[4,4])
+di_mean_date_2017 <- as.numeric(so_mt[5,3])
+di_sd_2017 <- as.numeric(so_mt[5,4])
+js_mean_date_2017 <- as.numeric(so_mt[6,3])
+js_sd_2017 <- as.numeric(so_mt[6,4])
+
+date_range <- tibble(dates = c(121:182))
+
+diff <- c(so_mt[2,3] - so_mt[1,3], so_mt[4,3] - so_mt[3,3], so_mt[6,3] - so_mt[5,3])
+years <- c(2015, 2016, 2017)
+
+annual_peak_diff <- tibble(years, mean = round(as.numeric(diff),1))
+
+(average_time <- mean(annual_peak_diff$mean))
+```
+
+```{r Migration Timing and Abundance}
+
+avg_school_size <- tidy_so_catch %>% 
+  group_by(year, region, sampling_week) %>% 
+  summarise(mean = mean(n), se = (sd(n) / sqrt(n()))) %>% 
+  ungroup() %>% 
+  # Create observations of zero catch to account for pre sockeye arrival surveys that were conducted, but the net was not set because no fish activity was observed. 
+  add_case(year = 2015, region = "DI", sampling_week = "May 12", mean = 0) %>% 
+  add_case(year = 2015, region = "JS", sampling_week = "May 19", mean = 0) %>% 
+  add_case(year = 2016, region = "JS", sampling_week = "May 19", mean = 0) %>% 
+  add_case(year = 2017, region = "DI", sampling_week = "May 12", mean = 0) %>%
+  add_case(year = 2017, region = "DI", sampling_week = "May 19", mean = 0) %>% 
+  add_case(year = 2017, region = "JS", sampling_week = "May 26", mean = 0) %>% 
+  add_case(year = 2017, region = "JS", sampling_week = "June 2", mean = 0) 
+  
+labels <- c(DI = "Discovery Islands", JS = "Johnstone Strait")
+
+school_size_plot <- ggplot(data = avg_school_size, aes(x = sampling_week, y = mean,
+                                     colour = as.factor(year), group = year, shape = as.factor(year))) +
+  geom_errorbar(aes(ymin = mean - se, ymax = mean + se),
+  position = position_dodge(width = 0.15),
+  width = 0.3) +
+  facet_wrap(~ region, nrow = 2,
+             labeller = labeller(region = labels), scales = "free_y") +
+  geom_line( size = 1) +
+  geom_point(size = 1.75, position = position_dodge(width = 0.1)) +
+  xlab("Date") +
+  ylab("Sockeye abundance") +
+ #theme(legend.justification = c(1, 0), legend.position = c(.83, .65)) +
+  theme(legend.title = element_blank()) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
+
+school_size_plot
+
+
+ggsave(here::here("Time Series", "Time-series-manuscript","Johnson_et_al_2018_migration_dynamics_NPAFC", "figs", "migration_timing_and_abundance.png"), width = 7, height = 4)
+```
+
+```{r skewness}
+# Test for skewness
+skew_2015 <- so_catch_expanded %>% 
+  filter(year == 2015)
+skew_2015 <- psych::skew(skew_2015$yday)
+
+skew_2016 <- so_catch_expanded %>% 
+  filter(year == 2016)
+skew_2016 <- psych::skew(skew_2016$yday)
+
+skew_2017 <- so_catch_expanded %>% 
+  filter(year == 2017)
+skew_2017 <- psych::skew(skew_2017$yday)
+
+skew_all <- c(skew_2015, skew_2016, skew_2017)
+
+(mean_skew <- mean(skew_all))
+(skew_se <- sd(skew_all)/ sqrt(3))
+
+
+```
+
+```{r Fit logisitc growth curve to cumulative sockeye abundance}
+
+so_cum_abund_di_2015 <- catch_expanded %>% 
+  filter(year == "2015", species == "so_total", region == "DI") %>% 
+  mutate(year = year(survey_date)) %>% 
+  group_by(year, region, yday) %>% 
+  summarise(n = n()) %>%
+  mutate(percent = cumsum(n / sum(n))*100) %>% 
+  ungroup() %>% 
+  transmute(year = year, survey_date = yday, region = region, percent = percent, so.cum.abund = cumsum(n))  
+
+
+
+coefs <- coef(lm(logit(so_cum_abund_di_2015$percent/100) ~ so_cum_abund_di_2015$survey_date, date = so_cum_abund_di_2015))
+coefs
+phi2 <- coefs[1]
+phi3 <- coefs[2]
+
+wilson <- nls(so_cum_abund_di_2015$percent ~ phi1/(1+exp(-(phi2+phi3*so_cum_abund_di_2015$survey_date))),
+              start = list(phi1 = 100, phi2 = phi2, phi3=phi3), data=so_cum_abund_di_2015, trace = TRUE)
+summary(wilson)
+
+min <- min(so_cum_abund_di_2015$survey_date)
+max <- max(so_cum_abund_di_2015$survey_date)
+
+#set parameters
+phi1<-100
+phi2<-coef(wilson)[2]
+phi3<-coef(wilson)[3]
+x<-c(seq(min, to = max, by = 1)) #construct a range of x values bounded by the data
+y<-phi1/(1+exp(-(phi2+phi3*x))) #predicted abundance
+
+predict_DI_2015 <-data.frame(x,y) #create the prediction data frame#And add a nice plot (I cheated and added the awesome inset jpg in another program)
+predict_DI_2015 <- predict_DI_2015 %>% 
+  mutate(region = "DI", year = "2015")
+
+
+so_cum_abund_js_2015 <- catch_expanded %>% 
+  filter(year == "2015", species == "so_total", region == "JS") %>% 
+  mutate(year = year(survey_date)) %>% 
+  group_by(year, region, yday) %>% 
+  summarise(n = n()) %>%
+  mutate(percent = cumsum(n / sum(n))*100) %>% 
+  ungroup() %>% 
+  transmute(year = year, survey_date = yday, region = region, percent = percent, so.cum.abund = cumsum(n)) 
+
+
+coefs <- coef(lm(logit(so_cum_abund_js_2015$percent/100) ~ so_cum_abund_js_2015$survey_date, date = so_cum_abund_js_2015))
+coefs
+phi2 <- coefs[1]
+phi3 <- coefs[2]
+
+wilson <- nls(so_cum_abund_js_2015$percent ~ phi1/(1+exp(-(phi2+phi3*so_cum_abund_js_2015$survey_date))),
+              start = list(phi1 = 100, phi2 = phi2, phi3=phi3), data=so_cum_abund_js_2015, trace = TRUE)
+summary(wilson)
+
+min <- min(so_cum_abund_js_2015$survey_date)
+max <- max(so_cum_abund_js_2015$survey_date)
+
+#set parameters
+phi1<-100
+phi2<-coef(wilson)[2]
+phi3<-coef(wilson)[3]
+x<-c(seq(min, to = max, by = 1)) #construct a range of x values bounded by the data
+y<-phi1/(1+exp(-(phi2+phi3*x))) #predicted abundance
+
+predict_JS_2015 <-data.frame(x,y) #create the prediction data frame#And add a nice plot (I cheated and added the awesome inset jpg in another program)
+predict_JS_2015 <- predict_JS_2015 %>% 
+  mutate(region = "JS", year = "2015")
+
+
+so_cum_abund_di_2016 <- catch_expanded %>% 
+  filter(year == "2016", species == "so_total", region == "DI") %>% 
+  mutate(year = year(survey_date)) %>% 
+  group_by(year, region, yday) %>% 
+  summarise(n = n()) %>%
+  mutate(percent = cumsum(n / sum(n))*100) %>% 
+  ungroup() %>% 
+  transmute(year = year, survey_date = yday, region = region, percent = percent, so.cum.abund = cumsum(n)) 
+
+
+coefs <- coef(lm(logit(so_cum_abund_di_2016$percent/100) ~ so_cum_abund_di_2016$survey_date, date = so_cum_abund_di_2016))
+coefs
+phi2 <- coefs[1]
+phi3 <- coefs[2]
+
+wilson <- nls(so_cum_abund_di_2016$percent ~ phi1/(1+exp(-(phi2+phi3*so_cum_abund_di_2016$survey_date))),
+              start = list(phi1 = 100, phi2 = phi2, phi3=phi3), data=so_cum_abund_di_2016, trace = TRUE)
+summary(wilson)
+
+min <- min(so_cum_abund_di_2016$survey_date)
+max <- max(so_cum_abund_di_2016$survey_date)
+
+#set parameters
+phi1<-100
+phi2<-coef(wilson)[2]
+phi3<-coef(wilson)[3]
+x<-c(seq(min, to = max, by = 1)) #construct a range of x values bounded by the data
+y<-phi1/(1+exp(-(phi2+phi3*x))) #predicted abundance
+
+predict_DI_2016 <-data.frame(x,y) #create the prediction data frame#And add a nice plot (I cheated and added the awesome inset jpg in another program)
+predict_DI_2016 <- predict_DI_2016 %>% 
+  mutate(region = "DI", year = "2016")
+
+
+so_cum_abund_js_2016 <- catch_expanded %>% 
+  filter(year == "2016", species == "so_total", region == "JS") %>% 
+  mutate(year = year(survey_date)) %>% 
+  group_by(year, region, yday) %>%  
+  summarise(n = n()) %>%
+  mutate(percent = cumsum(n / sum(n))*100) %>% 
+  ungroup() %>% 
+  transmute(year = year,survey_date = yday, region = region, percent = percent, so.cum.abund = cumsum(n)) 
+
+
+coefs <- coef(lm(logit(so_cum_abund_js_2016$percent/100) ~ so_cum_abund_js_2016$survey_date, date = so_cum_abund_js_2016))
+coefs
+phi2 <- coefs[1]
+phi3 <- coefs[2]
+
+wilson <- nls(so_cum_abund_js_2016$percent ~ phi1/(1+exp(-(phi2+phi3*so_cum_abund_js_2016$survey_date))),
+              start = list(phi1 = 100, phi2 = phi2, phi3=phi3), data=so_cum_abund_js_2016, trace = TRUE)
+summary(wilson)
+
+min <- min(so_cum_abund_js_2016$survey_date)
+max <- max(so_cum_abund_js_2016$survey_date)
+
+#set parameters
+phi1<-100
+phi2<-coef(wilson)[2]
+phi3<-coef(wilson)[3]
+x<-c(seq(min, to = max, by = 1)) #construct a range of x values bounded by the data
+y<-phi1/(1+exp(-(phi2+phi3*x))) #predicted abundance
+
+predict_JS_2016 <-data.frame(x,y) #create the prediction data frame#And add a nice plot (I cheated and added the awesome inset jpg in another program)
+predict_JS_2016 <- predict_JS_2016 %>% 
+  mutate(region = "JS", year = "2016")
+
+
+so_cum_abund_di_2017 <- catch_expanded %>% 
+  filter(year == "2017", species == "so_total", region == "DI") %>% 
+  mutate(year = year(survey_date)) %>% 
+  group_by(year, region, yday) %>% 
+  summarise(n = n()) %>%
+  mutate(percent = cumsum(n / sum(n))*100) %>% 
+  ungroup() %>% 
+  transmute(year = year, survey_date = yday, region = region, percent = percent, so.cum.abund = cumsum(n)) 
+
+
+coefs <- coef(lm(logit(so_cum_abund_di_2017$percent/100) ~ so_cum_abund_di_2017$survey_date, date = so_cum_abund_di_2017))
+coefs
+phi2 <- coefs[1]
+phi3 <- coefs[2]
+
+wilson <- nls(so_cum_abund_di_2017$percent ~ phi1/(1+exp(-(phi2+phi3*so_cum_abund_di_2017$survey_date))),
+              start = list(phi1 = 100, phi2 = phi2, phi3=phi3), data=so_cum_abund_di_2017, trace = TRUE)
+summary(wilson)
+
+min <- min(so_cum_abund_di_2017$survey_date)
+max <- max(so_cum_abund_di_2017$survey_date)
+
+#set parameters
+phi1<-100
+phi2<-coef(wilson)[2]
+phi3<-coef(wilson)[3]
+x<-c(seq(min, to = max, by = 1)) #construct a range of x values bounded by the data
+y<-phi1/(1+exp(-(phi2+phi3*x))) #predicted abundance
+
+predict_DI_2017 <-data.frame(x,y) #create the prediction data frame#And add a nice plot (I cheated and added the awesome inset jpg in another program)
+predict_DI_2017 <- predict_DI_2017 %>% 
+  mutate(region = "DI", year = "2017")
+
+
+so_cum_abund_js_2017 <- catch_expanded %>% 
+  filter(year == "2017", species == "so_total", region == "JS") %>% 
+  mutate(year = year(survey_date)) %>% 
+  group_by(year, region, yday) %>% 
+  summarise(n = n()) %>%
+  mutate(percent = cumsum(n / sum(n))*100) %>% 
+  ungroup() %>% 
+  transmute(year = year, survey_date = yday, region = region, percent = percent, so.cum.abund = cumsum(n))
+
+
+coefs <- coef(lm(logit(so_cum_abund_js_2017$percent/100) ~ so_cum_abund_js_2017$survey_date, date = so_cum_abund_js_2017))
+coefs
+phi2 <- coefs[1]
+phi3 <- coefs[2]
+
+wilson <- nls(so_cum_abund_js_2017$percent ~ phi1/(1+exp(-(phi2+phi3*so_cum_abund_js_2017$survey_date))),
+              start = list(phi1 = 100, phi2 = phi2, phi3=phi3), data=so_cum_abund_js_2017, trace = TRUE)
+summary(wilson)
+
+min <- min(so_cum_abund_js_2017$survey_date)
+max <- max(so_cum_abund_js_2017$survey_date)
+
+#set parameters
+phi1<-100
+phi2<-coef(wilson)[2]
+phi3<-coef(wilson)[3]
+x<-c(seq(min, to = max, by = 1)) #construct a range of x values bounded by the data
+y<-phi1/(1+exp(-(phi2+phi3*x))) #predicted abundance
+
+predict_JS_2017 <-data.frame(x,y) #create the prediction data frame#And add a nice plot (I cheated and added the awesome inset jpg in another program)
+predict_JS_2017 <- predict_JS_2017 %>% 
+  mutate(region = "JS", year = "2017")
+
+
+prediction <- rbind(predict_DI_2015, predict_JS_2015, predict_DI_2016, predict_JS_2016,
+      predict_DI_2017, predict_JS_2017) %>% 
+  dplyr::rename(survey_date = x)
+
+actual <- rbind(so_cum_abund_di_2015, so_cum_abund_di_2016, so_cum_abund_di_2017,
+                so_cum_abund_js_2015, so_cum_abund_js_2016, so_cum_abund_js_2017)
+
+prediction$year <- as.numeric(prediction$year)
+prediction <- left_join(prediction, actual)
+
+```
+
+```{r Plot cumulative abundance}
+ggplot(data=prediction,aes(x = survey_date, y = y, group = region, shape = region))+
+  labs(x='Date', y='% of total catch')+
+  #geom_point(size=1)+
+  #scale_x_continuous(breaks=c(0,250,500,750, 1000,1250))+
+  #scale_y_continuous(breaks=c(0,10,20,30,40,50,60,70,80))+
+  geom_line(aes(linetype=region)) +
+  geom_point(aes(x = survey_date, y = percent), size = 2) +
+  geom_vline(data=so_mt, aes(xintercept = avg_date, linetype = region),
+              size=.75) +
+  facet_grid(year~.) +
+  scale_shape_discrete(name = "Region") +
+  scale_linetype_discrete(name = "Region") +
+  scale_x_continuous(breaks = c(135, 152, 166, 182, 196), 
+                     labels = c("May 15", "June 1", "June 15", "July 1", "July 15"))
+  
+ggsave(here::here("Time Series", "Time-series-manuscript","Johnson_et_al_2018_migration_dynamics_NPAFC", "figs", "cumulative_abundance.png"), width = 7, height = 4)
+```
+
+
+```{r Annual migration abundance}
+# Migration abundance is based on the average abundance from seines that have complete enumeration of all species from in the seine, and seines with > 0 sockeye because tidy_catch was created using drop_na() so that if a row had NA for any species totals then it was dropped. 
+annual_cpue <- tidy_catch %>% 
+  group_by(year, region, species) %>% 
+  summarize(mean = mean(n, na.rm = TRUE))
+
+annual_cpue$species <- as_factor(annual_cpue$species) 
+annual_cpue$species <- fct_relevel(annual_cpue$species, "so_total", "cu_total", "pi_total", "co_total", "he_total")
+
+ggplot(annual_cpue, aes(x = species, y = mean, fill = species)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  ylab("Mean abundance") +
+  xlab("Species") +
+  scale_x_discrete(breaks=c("so_total","cu_total","pi_total","co_total", "he_total"),
+                          labels=c("sockeye", "chum", "pink", "herring", "coho")) +
+  facet_grid(region~year) +
+  theme(legend.position="none") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
+
+ggsave(here::here("Time Series", "Time-series-manuscript","Johnson_et_al_2018_migration_dynamics_NPAFC", "figs", "annual_abundance.png"), width = 7, height = 4)
+```
+
+```{r Annual proportions}
+proportions <- catch_expanded %>%
+  group_by(year, region, species) %>%
+  summarize(n = n()) %>%
+  mutate(proportion = n / sum(n)) %>%
+  ungroup()
+
+ggplot(data = proportions, aes(x = year, y = proportion, fill = species)) +
+      geom_bar(stat="identity", position = 'stack') +
+      scale_fill_discrete(name = "Species",
+                          breaks=c("so_total","cu_total","pi_total","co_total", "he_total"),
+                          labels=c("sockeye", "chum", "pink", "herring", "coho")) + 
+  xlab("Year") +
+  ylab("Proportion") +
+  facet_wrap(~region)
+
+ggsave(here::here("Time Series", "Time-series-manuscript","Johnson_et_al_2018_migration_dynamics_NPAFC", "figs", "annual_proportion.png"), width = 7, height = 4)
+
+```
+
+```{r Print session info}
+sessionInfo()  
+```
+
