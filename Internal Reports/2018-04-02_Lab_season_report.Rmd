@@ -1,5 +1,5 @@
 ---
-title: "2017/2018 Lab Season Report"
+title: "Hakai Institute Juvenile Salmon Program"
 author: Brett Johnson, Carly Janusson, Julian Gan, Brian Hunt
 output:
   rmarkdown::pdf_document:
@@ -19,7 +19,8 @@ header-includes:
 
 \begin{center}
 \large
-— Hakai Institute Juvenile Salmon Program —
+— 2017/2018 Lab Season Report —
+
 \end{center}
 
 ```{r, include = FALSE}
@@ -35,42 +36,44 @@ ggplot2::theme_set(my_theme)
 
 # Highlighted Outputs
 
+## Publications
+
+__Hunt, B.P.V.__, B.T. Johnson, S.C. Godwin, M. Krkosek, E.A. Pakhomov, and L. Rogers. 2018. *The Hakai Institute Juvenile Salmon Program: early life history of sockeye, pink and chum salmon in British Columbia, Canada.* NPAFC Doc. 1788. 14 pp. Institute for the Oceans and Fisheries and Department of Earth, Ocean and Atmospheric Sciences, University of British Columbia, Hakai Institute, Earth to Ocean Research Group, Simon Fraser University, Department of Ecology and Evolutionary Biology, University of Toronto, and Salmon Coast Field Station. [Available here](https://drive.google.com/a/hakai.org/file/d/0B74qGrcAc8HMT3FIU1l1bWVkRjcwWUxuNGNreFZPVzJld1BB/view?usp=sharing).
+
+__Johnson, B.T.__, J.C.L. Gan, C.V. Janusson, and B.P.V. Hunt. 2018. *Juvenile salmon migration dynamics in the Discovery Islands and Johnstone Strait; 2015–2017.* NPAFC Doc. 1790. 10 pp. Hakai Institute, Institute for the Oceans and Fisheries and Department of Earth, Ocean and Atmospheric Sciences, University of British Columbia. [Available here](https://drive.google.com/a/hakai.org/file/d/0B74qGrcAc8HMeVloNmpqV3hfT29ncVpidnpmT0RySWNzZms0/view?usp=sharing).
+
+__Johnson, B.T.__, C. Neville, B.P.V. Hunt. 2018. *Fine scale migration dynamics of juvenile sockeye salmon in the Discovery Islands, B.C.* In preparation.
+
+## Data
+
+* A GeoNetwork metadata catalogue entry was created to access citable versions of salmon program data, and can be [accessed here](http://dx.doi.org/10.21966/1.566666).
+* An R package, [available here](https://hakaiinstitute.github.io/hakaisalmon/), was developed to facilitate easy access to salmon program data through R, provide a common data resource for researchers to work from, and facilitate open science workflows.
+* Salmon program data was restructured to fit the standard format for Hakai EIMS Data Portal entry
+* Salmon program data are in the final stages of being put into the Hakai Data Portal, thanks to Nate Rosenstock and Matt Foster
+
 ## Conference presentations and posters
 
-__Johnson, B.T.__, C. Neville, B.P.V. Hunt. 2018. *Fine scale migration dynamics of juvenile sockeye in the Discovery Islands, B.C.* Salmon Ocean Ecology Meeting. Newport, Oregon. *Oral* 
+__Johnson, B.T.__, C. Neville, B.P.V. Hunt. 2018. *Fine-scale migration dynamics of juvenile sockeye in the Discovery Islands, B.C.* Salmon Ocean Ecology Meeting. Newport, Oregon. *Oral* 
 
-__Hunt, B.P.V.__ 2018. *Integrated biogeochemical approaches to full salmon life history analysis.* Salmon Ocean Ecology Meeting. Newport, Oregon. *Oral*
+__Hunt, B.P.V.__, S. Batten, D. Costalago, B. Espinasse, I. Forster, J. Garzke, F. Giannini, C. Neville, E. Pakhomov, I. Perry. 2018. *Integrated biogeochemical approaches to full salmon life history analysis.* Salmon Ocean Ecology Meeting. Newport, Oregon. *Oral*
 
-__James, S.__ 2018. *Characterizing the diets of juvenile Fraser River sockeye salmon across ocean regimes in coastal British Columbia*. Salmon Ocean Ecology Meeting. Newport, Oregon. *Oral*
+__James, S.__, B.P.V. Hunt, E. Pakhomov. 2018. *Characterizing the diets of juvenile Fraser River sockeye salmon across ocean regimes in coastal British Columbia*. Salmon Ocean Ecology Meeting. Newport, Oregon. *Oral*
+
+__Johnston, S.D.__, S.G. Hinch, C.F. Stevenson, A.G. Lotto,  N.B. Furey,  D.W.Welch, E.L. Rechinsky, A.D. Porter. 2018. *Sockeye salmon (Oncorhynchus nerka) smolt migration through coastal British Columbia assessed by acoustic telemetry*. Salmon Ocean Ecology Meeting. Newport, Oregon. February 28th, 2017. 
 
 __Hunt, B.P.V.__, B.T. Johnson. 2017 *[Juvenile Salmon Program update; foraging conditions, migration dynamics, and growth](https://speakerdeck.com/brettjohnson/psf-ssmsp-2017).* Pacific Salmon Foundation Salish Sea Marine Survival Project international conference. Richmond, BC, Canada. *Oral*
+
+__Hunt B.P.V.__, I. Forster, I. Perry, C. Neville, J. Boldt, C. Gomez, D. Costalago. 2017. *Structure and function of the plankton food webs supporting juvenile salmon in the Salish Sea.* Pacific Salmon Foundation Salish Sea Marine Survival Project international conference. Richmond, BC, Canada. *Oral*
 
 __Johnson, B.T.__, J.C.L. Gan, C.V. Janusson, B.P.V. Hunt. 2017. *Hakai Institute Juvenile Salmon Program 2015--2017 Time Series Poster.* Poster presentation at the Pacific Salmon Foundation Salish Sea Marine Survival Project juvenile salmon work group. Nanaimo, BC, Canada. *Poster*
 
 __Johnson, B.T.__, J.C.L. Gan, C.V. Janusson, B.P.V. Hunt. 2017. *Hakai Institute Juvenile Salmon Program 2015--2016 Time Series Poster*. Poster presentation at Fisheries and Oceans Canada State of the Pacific Ocean meeting. Sidney, BC, Canada. *Poster*
-
-## Publications
-
-### In preparation
-
-__Johnson, B.T.__, J.C.L. Gan, C.V. Janusson, B.P.V. Hunt. 2018. *Hakai Institute Juvenile Salmon Program migration monitoring 2015 -- 2017 time series* In preparation for the North Pacific Anadromous Fisheries Commission document reports.
-
-__Johnson, B.T.__, C. Neville, B.P.V. Hunt. 2018. *Fine scale migration dynamics of juvenile sockeye salmon in the Discovery Islands, B.C.* In preparation for Marine and Coastal Fisheries journal.
-
-
-## Data
-
-* Salmon program data was restructured for Hakai EIMS database creation
-* A [Citable data package](http://dx.doi.org/10.21966/1.566666) produced for collaborators
-* Update this link to point to GitHUB webpage. [R package](https://github.com/HakaiInstitute/hakaisalmon) produced for program data and custom functions for summarizing program data
-* Salmon program data now in the Hakai Data Portal
 
 # Lab Progress
 
 ## Fish dissected
 ```{r include = FALSE}
 # This section looks into the current inventory to calculate the number of fish dissected and the number of samples collected from those fish. To update this section you simply need to change the date in the filter() argument, to update to the relevant reporting period.
-
 
 n_fish_after_2017 <- as.numeric(survey_seines_fish %>%
   filter(date_processed > "2017-08-01") %>% 
@@ -81,7 +84,6 @@ n_fish <- as.numeric((survey_seines_fish) %>%
   select(ufn, date_processed, dissection_status) %>% 
   filter(dissection_status == "dissected") %>% 
   nrow())
-  
 
 ```
 
@@ -98,7 +100,7 @@ lab_season_cum_abund <- survey_seines_fish %>%
     ggplot(aes(x = date_processed, y = cumsum)) +
     geom_line() +
     xlab("Date") +
-    ylab("Cumulative Dissectios") +
+    ylab("Cumulative Dissections") +
   ggtitle("2017/2018 Lab Season")
 
 all_time_cum_abund <- survey_seines_fish %>%
@@ -118,8 +120,8 @@ cowplot::plot_grid(lab_season_cum_abund,all_time_cum_abund, align = 'h')
 
 ```
 
-* Since the 2017 field season finished on August 1 2017, `r n_fish_after_2017` were dissected primarily by the professional efforts of Krystal Bachen, Julian Gan, Carly Janusson, and Megan Foss.
-* Since the program began exactly `r n_fish` have been dissected.
+* Since the 2017 field season finished on August 1 2017, `r n_fish_after_2017` fish were dissected primarily by the professional efforts of Krystal Bachen, Julian Gan, Carly Janusson, and Megan Foss.
+* Since the program began exactly `r n_fish` fish have been dissected.
 
 ## Samples collected
 ```{r samples collected, include = FALSE}
@@ -165,47 +167,47 @@ numeric_samples_dissected_after_2017 <- as.numeric(nrow(n_samples_dissected_afte
 
 ```
 
-* Since the program began, $`r numeric_total_samples`$ samples have been collected and inventoried
+* Since the program began, $`r numeric_total_samples`$ samples have been taken from fish and inventoried
 * Since the 2017 field season finished on August 1 2017, `r numeric_samples_dissected_after_2017` samples have been collected and inventoried from the fish we've dissected.
 
 ## Samples analyzed
 
 * Dr. Jessica Garzke, a post-doc in Dr. Brian Hunt's Lab at UBC began measuring and analyzing muscle tissue samples from juvenile sockeye to measure the ratio of RNA:DNA as a measure of growth.
 
-* Dr. David Coastalago, a post-doc in Dr. Brian Hunt's Lab at UBC began analyzing muscle tissue samples from juvenile sockeye that have been measured at DFO's West Van Labs to profile muscle lipid content and composition as a measure of fish condition.
+* Dr. David Costalago, a post-doc in Dr. Brian Hunt's Lab at UBC began analyzing muscle tissue samples from juvenile sockeye that have been measured at DFO's West Van Labs to profile muscle lipid content and composition as a measure of fish condition.
 
-* Sam James, a MSc. student co-supervised by Dr. Brian Hunt and Dr. Evgeny Pakhomov at UBC has been identifying juvenile sockeye stomach contents in an effort to understand the foraging ecology of juvenile salmon across ocean regimes.
+* Sam James, an MSc. student co-supervised by Dr. Brian Hunt and Dr. Evgeny Pakhomov at UBC has been identifying juvenile sockeye stomach contents in an effort to understand the foraging ecology of juvenile salmon across ocean regimes.
 
-* Yuliya Kuzmenko, a MSc. student co-supervised by Dr. Brian Hunt and Dr. Evgeny Pakhomov at UBC has been polishing juvenile sockeye otoliths to measure daily growth rates of juvenile sockeye once they enter the marine environment using laser-ablation inductively coupled plasma mass-spectrometry.
+* Yuliya Kuzmenko, an MSc. student co-supervised by Dr. Brian Hunt and Dr. Evgeny Pakhomov at UBC has been polishing juvenile sockeye otoliths to measure daily growth rates of juvenile sockeye once they enter the marine environment using laser-ablation inductively coupled plasma mass-spectrometry.
 
 * Genetic stock ID of the 2017 sockeye salmon is moving forward pending finalization of the collaborative agreement with DFO.
 
 ## Inventory
 
-* A complete inventory of all `r numeric_total_samples` samples has been completed. This includes: current location, storage medium, sample processing stage, shipping/receiving information, and sample quality remarks.  This was a monumental effort undertaken starting last lab season, and completed this December.
+* A formalized inventory framework was developed and a complete inventory of all `r numeric_total_samples` samples has been completed. This includes: current location, storage medium, sample processing stage, shipping/receiving information, and sample quality remarks.  This was a monumental effort that commenced last lab season, and completed this December.
 
 ## Genomics
 
-* Carly Janusson has been working with the Molecular Genetics Lab at DFO's Pacific Biological Station (PBS) to develop genomic processing workflows at the Quadra station. Carly spent several days being trained at PBS to extract salmon tissue samples to be run through Dr. Kristi Miller's lab to determine whether fish are in a viral disease development state.
+* Carly Janusson has been working with the Molecular Genetics Lab at DFO's Pacific Biological Station (PBS) to develop genomic processing workflows at the Quadra station. Carly has begun extracting samples at PBS to be run through Dr. Kristi Miller's lab to determine whether fish are in a viral disease development state. 
 
 # Next Steps
 
 ## Lab directions
 
-* Carly Janusson, in collaboration with Colleen Kellog and Rebecca Piercey, intends to continue developing the in-house capacity for genomics work with salmon in the new Marna Lab at the Quadra Station.
+* Carly Janusson, in collaboration with Dr. Colleen Kellog and Rebecca Piercey, intends to continue developing the in-house capacity for genomics work with salmon in the new Marna Lab at the Quadra Station.
 
-* Dr. Jessica Garzke will be coming to Quadra to train staff to measure fish growth using the fluormeter to analyze fish muscle samples for RNA:DNA ratios.
+* Dr. Jessica Garzke will be coming to Quadra to train staff to measure fish growth using the fluorometer to analyze fish muscle samples for RNA:DNA ratios.
 
 ## Field season
 
-* We are eagerly awaiting the arrival of a new sampling boat for the Juvenile Salmon Program. The vessel is a 23 foot Ironwood with twin 90 hp Yamahas, similar to the Good Hope vessels on Calvert. This boat will replace our previous sampling vessel Sloop-Jo, which is no longer available for us to lease. 
+* We are eagerly awaiting the arrival of a new sampling boat for the Juvenile Salmon Program. The vessel is a 23-foot Ironwood with twin 90 hp Yamahas, similar to the Good Hope vessels on Calvert. This boat will replace our previous sampling vessel Sloop-Jo, which is no longer available for us to lease. 
 
-* Field sampling officially start May 9th and will run through to July 13th.
+* Field sampling officially starts May 9th and will run through to July 13th.
 
-* Katie Davidson (formerly of the 100 Islands project) and Sara Tremblay-Boyer will be joining the Salmon Program for this summer starting on April 23rd. Please be sure to say hi if you see them around station!
+* Katie Davidson (formerly of the 100 Islands project) and Sara Tremblay-Boyer have joined the Salmon Program for this summer. Please be sure to say hi if you see them around the station!
 
-* Stephen Johnston, a MSc. student in the Pacific Salmon Ecology and Conservation Lab with Dr. Scott Hinch at UBC will be joining us on Quadra, along with Christine Stevenson, and Andrew Lotto, to lead the charge on conducting acoustic tagging operations. These tags allow us to track survival, migration rate, and migration route selection through the Discovery Islands and Johnstone Strait giving us a direct measure of survival.
+* Stephen Johnston, an MSc. student in the Pacific Salmon Ecology and Conservation Lab with Dr. Scott Hinch at UBC will be joining us on Quadra, along with Christine Stevenson, and Andrew Lotto, to lead the charge on conducting acoustic tagging operations. These tags allow us to track survival, migration rate, and migration route selection through the Discovery Islands and Johnstone Strait giving us a direct measure of survival.
 
-
+* In-season reports will be coming out in June to rapidly report migration timing, species abundance, species composition, lengths, weights, parasite loads, and relevant oceanographic parameters during the juvenile sockeye migration period. Contact Brett.Johnson@hakai.org to be added to the mailing list for these reports.
 
 
