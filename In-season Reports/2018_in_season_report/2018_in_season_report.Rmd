@@ -1,5 +1,5 @@
 ---
-title: "Hakai Institute Juvenile Salmon Program Report"
+title: "2018 Hakai Institute Juvenile Salmon Program Report"
 output:
   rmarkdown::pdf_document:
     
@@ -28,41 +28,67 @@ library(lubridate)
 library(here)
 library(googlesheets)
 library(ggridges)
+library(hakaiApi)
 options(scipen=999) # This removes scientific notation for inline output ie `r object` in the report text
+theme_set(theme_bw())
 ```
 
-```{r setup}
+```{r data import}
 field_2018 <- gs_key("1iRQCKMTznHbMeI9GunbsgPyb-rtWgwj-0IfxLw7NBJE", 
-                         lookup = FALSE, visibility = "private")
+                     lookup = FALSE, visibility = "private")
 
-survey_data <- gs_read(field_2018, ws = "survey_data")
+survey_data <- gs_read(field_2018, ws = "survey_data") %>% 
+  drop_na(survey_id)
 
 survey_data <- survey_data %>% 
   mutate(sampling_week = as.numeric((yday(survey_date) + 4) %/% 7))
 
 survey_data$sampling_week <- recode_factor(survey_data$sampling_week, 
-                                       `18` = "May 5",
-                                       `19` = "May 12" ,
-                                       `20` = "May 19", 
-                                       `21` = "May 26",
-                                       `22` = "June 2",
-                                       `23` = "June 9", 
-                                       `24` = "June 16", 
-                                       `25` = "June 23",
-                                       `26` = "June 30", 
-                                       `27` = "July 6", 
-                                       `28` = "July 13")
+                                           `18` = "May 5",
+                                           `19` = "May 12" ,
+                                           `20` = "May 19", 
+                                           `21` = "May 26",
+                                           `22` = "June 2",
+                                           `23` = "June 9", 
+                                           `24` = "June 16", 
+                                           `25` = "June 23",
+                                           `26` = "June 30", 
+                                           `27` = "July 6", 
+                                           `28` = "July 13")
 
 seine_data <- gs_read(field_2018, ws = "seine_data")
 
 survey_seines <- left_join(seine_data, survey_data) %>% 
-    mutate(year = year(survey_date))
+  mutate(year = year(survey_date))
 
 fish_and_sealice_field_data <- gs_read(field_2018, 
                                        ws = "fish_and_sealice_field_data")
 
 fish_and_sealice_field_data <- left_join(fish_and_sealice_field_data, 
                                          survey_seines, by = "seine_id")
+
+# Get oceanoraphy data
+oceanography_metadata <- gs_read(field_2018, ws = "oceanography_data") %>% 
+  drop_na(ctd_cast_id)
+
+di_ctd_data <- read_csv(here("In-season Reports", "2018_in_season_report",
+                             "data", "di_ctd_data.csv"))
+
+js_ctd_data <- read_csv(here("In-season Reports", "2018_in_season_report",
+                             "data", "js_ctd_data.csv"))
+
+qu29 <- read_csv(here("In-season Reports", "2018_in_season_report",
+                      "data", "qu29.csv"))
+
+qu39 <- read_csv(here("In-season Reports", "2018_in_season_report",
+                      "data", "qu39.csv"))
+
+# Create primary key to join ctd data with fish field data
+di_ctd_data$ctd_cast_id <- paste(di_ctd_data$station, as_date(di_ctd_data$start_dt), di_ctd_data$cast_number, sep = "_")
+js_ctd_data$ctd_cast_id <- paste(js_ctd_data$station, as_date(js_ctd_data$start_dt), js_ctd_data$cast_number, sep = "_")
+
+# Join survey and oceanography data
+survey_oceanography <- left_join(survey_data, oceanography_metadata)
 ```
 
 
@@ -92,11 +118,11 @@ health.
 
 ## Key Parameters Reported
 * Catch Statistics
+* Length and Weight
 * Parasite Loads
-* Sockeye Length and Weight
 * Oceanographic Conditions
 
-![Salmon sampling locations in the Discovery Islands and Johnstone Strait in 2017 (yellow circles).](./figs/map_2017.pdf)
+![Salmon sampling locations in the Discovery Islands and Johnstone Strait in 2018 (yellow circles).](./figs/map_2018.jpg)
 
 The following plots are subject to change as the underlying data are preliminary and subject to further quality assurance. 
 
@@ -108,133 +134,21 @@ __Updated:__ `r Sys.Date()`
 
 
 ## Catch Statistics
-### Cumulative Abundance of all Species
 
-```{r All Species Cumulative Abundance, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap= "The cumulative abundance of fish captured in the Discovery Islands and Johnstone Strait in 2017."}
-# This calculates cumulative abundance, regardless of region
+### Sockeye Abundance and Timing
+```{r Sockeye abundance, fig.cap="Average number of juvenile sockeye salmon caught in each seine in 2018 averaged over one week periods for each region."}
 
-cum_abund <- survey_seines %>%
-                select(region, survey_date, so_total, pi_total, cu_total, co_total, he_total, ck_total) %>%
-                group_by(region, survey_date) %>% 
-                summarise(daily_so = mean(so_total), 
-                          daily_pi = mean(pi_total),
-                          daily_cu = mean(cu_total),
-                          daily_co = mean(co_total),
-                          daily_he = mean(he_total),
-                          daily_ck = mean(ck_total)) %>% 
-                ungroup()
+spp_labels <- c(CU = "Chum", PI = "Pink", SO = "Sockeye", DI = "Discovery Islands", 
+                JS = "Johnstone Strait")
 
-js_cum_abund <- cum_abund %>% 
-                filter(region == "JS") %>% 
-                transmute(survey_date = survey_date, region = region,
-                              so.cum.abund = cumsum(daily_so), 
-                              pi.cum.abund = cumsum(daily_pi),
-                              cu.cum.abund = cumsum(daily_cu),
-                              co.cum.abund = cumsum(daily_co),
-                              he.cum.abund = cumsum(daily_he),
-                              ck.cum.abund = cumsum(daily_ck)
-                              ) %>% 
-                 gather(so.cum.abund, pi.cum.abund, cu.cum.abund,
-                           co.cum.abund, he.cum.abund, ck.cum.abund, key = "species", value = "cum.abund") %>% 
-                ungroup()
-
-di_cum_abund <- cum_abund %>% 
-                filter(region == "DI") %>% 
-                transmute(survey_date = survey_date, region = region,
-                              so.cum.abund = cumsum(daily_so), 
-                              pi.cum.abund = cumsum(daily_pi),
-                              cu.cum.abund = cumsum(daily_cu),
-                              co.cum.abund = cumsum(daily_co),
-                              he.cum.abund = cumsum(daily_he),
-                              ck.cum.abund = cumsum(daily_ck)
-                              ) %>% 
-                 gather(so.cum.abund, pi.cum.abund, cu.cum.abund,
-                           co.cum.abund, he.cum.abund, ck.cum.abund, key = "species", value = "cum.abund")  
-
-cum_abund <- rbind(di_cum_abund,js_cum_abund)
-
-labels <- c(DI = "Discovery Islands", JS = "Johnstone Strait")
-
-cum_abund_plot <- ggplot(data = cum_abund, mapping = aes(x = survey_date, y = cum.abund)) +
-        geom_point(mapping = aes(colour= species)) +
-        geom_line(mapping = aes(colour = species)) +
-        ylab("Cumulative abundance") + xlab("Date") + 
-        facet_grid(region ~., labeller=labeller(region = labels))+
-        scale_colour_discrete(name = "",
-                        breaks=c("co.cum.abund","cu.cum.abund", "he.cum.abund", "pi.cum.abund", "so.cum.abund",
-                                 "ck.cum.abund"),
-                        labels=c("Coho", "Chum", "Herring", "Pink", "Sockeye", "Chinook"))+
-        theme(legend.justification=c(1,0),
-                legend.background = element_rect(fill="white")) +  
-        theme(legend.text = element_text(colour="black", size = 12))+ 
-        theme(axis.text=element_text(size=12),
-                axis.title=element_text(size=12,face="bold"))+
-        theme(legend.justification=c(1,0), legend.position=c(.3,.6),
-             legend.background = element_rect(fill="white")) 
-cum_abund_plot 
-ggsave(here("In-season Reports", "2018_in_season_report", "figs", "all_spp_cumulative_abundance.png"))
-
-```
-
-### Cumulative Abundance of Sockeye by Region
-```{r Sockeye Cumulative Abundance, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap = "The cumulative abundance of sockeye captured in the Discovery Islands and Johnstone Strait in 2017."}
-# Create new columns for cumulative sums of each species captured
-# Average multiple seines conducted in the same region on the same day
-
-# This summarises and averages cpue grouped by region and sampling day
-cum_abund_by_region <- survey_seines %>% 
-                select(survey_date, region, so_total, pi_total,
-                       cu_total, co_total, he_total) %>%
-                drop_na() %>% 
-                group_by(region, survey_date) %>% 
-                summarise(daily_so = mean(so_total), 
-                          daily_pi = mean(pi_total),
-                          daily_cu = mean(cu_total),
-                          daily_co = mean(co_total),
-                          daily_he = mean(he_total)
-                )
-
-# This replaces cpue for each day and each region with the cumulative sum for each species, and then tidys the data so that each row is only one observation
-cum_abund_by_region <- cum_abund_by_region %>% 
-                    transmute(survey_date = survey_date,
-                              so_cum_abund = cumsum(daily_so), 
-                              pi_cum_abund = cumsum(daily_pi),
-                              cu_cum_abund = cumsum(daily_cu),
-                              co_cum_abund = cumsum(daily_co),
-                              he_cum_abund = cumsum(daily_he)
-                              ) %>% 
-                    gather(so_cum_abund, pi_cum_abund, cu_cum_abund,
-                           co_cum_abund, he_cum_abund, key = "species", value = "cum_abund")        
-
-# This plots cumulative abundnace of sockeye grouped by region
-
-so_cum_abund_plot <- ggplot(data = filter(cum_abund_by_region, species == "so_cum_abund"),
-        mapping = aes(x = survey_date, y = cum_abund)) +
-        geom_point(mapping = aes(colour= region)) +
-        geom_line(mapping = aes(colour = region)) +
-        ylab("Sockeye cumulatve abundance") + xlab("Date") +
-        scale_colour_discrete(name = "",
-                        breaks=c("DI","JS"),
-                        labels=c("Discovery Islands", "Johnstone Strait"))+
-        theme(legend.justification=c(1,0),legend.background = element_rect(fill="white")) +  
-                theme(legend.text = element_text(colour="black", size = 12)) +                         theme(axis.text=element_text(size=12),
-                axis.title=element_text(size=12,face="bold"))+
-        theme(legend.justification=c(1,0), legend.position=c(.4,.8),
-             legend.background = element_rect(fill="white")) 
-so_cum_abund_plot
-```
-
-### Sockeye Catch Per Unit Effort
-
-```{r Sockeye CPUE, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap="Catch per unit effort of juvenile sockeye salmon in 2017 averaged over one week periods for each region."}
-
-avg_school_size <- survey_seines %>% 
-  select(year, region, sampling_week, so_total) %>% 
+avg_school_size <- as_tibble(survey_seines %>% 
+  select(year, region, sampling_week, so_total) %>%
   group_by(year, region, sampling_week) %>% 
-  summarise(mean = mean(so_total, na.rm = T), se = (sd(so_total) / sqrt(n())))
+  summarise(mean = mean(so_total, na.rm = T))) %>% 
+  ungroup()
 
-so_abund_timing <- ggplot(data = avg_school_size, aes(x = sampling_week, y = mean, colour = region, group = region))+
-  geom_line(size = 1)+
+so_abund_timing <- ggplot(data = avg_school_size, aes(x = as_factor(sampling_week), y = mean, colour = region, group = region))+
+  geom_line(size = 1)+  
   geom_point(position = position_dodge(width = 0.05))+
   xlab("Date") +
   ylab("Sockeye CPUE") +
@@ -243,15 +157,148 @@ so_abund_timing <- ggplot(data = avg_school_size, aes(x = sampling_week, y = mea
                         breaks=c("DI","JS"),
                         labels=c("Discovery Islands", "Johnstone Strait"))+
   theme(legend.justification=c(1,0), legend.position=c(.8,.8),
-        legend.background = element_rect(fill="white")) + 
-  theme(legend.text = element_text(colour="black", size = 12)) +                           theme(axis.text=element_text(size=12),
+        legend.background = element_rect(fill=alpha(0.1))) + 
+  theme(legend.text = element_text(colour="black", size = 12)) +
+  theme(axis.text=element_text(size=12),
         axis.title=element_text(size=12,face="bold")) +
   geom_point(size = 1.75, position = position_dodge(width = 0.1)) +
   xlab("Date") +
   ylab("Sockeye abundance") +
   theme(legend.title = element_blank()) +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5)) 
+
 so_abund_timing
+```
+
+### Cumulative Abundance of all Species
+
+```{r All Species Cumulative Abundance, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap= "The cumulative abundance of fish captured in the Discovery Islands and Johnstone Strait in 2018."}
+# This calculates cumulative abundance, regardless of region
+
+cum_abund <- survey_seines %>%
+  select(region, survey_date, so_total, pi_total, cu_total, co_total, he_total, ck_total) %>%
+  group_by(region, survey_date) %>% 
+  summarise(daily_so = mean(so_total), 
+            daily_pi = mean(pi_total),
+            daily_cu = mean(cu_total),
+            daily_co = mean(co_total),
+            daily_he = mean(he_total),
+            daily_ck = mean(ck_total)) %>% 
+  ungroup()
+
+js_cum_abund <- cum_abund %>% 
+  filter(region == "JS") %>% 
+  transmute(survey_date = survey_date, region = region,
+            so.cum.abund = cumsum(daily_so), 
+            pi.cum.abund = cumsum(daily_pi),
+            cu.cum.abund = cumsum(daily_cu),
+            co.cum.abund = cumsum(daily_co),
+            he.cum.abund = cumsum(daily_he),
+            ck.cum.abund = cumsum(daily_ck)
+  ) %>% 
+  gather(so.cum.abund, pi.cum.abund, cu.cum.abund,
+         co.cum.abund, he.cum.abund, ck.cum.abund, key = "species", value = "cum.abund") %>% 
+  ungroup()
+
+di_cum_abund <- cum_abund %>% 
+  filter(region == "DI") %>% 
+  transmute(survey_date = survey_date, region = region,
+            so.cum.abund = cumsum(daily_so), 
+            pi.cum.abund = cumsum(daily_pi),
+            cu.cum.abund = cumsum(daily_cu),
+            co.cum.abund = cumsum(daily_co),
+            he.cum.abund = cumsum(daily_he),
+            ck.cum.abund = cumsum(daily_ck)
+  ) %>% 
+  gather(so.cum.abund, pi.cum.abund, cu.cum.abund,
+         co.cum.abund, he.cum.abund, ck.cum.abund, key = "species", value = "cum.abund")  
+
+cum_abund <- rbind(di_cum_abund,js_cum_abund)
+
+labels <- c(DI = "Discovery Islands", JS = "Johnstone Strait")
+
+cum_abund_plot <- ggplot(data = cum_abund, mapping = aes(x = survey_date, y = cum.abund)) +
+  geom_point(mapping = aes(colour= species)) +
+  geom_line(mapping = aes(colour = species)) +
+  ylab("Cumulative abundance") + xlab("Date") + 
+  facet_grid(region ~., labeller=labeller(region = labels))+
+  scale_colour_discrete(name = "",
+                        breaks=c("co.cum.abund","cu.cum.abund", "he.cum.abund", "pi.cum.abund", "so.cum.abund",
+                                 "ck.cum.abund"),
+                        labels=c("Coho", "Chum", "Herring", "Pink", "Sockeye", "Chinook"))+
+  theme(legend.justification=c(1,0),
+        legend.background = element_rect(fill="white")) +  
+  theme(legend.text = element_text(colour="black", size = 12))+ 
+  theme(axis.text=element_text(size=12),
+        axis.title=element_text(size=12,face="bold"))+
+  theme(legend.justification=c(1,0), legend.position=c(.3,.6),
+        legend.background = element_rect(fill=alpha(0.1)))
+cum_abund_plot 
+
+
+```
+
+\newpage
+
+## Fish Lengths
+```{r DI Length Histogram, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap = "Fork legnth boxplots of juvenile salmon in the Discovery Islands in 2018 grouped by week compared to the average length from 2015, 2016 and 2017."}
+annual_di_length_histo <- hakaisalmon::survey_seines_fish %>% 
+  select(sampling_week, region, species, fork_length) %>% 
+  filter(species %in% c("SO", "PI", "CU"), region == "DI") %>% 
+  mutate(year = "2015-2017")
+
+di_length_histo <- fish_and_sealice_field_data %>% 
+  select(sampling_week, region, species, fork_length) %>% 
+  filter(species %in% c("SO", "PI", "CU"), region == "DI") %>% 
+  mutate(year = "2018")
+
+di_length_histo <- rbind(di_length_histo, annual_di_length_histo) %>% 
+  drop_na(fork_length)
+
+di_length_hist_plot <- ggplot(di_length_histo, aes(x = sampling_week, y = fork_length, fill = year)) +
+  geom_boxplot()+
+  ylab("Fork Length (mm)")+
+  xlab("Date")+
+  theme(legend.text = element_text(colour="black", size = 12)) + 
+  theme(axis.text=element_text(size=12),
+        axis.title=element_text(size=12,face="bold")) +
+  facet_grid(species~., labeller=labeller(species = spp_labels)) +
+  ggtitle("Discovery Islands") +
+  theme(legend.position="bottom") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5)) 
+
+di_length_hist_plot
+```
+
+\newpage
+
+```{r JS Length Histogram, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap = "Fork legnth boxplots of juvenile salmon in Johnstone Strait in 2018 grouped by week compared to the average length from 2015, 2016 and 2017."}
+annual_js_length_histo <- hakaisalmon::survey_seines_fish %>% 
+  select(sampling_week, region, species, fork_length) %>% 
+  filter(species %in% c("SO", "PI", "CU"), region == "JS") %>% 
+  mutate(year = "2015-2017")
+
+js_length_histo <- fish_and_sealice_field_data %>% 
+  select(sampling_week, region, species, fork_length) %>% 
+  filter(species %in% c("SO", "PI", "CU"), region == "JS") %>% 
+  mutate(year = "2018")
+
+js_length_histo <- rbind(js_length_histo, annual_js_length_histo) %>% 
+  drop_na(fork_length)
+
+js_length_histo_plot <- ggplot(js_length_histo, aes(x = sampling_week, y = fork_length, fill = year)) +
+  geom_boxplot()+
+  ylab("Fork Length (mm)")+
+  xlab("Date")+
+  theme(legend.text = element_text(colour="black", size = 12)) + 
+  theme(axis.text=element_text(size=12),
+        axis.title=element_text(size=12,face="bold")) +
+  facet_grid(species~., labeller=labeller(species = spp_labels)) +
+  ggtitle("Johnstone Strait") +
+  theme(legend.position="bottom")+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5)) 
+
+js_length_histo_plot
 ```
 
 \newpage
@@ -274,75 +321,46 @@ _Abundance_: The total number of individuals of a particular parasite species in
 
 [^1]: Margolis, L., Esch, G.W., Holmes, J.C., Kuris, A.M. and Schad, G.A. (1982). The use of ecological terms in parasitology: report of an ad hoc committee of the American Society of Parasitologists. J. Parasitol. 68:131–133.
 
-### Sea Lice Prevalence
-
 
 ```{r Sealice setup, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE}
 
 # Group fish by region and by sampling week to calculate prevalence of sea-lice
 sea_lice_2018_summary <- fish_and_sealice_field_data %>%
   filter(species %in% c("SO", "PI", "CU")) %>% 
-        mutate(total_lice = cal_cope + lep_cope + chal_a +
-                        chal_b + cm + cpaf + caf + cgf + lpam + lpaf + lam + laf + lgf
-                        + unid_cope + unid_chal,
-               copepodid = cal_cope + lep_cope + unid_cope,
-               chalimus = chal_a + chal_b + unid_chal,
-               motile = cm + cpaf + caf + cgf + lpam + lpaf + lam + laf + lgf,
-               motile_caligus = cm + cpaf + caf + cgf,
-               motile_lep = lpam + lpaf + lam + laf + lgf
-        )
+  mutate(total_lice = cal_cope + lep_cope + chal_a +
+           chal_b + cm + cpaf + caf + cgf + lpam + lpaf + lam + laf + lgf
+         + unid_cope + unid_chal,
+         copepodid = cal_cope + lep_cope + unid_cope,
+         chalimus = chal_a + chal_b + unid_chal,
+         motile = cm + cpaf + caf + cgf + lpam + lpaf + lam + laf + lgf,
+         motile_caligus = cm + cpaf + caf + cgf,
+         motile_lep = lpam + lpaf + lam + laf + lgf
+  )
 ```
-
-```{r Lice Prevalence, fig.cap= "The proportion of juvenile chum, pink and sockeye that had at least one motile sea louse of either _Lepeoptheirus salmonis_ and _Caligus clemensi_ in the Discovery Islands and Johnstone Strait in 2017."}
-# Summarize data to calcuate the average prevalence by region and sampling week with SD
-motile_sea_lice_2018_prevalence <- sea_lice_2018_summary %>%
-                group_by(region, species, sampling_week) %>%
-                summarize(prevalence = mean(motile, na.rm = T))
-
-labels <- c(CU = "Chum", PI = "Pink", SO = "Sockeye")
-                
-
-motile_sea_lice_2018_prevalence_plot <- ggplot(data = motile_sea_lice_2018_prevalence, aes(x = sampling_week, y = prevalence, colour = region))+
-  geom_point(position = position_dodge(0.05))+
-  geom_line()+
-  ylab("Prevalence")+
-  xlab("Date")+
-  theme(legend.position="none") +
-  theme(legend.text = element_text(colour="black", size = 12)) + 
-  theme(axis.text=element_text(size=12),
-        axis.title=element_text(size=12,face="bold"))+
-  coord_cartesian(y= 0:1)+
-  facet_grid(region~species, scales = "free_y", labeller=labeller(species = labels)) +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
-
-motile_sea_lice_2018_prevalence_plot
-```
-
-\newpage
 
 ### All Sea-lice Life-stages Infection Abundance on Sockeye
 
-```{r All stages Lice Abundance, fig.cap= "The abundance ± SE of three developmental stages of both _Lepeoptheirus salmonis_ and _Caligus clemensi_ sea lice per juvenile sockeye salmon in 2018."}
+```{r All stages Lice Abundance, fig.cap= "The abundance ± SE of all three developmental stages of combined _Lepeoptheirus salmonis_ and _Caligus clemensi_ sea lice  per juvenile sockeye salmon in 2018."}
 
 sea_lice_2018_avg <- sea_lice_2018_summary %>%
   filter(species == "SO") %>% 
-                select(region, sampling_week, copepodid, chalimus, motile) %>% 
-                group_by(region, sampling_week) %>%
-                summarise(
-                        cope    = mean(copepodid, na.rm = T),
-                        chal    = mean(chalimus, na.rm = T),
-                        mot     = mean(motile, na.rm =T)) %>%
-                gather(cope, chal, mot, key = "life_stage", value = "abundance") 
+  select(region, sampling_week, copepodid, chalimus, motile) %>% 
+  group_by(region, sampling_week) %>%
+  summarise(
+    cope    = mean(copepodid, na.rm = T),
+    chal    = mean(chalimus, na.rm = T),
+    mot     = mean(motile, na.rm =T)) %>%
+  gather(cope, chal, mot, key = "life_stage", value = "abundance") 
 
 sea_lice_2018_se <- sea_lice_2018_summary %>% 
   filter(species == "SO") %>% 
-                select(region, sampling_week, copepodid, chalimus, motile) %>% 
-                        group_by(region, sampling_week) %>%
-                        summarise(
-                                cope = sd(copepodid, na.rm = T)/sqrt(n()),  
-                                chal = sd(chalimus, na.rm = T)/sqrt(n()),  
-                                mot  = sd(motile, na.rm = T )/sqrt(n())) %>% 
-                        gather(cope, chal, mot, key = life.stage, value = "se")
+  select(region, sampling_week, copepodid, chalimus, motile) %>% 
+  group_by(region, sampling_week) %>%
+  summarise(
+    cope = sd(copepodid, na.rm = T)/sqrt(n()),  
+    chal = sd(chalimus, na.rm = T)/sqrt(n()),  
+    mot  = sd(motile, na.rm = T )/sqrt(n())) %>% 
+  gather(cope, chal, mot, key = life.stage, value = "se")
 
 sea_lice_2018_avg$se <- sea_lice_2018_se$se
 
@@ -371,25 +389,53 @@ sea_lice_2018_abundance_plot <- ggplot(data = sea_lice_2018_avg, aes(x = samplin
 sea_lice_2018_abundance_plot
 ```
 
+### Sea Lice Prevalence
+
+```{r Lice Prevalence, fig.cap= "The proportion of juvenile chum, pink and sockeye that had at least one motile sea louse of either _Lepeoptheirus salmonis_ and _Caligus clemensi_ in the Discovery Islands (DI) and Johnstone Strait (JS) in 2018."}
+# Summarize data to calcuate the average prevalence by region and sampling week with SD
+motile_sea_lice_2018_prevalence <- sea_lice_2018_summary %>%
+  group_by(region, species, sampling_week) %>%
+  summarize(prevalence = mean(motile, na.rm = T))
+
+labels <- c(CU = "Chum", PI = "Pink", SO = "Sockeye")
+
+
+motile_sea_lice_2018_prevalence_plot <- ggplot(data = motile_sea_lice_2018_prevalence, aes(x = sampling_week, y = prevalence, colour = region))+
+  geom_point(position = position_dodge(0.05))+
+  geom_line()+
+  ylab("Prevalence")+
+  xlab("Date")+
+  theme(legend.position="none") +
+  theme(legend.text = element_text(colour="black", size = 12)) + 
+  theme(axis.text=element_text(size=12),
+        axis.title=element_text(size=12,face="bold"))+
+  coord_cartesian(y= 0:1)+
+  facet_grid(region~species, scales = "free_y", labeller=labeller(species = labels)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
+
+motile_sea_lice_2018_prevalence_plot
+```
+
+\newpage
 
 ### Motile Abundance for Chum, Pink, and Sockeye
 
 ```{r Motile Caligus and Lep abundance on chum. pink, and sockeye , fig.cap = "The abundance  ± SE of __motile__ _Lepeoptheirus salmonis_ and _Caligus clemensi_ sea lice combined infecting juvenile chum, pink and sockeye salmon in the Discovery Islands and Johnstone Strait in 2018."}
 
 sea_lice_2018_mot <- sea_lice_2018_summary %>% 
-                select(region, species, sampling_week, motile_caligus, motile_lep) %>% 
-                group_by(region, species, sampling_week) %>%
-                summarise(cal    = mean(motile_caligus, na.rm = T),
-                          lep    = mean(motile_lep, na.rm = T)) %>%
-                gather(cal, lep, key = "lice_species", value = "abundance") 
+  select(region, species, sampling_week, motile_caligus, motile_lep) %>% 
+  group_by(region, species, sampling_week) %>%
+  summarise(cal    = mean(motile_caligus, na.rm = T),
+            lep    = mean(motile_lep, na.rm = T)) %>%
+  gather(cal, lep, key = "lice_species", value = "abundance") 
 
 sea_lice_2018_mot_se <- sea_lice_2018_summary %>% 
-                select(region, species, sampling_week, motile_caligus, motile_lep) %>% 
-                        group_by(region, species, sampling_week) %>%
-                        summarise(
-                                cal = sd(motile_caligus, na.rm = T)/sqrt(n()),  
-                                lep = sd(motile_lep, na.rm = T)/sqrt(n())) %>% 
-                        gather(cal, lep, key = lice_species, value = "se")
+  select(region, species, sampling_week, motile_caligus, motile_lep) %>% 
+  group_by(region, species, sampling_week) %>%
+  summarise(
+    cal = sd(motile_caligus, na.rm = T)/sqrt(n()),  
+    lep = sd(motile_lep, na.rm = T)/sqrt(n())) %>% 
+  gather(cal, lep, key = lice_species, value = "se")
 
 sea_lice_2018_mot$se <- sea_lice_2018_mot_se$se
 
@@ -404,65 +450,22 @@ motile_abundance_plot <- ggplot(sea_lice_2018_mot, aes(x = sampling_week, y = ab
   ylab("Infection Abundance")+
   scale_colour_discrete(name = "",
                         breaks=c("cal", "lep"),
-                        labels=c("Caligus clemensi", "Lepeioptheirus salmonis"))+ 
+                        labels=c("C. clemensi", "L. salmonis"))+ 
   theme(legend.text = element_text(colour="black", size = 12, face = "italic")) +
   theme(axis.text=element_text(size=12), 
         axis.title=element_text(size=12,face="bold")) +
-  facet_grid(region~species)+
+  facet_grid(region~species, labeller=labeller(species = spp_labels)) +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
-        
+
 motile_abundance_plot
 
 ```
 
-\newpage
-
-### Combined Motile _Lep._ and _Cal._ Intensity for Chum, Pink, and Sockeye
-
-```{r Motile infection intensity, fig.cap = "The mean infection intensity of __motile__ _Lepeoptheirus salmonis_ and  _Caligus clemensi_ sea lice combined on juvenile sockeye salmon in the Discovery Islands and Johnstone Strait in 2018."}
-
-sea_lice_2018_intensity <- sea_lice_2018_summary %>% 
-  filter(motile > 0) %>% 
-  select(region, species, sampling_week, motile) %>% 
-  group_by(region, species, sampling_week) %>%
-  summarise(intensity =  mean(motile, na.rm = T)) 
-
-sea_lice_2018_intensity_se <- sea_lice_2018_summary %>%
-  filter(motile > 0) %>% 
-  select(region, species, sampling_week, motile) %>% 
-  group_by(region, species, sampling_week) %>%
-  summarise(se = sd(motile, na.rm = T)/sqrt(n()))
-
-sea_lice_2018_intensity$se <- sea_lice_2018_intensity_se$se
-
-spp_labels <- c(CU = "Chum", PI = "Pink", SO = "Sockeye", DI = "Discovery Islands", 
-                JS = "Johnstone Strait")
-                
-sea_lice_intensity_plot <- ggplot(sea_lice_2018_intensity,
-                                  aes(x = sampling_week,
-                                      y = intensity, group = region))+
-  geom_point()+
-  geom_line()+
-  geom_errorbar(aes(ymin = intensity - se, ymax = intensity + se, width = 0.1))+
-  facet_grid(region~species, labeller = as_labeller(spp_labels))+
-  xlab("Date")+
-  ylab("Mean Infection Intensity")+
-  theme(legend.justification=c(1,0), legend.position=c(.4,.3),
-        legend.background = element_rect(fill="white")) +  
-  theme(legend.text = element_text(colour="black", size = 12,
-                                   face = "italic")) + 
-  theme(axis.text=element_text(size=12),
-        axis.title=element_text(size=12,face="bold")) +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
-
-        
-sea_lice_intensity_plot
-```
 
 \newpage
 
 #### Motile _Caligus clemensi_ Infection Intensity 
-```{r Lice cal intensity, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap = "The mean infection intensity of __motile__ _Caligus clemensi_ sea lice per juvenile sockeye salmon infected with one or more motile _Caligus clemensi_."}
+```{r Lice cal intensity, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap = "The mean infection intensity of __motile__ _Caligus clemensi_ sea lice per juvenile sockeye salmon infected with one or more motile _Caligus clemensi_ in 2018."}
 
 sea_lice_2018_cal_mot_intensity <- sea_lice_2018_summary %>% 
   filter(motile_caligus > 0) %>% 
@@ -502,7 +505,7 @@ cal_mot_intensity_plot
 
 #### Motile _Lepeoptheirus salmonis_ Infection Intensity
 
-```{r Lice lep intensity, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap = "The mean intensity of __motile__ _Lepeoptheirus salmonis_ sea lice per juvenile sockeye salmon infected with one or more motile _Lepeoptheirus salmonis_."}
+```{r Lice lep intensity, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap = "The mean intensity of __motile__ _Lepeoptheirus salmonis_ sea lice per juvenile sockeye salmon infected with one or more motile _Lepeoptheirus salmonis_ in 2018."}
 
 sea_lice_2018_lep_mot_intensity <- sea_lice_2018_summary %>% 
   filter(motile_lep > 0) %>% 
@@ -540,61 +543,68 @@ lep_mot_intensity_plot
 
 \newpage
 
-## Fish Length and Weight
-### Sockeye Length
-```{r Length Histogram, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap= "Length frequency histogram of juvenile sockeye in the Discovery Islands and Johnstone Strait in 2017."}
+## Oceanography
 
-length_histo <- fish_and_sealice_field_data %>% 
-  filter(species %in% c("SO", "PI", "CU")) %>% 
-  ggplot(aes(x = sampling_week, y = fork_length, fill = species)) +
-  geom_boxplot()+
-  ylab("Fork Length (mm)")+
-  ylab("Date")+
-  theme(legend.text = element_text(colour="black", size = 12)) + 
-  theme(axis.text=element_text(size=12),
-                axis.title=element_text(size=12,face="bold")) +
-  facet_grid(region~.)
-length_histo
+### Northern Strait of Georgia vs. Discovery Islands
+```{r nsog DI CTD temp, fig.cap = "Oceanographic time series in the Discovery Islands and the Northern Strait of Georgia from averaged from the top 30 m "}
+
+qu29_qu39_ctd <- rbind(qu29, qu39) %>% 
+  mutate(year = year(start_dt), date = as_date(start_dt)) %>% 
+  filter(depth <= 30) %>% 
+  group_by(date, station) %>% 
+  summarise(mean_temp = mean(temperature, na.rm = T), 
+            mean_do = mean(dissolved_oxygen_ml_l, na.rm = T),
+            mean_salinity = mean(salinity, na.rm = T))
+
+nsog_di_temp <- ggplot(qu29_qu39_ctd, aes(x = date, y = mean_temp, colour = station)) +
+  geom_point() +
+  ylab("Temperature °C") +
+  xlab("")+
+  scale_colour_discrete(name="",
+                        breaks=c("QU29", "QU39"),
+                        labels=c("Okisollo \nChannel", "NSOG")) 
+
+nsog_di_do <-ggplot(qu29_qu39_ctd, aes(x = date, y = mean_do, colour = station)) +
+  geom_point() +
+  ylab("Dissolved Oxygen (mg/L)") +
+  xlab("")+
+  theme(legend.position="none")
+
+
+nsog_di_salinity <-ggplot(qu29_qu39_ctd, aes(x = date, y = mean_salinity, colour = station)) +
+  geom_point() +
+  ylab("Salinity (PSU)") +
+  xlab("Date") +
+  theme(legend.position="none")
+
+cowplot::plot_grid(nsog_di_temp, nsog_di_do, nsog_di_salinity, nrow = 3, align = "v", axis = "r")
 ```
 
-### Sockeye Weight
-```{r Weight Histogram, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap= "Weight frequency histogram of juvenile sockeye salmon in the Discovery Islands and Johnstone Strait in 2017."}
+### Discovery Islands Migration Corridors 
+```{r DI migration corridors, fig.cap = "Temperature and Dissolved oxygen averaged in the top 30 m of water in the three main migration corridors in the Discovery Islands, in 2018."}
+di_ctd_survey <- left_join(di_ctd_data, survey_oceanography) %>% 
+  drop_na(ctd_cast_id) %>% 
+  select(ctd_cast_id, survey_date, site_id, region, zone, depth, temperature, dissolved_oxygen_ml_l) %>% 
+  filter(site_id != "D08", site_id != "D07", depth <= 30) %>% 
+  #remove observations from before 2018
+  drop_na(site_id) %>% 
+  group_by(ctd_cast_id, survey_date, site_id, zone) %>% 
+  summarise(mean_temp30 = mean(temperature, na.rm = T), mean_DO30 = mean(dissolved_oxygen_ml_l, na.rm = T))
 
-weight_histo <- fish_and_sealice_field_data %>% 
-  filter(species %in% c("SO", "PI", "CU")) %>% 
-  ggplot(aes(x = sampling_week, y = weight, fill = species)) +
-  geom_boxplot() +
-  ylab("Weight (g)")+
-  xlab("Sampling Week")+
-  theme(legend.text = element_text(colour="black", size = 12)) + 
-  theme(axis.text=element_text(size=12),
-                axis.title=element_text(size=12,face="bold")) +
-  facet_grid(region~.)
-weight_histo
+di_temp <- ggplot(di_ctd_survey, aes(x = survey_date, y = mean_temp30, colour = zone, group = site_id)) +
+  geom_point() +
+  ylab("Temperature °C") +
+  xlab("Date") +
+  scale_colour_discrete(name="Channel",
+                        breaks=c("C", "E", "W"),
+                        labels=c("Okisollo", "Cordero", "Discovery \nPassage")) 
+
+di_do <- ggplot(di_ctd_survey, aes(x = survey_date, y = mean_DO30, colour = zone, group = site_id)) +
+  geom_point() +
+  ylab("Dissolved Oxygen (mg/L)") +
+  xlab("Date") +
+  theme(legend.position="none")
+
+cowplot::plot_grid(di_temp, di_do, nrow = 2, align = "v", axis = "r")
 ```
 
-
-
-```{r Sea Surface Temp, include = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap= "Sea surface temperature in the Discovery Islands and Johnstone Strait averaged by date and region in 2017."}
-
-ysi_data <- ysi_data %>% 
-                group_by(Survey, Date) %>% 
-                summarise(avg.temp = mean(temp))
-
-sst_plot <- ggplot(ysi_data, aes(x = Date, y = avg.temp, colour = Survey, group = Survey)) +
-        geom_point() +
-        geom_line() +
-        theme(legend.text = element_text(colour="black", size = 12),
-              axis.text=element_text(size=12),axis.title=element_text(size=12,face="bold")) +
-         scale_color_discrete(name = "",
-                        breaks=c("DISOCKEYE", "JSSOCKEYE"),
-                        labels=c("Discovery Islands", "Johnstone Strait"))+
-        ylab("Average temperature (ºC)")+
-        theme(legend.justification=c(1,0), legend.position=c(.4,.8),
-             legend.background = element_rect(fill="white")) 
-
-sst_plot
-ggsave("./final_figures/sst_plot.png")
-
-
-```
