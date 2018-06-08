@@ -1,5 +1,5 @@
 ---
-title: "2018 Hakai Institute Juvenile Salmon Program Report"
+title: Juvenile salmon migration report; northern Strait of Georgia to Johnstone Strait
 output:
   rmarkdown::pdf_document:
     
@@ -18,7 +18,7 @@ header-includes:
 
 \begin{center}
 \large
-— Hakai Institute Juvenile Salmon Program —
+— Hakai Institute Juvenile Salmon Program 2018 —
 \end{center}
 
 ```{r, include = FALSE}
@@ -118,11 +118,11 @@ health.
 
 ## Key Parameters Reported
 * Catch Statistics
-* Length and Weight
+* Lengths
 * Parasite Loads
 * Oceanographic Conditions
 
-![Salmon sampling locations in the Discovery Islands and Johnstone Strait in 2018 (yellow circles).](./figs/map_2018.jpg)
+![Salmon sampling locations in the Discovery Islands and Johnstone Strait in 2018.](./figs/map_2018.jpg)
 
 The following plots are subject to change as the underlying data are preliminary and subject to further quality assurance. 
 
@@ -338,9 +338,8 @@ sea_lice_2018_summary <- fish_and_sealice_field_data %>%
   )
 ```
 
-### All Sea-lice Life-stages Infection Abundance on Sockeye
 
-```{r All stages Lice Abundance, fig.cap= "The abundance ± SE of all three developmental stages of combined _Lepeoptheirus salmonis_ and _Caligus clemensi_ sea lice  per juvenile sockeye salmon in 2018."}
+```{r All stages Lice Abundance, include = FALSE, fig.cap= "The abundance ± SE of all three developmental stages of combined _Lepeoptheirus salmonis_ and _Caligus clemensi_ sea lice  per juvenile sockeye salmon in 2018."}
 
 sea_lice_2018_avg <- sea_lice_2018_summary %>%
   filter(species == "SO") %>% 
@@ -373,52 +372,81 @@ sea_lice_2018_avg$life_stage <- factor(sea_lice_2018_avg$life_stage, levels = c(
 labels <- c('DI' = "Discovery Islands", 'JS' = "Johnstone Strait")
 
 
-sea_lice_2018_abundance_plot <- ggplot(data = sea_lice_2018_avg, aes(x = sampling_week, y = abundance, fill = life_stage))+
-  geom_bar(position = position_dodge(), stat= "identity")+
+sea_lice_2018_abundance_plot <- ggplot(data = sea_lice_2018_avg,
+                                       aes(x = sampling_week, y = abundance,
+                                           group = life_stage,
+                                           colour = life_stage))+
+  geom_point() +
+  geom_line(size = 1)+
+  #geom_bar(position = position_dodge(), stat= "identity")+
   geom_errorbar(aes(ymin = abundance-se, ymax = abundance+se), 
-                width = .2,
-                position = position_dodge(.9))+
+                width = .1)+
   facet_grid(region ~., labeller = as_labeller(labels))+ 
   ylab("Abundance")+
   xlab("Date")+
-  scale_fill_discrete(name = "",
+  scale_colour_discrete(name = "",
                       breaks=c("cope", "chal", "mot"),
                       labels=c("Copepodid", "Chalimus", "Motile")) +
   theme(legend.text = element_text(colour="black", size = 12)) +
   theme(axis.text=element_text(size=12), axis.title=element_text(size=12,face="bold"))
+
 sea_lice_2018_abundance_plot
 ```
 
-### Sea Lice Prevalence
+
+### Motile Sea Lice Prevalence
 
 ```{r Lice Prevalence, fig.cap= "The proportion of juvenile chum, pink and sockeye that had at least one motile sea louse of either _Lepeoptheirus salmonis_ and _Caligus clemensi_ in the Discovery Islands (DI) and Johnstone Strait (JS) in 2018."}
 # Summarize data to calcuate the average prevalence by region and sampling week with SD
-motile_sea_lice_2018_prevalence <- sea_lice_2018_summary %>%
+
+motile_caligus_infected_hosts <- sea_lice_2018_summary %>%
   group_by(region, species, sampling_week) %>%
-  summarize(prevalence = mean(motile, na.rm = T))
+  filter(motile_caligus >= 1) %>% 
+  summarise(n_caligus_infected = n())
 
-labels <- c(CU = "Chum", PI = "Pink", SO = "Sockeye")
+motile_lep_infected_hosts <- sea_lice_2018_summary %>%
+  group_by(region, species, sampling_week) %>%
+  filter(motile_lep >= 1) %>% 
+  summarise(n_lep_infected = n())
+
+hosts <- sea_lice_2018_summary %>%
+  group_by(region, species, sampling_week) %>%
+  summarise(n_examined = n())
+
+prevalence <- left_join(hosts, motile_caligus_infected_hosts)
+prevalence <- left_join(prevalence, motile_lep_infected_hosts, by = c("region", "species", "sampling_week"))
+
+prevalence <- prevalence %>% 
+  replace_na(list(n_caligus_infected = 0, n_lep_infected = 0)) %>% 
+  gather(`n_caligus_infected`, `n_lep_infected`, key = "lice_spp", value = n_infected) %>% 
+  mutate(prevalence = n_infected /  n_examined)
+
+labels <- c(CU = "Chum", PI = "Pink", SO = "Sockeye", DI = "Discovery Islands",
+            JS = "Johnstone Strait")
 
 
-motile_sea_lice_2018_prevalence_plot <- ggplot(data = motile_sea_lice_2018_prevalence, aes(x = sampling_week, y = prevalence, colour = region))+
+motile_sea_lice_2018_prevalence_plot <- ggplot(data = prevalence, aes(x = sampling_week, y = prevalence, colour = lice_spp, group = lice_spp))+
   geom_point(position = position_dodge(0.05))+
   geom_line()+
   ylab("Prevalence")+
   xlab("Date")+
-  theme(legend.position="none") +
   theme(legend.text = element_text(colour="black", size = 12)) + 
   theme(axis.text=element_text(size=12),
         axis.title=element_text(size=12,face="bold"))+
   coord_cartesian(y= 0:1)+
-  facet_grid(region~species, scales = "free_y", labeller=labeller(species = labels)) +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
+  facet_grid(region~species, scales = "free_y", labeller = as_labeller(labels)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5)) +
+  scale_colour_discrete(name = "",
+                        breaks=c("n_caligus_infected", "n_lep_infected"),
+                        labels=c("C. clemensi", "L. salmonis"))+ 
+  theme(legend.text = element_text(colour="black", size = 12, face = "italic"))
 
 motile_sea_lice_2018_prevalence_plot
 ```
 
 \newpage
 
-### Motile Abundance for Chum, Pink, and Sockeye
+### Motile Sea Lice Abundance
 
 ```{r Motile Caligus and Lep abundance on chum. pink, and sockeye , fig.cap = "The abundance  ± SE of __motile__ _Lepeoptheirus salmonis_ and _Caligus clemensi_ sea lice combined infecting juvenile chum, pink and sockeye salmon in the Discovery Islands and Johnstone Strait in 2018."}
 
@@ -441,20 +469,23 @@ sea_lice_2018_mot$se <- sea_lice_2018_mot_se$se
 
 sea_lice_2018_mot$sampling_week <- as.factor(sea_lice_2018_mot$sampling_week)
 
-motile_abundance_plot <- ggplot(sea_lice_2018_mot, aes(x = sampling_week, y = abundance, colour = lice_species, group = lice_species))+
+motile_abundance_plot <- ggplot(sea_lice_2018_mot, aes(x = sampling_week,
+                                                       y = abundance, 
+                                                       colour = lice_species, 
+                                                       group = lice_species))+
   geom_point()+
   geom_line()+
   geom_errorbar(aes(ymin = abundance - se, ymax = abundance + se, width = 0.1))+
   facet_grid(region~., labeller = as_labeller(labels))+
   xlab("Date")+
-  ylab("Infection Abundance")+
+  ylab("Abundance")+
   scale_colour_discrete(name = "",
                         breaks=c("cal", "lep"),
                         labels=c("C. clemensi", "L. salmonis"))+ 
   theme(legend.text = element_text(colour="black", size = 12, face = "italic")) +
   theme(axis.text=element_text(size=12), 
         axis.title=element_text(size=12,face="bold")) +
-  facet_grid(region~species, labeller=labeller(species = spp_labels)) +
+  facet_grid(region~species, labeller= as_labeller(labels)) +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
 
 motile_abundance_plot
@@ -464,14 +495,15 @@ motile_abundance_plot
 
 \newpage
 
-#### Motile _Caligus clemensi_ Infection Intensity 
-```{r Lice cal intensity, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap = "The mean infection intensity of __motile__ _Caligus clemensi_ sea lice per juvenile sockeye salmon infected with one or more motile _Caligus clemensi_ in 2018."}
-
+#### Motile Sea Lice Infection Intensity 
+```{r Lice cal intensity, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap = "The mean infection intensity ± SE of __motile__ _Lepeoptheirus salmonis_ and _Caligus clemensi_ sea lice per juvenile salmon infected with one or more motile _Lepeoptheirus salmonis_ and _Caligus clemensi_ louse in 2018."}
+# Leps
 sea_lice_2018_cal_mot_intensity <- sea_lice_2018_summary %>% 
   filter(motile_caligus > 0) %>% 
   select(region, species, sampling_week, motile_caligus) %>% 
   group_by(region, species, sampling_week) %>%
-  summarise(intensity =  mean(motile_caligus, na.rm = T))
+  summarise(intensity =  mean(motile_caligus, na.rm = T)) %>% 
+  mutate(lice_spp = "cal")
 
 sea_lice_2018_cal_mot_intens_se <- sea_lice_2018_summary %>%
   filter(motile_caligus > 0) %>% 
@@ -481,37 +513,13 @@ sea_lice_2018_cal_mot_intens_se <- sea_lice_2018_summary %>%
 
 sea_lice_2018_cal_mot_intensity$se <- sea_lice_2018_cal_mot_intens_se$se
 
-cal_mot_intensity_plot <- ggplot(sea_lice_2018_cal_mot_intensity, 
-                                 aes(x = sampling_week, y = intensity, group = region))+
-  geom_point()+
-  geom_line()+
-  geom_errorbar(aes(ymin = intensity - se, ymax = intensity + se, width = 0.1))+
-  facet_grid(region~species, labeller = as_labeller(spp_labels))+
-  xlab("Date")+
-  ylab("Mean Infection Intensity")+
-  theme(legend.justification=c(1,0), legend.position=c(.4,.3),
-        legend.background = element_rect(fill="white")) +  
-  theme(legend.text = element_text(colour="black", size = 12, face = "italic")) +
-  theme(axis.text=element_text(size=12), axis.title=element_text(size=12,face="bold")) +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
-
-
-cal_mot_intensity_plot
-
-
-```
-
-\newpage
-
-#### Motile _Lepeoptheirus salmonis_ Infection Intensity
-
-```{r Lice lep intensity, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap = "The mean intensity of __motile__ _Lepeoptheirus salmonis_ sea lice per juvenile sockeye salmon infected with one or more motile _Lepeoptheirus salmonis_ in 2018."}
-
+# Leps
 sea_lice_2018_lep_mot_intensity <- sea_lice_2018_summary %>% 
   filter(motile_lep > 0) %>% 
   select(region, species, sampling_week, motile_lep) %>% 
   group_by(region, species, sampling_week) %>%
-  summarise(intensity =  mean(motile_lep, na.rm = T))
+  summarise(intensity =  mean(motile_lep, na.rm = T)) %>% 
+  mutate(lice_spp = "lep")
 
 sea_lice_2018_lep_mot_intens_se <- sea_lice_2018_summary %>%
   filter(motile_lep > 0) %>% 
@@ -521,24 +529,26 @@ sea_lice_2018_lep_mot_intens_se <- sea_lice_2018_summary %>%
 
 sea_lice_2018_lep_mot_intensity$se <- sea_lice_2018_lep_mot_intens_se$se
 
-lep_mot_intensity_plot <- ggplot(sea_lice_2018_lep_mot_intensity,
-                                 aes(x = sampling_week, y = intensity, group = region))+
+intensity <- rbind(sea_lice_2018_lep_mot_intensity, sea_lice_2018_cal_mot_intensity)
+
+mot_intensity_plot <- ggplot(intensity,
+                                 aes(x = sampling_week, y = intensity,
+                                     colour = lice_spp, group = lice_spp))+
   geom_point()+
   geom_line()+
   geom_errorbar(aes(ymin = intensity - se, ymax = intensity + se, width = 0.1))+
   facet_grid(region~species, labeller = as_labeller(spp_labels))+
   xlab("Date")+
   ylab("Mean Infection Intensity")+
-  theme(legend.justification=c(1,0), legend.position=c(.4,.3),
-        legend.background = element_rect(fill="white")) +  
   theme(legend.text = element_text(colour="black", size = 12, face = "italic")) +
   theme(axis.text=element_text(size=12), 
         axis.title=element_text(size=12,face="bold"))  +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5)) +
+  scale_colour_discrete(name = "",
+                        breaks=c("cal", "lep"),
+                        labels=c("C. clemensi", "L. salmonis"))
 
-
-lep_mot_intensity_plot
-
+mot_intensity_plot
 ```
 
 \newpage
@@ -546,7 +556,7 @@ lep_mot_intensity_plot
 ## Oceanography
 
 ### Northern Strait of Georgia vs. Discovery Islands
-```{r nsog DI CTD temp, fig.cap = "Oceanographic time series in the Discovery Islands and the Northern Strait of Georgia from averaged from the top 30 m "}
+```{r nsog DI CTD temp, fig.cap = "Oceanographic time series in the Discovery Islands and the Northern Strait of Georgia from averaged from the top 30 m of the water column."}
 
 qu29_qu39_ctd <- rbind(qu29, qu39) %>% 
   mutate(year = year(start_dt), date = as_date(start_dt)) %>% 
@@ -562,7 +572,7 @@ nsog_di_temp <- ggplot(qu29_qu39_ctd, aes(x = date, y = mean_temp, colour = stat
   xlab("")+
   scale_colour_discrete(name="",
                         breaks=c("QU29", "QU39"),
-                        labels=c("Okisollo \nChannel", "NSOG")) 
+                        labels=c("DI \nQU29", "NSOG \nQU39")) 
 
 nsog_di_do <-ggplot(qu29_qu39_ctd, aes(x = date, y = mean_do, colour = station)) +
   geom_point() +
