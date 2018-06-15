@@ -19,3 +19,10 @@ qu29_endpoint <- sprintf("%s/%s", client$api_root, "ctd/views/file/cast/data?sta
 qu29 <- client$get(qu29_endpoint)
 write_csv(qu29, here::here("In-season Reports", "2018_in_season_report",
                            "data", "qu29.csv"))
+
+qu_39_secchi_endpoint <- sprintf("%s/%s", client$api_root, 
+                                 "eims/views/output/secchi?work_area=QUADRA&site_id=QU39&limit=-1")
+
+qu_39_secchi <- client$get(qu_39_secchi_endpoint)
+write_csv(qu_39_secchi, here::here("In-season Reports", "2018_in_season_report",
+                           "data", "qu39_secchi.csv"))

@@ -33,6 +33,142 @@ options(scipen=999) # This removes scientific notation for inline output ie `r o
 theme_set(theme_bw())
 ```
 
+```{r rose plot function}
+  # WindRose.R
+require(ggplot2)
+require(RColorBrewer)
+require(scales)
+
+plot.windrose <- function(data,
+                          spd,
+                          dir,
+                          group = "Month",
+                          spdres = 2,
+                          dirres = 22.5,
+                          spdmin = 2,
+                          spdmax = 25,
+                          spdseq = NULL,
+                          palette = "Spectral",
+                          countmax = NA,
+                          debug = 0){
+
+
+  # Look to see what data was passed in to the function
+  if (is.numeric(spd) & is.numeric(dir)){
+    # assume that we've been given vectors of the speed and direction vectors
+    data <- data.frame(spd = spd,
+                       dir = dir)
+    spd = "spd"
+    dir = "dir"
+  } else if (exists("data")){
+    # Assume that we've been given a data frame, and the name of the speed 
+    # and direction columns. This is the format we want for later use.    
+  } 
+  # Tidy up input data ----
+  n.in <- NROW(data)
+  dnu <- (is.na(data[[spd]]) | is.na(data[[dir]]))
+  data[[spd]][dnu] <- NA
+  data[[dir]][dnu] <- NA
+
+  # figure out the wind speed bins ----
+  if (missing(spdseq)){
+    spdseq <- seq(spdmin,spdmax,spdres)
+  } else {
+    if (debug >0){
+      cat("Using custom speed bins \n")
+    }
+  }
+  # get some information about the number of bins, etc.
+  n.spd.seq <- length(spdseq)
+  n.colors.in.range <- n.spd.seq - 1
+
+  # create the color map
+  spd.colors <- colorRampPalette(brewer.pal(min(max(3,
+                                                    n.colors.in.range),
+                                                min(9,
+                                                    n.colors.in.range)),                                               
+                                            palette))(n.colors.in.range)
+
+  if (max(data[[spd]],na.rm = TRUE) > spdmax){    
+    spd.breaks <- c(spdseq,
+                    max(data[[spd]],na.rm = TRUE))
+    spd.labels <- c(paste(c(spdseq[1:n.spd.seq-1]),
+                          '-',
+                          c(spdseq[2:n.spd.seq])),
+                    paste(spdmax,
+                          "-",
+                          max(data[[spd]],na.rm = TRUE)))
+    spd.colors <- c(spd.colors, "grey50")
+  } else{
+    spd.breaks <- spdseq
+    spd.labels <- paste(c(spdseq[1:n.spd.seq-1]),
+                        '-',
+                        c(spdseq[2:n.spd.seq]))    
+  }
+  data$spd.binned <- cut(x = data[[spd]],
+                         breaks = spd.breaks,
+                         labels = spd.labels,
+                         ordered_result = TRUE)
+
+  # figure out the wind direction bins
+  dir.breaks <- c(-dirres/2,
+                  seq(dirres/2, 360-dirres/2, by = dirres),
+                  360+dirres/2)  
+  dir.labels <- c(paste(360-dirres/2,"-",dirres/2),
+                  paste(seq(dirres/2, 360-3*dirres/2, by = dirres),
+                        "-",
+                        seq(3*dirres/2, 360-dirres/2, by = dirres)),
+                  paste(360-dirres/2,"-",dirres/2))
+  # assign each wind direction to a bin
+  dir.binned <- cut(data[[dir]],
+                    breaks = dir.breaks,
+                    ordered_result = TRUE)
+  levels(dir.binned) <- dir.labels
+  data$dir.binned <- dir.binned
+
+  # Run debug if required ----
+  if (debug>0){    
+    cat(dir.breaks,"\n")
+    cat(dir.labels,"\n")
+    cat(levels(dir.binned),"\n")
+
+  }  
+
+  # create the plot ----
+  p.windrose <- ggplot(data = data,
+                       aes(x = dir.binned,
+                           fill = spd.binned
+                           ,y = (..count..)/sum(..count..)
+                           ))+
+    geom_bar() + 
+    scale_x_discrete(drop = FALSE,
+                     labels = c("N","NNE","NE","ENE", "E", 
+                                "ESE", "SE","SSE", 
+                                "S","SSW", "SW","WSW", "W", 
+                                "WNW","NW","NNW")) +
+    coord_polar(start = -((dirres/2)/360) * 2*pi) +
+    scale_fill_manual(name = "Wind Speed (m/s)", 
+                      values = spd.colors,
+                      drop = TRUE) +
+    theme(axis.title.x = element_blank()) + 
+    scale_y_continuous(labels = percent) +
+    ylab("Frequency")
+  
+  # adjust axes if required
+  if (!is.na(countmax)){
+    p.windrose <- p.windrose +
+      ylim(c(0,countmax))
+  }
+
+  # print the plot
+  print(p.windrose)  
+
+  # return the handle to the wind rose
+  return(p.windrose)
+}
+```
+
+
 ```{r data import}
 field_2018 <- gs_key("1iRQCKMTznHbMeI9GunbsgPyb-rtWgwj-0IfxLw7NBJE", 
                      lookup = FALSE, visibility = "private")
@@ -89,16 +225,43 @@ js_ctd_data$ctd_cast_id <- paste(js_ctd_data$station, as_date(js_ctd_data$start_
 
 # Join survey and oceanography data
 survey_oceanography <- left_join(survey_data, oceanography_metadata)
+
+qu_39_secchi <- read_csv(here("In-season Reports", "2018_in_season_report",
+                      "data", "qu39_secchi.csv"))
+
+
+# Wind plot data
+wind_dir <- read_csv(here("In-season Reports", "2018_in_season_report",
+                      "data", "wind_dir.csv"), skip = 3) %>% 
+  select("Measurement name >>", "Year", "Month", "WindDir_Avg")
+
+
+wind_speed <- read_csv(here("In-season Reports", "2018_in_season_report",
+                      "data", "wind_speed.csv"), skip = 3) %>% 
+  select("Measurement name >>", "Year", "Month", "WindSpd_Avg")
+
+wind_speed_direction <- left_join(wind_dir, wind_speed) %>% 
+  separate("Measurement name >>", c("date", "time"), " ") %>% 
+  as_tibble() %>% 
+  drop_na() %>% 
+  filter(Year == 2018) %>% 
+  mutate(knots = WindSpd_Avg * 1.9438444924574) %>% 
+  mutate(Month = as_factor(Month)) 
+  
+wind_speed_direction$Month <- fct_relevel(wind_speed_direction$Month, "Jan", "Feb", "Mar", "Apr", "May", "Jun")
+  
+
+
 ```
 
 
 ## Aim 
 
-To provide regular in-season summaries of juvenile Fraser salmon migration catch statistics, health indices, and oceanographic conditions in the northern Strait of Georgia to Johnstone Strait region. 
+To provide regular in-season summaries of juvenile salmon migration catch statistics, health indices, and oceanographic conditions in the northern Strait of Georgia to Johnstone Strait region. 
 
 ## Background
 
-The Hakai Institute Juvenile Salmon Program was launched in the spring of 2015 in a collaborative partnership with UBC, SFU, Salmon Coast, Pacific Salmon Foundation, and DFO. The program operates in the Discovery Islands and Johnstone Strait (Figure 1) and thus provides information on the health of juvenile Fraser River salmon after passage through: 
+The Hakai Institute Juvenile Salmon Program was launched in the spring of 2015 in a collaborative partnership with UBC, SFU, Salmon Coast, Pacific Salmon Foundation, and DFO. The program operates in the Discovery Islands and Johnstone Strait (Figure 1) and thus provides information on the health of juvenile salmon after passage through: 
 
 1) Strait of Georgia – stratified high plankton biomass zone; and 
 
@@ -136,7 +299,7 @@ __Updated:__ `r Sys.Date()`
 ## Catch Statistics
 
 ### Sockeye Abundance and Timing
-```{r Sockeye abundance, fig.cap="Average number of juvenile sockeye salmon caught in each seine in 2018 averaged over one week periods for each region."}
+```{r Sockeye abundance, fig.cap="Average number of juvenile sockeye salmon caught in each seine in 2018 averaged over one week periods for each region and represented by the middle day of each week."}
 
 spp_labels <- c(CU = "Chum", PI = "Pink", SO = "Sockeye", DI = "Discovery Islands", 
                 JS = "Johnstone Strait")
@@ -221,7 +384,7 @@ cum_abund_plot <- ggplot(data = cum_abund, mapping = aes(x = survey_date, y = cu
   geom_point(mapping = aes(colour= species)) +
   geom_line(mapping = aes(colour = species)) +
   ylab("Cumulative abundance") + xlab("Date") + 
-  facet_grid(region ~., labeller=labeller(region = labels))+
+  facet_grid(region ~., scales = "free_y", labeller=labeller(region = labels))+
   scale_colour_discrete(name = "",
                         breaks=c("co.cum.abund","cu.cum.abund", "he.cum.abund", "pi.cum.abund", "so.cum.abund",
                                  "ck.cum.abund"),
@@ -241,7 +404,7 @@ cum_abund_plot
 \newpage
 
 ## Fish Lengths
-```{r DI Length Histogram, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap = "Fork legnth boxplots of juvenile salmon in the Discovery Islands in 2018 grouped by week compared to the average length from 2015, 2016 and 2017."}
+```{r DI Length Histogram, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap = "Fork legnth boxplots of juvenile salmon in the Discovery Islands in 2018 grouped by week, and represented by the middle day of each week, compared to the average length from 2015, 2016 and 2017."}
 annual_di_length_histo <- hakaisalmon::survey_seines_fish %>% 
   select(sampling_week, region, species, fork_length) %>% 
   filter(species %in% c("SO", "PI", "CU"), region == "DI") %>% 
@@ -272,7 +435,7 @@ di_length_hist_plot
 
 \newpage
 
-```{r JS Length Histogram, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap = "Fork legnth boxplots of juvenile salmon in Johnstone Strait in 2018 grouped by week compared to the average length from 2015, 2016 and 2017."}
+```{r JS Length Histogram, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap = "Fork legnth boxplots of juvenile salmon in Johnstone Strait in 2018 grouped by week, and represented by the middle day of each week, compared to the average length from 2015, 2016 and 2017."}
 annual_js_length_histo <- hakaisalmon::survey_seines_fish %>% 
   select(sampling_week, region, species, fork_length) %>% 
   filter(species %in% c("SO", "PI", "CU"), region == "JS") %>% 
@@ -594,27 +757,69 @@ cowplot::plot_grid(nsog_di_temp, nsog_di_do, nsog_di_salinity, nrow = 3, align =
 ```{r DI migration corridors, fig.cap = "Temperature and Dissolved oxygen averaged in the top 30 m of water in the three main migration corridors in the Discovery Islands, in 2018."}
 di_ctd_survey <- left_join(di_ctd_data, survey_oceanography) %>% 
   drop_na(ctd_cast_id) %>% 
-  select(ctd_cast_id, survey_date, site_id, region, zone, depth, temperature, dissolved_oxygen_ml_l) %>% 
+  select(ctd_cast_id, survey_date, site_id, region, zone, depth, temperature, dissolved_oxygen_ml_l, salinity) %>% 
   filter(site_id != "D08", site_id != "D07", depth <= 30) %>% 
   #remove observations from before 2018
   drop_na(site_id) %>% 
-  group_by(ctd_cast_id, survey_date, site_id, zone) %>% 
-  summarise(mean_temp30 = mean(temperature, na.rm = T), mean_DO30 = mean(dissolved_oxygen_ml_l, na.rm = T))
+  group_by(survey_date, zone) %>% 
+  summarise(mean_temp30 = mean(temperature, na.rm = T),
+            mean_DO30 = mean(dissolved_oxygen_ml_l, na.rm = T),
+            mean_salinity_30 = mean(salinity, na.rm = T))
 
-di_temp <- ggplot(di_ctd_survey, aes(x = survey_date, y = mean_temp30, colour = zone, group = site_id)) +
+di_temp <- ggplot(di_ctd_survey, aes(x = survey_date, y = mean_temp30, colour = zone, group = zone)) +
   geom_point() +
+  geom_line() +
   ylab("Temperature °C") +
   xlab("Date") +
   scale_colour_discrete(name="Channel",
                         breaks=c("C", "E", "W"),
                         labels=c("Okisollo", "Cordero", "Discovery \nPassage")) 
 
-di_do <- ggplot(di_ctd_survey, aes(x = survey_date, y = mean_DO30, colour = zone, group = site_id)) +
+di_do <- ggplot(di_ctd_survey, aes(x = survey_date, y = mean_DO30, colour = zone, group = zone)) +
   geom_point() +
+  geom_line() +
   ylab("Dissolved Oxygen (mg/L)") +
   xlab("Date") +
   theme(legend.position="none")
 
-cowplot::plot_grid(di_temp, di_do, nrow = 2, align = "v", axis = "r")
+di_salinity <- ggplot(di_ctd_survey, aes(x = survey_date, y = mean_salinity_30,
+                                         colour = zone, group = zone)) +
+  geom_point() +
+  geom_line() +
+  ylab("Salinity (PSU)") +
+  xlab("Date") +
+  theme(legend.position="none")
+
+cowplot::plot_grid(di_temp, di_do, di_salinity, nrow = 3, align = "v", axis = "r")
 ```
 
+```{r secchi bloom timing, fig.cap = "Secchi depth at station QU39 in the Northern Strait of Georgia in 2018 indicating a spring phytoplankton bloom in mid-March."}
+
+qu_39_secchi %>% 
+  filter(year(date) > 2017) %>% 
+  ggplot(aes(x = date, y = line_out_depth)) +
+  geom_point() +
+  coord_cartesian(y = 0:20) +
+  ylab("Secchi depth (m)") +
+  xlab("Date")
+```
+
+```{r wind plots, include = FALSE}
+wind_speed_direction <- wind_speed_direction %>% 
+  drop_na() %>% 
+  na.omit()
+
+p <- plot.windrose(data = wind_speed_direction,
+                    spd = "WindSpd_Avg",
+                    dir = "WindDir_Avg",
+                    spdseq = c(0,3,6,9),
+                    palette = rev("Blues"))
+
+```
+
+```{R, include = FALSE, fig.cap = "Dominant wind directions and speed in 2018 at the Quadra Island Field Station."}
+p <- p +
+  facet_wrap(~Month) +
+  theme(legend.position="bottom")
+p
+```
