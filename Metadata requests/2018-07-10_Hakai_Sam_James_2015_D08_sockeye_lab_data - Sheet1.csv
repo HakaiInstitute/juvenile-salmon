@@ -1,0 +1,11 @@
+ufn,semsp_id,date_processed,cwt,adipose,weight,standard_length,fork_length,photo_number,comments_protocol,comments_fish_health_lab,dissector,dissection_protocol,fish_lab_qc_data,fish_lab_qc_flag,fish_lab_flag_reason,fish_lab_qc_log
+U4762,2015-06-04-D08-SO-01,2018-03-22,none,none,14.2,105,110,,,,LP,-20 work-up 1,,N,,
+U4763,2015-06-04-D08-SO-02,2018-03-22,none,none,10.7,98,103,,,,LP,-20 work-up 1,,N,,
+U4764,2015-06-04-D08-SO-03,2018-03-22,none,none,11.6,100,106,,,,LP,-20 work-up 1,,N,,
+U4765,2015-06-04-D08-SO-04,2018-03-22,none,none,14.8,107,113,,,,LP,-20 work-up 1,,N,,
+U4766,2015-06-04-D08-SO-05,2018-03-22,none,none,9.6,92,97,,,,LP,-20 work-up 1,,N,,
+U4767,2015-06-04-D08-SO-06,2018-03-22,none,none,10.9,99,105,,,,LP,-20 work-up 1,,N,,
+U4768,2015-06-04-D08-SO-07,2018-03-22,none,none,11.9,103,107,,,,LP,-20 work-up 1,,N,,
+U4769,2015-06-04-D08-SO-08,2018-03-22,none,none,12.2,106,111,,,,LP,-20 work-up 1,,N,,
+U4770,2015-06-04-D08-SO-09,2018-03-22,none,none,13.6,108,113,,,,LP,-20 work-up 1,,N,,
+U4771,2015-06-04-D08-SO-10,2018-03-22,none,none,6,84,89,,,,LP,-20 work-up 1,,N,,
