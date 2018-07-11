@@ -1,0 +1,1148 @@
+sample_location,ufn,species,survey_date,site_id,lat,lon,standard_length,fork_length,weight,date_processed,stock_1,prob_1,stock_2,prob_2,stock_3,prob_3,container_id,comments_sample,comments_fish_health_lab,comments_protocol
+BRN15-A12,U1425,SO,2016-05-28,J02,50.60125,-126.704457,NA,99,8.5,2016-07-07,Chilko,0.87,Quesnel_Horsef,0.05,Tachie,0.03,BRN15,NA,NA,Correct location of otolith sample unverified due to duplicates in data entry
+BRN15-B12,U1426,SO,2016-05-28,J02,50.60125,-126.704457,NA,100,8.9,2016-07-07,L_Shuswap,0.98,MiddleShuswap,0.01,L_Adams,0,BRN15,NA,NA,NA
+BRN15-C12,U1427,SO,2016-05-28,J02,50.60125,-126.704457,NA,107,10.3,2016-07-07,Gates_Cr,1,NA,NA,NA,NA,BRN15,Outside scalpel touched heart & spleen,NA,Cut too deep to open inside cavity. cut heart and spleen accidentaly with outside scalpel. possible contamination.
+BRN15-A7,U1514,SO,2016-06-02,J10,50.477038,-126.028566,NA,104,7.7,2016-07-12,Chilko,0.74,L_Adams,0.13,Chilko_south,0.11,BRN15,NA,NA,1 otolith broke
+BRN15-B7,U1515,SO,2016-06-07,D22,50.242671,-125.398265,NA,109,9,2016-07-12,L_Adams,0.61,L_Shuswap,0.23,Little,0.13,BRN15,NA,NA,NA
+BRN15-C7,U1516,SO,2016-06-07,D22,50.242671,-125.398265,NA,98,9.5,2016-07-12,L_Shuswap,1,NA,NA,NA,NA,BRN15,NA,NA,NA
+BRN15-D7,U1517,SO,2016-06-07,D22,50.242671,-125.398265,NA,104,9,2016-07-12,Scotch,0.99,Seymour,0.01,L_Shuswap,0,BRN15,NA,NA,NA
+BRN15-E7,U1518,SO,2016-06-07,D22,50.242671,-125.398265,NA,111,11.2,2016-07-12,Chilko-North,0.72,Chilko,0.11,L_Adams,0.08,BRN15,NA,NA,NA
+BRN15-F7,U1519,SO,2016-06-07,D22,50.242671,-125.398265,NA,110,10.7,2016-07-12,L_Shuswap,0.99,L_Adams,0.01,Little,0,BRN15,NA,NA,NA
+BRN15-G7,U1520,SO,2016-06-07,D22,50.242671,-125.398265,NA,85,6.5,2016-07-12,L_Shuswap,0.95,L_Adams,0.04,Little,0,BRN15,NA,NA,NA
+BRN15-A1,U1528,SO,2016-06-25,J06,50.47508,-126.03392,NA,115,17.2,2016-07-06,Horsefly,0.84,Quesnel_Horsef,0.16,McKinley,0,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-B1,U1529,SO,2016-06-25,J06,50.47508,-126.03392,NA,107,13,2016-07-06,L_Shuswap,0.97,MiddleShuswap,0.03,Little,0,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-C1,U1530,SO,2016-06-25,J06,50.47508,-126.03392,NA,102,11.6,2016-07-06,L_Shuswap,0.63,MiddleShuswap,0.34,Eagle_L,0.02,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-H3,U1539,SO,2016-06-24,J08,50.4806,-126.40961,NA,109,12,2016-07-07,Scotch,0.89,Seymour,0.1,Blackwater,0.01,BRN15,NA,NA,NA
+BRN15-A3,U1540,SO,2016-06-02,J09,50.543432,-126.8134,NA,90,10.2,2016-07-07,L_Adams,0.83,L_Shuswap,0.11,Quesnel_Horsef,0.03,BRN15,NA,NA,NA
+BRN15-D1,U1541,SO,2016-06-25,J06,50.47508,-126.03392,NA,113,15,2016-07-06,Horsefly,0.77,Quesnel_Horsef,0.15,Quesnel_Decept,0.04,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-E1,U1542,SO,2016-06-25,J06,50.47508,-126.03392,NA,108,13.2,2016-07-06,L_Shuswap,0.37,Little,0.24,MiddleShuswap,0.17,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-F1,U1543,SO,2016-06-25,J06,50.47508,-126.03392,NA,118,18.3,2016-07-06,Chilko,0.91,Chilko-North,0.08,Chilko_south,0.01,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-G1,U1544,SO,2016-06-24,J08,50.4806,-126.40961,NA,99,12.1,2016-07-06,L_Shuswap,0.7,MiddleShuswap,0.28,Little,0.02,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-H1,U1545,SO,2016-06-24,J08,50.4806,-126.40961,NA,110,15.8,2016-07-06,L_Shuswap,0.78,MiddleShuswap,0.19,Little,0.02,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-A2,U1546,SO,2016-06-24,J08,50.4806,-126.40961,NA,110,14.9,2016-07-06,Seymour,0.84,Scotch,0.13,L_Shuswap,0.02,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-B2,U1547,SO,2016-06-24,J08,50.4806,-126.40961,NA,107,13.9,2016-07-07,Little,0.48,L_Shuswap,0.37,MiddleShuswap,0.14,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-C2,U1548,SO,2016-06-24,J08,50.4806,-126.40961,NA,105,13.3,2016-07-07,L_Shuswap,0.85,MiddleShuswap,0.14,Little,0.01,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-D2,U1549,SO,2016-06-24,J08,50.4806,-126.40961,NA,102,11.4,2016-07-07,Scotch,0.89,Seymour,0.11,L_Shuswap,0,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-E2,U1550,SO,2016-06-02,J09,50.543432,-126.8134,NA,91,8.4,2016-07-07,Quesnel_Horsef,0.57,M_Horsefly,0.21,Horsefly,0.21,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-B3,U1551,SO,2016-06-02,J09,50.543432,-126.8134,NA,105,8,2016-07-07,L_Shuswap,0.83,L_Adams,0.17,MiddleShuswap,0,BRN15,NA,NA,NA
+BRN15-C3,U1552,SO,2016-06-02,J09,50.543432,-126.8134,NA,102,8.6,2016-07-07,L_Adams,0.77,Chilko,0.1,L_Shuswap,0.06,BRN15,NA,Caudal fin broken,NA
+BRN15-D3,U1553,SO,2016-06-02,J09,50.543432,-126.8134,NA,98,8.6,2016-07-07,Quesnel_Horsef,0.88,Horsefly,0.06,M_Horsefly,0.06,BRN15,NA,NA,NA
+BRN15-E3,U1554,SO,2016-06-02,J09,50.543432,-126.8134,NA,100,9.1,2016-07-07,Quesnel_Horsef,0.93,Horsefly,0.03,M_Horsefly,0.03,BRN15,NA,NA,NA
+BRN15-F3,U1555,SO,2016-06-02,J09,50.543432,-126.8134,NA,102,11.4,2016-07-07,L_Shuswap,0.99,L_Adams,0.01,MiddleShuswap,0,BRN15,NA,NA,NA
+BRN15-A5,U1557,SO,2016-05-28,J02,50.60125,-126.704457,NA,118,14.5,2016-07-07,DollyVarden_Cr,0.99,Pinchi_Cr,0.01,Chilko,0,BRN15,NA,NA,NA
+BRN15-B5,U1558,SO,2016-05-28,J02,50.60125,-126.704457,NA,105,10.9,2016-07-07,Tachie,0.72,Pinchi_Cr,0.23,Blackwater,0.03,BRN15,NA,NA,NA
+BRN15-D12,U1559,SO,2016-06-04,J06,50.458983,-126.169594,NA,93,7.7,2016-07-13,Chilko,0.66,L_Adams,0.13,Quesnel_Horsef,0.09,BRN15,NA,NA,NA
+BRN15-E12,U1560,SO,2016-06-04,J06,50.458983,-126.169594,NA,93,9.6,2016-07-13,L_Adams,0.96,Seymour,0.02,Quesnel_Horsef,0.01,BRN15,NA,NA,1 otolith
+BRN15-F2,U1561,SO,2016-06-02,J09,50.543432,-126.8134,NA,92,7.4,2016-07-07,L_Adams,0.98,L_Shuswap,0.01,M_Horsefly,0.01,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-G2,U1562,SO,2016-06-02,J09,50.543432,-126.8134,NA,88,7,2016-07-07,Quesnel_Horsef,0.83,Horsefly,0.1,L_Adams,0.04,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-H2,U1563,SO,2016-06-02,J09,50.543432,-126.8134,NA,97,9.1,2016-07-07,L_Shuswap,0.97,MiddleShuswap,0.03,L_Adams,0,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-A4,U1564,SO,2016-05-28,J02,50.60125,-126.704457,NA,91,7.9,2016-07-07,L_Shuswap,0.99,L_Adams,0.01,MiddleShuswap,0.01,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-B4,U1565,SO,2016-05-28,J02,50.60125,-126.704457,NA,100,9.9,2016-07-07,Scotch,0.83,Seymour,0.05,L_Shuswap,0.05,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-C4,U1566,SO,2016-05-28,J02,50.60125,-126.704457,NA,95,9.3,2016-07-07,Quesnel_Horsef,0.82,Little,0.07,U_Horsefly,0.05,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-D4,U1567,SO,2016-05-28,J02,50.60125,-126.704457,NA,95,8.4,2016-07-07,L_Shuswap,0.72,Scotch,0.22,MiddleShuswap,0.02,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-E4,U1568,SO,2016-05-28,J02,50.60125,-126.704457,NA,99,10.2,2016-07-07,L_Shuswap,0.84,Scotch,0.09,MiddleShuswap,0.05,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-F4,U1569,SO,2016-06-14,D09,50.307203,-125.332605,NA,106,11.8,2016-07-07,Horsefly,0.61,L_Horsefly,0.13,Quesnel_Horsef,0.1,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-G4,U1570,SO,2016-06-14,D09,50.307203,-125.332605,NA,95,9.9,2016-07-07,L_Shuswap,0.53,MiddleShuswap,0.45,Eagle_L,0.02,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-H4,U1571,SO,2016-06-14,D09,50.307203,-125.332605,NA,93,10.1,2016-07-08,MiddleShuswap,0.91,L_Shuswap,0.08,Horsefly,0.01,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-C5,U1572,SO,2016-06-14,D09,50.307203,-125.332605,NA,98,10.5,2016-07-08,MiddleShuswap,0.84,L_Shuswap,0.14,Eagle_L,0.02,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-D5,U1573,SO,2016-06-14,D09,50.307203,-125.332605,NA,94,9.2,2016-07-08,Seymour,0.55,Scotch,0.34,MiddleShuswap,0.05,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-E5,U1574,SO,2016-06-14,D09,50.307203,-125.332605,NA,95,9.2,2016-07-08,MiddleShuswap,0.95,L_Shuswap,0.04,Eagle_L,0.01,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-F5,U1575,SO,2016-06-14,D09,50.307203,-125.332605,NA,96,9.8,2016-07-08,MiddleShuswap,0.9,L_Shuswap,0.07,Eagle_L,0.03,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-G5,U1576,SO,2016-06-14,D09,50.307203,-125.332605,NA,94,9.5,2016-07-08,MiddleShuswap,0.76,Chilko,0.14,Eagle_L,0.06,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-H5,U1577,SO,2016-06-14,D09,50.307203,-125.332605,NA,97,10,2016-07-08,Horsefly,0.66,L_Horsefly,0.13,Quesnel_Horsef,0.1,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-A6,U1578,SO,2016-06-14,D09,50.307203,-125.332605,NA,94,8.7,2016-07-08,MiddleShuswap,0.78,L_Shuswap,0.17,Eagle_L,0.03,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-B6,U1579,SO,2016-06-02,J10,50.477038,-126.028566,NA,97,10,2016-07-08,L_Adams,0.82,L_Shuswap,0.15,Chilko_south,0.01,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-C6,U1580,SO,2016-06-02,J10,50.477038,-126.028566,NA,90,7.6,2016-07-08,L_Adams,0.67,L_Shuswap,0.26,Seymour,0.06,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-D6,U1581,SO,2016-06-02,J10,50.477038,-126.028566,NA,102,10.6,2016-07-08,Mitchell,1,NA,NA,NA,NA,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-E6,U1582,SO,2016-06-02,J10,50.477038,-126.028566,NA,96,7.5,2016-07-08,Mitchell,0.98,Quesnel_Horsef,0.01,Roaring,0,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-F6,U1583,SO,2016-06-02,J10,50.477038,-126.028566,NA,92,8,2016-07-08,L_Adams,0.65,Stellako,0.13,Pinchi_Cr,0.04,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-G6,U1584,SO,2016-06-02,J10,50.477038,-126.028566,NA,103,10.5,2016-07-08,NA,NA,NA,NA,NA,NA,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-H6,U1585,SO,2016-06-02,J10,50.477038,-126.028566,NA,88,8,2016-07-08,L_Adams,1,Eagle_L,0,MiddleShuswap,0,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-A8,U1586,SO,2016-06-02,J10,50.477038,-126.028566,NA,98,9.7,2016-07-08,L_Adams,0.88,L_Shuswap,0.11,MiddleShuswap,0.01,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-B8,U1587,SO,2016-06-02,J10,50.477038,-126.028566,NA,93,8.5,2016-07-12,Mitchell,0.99,Quesnel_Mitche,0.01,NA,NA,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-C8,U1588,SO,2016-06-07,D22,50.242671,-125.398265,NA,90,7.9,2016-07-12,Little,0.63,L_Adams,0.28,L_Shuswap,0.09,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-D8,U1589,SO,2016-06-07,D22,50.242671,-125.398265,NA,98,12.3,2016-07-12,Quesnel_Horsef,0.48,Little,0.24,L_Shuswap,0.1,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-E8,U1590,SO,2016-06-07,D22,50.242671,-125.398265,NA,92,10.2,2016-07-12,Quesnel_Mitche,0.59,Mitchell,0.4,Quesnel_Decept,0,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-H7,U1591,SO,2016-05-27,J01,50.576696,-126.721158,NA,113,10.8,2016-07-12,Chilko,0.89,L_Shuswap,0.05,Portage_Cr,0.01,BRN15,NA,NA,Stomach fell apart during disection
+BRN15-A9,U1592,SO,2016-05-27,J01,50.576696,-126.721158,NA,102,8.4,2016-07-12,Scotch,0.91,Seymour,0.08,Eagle,0.01,BRN15,NA,NA,NA
+BRN15-B9,U1593,SO,2016-05-27,J01,50.576696,-126.721158,NA,119,12.5,2016-07-12,Chilko,0.34,Quesnel_Horsef,0.3,U_Horsefly,0.07,BRN15,NA,NA,NA
+BRN15-C9,U1594,SO,2016-05-27,J01,50.576696,-126.721158,NA,103,7.6,2016-07-13,L_Shuswap,1,Dust,0,MiddleShuswap,0,BRN15,NA,NA,Broken caudal fin
+BRN15-D9,U1595,SO,2016-06-04,J06,50.458983,-126.169594,NA,100,7.6,2016-07-13,L_Adams,0.95,Seymour,0.03,L_Shuswap,0.01,BRN15,NA,NA,NA
+BRN15-E9,U1596,SO,2016-06-04,J06,50.458983,-126.169594,NA,103,7,2016-07-13,Quesnel_Horsef,0.58,Horsefly,0.23,M_Horsefly,0.12,BRN15,NA,NA,NA
+BRN15-F9,U1597,SO,2016-06-04,J06,50.458983,-126.169594,NA,105,9,2016-07-13,L_Adams,0.49,L_Shuswap,0.33,Quesnel_Horsef,0.14,BRN15,NA,NA,NA
+BRN15-G9,U1598,SO,2016-06-04,J06,50.458983,-126.169594,NA,110,7.8,2016-07-13,L_Shuswap,0.73,L_Adams,0.26,MiddleShuswap,0.01,BRN15,NA,NA,NA
+BRN15-H9,U1599,SO,2016-05-27,J09,50.543432,-126.8134,NA,107,8.4,2016-07-13,L_Shuswap,0.61,Little,0.2,L_Adams,0.15,BRN15,NA,NA,NA
+BRN15-F8,U1601,SO,2016-06-07,D22,50.242671,-125.398265,NA,87,8.2,2016-07-12,L_Shuswap,0.99,L_Adams,0,Little,0,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-G8,U1602,SO,2016-05-27,J01,50.576696,-126.721158,NA,88,8.9,2016-07-12,Quesnel_Horsef,0.76,U_Horsefly,0.15,Horsefly,0.07,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-H8,U1603,SO,2016-05-27,J01,50.576696,-126.721158,NA,102,10.5,2016-07-12,Tachie,0.69,Pinchi_Cr,0.22,Blackwater,0.05,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-A10,U1604,SO,2016-05-27,J01,50.576696,-126.721158,NA,90,8.8,2016-07-12,Chilko,1,Chilko-North,0,NA,NA,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-B10,U1605,SO,2016-05-27,J01,50.576696,-126.721158,NA,91,9.4,2016-07-12,Chilko,1,Quesnel_Horsef,0,Roaring,0,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-C10,U1606,SO,2016-05-27,J01,50.576696,-126.721158,NA,91,10.1,2016-07-12,Quesnel_Horsef,0.66,U_Horsefly,0.12,Horsefly,0.07,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-D10,U1607,SO,2016-05-27,J01,50.576696,-126.721158,NA,93,9.2,2016-07-12,L_Shuswap,0.87,DollyVarden_Cr,0.03,Tachie,0.03,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-E10,U1608,SO,2016-06-04,J06,50.458983,-126.169594,NA,92,9.2,2016-07-13,Quesnel_Horsef,0.92,M_Horsefly,0.05,Horsefly,0.03,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-F10,U1609,SO,2016-06-04,J06,50.458983,-126.169594,NA,88,7.2,2016-07-13,L_Adams,0.59,L_Shuswap,0.38,MiddleShuswap,0.03,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-G10,U1610,SO,2016-06-04,J06,50.458983,-126.169594,NA,94,9.3,2016-07-13,L_Adams,0.94,Seymour,0.03,L_Shuswap,0.03,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-F12,U1611,SO,2016-06-04,J06,50.458983,-126.169594,NA,90,9.4,2016-07-13,Seymour,0.5,L_Shuswap,0.25,L_Adams,0.24,BRN15,NA,NA,NA
+BRN15-G12,U1612,SO,2016-05-27,J09,50.543432,-126.8134,NA,96,9,2016-07-13,Scotch,0.89,Seymour,0.08,Eagle,0.01,BRN15,NA,NA,NA
+BRN15-H12,U1613,SO,2016-05-27,J09,50.543432,-126.8134,NA,95,7.3,2016-07-13,Little,0.46,L_Shuswap,0.27,L_Adams,0.18,BRN15,NA,NA,NA
+BRN15-H10,U1621,SO,2016-05-27,J09,50.543432,-126.8134,NA,83,6.5,2016-07-13,Chilko,0.68,Quesnel_Horsef,0.27,Horsefly,0.02,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-A11,U1622,SO,2016-05-27,J09,50.543432,-126.8134,NA,91,9.1,2016-07-13,Kynock,0.22,Tachie,0.22,Sandpoint,0.15,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-B11,U1623,SO,2016-05-27,J09,50.543432,-126.8134,NA,94,10.7,2016-07-13,Little,0.72,L_Adams,0.18,L_Shuswap,0.07,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-C11,U1624,SO,2016-05-27,J09,50.543432,-126.8134,NA,90,8.6,2016-07-13,L_Shuswap,0.97,Little,0.01,L_Adams,0.01,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-D11,U1625,SO,2016-06-03,J05,50.507301,-126.24325,NA,80,7.6,2016-07-13,Chilko,0.5,Quesnel_Horsef,0.21,L_Adams,0.19,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,White splin,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-E11,U1626,SO,2016-06-03,J05,50.507301,-126.24325,NA,84,6.5,2016-07-13,L_Shuswap,0.94,MiddleShuswap,0.05,L_Adams,0.01,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-F11,U1627,SO,2016-06-03,J05,50.507301,-126.24325,NA,87,9,2016-07-13,Chilko,0.97,Chilko_south,0.03,L_Adams,0.01,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-G11,U1628,SO,2016-06-03,J05,50.507301,-126.24325,NA,83,7.4,2016-07-13,Chilko,0.86,L_Adams,0.05,Chilko-North,0.04,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN15-H11,U1629,SO,2016-06-03,J05,50.507301,-126.24325,NA,90,8.8,2016-07-13,L_Adams,0.53,Quesnel_Horsef,0.19,L_Shuswap,0.16,BRN15,Improper handling of RNA microtube caps may have cross contaminated tissue samples,NA,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN16-G1,U1428,SO,2016-06-02,D20,50.462513,-125.368231,NA,99,7,2016-07-14,L_Shuswap,0.39,L_Adams,0.35,Little,0.16,BRN16,NA,NA,NA
+BRN16-H1,U1429,SO,2016-06-02,D20,50.462513,-125.368231,NA,98,9.5,2016-07-14,L_Adams,0.46,Little,0.43,Scotch,0.04,BRN16,NA,NA,NA
+BRN16-A4,U1430,SO,2016-06-02,D20,50.462513,-125.368231,NA,93,8.5,2016-07-14,L_Shuswap,1,MiddleShuswap,0,Portage_Cr,0,BRN16,NA,NA,Fork length estimated (caudal fin broken)
+BRN16-A1,U1600,SO,2016-05-27,J09,50.543432,-126.8134,NA,100,7.7,2016-07-13,Chilko,1,NA,NA,NA,NA,BRN16,NA,NA,NA
+BRN16-H2,U1614,SO,2016-05-27,J09,50.543432,-126.8134,NA,93,8,2016-07-13,Scotch,0.47,Chilko,0.11,Quesnel_Horsef,0.11,BRN16,NA,NA,NA
+BRN16-A2,U1630,SO,2016-06-03,J05,50.507301,-126.24325,NA,86,7.6,2016-07-13,L_Shuswap,0.8,L_Adams,0.15,Quesnel_Horsef,0.02,BRN16,Improper handling of RNA microtube caps may have cross contaminated tissue samples,1 otolith is broken,Improper handling of RNA microtube caps may have cross contaminated RNA tissues samples
+BRN16-B1,U1631,SO,2016-05-27,J09,50.543432,-126.8134,NA,112,11.5,2016-07-13,Quesnel_Horsef,0.83,U_Horsefly,0.11,Horsefly,0.04,BRN16,NA,NA,NA
+BRN16-C1,U1632,SO,2016-06-03,J05,50.507301,-126.24325,NA,105,8,2016-07-13,L_Adams,0.97,L_Shuswap,0.01,Seymour,0.01,BRN16,NA,NA,NA
+BRN16-D1,U1633,SO,2016-06-03,J05,50.507301,-126.24325,NA,103,7.7,2016-07-13,L_Adams,0.49,Chilko,0.29,L_Shuswap,0.06,BRN16,NA,NA,NA
+BRN16-E1,U1634,SO,2016-06-03,J05,50.507301,-126.24325,NA,109,8.4,2016-07-13,L_Shuswap,0.99,MiddleShuswap,0.01,L_Adams,0,BRN16,NA,NA,NA
+BRN16-F1,U1635,SO,2016-06-03,J05,50.507301,-126.24325,NA,104,8.7,2016-07-13,Quesnel_Horsef,0.96,Horsefly,0.02,M_Horsefly,0.01,BRN16,NA,NA,NA
+BRN16-A3,U1636,SO,2016-06-02,D20,50.462513,-125.368231,NA,104,8.5,2016-07-14,Horsefly,0.53,Wasko_Cr,0.4,Quesnel_Mitche,0.04,BRN16,NA,NA,NA
+BRN16-B3,U1637,SO,2016-06-02,D20,50.462513,-125.368231,NA,101,7.6,2016-07-14,L_Adams,0.88,L_Shuswap,0.1,Little,0.01,BRN16,NA,NA,NA
+BRN16-C3,U1638,SO,2016-05-27,J07,50.4559,-126.1191,NA,99,7.7,2016-07-14,NA,NA,NA,NA,NA,NA,BRN16,NA,NA,NA
+BRN16-D3,U1639,SO,2016-05-27,J07,50.4559,-126.1191,NA,98,7.1,2016-07-14,Chilko,0.6,Roaring,0.16,Quesnel_Horsef,0.15,BRN16,NA,NA,NA
+BRN16-H3,U1640,SO,2016-05-27,J07,50.4559,-126.1191,NA,90,5.9,2016-07-14,L_Shuswap,0.66,Little,0.22,L_Adams,0.06,BRN16,NA,NA,NA
+BRN16-B2,U1641,SO,2016-06-02,D20,50.462513,-125.368231,NA,81,6.7,2016-07-14,Chilko,0.49,Horsefly,0.33,Wasko_Cr,0.08,BRN16,NA,NA,NA
+BRN16-C2,U1642,SO,2016-06-02,D20,50.462513,-125.368231,NA,91,8.8,2016-07-14,Horsefly,0.93,Chilko,0.04,L_Adams,0.02,BRN16,NA,NA,NA
+BRN16-D2,U1643,SO,2016-06-02,D20,50.462513,-125.368231,NA,95,9.1,2016-07-14,Chilko,0.42,L_Adams,0.36,Sandpoint,0.05,BRN16,NA,NA,NA
+BRN16-E2,U1644,SO,2016-06-02,D20,50.462513,-125.368231,NA,92,9.1,2016-07-14,Quesnel_Mitche,0.54,Wasko_Cr,0.24,Mitchell,0.22,BRN16,NA,NA,NA
+BRN16-F2,U1645,SO,2016-06-02,D20,50.462513,-125.368231,NA,92,9.2,2016-07-14,Horsefly,0.83,Wasko_Cr,0.08,Chilko,0.04,BRN16,NA,NA,1 otolith is broken
+BRN16-G2,U1646,SO,2016-05-27,J07,50.4559,-126.1191,NA,90,6.8,2016-07-14,Scotch,0.67,L_Shuswap,0.15,L_Adams,0.06,BRN16,NA,NA,NA
+BRN16-E3,U1647,SO,2016-05-27,J07,50.4559,-126.1191,NA,88,7.1,2016-07-14,Roaring,0.54,Quesnel_Decept,0.18,Mitchell,0.1,BRN16,NA,NA,NA
+BRN16-F3,U1648,SO,2016-05-27,J07,50.4559,-126.1191,NA,92,7.3,2016-07-14,L_Shuswap,0.86,Little,0.11,L_Adams,0.03,BRN16,NA,NA,NA
+BRN16-G3,U1649,SO,2016-05-27,J07,50.4559,-126.1191,NA,90,7.7,2016-07-14,Chilko,0.99,Kynock,0,Sandpoint,0,BRN16,NA,NA,NA
+BRN16-B4,U1651,SO,2016-05-27,J07,50.4559,-126.1191,NA,85,7.2,2016-07-14,Chilko,1,NA,NA,NA,NA,BRN16,NA,NA,NA
+BRN16-C4,U1652,SO,2016-05-27,J07,50.4559,-126.1191,NA,94,7.9,2016-07-14,Quesnel_Horsef,0.62,U_Horsefly,0.18,Horsefly,0.08,BRN16,NA,NA,NA
+BRN16-D4,U1653,SO,2016-05-27,J07,50.4559,-126.1191,NA,88,7.8,2016-07-14,Quesnel_Horsef,0.81,U_Horsefly,0.13,Horsefly,0.04,BRN16,NA,NA,NA
+BRN16-E4,U1654,SO,2016-06-07,D22,50.242671,-125.398265,NA,106,13.4,2016-09-02,L_Adams,0.42,L_Shuswap,0.41,Little,0.15,BRN16,NA,NA,NA
+BRN16-F4,U1655,SO,2016-06-07,D22,50.242671,-125.398265,NA,108,11.9,2016-09-02,NA,NA,NA,NA,NA,NA,BRN16,NA,NA,NA
+BRN16-G4,U1656,SO,2016-06-07,D22,50.242671,-125.398265,NA,97,6.7,2016-09-02,L_Shuswap,0.86,Chilko-North,0.14,L_Adams,0,BRN16,NA,NA,Took liver DNA. only one otolith found
+BRN16-H4,U1657,SO,2016-06-07,D09,50.30436,-125.332956,NA,90,7.9,2016-09-02,Little,0.4,L_Adams,0.35,Quesnel_Horsef,0.18,BRN16,NA,NA,NA
+BRN16-H7,U1658,SO,2016-06-07,D09,50.30436,-125.332956,NA,94,8.1,2016-09-02,Scotch,0.92,Little,0.04,L_Shuswap,0.03,BRN16,NA,NA,Took liver DNA.
+BRN16-G7,U1659,SO,2016-06-07,D09,50.30436,-125.332956,NA,90,7.4,2016-09-02,L_Adams,0.6,Little,0.27,Eagle_L,0.09,BRN16,NA,NA,NA
+BRN16-F7,U1660,SO,2016-06-07,D09,50.30436,-125.332956,NA,99,NA,2016-09-02,Chilko-North,0.9,Chilko,0.1,NA,NA,BRN16,NA,NA,Forgot to weigh
+BRN16-H5,U1661,SO,2016-06-07,D22,50.242671,-125.398265,NA,102,12.5,2016-09-02,L_Shuswap,0.98,Scotch,0.01,L_Adams,0,BRN16,NA,NA,Only one otolith found
+BRN16-G5,U1662,SO,2016-06-07,D22,50.242671,-125.398265,NA,102,11.8,2016-09-02,L_Shuswap,0.62,L_Adams,0.19,Little,0.16,BRN16,NA,NA,One otolith broken
+BRN16-F5,U1663,SO,2016-06-07,D22,50.242671,-125.398265,NA,91,10.3,2016-09-02,NA,NA,NA,NA,NA,NA,BRN16,NA,NA,NA
+BRN16-E5,U1664,SO,2016-06-07,D09,50.30436,-125.332956,NA,92,8.5,2016-09-02,NA,NA,NA,NA,NA,NA,BRN16,NA,NA,NA
+BRN16-D5,U1665,SO,2016-06-07,D09,50.30436,-125.332956,NA,94,8.5,2016-09-02,NA,NA,NA,NA,NA,NA,BRN16,NA,NA,NA
+BRN16-C5,U1666,SO,2016-06-07,D09,50.30436,-125.332956,NA,85,6.7,2016-09-02,Scotch,0.99,Seymour,0.01,NA,NA,BRN16,NA,NA,NA
+BRN16-B5,U1667,SO,2016-06-09,J02,50.602327,-126.701507,NA,93,11.1,2016-09-02,L_Adams,0.88,Seymour,0.09,Chilko,0.01,BRN16,NA,NA,NA
+BRN16-A5,U1668,SO,2016-06-09,J02,50.602327,-126.701507,NA,84,9.1,2016-09-03,Chilko,0.56,Chilko-North,0.42,MiddleShuswap,0.01,BRN16,NA,NA,NA
+BRN16-H8,U1669,SO,2016-06-09,J02,50.602327,-126.701507,NA,104,12.1,2016-09-03,MiddleShuswap,0.4,L_Shuswap,0.35,L_Adams,0.16,BRN16,NA,NA,NA
+BRN16-G8,U1670,SO,2016-06-09,J02,50.602327,-126.701507,NA,95,10.5,2016-09-04,Scotch,0.87,L_Adams,0.1,Seymour,0.02,BRN16,NA,NA,NA
+BRN16-H6,U1671,SO,2016-06-07,D22,50.242671,-125.398265,NA,117,11.8,2016-09-02,Chilko-North,0.88,Chilko,0.11,Little,0,BRN16,NA,NA,Non-motile x 1
+BRN16-G6,U1672,SO,2016-06-07,D22,50.242671,-125.398265,NA,102,11.4,2016-09-02,L_Shuswap,0.99,MiddleShuswap,0,Little,0,BRN16,NA,NA,DNA taken (liver)
+BRN16-F6,U1673,SO,2016-06-07,D22,50.242671,-125.398265,NA,97,10.2,2016-09-02,Quesnel_Horsef,0.75,McKinley,0.14,U_Horsefly,0.05,BRN16,NA,NA,NA
+BRN16-E6,U1674,SO,2016-06-07,D22,50.242671,-125.398265,NA,97,10.6,2016-09-02,Scotch,0.95,Seymour,0.04,Eagle,0.01,BRN16,NA,NA,NA
+BRN16-D6,U1675,SO,2016-06-07,D09,50.30436,-125.332956,NA,93,10.2,2016-09-02,L_Adams,0.43,Little,0.4,L_Shuswap,0.14,BRN16,NA,Large lesion (12mm x 5mm) on dorsal side behind head,Non-motile x 1
+BRN16-C6,U1676,SO,2016-06-07,D09,50.30436,-125.332956,NA,89,8.4,2016-09-02,L_Shuswap,0.99,MiddleShuswap,0,Little,0,BRN16,NA,NA,NA
+BRN16-B6,U1677,SO,2016-06-07,D09,50.30436,-125.332956,NA,84,7,2016-09-02,Scotch,0.49,Little,0.21,L_Adams,0.13,BRN16,NA,NA,NA
+BRN16-A6,U1678,SO,2016-06-09,J02,50.602327,-126.701507,NA,89,8.9,2016-09-02,NA,NA,NA,NA,NA,NA,BRN16,NA,NA,NA
+BRN16-E7,U1691,SO,2016-06-09,J02,50.602327,-126.701507,NA,95,10.9,2016-09-03,L_Shuswap,0.63,MiddleShuswap,0.37,L_Adams,0,BRN16,Cross contaminated spleen & liver microtubes,NA,I cross contaminated spleen and liver microtube. 1 otolith found
+BRN16-D7,U1692,SO,2016-06-09,J02,50.602327,-126.701507,NA,108,14.1,2016-09-04,Quesnel_Horsef,0.46,MiddleShuswap,0.17,L_Adams,0.17,BRN16,NA,NA,Caligus chalimus x 1
+BRN16-C7,U1693,SO,2016-06-09,J02,50.602327,-126.701507,NA,104,15.4,2016-09-04,Mitchell,0.8,Quesnel_Horsef,0.14,McKinley,0.02,BRN16,NA,NA,NA
+BRN16-B7,U1694,SO,2016-06-14,D22,50.235322,-125.39888,NA,109,12.4,2016-09-06,Chilko,0.73,Chilko-North,0.1,MiddleShuswap,0.08,BRN16,NA,NA,One otolith
+BRN16-A7,U1695,SO,2016-06-22,D21,50.382455,-125.373533,NA,107,10.3,2016-09-06,MiddleShuswap,0.97,L_Adams,0.01,Little,0.01,BRN16,NA,NA,NA
+BRN16-H10,U1696,SO,2016-06-22,D21,50.382455,-125.373533,NA,130,18.3,2016-09-06,Chilko,0.57,Tachie,0.18,Little,0.11,BRN16,NA,NA,NA
+BRN16-G10,U1697,SO,2016-06-22,D21,50.382455,-125.373533,NA,104,13.2,2016-09-06,Quesnel_Mitche,0.99,Mitchell,0.01,NA,NA,BRN16,NA,NA,NA
+BRN16-F10,U1698,SO,2016-06-22,D21,50.382455,-125.373533,NA,117,12.8,2016-09-06,MiddleShuswap,0.99,L_Adams,0.01,Chilko,0,BRN16,NA,NA,NA
+BRN16-E10,U1699,SO,2016-06-22,D21,50.382455,-125.373533,NA,111,15.6,2016-09-06,MiddleShuswap,0.96,Little,0.02,L_Adams,0.02,BRN16,NA,NA,NA
+BRN16-D10,U1700,SO,2016-06-17,J01,50.579213,-126.71432,NA,95,10.2,2016-09-06,MiddleShuswap,0.71,L_Adams,0.28,Horsefly,0,BRN16,NA,NA,NA
+BRN16-F8,U1701,SO,2016-06-09,J02,50.602327,-126.701507,NA,96,10.1,2016-09-04,Chilko,0.86,Chilko-North,0.08,L_Adams,0.03,BRN16,NA,NA,One otolith broken
+BRN16-E8,U1702,SO,2016-06-09,J02,50.602327,-126.701507,NA,89,10.2,2016-09-04,Seymour,0.45,Scotch,0.36,L_Adams,0.12,BRN16,NA,NA,One otolith broken
+BRN16-D8,U1703,SO,2016-06-14,D22,50.235322,-125.39888,NA,110,14.9,2016-09-04,Chilko,0.79,L_Shuswap,0.06,Chilko-North,0.06,BRN16,Forgot to cap vials overnight. Muscle contaminated with that of U1704,NA,Forgot to cap vials overnight. muscle sample contaminated with that of u1704. liver with large pale yellowish section.
+BRN16-C8,U1704,SO,2016-06-14,D22,50.235322,-125.39888,NA,108,12.5,2016-09-05,MiddleShuswap,0.64,Eagle_L,0.36,L_Shuswap,0,BRN16,NA,NA,Bottom right scale in scale book got scratched a bit.
+BRN16-B8,U1705,SO,2016-06-14,D22,50.235322,-125.39888,NA,120,18.1,2016-09-05,Sinta,0.69,Bivouac,0.09,Middle,0.09,BRN16,NA,"Large lesion, above lateral line, posterior to gills - picture. kidney tissue cotaminated with its own heart tissue.",NA
+BRN16-A8,U1706,SO,2016-06-14,D22,50.235322,-125.39888,NA,118,16.4,2016-09-05,L_Shuswap,0.7,Eagle_L,0.12,Quesnel_Decept,0.09,BRN16,NA,NA,NA
+BRN16-H9,U1707,SO,2016-06-14,D22,50.235322,-125.39888,NA,101,12.2,2016-09-05,Chilko,0.76,Chilko-North,0.1,Sinta,0.08,BRN16,NA,NA,NA
+BRN16-G9,U1708,SO,2016-06-14,D22,50.235322,-125.39888,NA,105,11.4,2016-09-05,MiddleShuswap,0.52,Eagle_L,0.41,L_Shuswap,0.05,BRN16,NA,NA,NA
+BRN16-F9,U1709,SO,2016-06-14,D22,50.235322,-125.39888,NA,98,8.6,2016-09-05,MiddleShuswap,0.79,L_Shuswap,0.14,Eagle_L,0.07,BRN16,NA,NA,NA
+BRN16-E9,U1710,SO,2016-06-14,D22,50.235322,-125.39888,NA,109,11.5,2016-09-05,MiddleShuswap,0.7,L_Shuswap,0.28,Eagle_L,0.02,BRN16,NA,NA,One otolith broken
+BRN16-D9,U1711,SO,2016-06-14,D22,50.235322,-125.39888,NA,103,12.8,2016-09-05,MiddleShuswap,0.79,L_Shuswap,0.21,NA,NA,BRN16,NA,Tiny spleen,NA
+BRN16-C9,U1712,SO,2016-06-22,D21,50.382455,-125.373533,NA,120,14.9,2016-09-06,MiddleShuswap,0.95,L_Adams,0.04,Little,0.01,BRN16,NA,NA,One otolith broken
+BRN16-B9,U1713,SO,2016-06-22,D21,50.382455,-125.373533,NA,109,13.1,2016-09-06,MiddleShuswap,0.75,L_Adams,0.18,Chilko,0.05,BRN16,NA,NA,NA
+BRN16-A9,U1714,SO,2016-06-22,D21,50.382455,-125.373533,NA,114,14.7,2016-09-06,Tachie,0.41,Little,0.23,Chilko,0.19,BRN16,NA,NA,NA
+BRN16-H11,U1715,SO,2016-06-22,D21,50.382455,-125.373533,NA,112,13.7,2016-09-06,L_Adams,0.39,MiddleShuswap,0.33,Little,0.25,BRN16,NA,NA,NA
+BRN16-G11,U1716,SO,2016-06-22,D21,50.382455,-125.373533,NA,119,NA,2016-09-06,Chilko,0.91,Quesnel_Mitche,0.08,Tachie,0.01,BRN16,NA,NA,Forgot to record weight
+BRN16-F11,U1717,SO,2016-06-17,J01,50.579213,-126.71432,NA,118,18.2,2016-09-06,MiddleShuswap,0.96,L_Adams,0.02,Scotch,0.01,BRN16,NA,NA,NA
+BRN16-E11,U1718,SO,2016-06-17,J01,50.579213,-126.71432,NA,110,11.9,2016-09-07,Horsefly,1,Wasko_Cr,0,M_Horsefly,0,BRN16,NA,NA,NA
+BRN16-C11,U1720,SO,2016-06-17,J01,50.579213,-126.71432,NA,94,10.7,2016-09-07,MiddleShuswap,1,L_Adams,0,NA,NA,BRN16,NA,NA,NA
+BRN16-B11,U1731,SO,2016-06-10,J01,50.5771,-126.721684,NA,98,11,2016-09-08,MiddleShuswap,0.34,Seymour,0.3,L_Adams,0.17,BRN16,NA,NA,NA
+BRN16-A11,U1732,SO,2016-06-10,J01,50.5771,-126.721684,NA,105,12.9,2016-09-08,MiddleShuswap,0.37,L_Adams,0.22,L_Shuswap,0.21,BRN16,NA,NA,NA
+BRN16-C10,U1741,SO,2016-06-17,J01,50.579213,-126.71432,NA,105,13.9,2016-09-07,Horsefly,0.58,MiddleShuswap,0.26,L_Adams,0.16,BRN16,NA,NA,NA
+BRN16-B10,U1742,SO,2016-06-17,J01,50.579213,-126.71432,NA,109,15.5,2016-09-07,L_Adams,0.54,MiddleShuswap,0.45,Seymour,0.01,BRN16,NA,NA,NA
+BRN16-A10,U1743,SO,2016-06-17,J01,50.579213,-126.71432,NA,100,11.8,2016-09-07,MiddleShuswap,0.67,L_Adams,0.29,Scotch,0.03,BRN16,Fish fell on floor,NA,Dropped fish on floor
+BRN16-H12,U1744,SO,2016-06-17,J01,50.579213,-126.71432,NA,120,15.5,2016-09-07,MiddleShuswap,0.9,L_Adams,0.1,Scotch,0,BRN16,NA,NA,NA
+BRN16-G12,U1745,SO,2016-06-17,J01,50.579213,-126.71432,NA,108,12.4,2016-09-07,Hudson_Bay,0.21,Rossette,0.16,Gluskie,0.14,BRN16,NA,NA,NA
+BRN16-F12,U1746,SO,2016-06-10,J01,50.5771,-126.721684,NA,89,8.4,2016-09-08,Chilko-North,0.51,Chilko,0.49,Chilko_south,0,BRN16,NA,NA,NA
+BRN16-E12,U1747,SO,2016-06-10,J01,50.5771,-126.721684,NA,87,9.5,2016-09-08,Mitchell,1,Blue_Lead_Ck,0,Quesnel_Decept,0,BRN16,NA,NA,NA
+BRN16-D12,U1748,SO,2016-06-10,J01,50.5771,-126.721684,NA,104,11.4,2016-09-08,L_Adams,0.59,MiddleShuswap,0.33,L_Shuswap,0.06,BRN16,NA,NA,NA
+BRN16-C12,U1749,SO,2016-06-10,J01,50.5771,-126.721684,NA,98,9.4,2016-09-08,Chilko,0.96,Chilko-North,0.04,Chilko_south,0,BRN16,NA,NA,NA
+BRN16-B12,U1750,SO,2016-06-10,J01,50.5771,-126.721684,NA,100,9.9,2016-09-08,L_Adams,0.96,MiddleShuswap,0.03,L_Shuswap,0.01,BRN16,NA,NA,NA
+BRN16-A12,U1781,SO,2016-06-09,D07,50.190683,-125.143138,NA,93,8.9,2016-09-08,L_Shuswap,0.99,Little,0.01,MiddleShuswap,0,BRN16,NA,NA,NA
+BRN16-D11,U1719,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,BRN16,NA,NA,NA
+BRN26-H4,U2262,SO,2016-05-21,J07,50.458043,-126.152637,94,NA,9.2,2016-11-02,NA,NA,NA,NA,NA,NA,BRN26,NA,NA,Fork length not taken because fin clip was in fork
+BRN26-F4,U2263,SO,2016-05-21,J08,50.480359,-126.412275,101,105,11.9,2016-11-05,NA,NA,NA,NA,NA,NA,BRN26,NA,Pale heart,NA
+BRN26-G4,U2264,SO,2016-05-21,J08,50.480359,-126.412275,96,NA,9.3,2016-11-05,Stellako,1,NA,NA,NA,NA,BRN26,NA,Pale kidney,NA
+BRN26-E4,U2265,SO,2016-05-24,D21,50.392115,-125.374782,95,NA,8.5,2016-11-23,L_Adams,0.39,L_Shuswap,0.33,Little,0.26,BRN26,NA,NA,NA
+BRN26-D4,U2266,SO,2016-05-24,D21,50.392115,-125.374782,89,NA,8.9,2016-11-23,Little,0.43,L_Adams,0.42,Horsefly,0.06,BRN26,NA,NA,NA
+BRN26-C4,U2267,SO,2016-05-24,D21,50.392115,-125.374782,83,NA,6.8,2016-11-23,Seymour,0.69,L_Adams,0.26,L_Shuswap,0.04,BRN26,NA,NA,1 otolith
+BRN26-B4,U2268,SO,2016-05-24,D21,50.392115,-125.374782,86,NA,8.2,2016-11-23,Horsefly,0.36,Quesnel_Horsef,0.24,U_Horsefly,0.15,BRN26,NA,NA,NA
+BRN26-A4,U2269,SO,2016-05-24,D21,50.392115,-125.374782,86,91,6.8,2016-11-23,Little,0.94,L_Adams,0.06,L_Shuswap,0,BRN26,NA,Predator marks observed,NA
+BRN26-H1,U2349,SO,2016-05-22,J10,50.558361,-126.732241,97,102,9.6,2016-11-01,Paula,0.53,Forfar,0.32,Hudson_Bay,0.06,BRN26,NA,NA,NA
+BRN26-G1,U2350,SO,2016-05-22,J10,50.558361,-126.732241,83,87,6.8,2016-11-01,Blue_Lead_Ck,0.99,Quesnel_Decept,0,Wasko_Cr,0,BRN26,NA,NA,NA
+BRN26-F1,U2351,SO,2016-05-22,J10,50.558361,-126.732241,79,83,7.2,2016-11-01,Chilko,0.88,Horsefly,0.09,Seymour,0.01,BRN26,NA,NA,NA
+BRN26-E1,U2352,SO,2016-05-22,J10,50.558361,-126.732241,85,89,6.1,2016-11-01,Stellako,1,Nadina,0,NA,NA,BRN26,NA,NA,NA
+BRN26-D1,U2353,SO,2016-05-22,J10,50.558361,-126.732241,85,90,6.6,2016-11-01,NA,NA,NA,NA,NA,NA,BRN26,NA,NA,NA
+BRN26-C1,U2354,SO,2016-05-22,J10,50.558361,-126.732241,104,109,11,2016-11-01,Paula,0.41,Stellako,0.26,Horsefly,0.11,BRN26,NA,NA,NA
+BRN26-B1,U2355,SO,2016-05-22,J10,50.558361,-126.732241,93,98,8.6,2016-11-01,Chilko,0.99,Horsefly,0.01,Raft,0.01,BRN26,NA,NA,NA
+BRN26-A1,U2356,SO,2016-05-22,J10,50.558361,-126.732241,82,87,6.2,2016-11-02,Chilko,1,Blackwater,0,NA,NA,BRN26,NA,NA,NA
+BRN26-H2,U2357,SO,2016-05-22,J10,50.558361,-126.732241,87,92,7.2,2016-11-02,L_Shuswap,0.97,Seymour,0.01,Little,0.01,BRN26,NA,NA,NA
+BRN26-G2,U2358,SO,2016-05-22,J10,50.558361,-126.732241,94,99,9.4,2016-11-02,Horsefly,0.61,U_Horsefly,0.37,M_Horsefly,0.02,BRN26,NA,NA,NA
+BRN26-F2,U2359,SO,2016-05-26,J05,50.495266,-126.211667,76,80,5.4,2016-11-02,Chilko,0.99,Quesnel_Horsef,0.01,Tachie,0,BRN26,NA,NA,NA
+BRN26-E2,U2360,SO,2016-05-26,J05,50.495266,-126.211667,90,95,8.4,2016-11-02,Kynock,0.24,Quesnel_Horsef,0.24,Chilko,0.14,BRN26,NA,NA,NA
+BRN26-D2,U2361,SO,2016-05-26,J05,50.495266,-126.211667,84,89,6.7,2016-11-02,Little,0.62,Quesnel_Horsef,0.23,L_Adams,0.12,BRN26,NA,NA,NA
+BRN26-C2,U2362,SO,2016-05-26,J05,50.495266,-126.211667,81,86,6.8,2016-11-02,Chilko,1,Portage_Cr,0,L_Adams,0,BRN26,NA,NA,NA
+BRN26-B2,U2363,SO,2016-05-26,J05,50.495266,-126.211667,89,94,8.5,2016-11-02,Quesnel_Horsef,0.67,U_Horsefly,0.11,Little,0.08,BRN26,NA,NA,NA
+BRN26-A2,U2364,SO,2016-05-26,J05,50.495266,-126.211667,90,95,7,2016-11-03,Scotch,0.9,Seymour,0.08,Eagle,0.01,BRN26,NA,NA,NA
+BRN26-H5,U2365,SO,2016-05-26,J05,50.495266,-126.211667,93,98,9.9,2016-11-03,L_Shuswap,0.93,Chilko,0.04,MiddleShuswap,0.02,BRN26,NA,NA,NA
+BRN26-G5,U2366,SO,2016-05-26,J05,50.495266,-126.211667,82,87,6.1,2016-11-03,Chilko,0.99,Little,0.01,L_Adams,0,BRN26,NA,NA,NA
+BRN26-F5,U2367,SO,2016-05-26,J05,50.495266,-126.211667,78,83,NA,2016-11-03,Scotch,0.9,Little,0.08,L_Adams,0.01,BRN26,NA,NA,Significant outer trauma. (photo taken).
+BRN26-E5,U2368,SO,2016-05-26,J05,50.495266,-126.211667,87,NA,6.7,2016-11-03,Little,0.69,L_Adams,0.16,Quesnel_Horsef,0.05,BRN26,NA,NA,NA
+BRN26-D5,U2369,SO,2016-06-01,J01,50.576696,-126.721158,113,119,14.8,2016-11-03,Quesnel_Horsef,0.92,L_Adams,0.03,Horsefly,0.02,BRN26,NA,NA,NA
+BRN26-C5,U2370,SO,2016-06-01,J01,50.576696,-126.721158,97,101,10.4,2016-11-04,L_Shuswap,0.99,L_Adams,0.01,MiddleShuswap,0,BRN26,NA,NA,NA
+BRN26-B5,U2371,SO,2016-06-01,J01,50.576696,-126.721158,95,100,9.5,2016-11-04,L_Adams,0.72,L_Shuswap,0.28,MiddleShuswap,0,BRN26,NA,NA,NA
+BRN26-A5,U2372,SO,2016-06-01,J01,50.576696,-126.721158,95,100,9.8,2016-11-04,L_Adams,0.9,L_Shuswap,0.09,MiddleShuswap,0,BRN26,NA,NA,NA
+BRN26-H7,U2373,SO,2016-06-01,J01,50.576696,-126.721158,106,111,12.6,2016-11-04,Seymour,0.86,L_Adams,0.14,Chilko_south,0,BRN26,NA,NA,NA
+BRN26-G7,U2374,SO,2016-06-01,J01,50.576696,-126.721158,92,NA,8.3,2016-11-04,Mitchell,0.99,Quesnel_Mitche,0.01,NA,NA,BRN26,NA,NA,NA
+BRN26-F7,U2375,SO,2016-06-01,J01,50.576696,-126.721158,100,106,11.7,2016-11-04,Seymour,0.99,L_Shuswap,0,L_Adams,0,BRN26,NA,NA,NA
+BRN26-E7,U2376,SO,2016-06-01,J01,50.576696,-126.721158,105,111,11.5,2016-11-04,Seymour,1,Scotch,0,NA,NA,BRN26,NA,NA,NA
+BRN26-D7,U2377,SO,2016-06-01,J01,50.576696,-126.721158,98,103,10.6,2016-11-04,Quesnel_Horsef,0.67,Chilko,0.25,L_Adams,0.03,BRN26,NA,NA,NA
+BRN26-C7,U2378,SO,2016-06-14,D27,50.275083,-125.381356,100,106,12.1,2016-11-05,MiddleShuswap,0.6,L_Shuswap,0.4,Eagle_L,0,BRN26,NA,NA,NA
+BRN26-B7,U2379,SO,2016-06-14,D27,50.275083,-125.381356,106,112,14.3,2016-11-05,MiddleShuswap,0.47,Eagle_L,0.21,Seymour,0.18,BRN26,NA,NA,NA
+BRN26-A7,U2380,SO,2016-06-14,D27,50.275083,-125.381356,104,110,12.2,2016-11-05,MiddleShuswap,0.56,L_Shuswap,0.44,NA,NA,BRN26,NA,NA,NA
+BRN26-H8,U2381,SO,2016-06-14,D27,50.275083,-125.381356,94,NA,8.2,2016-11-07,Chilko,0.88,Chilko-North,0.1,Horsefly,0,BRN26,NA,NA,NA
+BRN26-G8,U2382,SO,2016-06-14,D27,50.275083,-125.381356,96,102,10,2016-11-07,Eagle_L,0.94,L_Shuswap,0.05,MiddleShuswap,0.01,BRN26,NA,NA,NA
+BRN26-F8,U2383,SO,2016-06-14,D27,50.275083,-125.381356,105,110,13.1,2016-11-07,Sinta,0.61,Middle,0.09,Stellako,0.08,BRN26,NA,NA,NA
+BRN26-E8,U2384,SO,2016-06-03,D24,50.239953,-125.126574,85,90,6.8,2016-11-07,Scotch,0.89,L_Shuswap,0.07,Little,0.02,BRN26,NA,NA,NA
+BRN26-D8,U2385,SO,2016-06-03,D24,50.239953,-125.126574,100,105,11.1,2016-11-07,Chilko,0.98,L_Shuswap,0.01,L_Adams,0.01,BRN26,NA,NA,NA
+BRN26-C8,U2386,SO,2016-06-03,D24,50.239953,-125.126574,83,87,6.4,2016-11-07,L_Adams,0.53,L_Shuswap,0.18,Scotch,0.15,BRN26,NA,NA,Lesions on posterior flanks; see photo
+BRN26-B8,U2387,SO,2016-06-03,D24,50.239953,-125.126574,88,96,7,2016-11-07,L_Adams,0.8,L_Shuswap,0.16,Portage_Cr,0.02,BRN26,NA,NA,Lesions on posterior flanks; see photo
+BRN26-A8,U2388,SO,2016-06-03,D24,50.239953,-125.126574,90,NA,7.2,2016-11-07,L_Shuswap,0.95,Little,0.03,L_Adams,0.03,BRN26,NA,NA,No stomach taken
+BRN26-H3,U2431,SO,2016-05-21,J07,50.458043,-126.152637,113,118,14.3,2016-11-02,Stellako,0.94,Forfar,0.03,Chilko,0.01,BRN26,NA,NA,NA
+BRN26-G3,U2432,SO,2016-05-21,J07,50.458043,-126.152637,87,92,7.7,2016-11-02,Horsefly,0.43,Chilko,0.28,U_Horsefly,0.22,BRN26,NA,NA,NA
+BRN26-F3,U2433,SO,2016-05-21,J07,50.458043,-126.152637,91,96,7.6,2016-11-02,L_Shuswap,0.91,Little,0.05,Stellako,0.04,BRN26,NA,NA,NA
+BRN26-E3,U2434,SO,2016-05-21,J07,50.458043,-126.152637,89,97,7.1,2016-11-02,NA,NA,NA,NA,NA,NA,BRN26,NA,NA,NA
+BRN26-D3,U2435,SO,2016-05-21,J07,50.458043,-126.152637,88,NA,8.6,2016-11-03,Blue_Lead_Ck,0.96,Horsefly,0.02,Roaring,0.01,BRN26,NA,NA,NA
+BRN26-C3,U2436,SO,2016-05-21,J07,50.458043,-126.152637,105,NA,12.1,2016-11-03,Stellako,1,Kuzkwa_Cr,0,NA,NA,BRN26,NA,NA,NA
+BRN26-B3,U2437,SO,2016-05-21,J07,50.458043,-126.152637,96,NA,9.5,2016-11-03,Horsefly,0.63,U_Horsefly,0.37,Chilko,0,BRN26,NA,NA,NA
+BRN26-A3,U2438,SO,2016-05-21,J07,50.458043,-126.152637,102,NA,11.5,2016-11-03,NA,NA,NA,NA,NA,NA,BRN26,NA,Pale kidney.,NA
+BRN26-H6,U2439,SO,2016-05-21,J07,50.458043,-126.152637,87,NA,7.7,2016-11-03,Seymour,1,NA,NA,NA,NA,BRN26,NA,Redness around operclum and vent.,NA
+BRN26-G6,U2451,SO,2016-05-21,J08,50.480359,-126.412275,100,NA,9.5,2016-11-07,Paula,0.57,Forfar,0.32,Hudson_Bay,0.06,BRN26,NA,NA,Otoliths were extracted with metal tweezers.
+BRN26-F6,U2452,SO,2016-05-21,J08,50.480359,-126.412275,101,NA,9.7,2016-11-07,Stellako,0.99,L_Shuswap,0.01,Kuzkwa_Cr,0,BRN26,NA,NA,NA
+BRN26-E6,U2453,SO,2016-05-21,J08,50.480359,-126.412275,92,NA,8.8,2016-11-07,Chilko,0.99,Narrows,0,Stellako,0,BRN26,NA,Pale liver.,Samples somewhat thawed due to training new employee.
+BRN26-D6,U2454,SO,2016-05-21,J08,50.480359,-126.412275,101,NA,10.2,2016-11-08,L_Shuswap,1,MiddleShuswap,0,Chilko,0,BRN26,NA,NA,NA
+BRN26-C6,U2455,SO,2016-05-21,J08,50.480359,-126.412275,95,NA,8.6,2016-11-08,Seymour,0.95,Paula,0.02,Scotch,0.01,BRN26,NA,NA,NA
+BRN26-B6,U2456,SO,2016-05-21,J08,50.480359,-126.412275,99,NA,9.5,2016-11-09,Chilko,0.99,Raft,0,Blue_Lead_Ck,0,BRN26,NA,NA,NA
+BRN26-A6,U2457,SO,2016-05-21,J08,50.480359,-126.412275,90,NA,11.8,2016-11-09,Little,0.54,L_Shuswap,0.43,Horsefly,0.02,BRN26,NA,NA,NA
+BRN26-H11,U2458,SO,2016-05-21,J08,50.480359,-126.412275,96,NA,10,2016-11-09,NA,NA,NA,NA,NA,NA,BRN26,NA,Brains several individulas in this subsample had a reddness in the middle of the brain. a red dot in the middle of the three lobes. picture taken.,NA
+BRN26-G11,U2459,SO,2016-06-03,D24,50.239953,-125.126574,81,86,5.9,2016-11-09,Horsefly,0.74,L_Adams,0.21,Little,0.04,BRN26,NA,NA,NA
+BRN26-F11,U2460,SO,2016-06-03,D24,50.239953,-125.126574,86,90,6.4,2016-11-09,L_Shuswap,0.88,L_Adams,0.1,Portage_Cr,0.01,BRN26,NA,NA,NA
+BRN26-E11,U2461,SO,2016-06-03,D24,50.239953,-125.126574,92,96,8,2016-11-09,L_Shuswap,0.98,L_Adams,0.01,MiddleShuswap,0.01,BRN26,NA,NA,NA
+BRN26-D11,U2462,SO,2016-06-03,D24,50.239953,-125.126574,94,99,8.8,2016-11-09,Chilko,0.99,L_Adams,0.01,Little,0,BRN26,NA,NA,NA
+BRN26-C11,U2463,SO,2016-06-03,D24,50.239953,-125.126574,85,90,6.6,2016-11-09,Scotch,0.78,Little,0.12,L_Adams,0.1,BRN26,NA,NA,NA
+BRN26-B11,U2464,SO,2016-05-26,J04,50.522967,-126.377383,87,92,7,2016-11-10,L_Shuswap,0.84,Little,0.05,MiddleShuswap,0.04,BRN26,NA,Small spleen.,NA
+BRN26-A11,U2465,SO,2016-05-26,J04,50.522967,-126.377383,88,NA,6.8,2016-11-10,NA,NA,NA,NA,NA,NA,BRN26,NA,NA,NA
+BRN26-H9,U2601,SO,2016-06-23,D24,50.24043,-125.119941,107,NA,18.8,2016-11-08,NA,NA,NA,NA,NA,NA,BRN26,NA,NA,NA
+BRN26-G9,U2602,SO,2016-06-23,D24,50.24043,-125.119941,105,110,17.2,2016-11-08,NA,NA,NA,NA,NA,NA,BRN26,NA,NA,NA
+BRN26-F9,U2603,SO,2016-06-23,D24,50.24043,-125.119941,103,107,13.2,2016-11-09,NA,NA,NA,NA,NA,NA,BRN26,NA,NA,NA
+BRN26-E9,U2604,SO,2016-06-23,D24,50.24043,-125.119941,100,NA,13.5,2016-11-09,NA,NA,NA,NA,NA,NA,BRN26,NA,NA,NA
+BRN26-D9,U2605,SO,2016-06-23,D24,50.24043,-125.119941,123,130,21.4,2016-11-09,NA,NA,NA,NA,NA,NA,BRN26,NA,NA,NA
+BRN26-C9,U2606,SO,2016-06-23,D24,50.24043,-125.119941,109,114,20.4,2016-11-09,NA,NA,NA,NA,NA,NA,BRN26,NA,NA,NA
+BRN26-B9,U2607,SO,2016-05-27,J06,50.477037,-126.028592,98,103,8.8,2016-11-10,Little,0.73,L_Adams,0.06,Chilko,0.04,BRN26,NA,NA,NA
+BRN26-A9,U2608,SO,2016-05-27,J06,50.477037,-126.028592,91,NA,7,2016-11-10,L_Shuswap,0.53,Scotch,0.28,Little,0.1,BRN26,NA,NA,NA
+BRN26-H10,U2701,SO,2016-06-23,D24,50.24043,-125.119941,125,130,25.8,2016-11-09,NA,NA,NA,NA,NA,NA,BRN26,NA,Pale spleen,Only 1 otolith found
+BRN26-G10,U2702,SO,2016-06-23,D24,50.24043,-125.119941,103,109,14.4,2016-11-09,NA,NA,NA,NA,NA,NA,BRN26,NA,NA,NA
+BRN26-F10,U2703,SO,2016-06-23,D24,50.24043,-125.119941,107,113,15.7,2016-11-09,NA,NA,NA,NA,NA,NA,BRN26,NA,NA,NA
+BRN26-E10,U2704,SO,2016-06-23,D24,50.24043,-125.119941,122,128,23.2,2016-11-09,NA,NA,NA,NA,NA,NA,BRN26,NA,NA,NA
+BRN26-D10,U2705,SO,2016-05-27,J06,50.477037,-126.028592,89,95,8,2016-11-09,NA,NA,NA,NA,NA,NA,BRN26,NA,NA,NA
+BRN26-C10,U2706,SO,2016-05-27,J06,50.477037,-126.028592,90,NA,8.5,2016-11-09,Little,0.42,Tachie,0.17,L_Adams,0.16,BRN26,NA,"Unidentified ""sac"" (transclucent exterior; pale-beige interior) found attached to side of anal fin",Lost 1 otolith
+BRN26-B10,U2707,SO,2016-05-27,J06,50.477037,-126.028592,87,92,7.1,2016-11-09,Chilko,0.95,L_Shuswap,0.03,Quesnel_Horsef,0,BRN26,NA,NA,NA
+BRN26-A10,U2708,SO,2016-05-27,J06,50.477037,-126.028592,81,87,6.4,2016-11-10,NA,NA,NA,NA,NA,NA,BRN26,NA,NA,NA
+BRN26-H12,U2709,SO,2016-05-27,J06,50.477037,-126.028592,84,88,8.1,2016-11-10,Chilko,0.89,Quesnel_Horsef,0.1,Horsefly,0.01,BRN26,NA,Small spleen,NA
+BRN26-G12,U2710,SO,2016-05-27,J06,50.477037,-126.028592,83,88,7,2016-11-10,Chilko,0.92,Quesnel_Horsef,0.05,L_Shuswap,0.01,BRN26,NA,NA,NA
+BRN26-F12,U2711,SO,2016-05-27,J06,50.477037,-126.028592,85,90,7.7,2016-11-10,Quesnel_Horsef,0.61,U_Horsefly,0.11,Little,0.09,BRN26,NA,Pale ventricle,NA
+BRN26-E12,U2712,SO,2016-05-20,J05,50.506881,-126.247378,102,NA,10.4,2016-11-10,Nadina,1,NA,NA,NA,NA,BRN26,NA,NA,NA
+BRN26-D12,U2713,SO,2016-05-20,J05,50.506881,-126.247378,90,NA,8.6,2016-11-10,Chilko,0.5,Horsefly,0.38,U_Horsefly,0.06,BRN26,NA,NA,NA
+BRN26-C12,U2714,SO,2016-05-20,J05,50.506881,-126.247378,83,NA,5.9,2016-11-10,L_Shuswap,0.81,Seymour,0.15,Little,0.03,BRN26,NA,NA,NA
+BRN26-B12,U2715,SO,2016-05-20,J05,50.506881,-126.247378,85,NA,6.6,2016-11-10,Chilko,0.98,Forfar,0.01,Paula,0.01,BRN26,NA,NA,NA
+BRN26-A12,U2716,SO,2016-05-20,J05,50.506881,-126.247378,86,NA,7.2,2016-11-10,Horsefly,0.53,U_Horsefly,0.32,Seymour,0.06,BRN26,NA,NA,NA
+BRN40-H2,U4201,SO,2016-05-19,D08,50.319977,-125.042165,88,NA,6.6,2017-08-23,L_Adams,0.92,L_Shuswap,0.03,Scotch,0.02,BRN40,NA,NA,NA
+BRN40-G2,U4202,SO,2016-05-19,D08,50.319977,-125.042165,74,78,4.3,2017-08-23,Scotch,1,NA,NA,NA,NA,BRN40,NA,NA,Lost both otoliths
+BRN40-F2,U4203,SO,2016-05-19,D08,50.319977,-125.042165,83,86,5.3,2017-08-23,Scotch,0.98,L_Adams,0.02,Eagle_L,0,BRN40,NA,NA,NA
+BRN40-E2,U4204,SO,2016-05-19,D08,50.319977,-125.042165,84,89,5.6,2017-08-23,McKinley,0.92,Quesnel_Horsef,0.06,L_Adams,0.01,BRN40,NA,NA,No stomach taken
+BRN40-D2,U4205,SO,2016-05-26,D07,50.190737,-125.143169,92,96,7.4,2017-09-08,NA,NA,NA,NA,NA,NA,BRN40,NA,NA,NA
+BRN40-C2,U4206,SO,2016-05-26,D07,50.190737,-125.143169,80,84,5.8,2017-09-08,NA,NA,NA,NA,NA,NA,BRN40,NA,NA,NA
+BRN40-B2,U4207,SO,2016-05-26,D07,50.190737,-125.143169,83,NA,6.2,2017-09-08,NA,NA,NA,NA,NA,NA,BRN40,NA,NA,NA
+BRN40-A2,U4208,SO,2016-05-26,D07,50.190737,-125.143169,81,85,6.1,2017-09-08,NA,NA,NA,NA,NA,NA,BRN40,NA,NA,NA
+BRN40-H10,U4209,SO,2016-05-27,D09,50.304166,-125.333511,88,93,7.1,2017-09-18,L_Shuswap,0.85,L_Adams,0.13,MiddleShuswap,0.02,BRN40,NA,NA,NA
+BRN40-G10,U4210,SO,2016-05-27,D09,50.304166,-125.333511,88,93,7.1,2017-09-18,L_Shuswap,1,MiddleShuswap,0,L_Adams,0,BRN40,NA,NA,"Dropped fish on the table, forget to take the stomach"
+BRN40-F10,U4211,SO,2016-05-27,D09,50.304166,-125.333511,91,97,7.8,2017-09-18,Seymour,0.96,L_Adams,0.02,L_Shuswap,0.01,BRN40,NA,NA,NA
+BRN40-E10,U4212,SO,2016-05-27,D09,50.304166,-125.333511,88,93,6.9,2017-09-18,L_Shuswap,0.94,MiddleShuswap,0.05,L_Adams,0.01,BRN40,Heart RNA is contaminated,NA,Heart RNA is contaminated
+BRN40-D10,U4213,SO,2016-05-28,J03,50.545897,-126.668909,90,95,7.3,2017-09-18,L_Shuswap,0.99,MiddleShuswap,0.01,L_Adams,0,BRN40,NA,NA,NA
+BRN40-C10,U4214,SO,2016-05-28,J03,50.545897,-126.668909,90,94,8.8,2017-09-18,Scotch,0.92,Seymour,0.07,Eagle,0.01,BRN40,Dropped brain on outside part of skull cap,NA,Dropped brain on outside part of skull cap
+BRN40-B10,U4215,SO,2016-05-22,J09,50.543296,-126.816816,111,NA,13.2,2017-09-21,NA,NA,NA,NA,NA,NA,BRN40,NA,NA,NA
+BRN40-A10,U4216,SO,2016-05-22,J09,50.543296,-126.816816,105,NA,10.5,2017-09-21,Stellako,0.62,Nadina,0.36,Chilko,0.01,BRN40,NA,NA,NA
+BRN40-H1,U4225,SO,2016-05-19,D08,50.319977,-125.042165,69,NA,3.3,2017-08-23,Scotch,0.79,L_Adams,0.2,Seymour,0,BRN40,NA,NA,NA
+BRN40-G1,U4226,SO,2016-05-19,D08,50.319977,-125.042165,78,NA,4.5,2017-08-23,L_Adams,0.99,McKinley,0.01,Eagle_L,0,BRN40,NA,NA,NA
+BRN40-F1,U4227,SO,2016-05-19,D08,50.319977,-125.042165,87,NA,5.4,2017-08-23,L_Adams,0.98,Portage_Cr,0.02,NA,NA,BRN40,NA,Large lesion on dorsal side near caudal peduncal. looked almost like a bite.,NA
+BRN40-E1,U4228,SO,2016-05-19,D08,50.319977,-125.042165,84,88,5.4,2017-08-23,L_Shuswap,1,MiddleShuswap,0,NA,NA,BRN40,NA,NA,NA
+BRN40-D1,U4229,SO,2016-05-19,D08,50.319977,-125.042165,83,87,5.1,2017-08-23,L_Adams,0.84,McKinley,0.13,Quesnel_Horsef,0.01,BRN40,NA,NA,NA
+BRN40-C1,U4230,SO,2016-05-19,D08,50.319977,-125.042165,87,NA,5.7,2017-08-23,Scotch,1,NA,NA,NA,NA,BRN40,NA,NA,NA
+BRN40-B1,U4231,SO,2016-05-28,J03,50.545897,-126.668909,95,NA,9,2017-08-25,L_Shuswap,0.98,MiddleShuswap,0.01,L_Adams,0.01,BRN40,NA,Pale kidney and liver,NA
+BRN40-A1,U4232,SO,2016-05-28,J03,50.545897,-126.668909,98,104,9.4,2017-08-25,Chilko,0.46,Tachie,0.45,Pinchi_Cr,0.06,BRN40,NA,Pale gills and pale dorsal heart ventericle.,NA
+BRN40-H5,U4233,SO,2016-05-28,J03,50.545897,-126.668909,88,93,7.9,2017-08-25,Quesnel_Horsef,0.4,Little,0.32,L_Shuswap,0.1,BRN40,NA,NA,NA
+BRN40-G5,U4234,SO,2016-05-28,J03,50.545897,-126.668909,93,99,8,2017-08-25,Tachie,0.24,Scotch,0.17,Chilko,0.11,BRN40,NA,NA,NA
+BRN40-F5,U4235,SO,2016-05-28,J03,50.545897,-126.668909,94,99,8.2,2017-08-25,L_Shuswap,0.75,Little,0.19,L_Adams,0.03,BRN40,NA,NA,NA
+BRN40-E5,U4236,SO,2016-05-28,J03,50.545897,-126.668909,90,95,7.5,2017-08-28,Tachie,0.62,Pinchi_Cr,0.22,Chilko,0.06,BRN40,NA,NA,NA
+BRN40-D5,U4237,SO,2016-05-28,J03,50.545897,-126.668909,93,96,7.8,2017-08-28,L_Shuswap,0.87,MiddleShuswap,0.06,Little,0.04,BRN40,NA,NA,NA
+BRN40-C5,U4238,SO,2016-05-28,J03,50.545897,-126.668909,87,NA,6,2017-08-28,L_Shuswap,0.79,Scotch,0.08,Little,0.04,BRN40,NA,NA,NA
+BRN40-B5,U4239,SO,2016-06-23,J03,50.55803,-126.73463,123,129,20.2,2017-08-28,Chilko,0.75,Little,0.08,Quesnel_Horsef,0.05,BRN40,NA,NA,NA
+BRN40-A5,U4240,SO,2016-06-23,J03,50.55803,-126.73463,117,123,16.7,2017-08-28,L_Shuswap,0.67,MiddleShuswap,0.23,Eagle_L,0.08,BRN40,NA,NA,NA
+BRN40-H6,U4241,SO,2016-06-23,J03,50.55803,-126.73463,117,122,15.6,2017-08-28,Little,0.34,L_Shuswap,0.25,Scotch,0.18,BRN40,NA,NA,NA
+BRN40-G6,U4242,SO,2016-06-23,J03,50.55803,-126.73463,111,117,14.5,2017-08-28,Chilko,1,Chilko-North,0,Little,0,BRN40,NA,NA,NA
+BRN40-F6,U4243,SO,2016-06-23,J03,50.55803,-126.73463,114,119,16.2,2017-08-28,Seymour,0.54,Scotch,0.41,L_Shuswap,0.02,BRN40,NA,NA,NA
+BRN40-E6,U4244,SO,2016-06-23,J03,50.55803,-126.73463,117,NA,12.2,2017-08-28,L_Shuswap,0.9,MiddleShuswap,0.09,Eagle_L,0.01,BRN40,NA,NA,"Sea lice very thawed, found at end of dissection."
+BRN40-D6,U4245,SO,2016-06-23,J03,50.55803,-126.73463,123,128,21.8,2017-08-29,Horsefly,0.82,Quesnel_Horsef,0.15,Roaring,0.02,BRN40,NA,NA,NA
+BRN40-C6,U4246,SO,2016-06-23,J03,50.55803,-126.73463,114,NA,16,2017-08-29,Little,0.59,L_Shuswap,0.15,Horsefly,0.14,BRN40,NA,NA,NA
+BRN40-B6,U4247,SO,2016-06-23,J03,50.55803,-126.73463,107,112,12.6,2017-08-29,Scotch,0.87,Seymour,0.1,MiddleShuswap,0.01,BRN40,NA,NA,NA
+BRN40-A6,U4248,SO,2016-06-23,J03,50.55803,-126.73463,109,114,13.5,2017-08-29,Chilko,0.89,Chilko-North,0.09,Middle,0.01,BRN40,NA,NA,NA
+BRN40-H7,U4249,SO,2016-06-04,J03,50.543029,-126.632233,85,90,7.4,2017-08-29,Quesnel_Horsef,0.57,Mitchell,0.15,Horsefly,0.14,BRN40,NA,NA,NA
+BRN40-G7,U4250,SO,2016-06-04,J03,50.543029,-126.632233,79,83,5.7,2017-08-29,L_Adams,1,Seymour,0,NA,NA,BRN40,NA,NA,NA
+BRN40-F7,U4251,SO,2016-06-04,J03,50.543029,-126.632233,91,96,8.7,2017-08-29,Horsefly,0.44,M_Horsefly,0.25,Chilko,0.15,BRN40,NA,NA,NA
+BRN40-D7,U4252,SO,2016-06-04,J03,50.543029,-126.632233,88,92,7.1,2017-08-30,Quesnel_Horsef,0.51,Chilko,0.18,L_Adams,0.18,BRN40,NA,NA,NA
+BRN40-E7,U4253,SO,2016-06-04,J03,50.543029,-126.632233,92,97,9,2017-08-30,L_Adams,0.59,Seymour,0.38,L_Shuswap,0.03,BRN40,NA,NA,NA
+BRN40-C7,U4254,SO,2016-06-04,J03,50.543029,-126.632233,82,86,6.3,2017-08-30,Mitchell,1,Quesnel_Mitche,0.01,NA,NA,BRN40,NA,NA,Lost one otolith.
+BRN40-B7,U4255,SO,2016-06-04,J03,50.543029,-126.632233,85,89,6.4,2017-08-30,L_Shuswap,0.91,MiddleShuswap,0.07,L_Adams,0.02,BRN40,NA,NA,NA
+BRN40-A7,U4256,SO,2016-06-04,J03,50.543029,-126.632233,92,97,9.5,2017-08-30,L_Shuswap,0.97,L_Adams,0.02,MiddleShuswap,0,BRN40,NA,NA,NA
+BRN40-H8,U4257,SO,2016-06-04,J03,50.543029,-126.632233,96,NA,9.4,2017-08-30,L_Adams,0.88,Seymour,0.11,Horsefly,0,BRN40,NA,NA,NA
+BRN40-G8,U4258,SO,2016-06-04,J03,50.543029,-126.632233,88,NA,7.2,2017-08-30,L_Adams,0.57,Seymour,0.22,L_Shuswap,0.21,BRN40,NA,NA,NA
+BRN40-F8,U4259,SO,2016-06-10,J03,50.547475,-126.676942,95,NA,9.9,2017-08-31,Chilko-North,0.87,Chilko,0.11,MiddleShuswap,0,BRN40,NA,NA,NA
+BRN40-E8,U4260,SO,2016-06-10,J03,50.547475,-126.676942,98,103,10.6,2017-09-05,Chilko,0.82,Hudson_Bay,0.12,Paula,0.02,BRN40,NA,NA,NA
+BRN40-D8,U4261,SO,2016-06-10,J03,50.547475,-126.676942,103,108,12.5,2017-09-05,Chilko,0.54,L_Adams,0.22,Quesnel_Horsef,0.09,BRN40,NA,NA,NA
+BRN40-C8,U4262,SO,2016-06-10,J03,50.547475,-126.676942,104,109,12.7,2017-09-05,Quesnel_Horsef,0.74,McKinley,0.16,M_Horsefly,0.06,BRN40,NA,NA,One otolith only.
+BRN40-B8,U4263,SO,2016-06-10,J03,50.547475,-126.676942,103,107,10.9,2017-09-05,L_Adams,0.77,Seymour,0.05,Portage_Cr,0.04,BRN40,NA,NA,NA
+BRN40-A8,U4264,SO,2016-06-10,J03,50.547475,-126.676942,92,97,9.5,2017-09-05,L_Adams,0.83,MiddleShuswap,0.1,Seymour,0.04,BRN40,NA,NA,NA
+BRN40-H9,U4265,SO,2016-06-10,J03,50.547475,-126.676942,102,106,11.2,2017-09-05,L_Adams,0.48,Chilko,0.26,Chilko-North,0.11,BRN40,NA,Lesions on cadaul peduncal area. both sides. possibly bird predation scars.,NA
+BRN40-G9,U4266,SO,2016-06-10,J03,50.547475,-126.676942,100,106,9.8,2017-09-05,Scotch,0.79,Seymour,0.21,L_Shuswap,0,BRN40,NA,NA,NA
+BRN40-F9,U4267,SO,2016-06-10,J03,50.547475,-126.676942,99,NA,9.1,2017-09-05,L_Shuswap,0.79,MiddleShuswap,0.21,NA,NA,BRN40,NA,NA,NA
+BRN40-E9,U4268,SO,2016-06-10,J03,50.547475,-126.676942,98,104,10.1,2017-09-05,MiddleShuswap,0.48,L_Adams,0.41,L_Shuswap,0.08,BRN40,NA,NA,NA
+BRN40-D9,U4269,SO,2016-05-26,D07,50.190737,-125.143169,86,NA,6.3,2017-09-08,NA,NA,NA,NA,NA,NA,BRN40,NA,NA,NA
+BRN40-C9,U4270,SO,2016-05-26,D07,50.190737,-125.143169,94,99,8.4,2017-09-08,NA,NA,NA,NA,NA,NA,BRN40,NA,NA,NA
+BRN40-B9,U4271,SO,2016-05-26,D07,50.190737,-125.143169,NA,NA,7.2,2017-09-08,NA,NA,NA,NA,NA,NA,BRN40,NA,NA,Forgot to measure
+BRN40-A9,U4272,SO,2016-05-26,D07,50.190737,-125.143169,86,91,6.2,2017-09-08,NA,NA,NA,NA,NA,NA,BRN40,NA,NA,NA
+BRN40-H3,U4273,SO,2016-05-19,D08,50.319977,-125.042165,70,72,4,2017-08-23,L_Adams,0.64,L_Shuswap,0.22,McKinley,0.06,BRN40,NA,NA,NA
+BRN40-G3,U4274,SO,2016-05-19,D08,50.319977,-125.042165,78,84,5.1,2017-08-23,Scotch,0.99,L_Adams,0.01,Seymour,0,BRN40,Liver touched outer fish body,NA,Liver touched outer fish body
+BRN40-F3,U4275,SO,2016-05-19,D08,50.319977,-125.042165,79,82,4.9,2017-08-23,L_Adams,0.49,L_Shuswap,0.3,Chilko-North,0.11,BRN40,NA,NA,NA
+BRN40-E3,U4276,SO,2016-05-19,D08,50.319977,-125.042165,112,117,14.1,2017-08-23,Nadina,0.6,Pinchi_Cr,0.15,Tachie,0.09,BRN40,NA,NA,NA
+BRN40-D3,U4277,SO,2016-05-19,D08,50.319977,-125.042165,86,90,6.5,2017-08-23,Blue_Lead_Ck,0.98,Quesnel_Decept,0.01,Quesnel_Horsef,0,BRN40,NA,NA,NA
+BRN40-C3,U4278,SO,2016-05-19,D08,50.319977,-125.042165,84,89,6.2,2017-08-24,L_Shuswap,0.98,L_Adams,0.01,MiddleShuswap,0.01,BRN40,NA,NA,NA
+BRN40-B3,U4279,SO,2016-05-19,D08,50.319977,-125.042165,85,88,5.7,2017-08-24,L_Shuswap,0.96,MiddleShuswap,0.02,L_Adams,0.01,BRN40,NA,NA,NA
+BRN40-A3,U4280,SO,2016-05-19,D08,50.319977,-125.042165,83,87,5.8,2017-08-24,Blue_Lead_Ck,0.95,Mitchell,0.05,Chilko-North,0,BRN40,NA,NA,NA
+BRN40-H4,U4281,SO,2016-05-19,D08,50.319977,-125.042165,71,76,3.7,2017-08-24,Chilko-North,0.36,L_Adams,0.32,Chilko,0.22,BRN40,NA,NA,NA
+BRN40-G4,U4282,SO,2016-05-19,D08,50.319977,-125.042165,73,75,3.8,2017-08-24,L_Adams,0.67,Scotch,0.24,McKinley,0.05,BRN40,Gill touched U4283; bead is on top of gill,NA,Gill touched u4283; bead is on top of gill
+BRN40-F4,U4283,SO,2016-05-28,J03,50.545897,-126.668909,88,93,7.4,2017-08-24,Quesnel_Horsef,0.86,U_Horsefly,0.1,Horsefly,0.03,BRN40,Gill touched U4282,NA,Gill touched u4282
+BRN40-E4,U4284,SO,2016-05-28,J03,50.545897,-126.668909,92,99,8.7,2017-08-24,Quesnel_Horsef,0.81,U_Horsefly,0.12,Horsefly,0.05,BRN40,NA,NA,"Cm fully thawed, therefore did not preserve"
+BRN40-D4,U4285,SO,2016-05-26,D07,50.190737,-125.143169,91,96,7.5,2017-09-14,NA,NA,NA,NA,NA,NA,BRN40,NA,NA,NA
+BRN40-C4,U4286,SO,2016-05-26,D07,50.190737,-125.143169,77,81,5.6,2017-09-14,NA,NA,NA,NA,NA,NA,BRN40,NA,NA,NA
+BRN40-B4,U4287,SO,2016-05-26,D07,50.190737,-125.143169,87,93,6.8,2017-09-14,NA,NA,NA,NA,NA,NA,BRN40,NA,NA,NA
+BRN40-A4,U4288,SO,2016-05-26,D07,50.190737,-125.143169,90,95,7.1,2017-09-14,NA,NA,NA,NA,NA,NA,BRN40,NA,NA,NA
+BRN40-H12,U4289,SO,2016-05-26,D07,50.190737,-125.143169,90,94,7.6,2017-09-14,NA,NA,NA,NA,NA,NA,BRN40,NA,NA,NA
+BRN40-G12,U4290,SO,2016-05-26,D07,50.190737,-125.143169,90,95,7.5,2017-09-14,NA,NA,NA,NA,NA,NA,BRN40,NA,NA,NA
+BRN40-F12,U4291,SO,2016-05-26,D07,50.190737,-125.143169,86,91,7.2,2017-09-14,NA,NA,NA,NA,NA,NA,BRN40,NA,NA,NA
+BRN40-E12,U4292,SO,2016-06-14,D09,50.307203,-125.332605,94,NA,9.2,2017-09-15,Horsefly,0.64,Chilko,0.11,Quesnel_Horsef,0.09,BRN40,NA,NA,NA
+BRN40-D12,U4293,SO,2016-06-14,D09,50.307203,-125.332605,92,NA,8.1,2017-09-15,Horsefly,0.63,Quesnel_Decept,0.23,Quesnel_Horsef,0.07,BRN40,Small/incomplete brain sample,NA,Small/incomplete brain sample
+BRN40-C12,U4294,SO,2016-06-14,D09,50.307203,-125.332605,96,101,9.8,2017-09-15,MiddleShuswap,0.97,Eagle_L,0.03,Freda_Lake,0,BRN40,NA,NA,NA
+BRN40-B12,U4295,SO,2016-06-14,D09,50.307203,-125.332605,94,99,9,2017-09-15,MiddleShuswap,0.9,L_Shuswap,0.1,Eagle_L,0,BRN40,NA,NA,NA
+BRN40-A12,U4296,SO,2016-06-14,D09,50.307203,-125.332605,90,95,7.8,2017-09-15,MiddleShuswap,0.98,L_Shuswap,0.01,Eagle_L,0.01,BRN40,NA,NA,NA
+BRN40-H11,U4297,SO,2016-05-26,D07,50.190737,-125.143169,85,NA,5.9,2017-09-08,NA,NA,NA,NA,NA,NA,BRN40,NA,NA,NA
+BRN40-G11,U4298,SO,2016-05-26,D07,50.190737,-125.143169,81,86,5.6,2017-09-08,NA,NA,NA,NA,NA,NA,BRN40,NA,Emaciated fish.,NA
+BRN40-F11,U4299,SO,2016-05-26,D07,50.190737,-125.143169,84,NA,5.8,2017-09-08,NA,NA,NA,NA,NA,NA,BRN40,NA,Emaciated fish.,NA
+BRN40-E11,U4300,SO,2016-05-26,D07,50.190737,-125.143169,87,91,7.1,2017-09-08,NA,NA,NA,NA,NA,NA,BRN40,NA,NA,NA
+BRN40-D11,U4301,SO,2016-05-26,D07,50.190737,-125.143169,86,90,6.2,2017-09-13,NA,NA,NA,NA,NA,NA,BRN40,Muscle and gill samples placed in the same well as E row u4300,NA,Muscle and gill samples placed in the same well as e row u4300
+BRN40-C11,U4302,SO,2016-06-14,D09,50.307203,-125.332605,89,NA,8.4,2017-09-14,MiddleShuswap,0.9,L_Shuswap,0.1,Eagle_L,0.01,BRN40,NA,Scares and lesions on caudal peduncle on left side.,NA
+BRN40-B11,U4303,SO,2016-06-14,D09,50.307203,-125.332605,93,NA,8.8,2017-09-15,Eagle_L,0.29,MiddleShuswap,0.26,L_Shuswap,0.21,BRN40,NA,Lesions and sclae loss on bottom left flank.,NA
+BRN40-A11,U4304,SO,2016-06-14,D09,50.307203,-125.332605,102,NA,10.3,2017-09-15,MiddleShuswap,0.79,L_Shuswap,0.21,Eagle_L,0,BRN40,NA,NA,NA
+BRN41-H1,U4177,SO,2016-06-14,D09,50.307203,-125.332605,94,99,8.9,2017-09-15,L_Shuswap,0.66,MiddleShuswap,0.33,Thompson_N,0,BRN41,NA,NA,NA
+BRN41-G1,U4178,SO,2016-06-18,J09,50.579393,-126.714162,88,94,7.9,2017-09-15,Chilko,0.56,Horsefly,0.34,MiddleShuswap,0.06,BRN41,NA,NA,NA
+BRN41-F1,U4179,SO,2016-06-18,J09,50.579393,-126.714162,91,96,9,2017-09-15,L_Adams,0.86,Chilko,0.07,MiddleShuswap,0.05,BRN41,NA,NA,NA
+BRN41-E1,U4180,SO,2016-06-18,J09,50.579393,-126.714162,82,86,7.4,2017-09-15,Nimpkish,1,Woss_Lake,0,NA,NA,BRN41,NA,NA,NA
+BRN41-D1,U4181,SO,2016-06-18,J09,50.579393,-126.714162,82,87,6.6,2017-09-15,Quesnel_Mitche,0.55,Mitchell,0.29,Wasko_Cr,0.14,BRN41,NA,NA,NA
+BRN41-C1,U4182,SO,2016-06-18,J09,50.579393,-126.714162,102,107,11.3,2017-09-15,Horsefly,0.4,MiddleShuswap,0.26,L_Adams,0.25,BRN41,Fish fell on floor,NA,Fish hit floor. only 1 otolith
+BRN41-B1,U4183,SO,2016-06-18,J09,50.579393,-126.714162,93,NA,8.6,2017-09-15,MiddleShuswap,0.84,L_Adams,0.14,Scotch,0.01,BRN41,NA,Hemorrhaging vent,NA
+BRN41-A1,U4184,SO,2016-06-18,J09,50.579393,-126.714162,95,100,9.7,2017-09-18,L_Adams,0.91,Horsefly,0.07,MiddleShuswap,0.01,BRN41,NA,Lesion on left flank,NA
+BRN41-H3,U4185,SO,2016-05-27,D09,50.304166,-125.333511,91,96,8,2017-09-18,L_Adams,0.44,Little,0.35,L_Shuswap,0.11,BRN41,NA,NA,NA
+BRN41-G3,U4186,SO,2016-05-27,D09,50.304166,-125.333511,81,87,6.5,2017-09-18,L_Adams,0.95,L_Shuswap,0.02,Portage_Cr,0.01,BRN41,NA,NA,NA
+BRN41-F3,U4187,SO,2016-05-27,D09,50.304166,-125.333511,80,85,5.7,2017-09-18,Fennell,0.97,Seymour,0.03,Little,0,BRN41,NA,NA,NA
+BRN41-E3,U4188,SO,2016-05-27,D09,50.304166,-125.333511,91,95,8.1,2017-09-18,Chilko,0.54,Little,0.26,L_Adams,0.15,BRN41,NA,NA,NA
+BRN41-C3,U4189,SO,2016-05-27,D09,50.304166,-125.333511,101,106,10,2017-09-18,Little,0.57,L_Adams,0.37,L_Shuswap,0.06,BRN41,NA,NA,NA
+BRN41-D3,U4190,SO,2016-05-27,D09,50.304166,-125.333511,83,NA,7.2,2017-09-18,Chilko,0.69,Little,0.1,L_Adams,0.09,BRN41,NA,NA,NA
+BRN41-B3,U4191,SO,2016-05-27,D09,50.304166,-125.333511,91,94,8,2017-09-18,Little,0.39,Chilko,0.31,L_Adams,0.16,BRN41,NA,NA,NA
+BRN41-A3,U4192,SO,2016-05-27,D09,50.304166,-125.333511,91,NA,7.6,2017-09-18,L_Adams,0.96,Little,0.02,L_Shuswap,0.02,BRN41,NA,NA,NA
+BRN41-H5,U4193,SO,2016-05-27,D09,50.304166,-125.333511,98,102,9.8,2017-09-18,L_Shuswap,0.97,L_Adams,0.03,MiddleShuswap,0.01,BRN41,NA,NA,NA
+BRN41-G5,U4194,SO,2016-05-27,D09,50.304166,-125.333511,88,93,7.2,2017-09-18,Roaring,0.37,Horsefly,0.22,U_Horsefly,0.12,BRN41,NA,Nematode on stomach,NA
+BRN41-F5,U4195,SO,2016-05-27,D09,50.304166,-125.333511,82,87,6.3,2017-09-19,L_Adams,0.85,Little,0.05,L_Shuswap,0.04,BRN41,NA,NA,NA
+BRN41-E5,U4196,SO,2016-06-14,D22,50.235322,-125.39888,105,121,17.6,2017-09-19,Eagle_L,0.38,MiddleShuswap,0.36,L_Shuswap,0.25,BRN41,NA,NA,NA
+BRN41-D5,U4197,SO,2016-06-14,D22,50.235322,-125.39888,97,NA,10.9,2017-09-19,Horsefly,0.66,Quesnel_Decept,0.2,Quesnel_Horsef,0.08,BRN41,NA,NA,NA
+BRN41-C5,U4198,SO,2016-06-14,D22,50.235322,-125.39888,92,NA,9,2017-09-19,Eagle_L,0.48,Seymour,0.39,Scotch,0.1,BRN41,NA,NA,NA
+BRN41-B5,U4199,SO,2016-06-14,D22,50.235322,-125.39888,118,124,18.4,2017-09-19,Eagle_L,0.43,L_Shuswap,0.42,MiddleShuswap,0.14,BRN41,NA,NA,NA
+BRN41-A5,U4200,SO,2016-06-14,D22,50.235322,-125.39888,115,121,16.3,2017-09-19,Sinta,0.49,Chilko,0.29,Chilko-North,0.1,BRN41,NA,NA,NA
+BRN41-H10,U4217,SO,2016-05-23,D22,50.224106,-125.395004,84,88,6.7,2017-09-21,L_Adams,0.71,Little,0.08,Chilko,0.07,BRN41,NA,Fish ID tag in carcass bag has the wrong UFN written on it.,Pale liver
+BRN41-G10,U4218,SO,2016-05-23,D22,50.224106,-125.395004,99,104,9.3,2017-09-21,L_Adams,0.87,L_Shuswap,0.1,MiddleShuswap,0.01,BRN41,NA,Fish ID tag in carcass bag has the wrong UFN written on it.,NA
+BRN41-F10,U4219,SO,2016-05-23,D22,50.224106,-125.395004,97,104,9.5,2017-09-21,Quesnel_Horsef,0.24,Horsefly,0.2,U_Horsefly,0.19,BRN41,NA,Fish ID tag in carcass bag has the wrong UFN written on it.,NA
+BRN41-E10,U4220,SO,2016-05-23,D22,50.224106,-125.395004,97,102,10.1,2017-09-21,Horsefly,0.21,Quesnel_Horsef,0.17,Little,0.15,BRN41,NA,Fish ID tag in carcass bag has the wrong UFN written on it.,NA
+BRN41-D10,U4221,SO,2016-05-15,D22,50.243454,-125.398108,86,91,6.8,2017-09-21,Horsefly,0.75,Quesnel_Horsef,0.14,McKinley,0.1,BRN41,NA,Fish ID tag in carcass bag has the wrong UFN written on it.,NA
+BRN41-H2,U4305,SO,2016-06-14,D09,50.307203,-125.332605,102,NA,10,2017-09-15,MiddleShuswap,0.54,L_Shuswap,0.42,Eagle_L,0.02,BRN41,NA,NA,NA
+BRN41-G2,U4306,SO,2016-06-18,J09,50.579393,-126.714162,89,94,7.8,2017-09-15,Nimpkish,1,Woss_Lake,0,NA,NA,BRN41,NA,NA,NA
+BRN41-F2,U4307,SO,2016-06-18,J09,50.579393,-126.714162,89,94,6.8,2017-09-15,Horsefly,0.96,MiddleShuswap,0.02,L_Horsefly,0.01,BRN41,NA,NA,NA
+BRN41-E2,U4308,SO,2016-06-18,J09,50.579393,-126.714162,87,91,6.6,2017-09-15,L_Adams,0.99,MiddleShuswap,0.01,Little,0,BRN41,NA,NA,NA
+BRN41-D2,U4309,SO,2016-05-27,D09,50.304166,-125.333511,95,100,9.1,2017-09-18,Chilko,0.51,Roaring,0.16,Quesnel_Mitche,0.12,BRN41,NA,5 cal bs and 3 cal as attached.,NA
+BRN41-C2,U4310,SO,2016-05-27,D09,50.304166,-125.333511,94,99,8.5,2017-09-18,Horsefly,0.44,U_Horsefly,0.27,Quesnel_Horsef,0.26,BRN41,NA,NA,NA
+BRN41-B2,U4311,SO,2016-05-27,D09,50.304166,-125.333511,95,100,8.2,2017-09-18,Horsefly,0.43,U_Horsefly,0.28,Quesnel_Horsef,0.15,BRN41,NA,2 cal bs,NA
+BRN41-A2,U4312,SO,2016-05-27,D09,50.304166,-125.333511,82,NA,7.1,2017-09-18,L_Shuswap,0.87,Seymour,0.1,Little,0.01,BRN41,NA,NA,NA
+BRN41-H4,U4313,SO,2016-05-27,D09,50.304166,-125.333511,90,NA,8,2017-09-18,Little,0.39,L_Adams,0.36,L_Shuswap,0.2,BRN41,NA,NA,NA
+BRN41-G4,U4314,SO,2016-06-14,D22,50.235322,-125.39888,95,NA,8.7,2017-09-19,MiddleShuswap,0.9,L_Shuswap,0.1,Eagle_L,0,BRN41,NA,NA,NA
+BRN41-F4,U4315,SO,2016-06-14,D22,50.235322,-125.39888,100,104,11.1,2017-09-19,MiddleShuswap,0.95,Seymour,0.04,L_Shuswap,0.01,BRN41,NA,NA,One otolith broken
+BRN41-E4,U4316,SO,2016-06-14,D22,50.235322,-125.39888,105,110,12.9,2017-09-19,Chilko,0.74,L_Shuswap,0.22,Eagle_L,0.04,BRN41,NA,NA,NA
+BRN41-D4,U4317,SO,2016-06-14,D22,50.235322,-125.39888,99,104,11.3,2017-09-19,MiddleShuswap,0.72,Chilko,0.18,L_Shuswap,0.05,BRN41,NA,Lesions on tail area,One otolith broken
+BRN41-C4,U4318,SO,2016-05-22,J09,50.543296,-126.816816,125,NA,18.6,2017-09-20,NA,NA,NA,NA,NA,NA,BRN41,NA,NA,NA
+BRN41-B4,U4319,SO,2016-05-22,J09,50.543296,-126.816816,107,NA,11.8,2017-09-20,Nadina,0.78,Stellako,0.22,Seymour,0,BRN41,NA,NA,NA
+BRN41-A4,U4320,SO,2016-05-22,J09,50.543296,-126.816816,110,NA,13.4,2017-09-20,Stellako,1,Kuzkwa_Cr,0,NA,NA,BRN41,NA,NA,NA
+BRN41-H7,U4321,SO,2016-05-22,J09,50.543296,-126.816816,114,NA,13,2017-09-20,Birkenhead,1,NA,NA,NA,NA,BRN41,NA,NA,NA
+BRN41-G7,U4322,SO,2016-05-22,J09,50.543296,-126.816816,113,NA,13.7,2017-09-20,Horsefly,0.43,U_Horsefly,0.32,Stellako,0.12,BRN41,NA,NA,NA
+BRN41-F7,U4323,SO,2016-05-22,J09,50.543296,-126.816816,91,NA,7,2017-09-20,NA,NA,NA,NA,NA,NA,BRN41,NA,NA,NA
+BRN41-E7,U4324,SO,2016-05-22,J09,50.543296,-126.816816,105,NA,10.7,2017-09-21,NA,NA,NA,NA,NA,NA,BRN41,NA,NA,NA
+BRN41-D7,U4325,SO,2016-05-22,J09,50.543296,-126.816816,110,NA,12.7,2017-09-21,Birkenhead,0.62,Chilko,0.3,Smokehouse_Ck,0.05,BRN41,NA,NA,NA
+BRN41-C7,U4326,SO,2016-05-22,J09,50.543296,-126.816816,114,NA,11.5,2017-09-21,Chilko,0.99,Horsefly,0,Dust,0,BRN41,NA,NA,NA
+BRN41-B7,U4327,SO,2016-05-23,D22,50.224106,-125.395004,85,NA,6.6,2017-09-21,L_Adams,0.57,Little,0.28,L_Shuswap,0.14,BRN41,NA,NA,NA
+BRN41-A7,U4328,SO,2016-05-23,D22,50.224106,-125.395004,87,92,6.7,2017-09-21,Chilko,0.37,L_Adams,0.21,Seymour,0.14,BRN41,NA,NA,NA
+BRN41-G9,U4329,SO,2016-05-23,D22,50.224106,-125.395004,91,96,8.5,2017-09-21,Horsefly,0.44,U_Horsefly,0.28,Quesnel_Horsef,0.26,BRN41,NA,NA,NA
+BRN41-H9,U4330,SO,2016-05-23,D22,50.224106,-125.395004,89,94,6.5,2017-09-21,L_Adams,0.82,Little,0.1,L_Shuswap,0.06,BRN41,NA,NA,NA
+BRN41-F9,U4331,SO,2016-05-23,D22,50.224106,-125.395004,91,96,8.2,2017-09-21,L_Shuswap,0.63,L_Adams,0.26,Little,0.07,BRN41,NA,NA,NA
+BRN41-E9,U4332,SO,2016-05-23,D22,50.224106,-125.395004,89,94,7.8,2017-09-21,L_Adams,0.49,Little,0.37,L_Shuswap,0.08,BRN41,NA,NA,NA
+BRN41-D9,U4333,SO,2016-05-23,D22,50.224106,-125.395004,86,NA,6.8,2017-09-21,L_Shuswap,0.83,Little,0.09,L_Adams,0.06,BRN41,NA,NA,NA
+BRN41-C9,U4334,SO,2016-05-23,D22,50.224106,-125.395004,85,NA,6.5,2017-09-21,Seymour,0.51,L_Adams,0.38,Little,0.06,BRN41,NA,Pale liver,NA
+BRN41-B9,U4335,SO,2016-05-15,D22,50.243454,-125.398108,118,124,16.6,2017-09-22,Stellako,0.78,Tachie,0.18,Nadina,0.03,BRN41,NA,NA,NA
+BRN41-A9,U4336,SO,2016-05-15,D22,50.243454,-125.398108,86,NA,6,2017-09-22,L_Shuswap,0.86,MiddleShuswap,0.11,Dust,0.03,BRN41,NA,NA,NA
+BRN41-H12,U4337,SO,2016-05-15,D22,50.243454,-125.398108,89,95,6.8,2017-09-22,Chilko,0.86,Nadina,0.05,Horsefly,0.04,BRN41,NA,NA,NA
+BRN41-G12,U4338,SO,2016-05-15,D22,50.243454,-125.398108,78,NA,4.9,2017-09-22,L_Shuswap,0.79,MiddleShuswap,0.12,Chilko,0.09,BRN41,NA,NA,NA
+BRN41-F12,U4339,SO,2016-05-15,D22,50.243454,-125.398108,100,105,10.5,2017-09-22,Chilko,1,Nadina,0,NA,NA,BRN41,NA,NA,NA
+BRN41-E12,U4340,SO,2016-05-15,D22,50.243454,-125.398108,114,NA,15.7,2017-09-22,Nadina,0.98,Tachie,0.02,Dust,0,BRN41,NA,NA,NA
+BRN41-H6,U4345,SO,2016-06-14,D22,50.235322,-125.39888,104,110,12.8,2017-09-19,Seymour,0.7,Scotch,0.3,Eagle_L,0,BRN41,NA,NA,NA
+BRN41-G6,U4346,SO,2016-05-28,J03,50.545897,-126.668909,95,100,9,2017-09-19,Quesnel_Horsef,0.32,Chilko,0.2,Little,0.16,BRN41,NA,NA,NA
+BRN41-F6,U4347,SO,2016-05-28,J03,50.545897,-126.668909,91,96,9,2017-09-19,Roaring,0.38,Quesnel_Horsef,0.26,Chilko,0.14,BRN41,NA,NA,NA
+BRN41-E6,U4348,SO,2016-05-28,J03,50.545897,-126.668909,87,92,7.7,2017-09-19,Quesnel_Horsef,0.79,U_Horsefly,0.11,Little,0.03,BRN41,NA,NA,NA
+BRN41-D6,U4349,SO,2016-05-28,J03,50.545897,-126.668909,94,99,9.8,2017-09-19,Quesnel_Horsef,0.76,U_Horsefly,0.14,Horsefly,0.06,BRN41,NA,NA,NA
+BRN41-C6,U4350,SO,2016-05-28,J03,50.545897,-126.668909,94,99,9.1,2017-09-19,Quesnel_Horsef,0.43,Roaring,0.34,Chilko,0.08,BRN41,NA,NA,NA
+BRN41-B6,U4351,SO,2016-05-22,J09,50.543296,-126.816816,82,NA,5.5,2017-09-21,NA,NA,NA,NA,NA,NA,BRN41,NA,NA,NA
+BRN41-A6,U4352,SO,2016-05-22,J09,50.543296,-126.816816,107,NA,12.6,2017-09-21,NA,NA,NA,NA,NA,NA,BRN41,NA,NA,NA
+BRN41-H8,U4353,SO,2016-05-22,J09,50.543296,-126.816816,129,NA,20.5,2017-09-21,Nadina,0.99,Stellako,0.01,Paula,0,BRN41,NA,NA,NA
+BRN41-G8,U4354,SO,2016-05-22,J09,50.543296,-126.816816,110,NA,11.8,2017-09-21,NA,NA,NA,NA,NA,NA,BRN41,NA,NA,NA
+BRN41-F8,U4355,SO,2016-05-23,D22,50.224106,-125.395004,95,100,10.1,2017-09-21,Quesnel_Mitche,0.97,Roaring,0.03,Wasko_Cr,0,BRN41,NA,NA,NA
+BRN41-E8,U4356,SO,2016-05-23,D22,50.224106,-125.395004,87,92,7,2017-09-21,L_Adams,0.77,L_Shuswap,0.17,Little,0.05,BRN41,Forgot to sample gill until after completion of remainder of dissection; sample thawed,NA,Forgot to sample gill until after completion of remainder of dissection; sample thawed
+BRN41-D8,U4357,SO,2016-05-23,D22,50.224106,-125.395004,81,NA,6.5,2017-09-21,Little,0.7,L_Adams,0.29,Seymour,0.01,BRN41,Heart & liver slightly thawed,NA,Heart & liver slightly thawed
+BRN41-C8,U4358,SO,2016-05-23,D22,50.224106,-125.395004,91,96,7.3,2017-09-21,Seymour,1,L_Adams,0,Chilko,0,BRN41,NA,NA,NA
+BRN41-B8,U4359,SO,2016-05-23,D22,50.224106,-125.395004,78,83,5.4,2017-09-21,L_Shuswap,0.91,MiddleShuswap,0.08,L_Adams,0,BRN41,NA,NA,NA
+BRN41-A8,U4360,SO,2016-05-23,D22,50.224106,-125.395004,88,NA,7.4,2017-09-21,L_Adams,0.93,L_Shuswap,0.03,Fennell,0.02,BRN41,NA,NA,NA
+BRN41-H11,U4361,SO,2016-05-23,D22,50.224106,-125.395004,88,NA,7.5,2017-09-21,Chilko,0.98,L_Adams,0.01,L_Shuswap,0,BRN41,NA,NA,NA
+BRN41-G11,U4362,SO,2016-05-23,D22,50.224106,-125.395004,86,NA,7.7,2017-09-21,Chilko,0.96,Little,0.04,Sinta,0,BRN41,NA,NA,NA
+BRN41-F11,U4363,SO,2016-05-15,D22,50.243454,-125.398108,107,112,11.7,2017-09-21,Tachie,0.65,Dust,0.2,Kuzkwa_Cr,0.07,BRN41,NA,NA,NA
+BRN41-E11,U4364,SO,2016-05-15,D22,50.243454,-125.398108,95,101,8.5,2017-09-21,Chilko,0.31,Seymour,0.29,L_Adams,0.18,BRN41,NA,NA,NA
+BRN41-D11,U4365,SO,2016-05-15,D22,50.243454,-125.398108,97,102,8.7,2017-09-25,Nadina,0.55,Stellako,0.4,Tachie,0.05,BRN41,NA,NA,NA
+BRN41-C11,U4366,SO,2016-05-15,D22,50.243454,-125.398108,91,NA,7.9,2017-09-25,Chilko,0.84,L_Shuswap,0.05,L_Adams,0.04,BRN41,NA,NA,NA
+BRN41-B11,U4367,SO,2016-05-28,J03,50.545897,-126.668909,99,104,10.2,2017-09-25,Scotch,0.83,Seymour,0.08,Little,0.03,BRN41,NA,NA,NA
+BRN41-A11,U4368,SO,2016-05-28,J03,50.545897,-126.668909,94,98,9.4,2017-09-25,Chilko,0.34,Tachie,0.16,Little,0.15,BRN41,NA,NA,No otliths taken
+BRN41-C10,U4369,SO,2016-05-15,D22,50.243454,-125.398108,100,105,10.1,2017-09-22,Chilko,0.99,Portage_Cr,0,Mitchell,0,BRN41,NA,NA,1 otolith broke
+BRN41-B10,U4370,SO,2016-05-15,D22,50.243454,-125.398108,95,NA,9,2017-09-22,Chilko,0.98,L_Shuswap,0.01,L_Adams,0,BRN41,NA,NA,1 otolith broke
+BRN41-A10,U4371,SO,2016-05-15,D22,50.243454,-125.398108,89,NA,6.6,2017-09-22,L_Shuswap,0.86,MiddleShuswap,0.12,L_Adams,0.02,BRN41,NA,NA,NA
+BRN41-D12,U4372,SO,2016-05-15,D22,50.243454,-125.398108,87,NA,6.2,2017-09-25,L_Shuswap,0.85,MiddleShuswap,0.15,Chilko,0,BRN41,NA,NA,NA
+BRN41-C12,U4373,SO,2016-05-15,D22,50.243454,-125.398108,108,NA,13.2,2017-09-25,Chilko,1,L_Shuswap,0,Horsefly,0,BRN41,NA,NA,NA
+BRN41-B12,U4374,SO,2016-05-15,D22,50.243454,-125.398108,121,NA,16.6,2017-09-25,Chilko,1,L_Shuswap,0,Eagle_L,0,BRN41,NA,NA,1 broke otolith
+BRN41-A12,U4375,SO,2016-05-15,D22,50.243454,-125.398108,100,NA,9.3,2017-09-25,Chilko,1,NA,NA,NA,NA,BRN41,NA,NA,NA
+BRN42-H2,U4222,SO,2016-06-14,D22,50.235322,-125.39888,119,124,16.4,2017-09-25,Eagle_L,0.71,MiddleShuswap,0.21,L_Shuswap,0.07,BRN42,NA,NA,NA
+BRN42-G2,U4223,SO,2016-06-14,D22,50.235322,-125.39888,94,NA,9.9,2017-09-25,MiddleShuswap,0.58,L_Shuswap,0.26,Eagle_L,0.06,BRN42,NA,NA,NA
+BRN42-F2,U4224,SO,2016-06-14,D22,50.235322,-125.39888,93,99,9.2,2017-09-25,MiddleShuswap,0.85,Eagle_L,0.1,L_Shuswap,0.03,BRN42,NA,NA,NA
+BRN42-H1,U4341,SO,2016-05-15,D22,50.243454,-125.398108,91,NA,7.2,2017-09-25,Horsefly,0.72,Quesnel_Horsef,0.15,McKinley,0.12,BRN42,NA,NA,1 broke otolith
+BRN42-G1,U4342,SO,2016-05-15,D22,50.243454,-125.398108,97,NA,8.7,2017-09-25,L_Shuswap,0.88,MiddleShuswap,0.12,L_Adams,0,BRN42,NA,NA,NA
+BRN42-F1,U4343,SO,2016-05-28,J03,50.545897,-126.668909,90,95,8.2,2017-09-25,Little,0.36,L_Shuswap,0.34,Chilko,0.17,BRN42,NA,NA,NA
+BRN42-E1,U4344,SO,2016-06-14,D22,50.235322,-125.39888,96,NA,9.6,2017-09-25,L_Shuswap,0.51,MiddleShuswap,0.48,Eagle_L,0.01,BRN42,NA,NA,NA
+BRN42-B1,U4376,SO,2016-06-09,D07,50.190683,-125.143138,101,106,11.2,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-A1,U4377,SO,2016-06-09,D07,50.190683,-125.143138,92,NA,11,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-H7,U4378,SO,2016-06-03,D07,50.190887,-125.143416,91,NA,8.8,2017-09-27,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,1 otolith broke
+BRN42-E2,U4379,SO,2016-06-09,D07,50.190683,-125.143138,85,89,6.7,2017-09-25,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-D2,U4380,SO,2016-06-09,D07,50.190683,-125.143138,94,99,9.7,2017-09-25,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-G7,U4381,SO,2016-06-09,J09,50.544941,-126.816489,101,106,10.3,2017-09-27,Chilko,0.98,L_Adams,0.01,Chilko-North,0,BRN42,NA,NA,NA
+BRN42-D1,U4393,SO,2016-06-14,D22,50.235322,-125.39888,98,NA,9.8,2017-09-25,MiddleShuswap,0.84,L_Shuswap,0.16,Seymour,0,BRN42,NA,NA,NA
+BRN42-C1,U4394,SO,2016-06-14,D22,50.235322,-125.39888,93,97,10.2,2017-09-25,Horsefly,0.45,Quesnel_Decept,0.24,Quesnel_Horsef,0.08,BRN42,NA,NA,NA
+BRN42-C2,U4395,SO,2016-06-09,D07,50.190683,-125.143138,104,109,11.3,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-B2,U4396,SO,2016-05-28,J02,50.60125,-126.704457,107,112,11.4,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-A2,U4397,SO,2016-05-28,J02,50.60125,-126.704457,93,98,8.5,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-H6,U4398,SO,2016-05-28,J02,50.60125,-126.704457,93,NA,7.3,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-G6,U4399,SO,2016-05-28,J02,50.60125,-126.704457,99,105,9.7,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-F6,U4400,SO,2016-06-03,D07,50.190887,-125.143416,91,95,7.9,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-E6,U4401,SO,2016-06-03,D07,50.190887,-125.143416,88,NA,7.3,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-D6,U4402,SO,2016-06-03,D07,50.190887,-125.143416,106,111,11.1,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-C6,U4403,SO,2016-07-04,J09,50.543818,-126.794456,99,NA,12.6,2017-09-29,Nimpkish,1,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-B6,U4404,SO,2016-06-03,D07,50.190887,-125.143416,91,96,8,2017-09-29,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-A6,U4405,SO,2016-06-03,D07,50.190887,-125.143416,97,102,8.4,2017-09-29,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-H11,U4406,SO,2016-06-03,D07,50.190887,-125.143416,87,92,7.6,2017-09-29,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-G11,U4407,SO,2016-06-07,D09,50.30436,-125.332956,91,95,8.2,2017-09-29,L_Shuswap,0.78,Eagle_L,0.13,L_Adams,0.08,BRN42,NA,NA,NA
+BRN42-F11,U4408,SO,2016-06-07,D09,50.30436,-125.332956,84,NA,6.4,2017-09-29,L_Shuswap,0.68,L_Adams,0.21,Little,0.07,BRN42,NA,NA,NA
+BRN42-D11,U4409,SO,2016-06-23,J03,50.55803,-126.73463,102,108,10.8,2017-09-29,L_Shuswap,0.31,Little,0.29,MiddleShuswap,0.13,BRN42,NA,NA,NA
+BRN42-F7,U4413,SO,2016-06-03,D07,50.190887,-125.143416,89,NA,7.9,2017-09-29,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-E7,U4414,SO,2016-06-03,D07,50.190887,-125.143416,81,86,5.8,2017-09-29,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,One oto
+BRN42-D7,U4415,SO,2016-06-07,D09,50.30436,-125.332956,84,NA,7.2,2017-09-29,Scotch,0.41,L_Shuswap,0.32,L_Adams,0.18,BRN42,NA,NA,White colouring on intestines
+BRN42-C7,U4416,SO,2016-06-23,J03,50.55803,-126.73463,105,111,13.3,2017-09-29,L_Shuswap,0.61,Little,0.21,MiddleShuswap,0.19,BRN42,NA,NA,NA
+BRN42-H3,U4417,SO,2016-06-14,D22,50.235322,-125.39888,95,NA,9.2,2017-09-25,Mitchell,0.5,Quesnel_Mitche,0.33,Blue_Lead_Ck,0.1,BRN42,NA,NA,NA
+BRN42-G3,U4418,SO,2016-06-14,D22,50.235322,-125.39888,109,115,14.5,2017-09-25,Eagle_L,0.49,Chilko,0.38,Chilko-North,0.08,BRN42,NA,NA,1 broken otolith
+BRN42-F3,U4419,SO,2016-06-14,D22,50.235322,-125.39888,92,97,10.3,2017-09-25,Chilko,0.87,Chilko-North,0.11,Horsefly,0.01,BRN42,NA,NA,NA
+BRN42-E3,U4420,SO,2016-06-14,D22,50.235322,-125.39888,100,105,11.7,2017-09-25,Chilko,0.84,Horsefly,0.06,Chilko-North,0.06,BRN42,Brain fell on top of dissection tray,NA,Brain fell on top of dissection tray
+BRN42-D3,U4421,SO,2016-06-09,D07,50.190683,-125.143138,91,96,8.7,2017-09-25,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-C3,U4422,SO,2016-06-09,D07,50.190683,-125.143138,94,NA,8.8,2017-09-25,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-B3,U4423,SO,2016-06-09,D07,50.190683,-125.143138,102,107,12.7,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-A3,U4424,SO,2016-06-09,D07,50.190683,-125.143138,94,99,8.8,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-H5,U4425,SO,2016-05-28,J02,50.60125,-126.704457,112,118,13,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-G5,U4426,SO,2016-05-28,J02,50.60125,-126.704457,91,NA,7.7,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-F5,U4427,SO,2016-05-28,J02,50.60125,-126.704457,92,NA,7.8,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-E5,U4428,SO,2016-05-28,J02,50.60125,-126.704457,96,101,8.6,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-D5,U4429,SO,2016-06-03,D07,50.190887,-125.143416,101,106,11.9,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-C5,U4430,SO,2016-06-03,D07,50.190887,-125.143416,87,91,7.5,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-B5,U4431,SO,2016-06-03,D07,50.190887,-125.143416,99,104,9.8,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-A5,U4432,SO,2016-06-03,D07,50.190887,-125.143416,84,88,7.1,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-H9,U4433,SO,2016-06-03,D07,50.190887,-125.143416,89,95,8.1,2017-09-29,NA,NA,NA,NA,NA,NA,BRN42,spleen fell on chamois,NA,Spleen fell on chamois
+BRN42-G9,U4434,SO,2016-06-03,D07,50.190887,-125.143416,84,88,6.8,2017-09-29,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-F9,U4435,SO,2016-06-07,D09,50.30436,-125.332956,89,NA,7.5,2017-09-29,L_Shuswap,0.76,Scotch,0.21,L_Adams,0.02,BRN42,NA,NA,NA
+BRN42-E9,U4436,SO,2016-06-23,J03,50.55803,-126.73463,115,121,17.9,2017-09-29,Little,0.74,MiddleShuswap,0.19,L_Shuswap,0.06,BRN42,NA,NA,NA
+BRN42-D9,U4437,SO,2016-06-23,J03,50.55803,-126.73463,117,122,17.9,2017-09-29,L_Shuswap,0.53,Chilko,0.46,MiddleShuswap,0,BRN42,brain fell on chamois,NA,Brain fell on chamois
+BRN42-C9,U4438,SO,2016-06-01,D22,50.24565,-125.396035,87,91,7.3,2017-09-29,L_Shuswap,0.95,L_Adams,0.04,MiddleShuswap,0,BRN42,NA,Lesion on right flank,NA
+BRN42-B9,U4439,SO,2016-06-01,D22,50.24565,-125.396035,83,NA,6.9,2017-09-29,Chilko,0.45,L_Adams,0.29,L_Shuswap,0.14,BRN42,Fish slightly thawed,"Significant predator scarring, scall loss & lesions",Fish slightly thawed
+BRN42-A9,U4440,SO,2016-06-01,D22,50.24565,-125.396035,91,NA,7.9,2017-09-29,Scotch,0.76,L_Shuswap,0.11,L_Adams,0.04,BRN42,NA,Pred scar just anterior of vent,Don't use top-left scale
+BRN42-H4,U4441,SO,2016-06-09,D07,50.190683,-125.143138,88,92,8.7,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,Only one otolith taken
+BRN42-G4,U4442,SO,2016-05-28,J02,50.60125,-126.704457,95,101,9.3,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-F4,U4443,SO,2016-06-03,D07,50.190887,-125.143416,91,96,8.6,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-E4,U4444,SO,2016-06-03,D07,50.190887,-125.143416,100,106,10.9,2017-09-26,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-D4,U4445,SO,2016-06-09,J09,50.544941,-126.816489,86,91,7.8,2017-09-27,MiddleShuswap,0.92,Seymour,0.04,L_Shuswap,0.03,BRN42,NA,NA,NA
+BRN42-C4,U4446,SO,2016-06-09,J09,50.544941,-126.816489,87,93,8.3,2017-09-27,MiddleShuswap,0.77,L_Shuswap,0.11,L_Adams,0.1,BRN42,NA,NA,NA
+BRN42-B4,U4447,SO,2016-06-09,J09,50.544941,-126.816489,94,NA,9.7,2017-09-27,MiddleShuswap,0.48,L_Adams,0.33,L_Shuswap,0.16,BRN42,NA,NA,NA
+BRN42-A4,U4448,SO,2016-06-09,J09,50.544941,-126.816489,91,96,8,2017-09-27,L_Adams,0.93,Chilko,0.02,Scotch,0.02,BRN42,NA,NA,NA
+BRN42-H8,U4449,SO,2016-06-09,J09,50.544941,-126.816489,85,90,7.8,2017-09-27,MiddleShuswap,0.39,Scotch,0.29,Seymour,0.27,BRN42,Brain fell on cool rack,NA,Brain fell on cool rack
+BRN42-G8,U4450,SO,2016-06-09,J09,50.544941,-126.816489,98,104,10.8,2017-09-27,Chilko,1,Chilko-North,0,Hudson_Bay,0,BRN42,NA,NA,NA
+BRN42-F8,U4451,SO,2016-06-09,J09,50.544941,-126.816489,93,99,10.5,2017-09-28,Mitchell,1,Chilko,0,Kane,0,BRN42,NA,NA,NA
+BRN42-E8,U4452,SO,2016-06-09,J09,50.544941,-126.816489,87,93,8.8,2017-09-28,Scotch,0.82,Seymour,0.18,NA,NA,BRN42,NA,NA,NA
+BRN42-D8,U4453,SO,2016-06-09,J09,50.544941,-126.816489,91,96,8.9,2017-09-28,Chilko-North,0.98,Bowron,0.01,Quesnel_Horsef,0,BRN42,NA,NA,NA
+BRN42-C8,U4454,SO,2016-07-04,J09,50.543818,-126.794456,87,91,9.5,2017-09-28,Woss_Lake,0.92,Nimpkish,0.08,NA,NA,BRN42,NA,NA,NA
+BRN42-B8,U4455,SO,2016-07-04,J09,50.543818,-126.794456,125,132,25.6,2017-09-28,Quesnel_Horsef,0.85,M_Horsefly,0.08,Horsefly,0.05,BRN42,NA,NA,NA
+BRN42-A8,U4456,SO,2016-07-04,J09,50.543818,-126.794456,90,95,11.4,2017-09-28,Nimpkish,0.76,Woss_Lake,0.24,Vernon,0.01,BRN42,Brain fell on clean part of dissection tray,Huge spleen,Brain fell on clean part of dissection tray ; spleen huge!
+BRN42-H10,U4457,SO,2016-07-04,J09,50.543818,-126.794456,102,106,14.5,2017-09-28,Nimpkish,0.53,Woss_Lake,0.47,Vernon,0,BRN42,NA,NA,NA
+BRN42-G10,U4458,SO,2016-06-03,D07,50.190887,-125.143416,89,94,8.4,2017-09-29,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-F10,U4459,SO,2016-06-03,D07,50.190887,-125.143416,82,87,7.1,2017-09-29,NA,NA,NA,NA,NA,NA,BRN42,Brain fell on clean part of dissection tray,NA,Brain fell on clean part of dissection tray
+BRN42-E10,U4460,SO,2016-06-03,D07,50.190887,-125.143416,98,103,9.7,2017-09-29,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-D10,U4461,SO,2016-06-23,J03,50.55803,-126.73463,108,113,14.3,2017-09-29,L_Shuswap,0.94,MiddleShuswap,0.02,Seymour,0.02,BRN42,NA,Lots of blood around left eye,NA
+BRN42-C10,U4462,SO,2016-06-23,J03,50.55803,-126.73463,123,NA,24.1,2017-09-29,Chilko,0.88,Horsefly,0.05,Chilko-North,0.03,BRN42,NA,NA,NA
+BRN42-B10,U4463,SO,2016-06-01,D22,50.24565,-125.396035,89,NA,6.7,2017-09-29,L_Adams,0.78,Little,0.18,Scotch,0.01,BRN42,NA,"Lesion by vent, anal fin bloody",NA
+BRN42-A10,U4464,SO,2016-06-01,D22,50.24565,-125.396035,90,95,7.1,2017-09-29,L_Adams,0.67,L_Shuswap,0.31,Scotch,0.01,BRN42,NA,NA,NA
+BRN42-B7,U4465,SO,2016-06-01,D22,50.24565,-125.396035,85,90,6.6,2017-09-29,Wasko_Cr,0.27,Chilko,0.2,L_Adams,0.17,BRN42,Brain fell on chamois,NA,Brain fell on chamois
+BRN42-D12,U4498,SO,2016-06-01,D09,50.308769,-125.326765,86,91,6.9,2017-10-01,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-C12,U4499,SO,2016-06-01,D09,50.308769,-125.326765,89,NA,8.6,2017-10-01,L_Adams,0.54,Wasko_Cr,0.24,Little,0.13,BRN42,NA,NA,NA
+BRN42-B12,U4500,SO,2016-06-01,D09,50.308769,-125.326765,97,103,10.2,2017-10-01,L_Shuswap,0.88,L_Adams,0.07,Little,0.04,BRN42,"Kidney came out with stomach, may have touched chamois",NA,"Kidney came out with stomach, may have touched chamois"
+BRN42-A12,U4501,SO,2016-06-01,D09,50.308769,-125.326765,89,94,8.3,2017-10-01,Horsefly,0.71,Wasko_Cr,0.15,L_Adams,0.13,BRN42,NA,NA,NA
+BRN42-E11,U4489,SO,2016-06-01,D22,50.24565,-125.396035,84,89,6.7,2017-09-30,L_Shuswap,1,MiddleShuswap,0,NA,NA,BRN42,NA,NA,NA
+BRN42-C11,U4490,SO,2016-06-01,D22,50.24565,-125.396035,88,93,7.9,2017-09-30,Horsefly,0.58,L_Adams,0.29,Chilko,0.09,BRN42,NA,NA,NA
+BRN42-B11,U4491,SO,2016-06-01,D22,50.24565,-125.396035,80,NA,6,2017-09-30,L_Shuswap,1,MiddleShuswap,0,Little,0,BRN42,NA,NA,NA
+BRN42-A11,U4492,SO,2016-06-01,D22,50.24565,-125.396035,82,87,5.8,2017-09-30,L_Shuswap,1,L_Adams,0,Little,0,BRN42,NA,NA,NA
+BRN42-A7,U4493,SO,2016-06-01,D27,50.274055,-125.328828,89,NA,9,2017-09-30,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-H12,U4494,SO,2016-06-01,D27,50.274055,-125.328828,90,95,8.4,2017-09-30,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-G12,U4495,SO,2016-06-01,D27,50.274055,-125.328828,91,96,7.3,2017-09-30,NA,NA,NA,NA,NA,NA,BRN42,NA,slice on tail,NA
+BRN42-F12,U4496,SO,2016-06-01,D27,50.274055,-125.328828,99,105,11,2017-09-30,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN42-E12,U4497,SO,2016-06-01,D27,50.274055,-125.328828,88,93,8,2017-09-30,NA,NA,NA,NA,NA,NA,BRN42,NA,NA,NA
+BRN43-H9,U4382,SO,2016-06-03,J07,50.459012,-126.1695,99,NA,9.4,2017-10-04,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-G9,U4383,SO,2016-06-01,D27,50.274055,-125.328828,85,NA,7.7,2017-10-04,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-F9,U4384,SO,2016-05-27,D22,50.243773,-125.397476,86,NA,7.4,2017-10-04,Little,0.52,L_Adams,0.39,MiddleShuswap,0.05,BRN43,NA,NA,NA
+BRN43-E9,U4385,SO,2016-05-27,D22,50.243773,-125.397476,92,NA,7.8,2017-10-04,L_Adams,0.69,L_Shuswap,0.2,Little,0.07,BRN43,NA,NA,NA
+BRN43-D9,U4386,SO,2016-05-27,D22,50.243773,-125.397476,81,NA,6,2017-10-05,Chilko,0.98,L_Adams,0.01,Kuzkwa_Cr,0,BRN43,NA,NA,1 otolith. extra muscle stored at -20 overnight
+BRN43-C9,U4387,SO,2016-05-27,D22,50.243773,-125.397476,87,92,6.9,2017-10-05,L_Shuswap,0.8,Little,0.08,L_Adams,0.07,BRN43,NA,NA,Extra muscle stored at -20 overnight
+BRN43-B9,U4388,SO,2016-05-27,D22,50.243773,-125.397476,96,NA,9.4,2017-10-05,Chilko,1,Horsefly,0,Chilko-North,0,BRN43,NA,NA,Sea lice were not complete specimens to id. extra muscle stored at -20 overnight
+BRN43-A9,U4389,SO,2016-05-27,D22,50.243773,-125.397476,91,NA,8.1,2017-10-05,L_Shuswap,0.99,MiddleShuswap,0.01,L_Adams,0,BRN43,NA,NA,Extra muscle stored at -20 overnight
+BRN43-C5,U4390,SO,2016-06-03,J07,50.459012,-126.1695,88,93,7.8,2017-10-04,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-H2,U4411,SO,2016-06-01,D09,50.308769,-125.326765,97,102,8.6,2017-10-02,L_Shuswap,0.95,L_Adams,0.04,MiddleShuswap,0,BRN43,NA,NA,NA
+BRN43-G2,U4412,SO,2016-05-14,D07,50.19304,-125.136573,112,NA,14.1,2017-10-02,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-H3,U4466,SO,2016-05-14,D07,50.19304,-125.136573,100,NA,10.5,2017-10-02,NA,NA,NA,NA,NA,NA,BRN43,Kidney touched by muscle of U4473,NA,Kidney touched by muscle of u4473
+BRN43-G3,U4467,SO,2016-05-14,D07,50.19304,-125.136573,92,97,9,2017-10-02,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-F3,U4468,SO,2016-05-14,D07,50.19304,-125.136573,97,103,10.8,2017-10-02,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-E3,U4469,SO,2016-05-14,D07,50.19304,-125.136573,118,122,14.3,2017-10-02,NA,NA,NA,NA,NA,NA,BRN43,NA,White spot on stomach,NA
+BRN43-D3,U4470,SO,2016-05-14,D07,50.19304,-125.136573,123,130,20.4,2017-10-02,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-C3,U4471,SO,2016-05-14,D07,50.19304,-125.136573,87,92,6.9,2017-10-02,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,Only 1 otolith
+BRN43-B3,U4472,SO,2016-05-14,D07,50.19304,-125.136573,85,90,7.2,2017-10-02,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-A3,U4473,SO,2016-06-09,J09,50.544941,-126.816489,103,108,11,2017-10-02,L_Adams,0.75,MiddleShuswap,0.1,Chilko,0.07,BRN43,Muscle touched kidney of U4466,NA,Muscle touched kidney of u4466
+BRN43-H6,U4474,SO,2016-06-09,J09,50.544941,-126.816489,88,NA,7.3,2017-10-02,MiddleShuswap,0.47,L_Shuswap,0.38,Quesnel_Horsef,0.07,BRN43,NA,NA,NA
+BRN43-G6,U4475,SO,2016-06-09,J09,50.544941,-126.816489,95,100,10.8,2017-10-02,Quesnel_Horsef,0.71,McKinley,0.13,M_Horsefly,0.06,BRN43,NA,NA,NA
+BRN43-F6,U4476,SO,2016-06-09,J09,50.544941,-126.816489,92,97,8.5,2017-10-02,L_Shuswap,0.51,MiddleShuswap,0.46,L_Adams,0.02,BRN43,NA,NA,NA
+BRN43-E6,U4477,SO,2016-06-09,J09,50.544941,-126.816489,95,100,9.1,2017-10-02,Mitchell,1,Quesnel_Mitche,0,Blue_Lead_Ck,0,BRN43,NA,NA,NA
+BRN43-D6,U4478,SO,2016-06-03,J07,50.459012,-126.1695,89,94,8.3,2017-10-04,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-C6,U4479,SO,2016-06-03,J07,50.459012,-126.1695,95,100,9.8,2017-10-04,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,Fish fell on floor (not the side from which muscle is taken)
+BRN43-B6,U4480,SO,2016-06-03,J07,50.459012,-126.1695,100,105,10.8,2017-10-04,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-A6,U4481,SO,2016-06-03,J07,50.459012,-126.1695,97,102,9.7,2017-10-04,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-H10,U4482,SO,2016-05-27,D22,50.243773,-125.397476,93,98,7.5,2017-10-04,L_Shuswap,1,MiddleShuswap,0,NA,NA,BRN43,NA,NA,NA
+BRN43-G10,U4483,SO,2016-05-27,D22,50.243773,-125.397476,90,NA,7.2,2017-10-04,L_Adams,0.8,L_Shuswap,0.11,Little,0.07,BRN43,NA,NA,1 broken otolith
+BRN43-F10,U4484,SO,2016-05-27,D22,50.243773,-125.397476,96,NA,9.8,2017-10-05,Horsefly,0.46,U_Horsefly,0.28,Quesnel_Horsef,0.23,BRN43,Kidney fell on a cryotube in cool rack,NA,Kidney fell on a cryotube in cool rack. extra muscle stored at -20 overnight
+BRN43-E10,U4485,SO,2016-05-27,D22,50.243773,-125.397476,91,96,8.4,2017-10-05,L_Adams,0.88,Little,0.07,MiddleShuswap,0.02,BRN43,NA,NA,Extra muscle stored at -20 overnight
+BRN43-D10,U4486,SO,2016-05-27,D22,50.243773,-125.397476,83,88,7.1,2017-10-05,Little,0.89,L_Adams,0.07,L_Shuswap,0.03,BRN43,NA,NA,Extra muscle stored at -20 overnight
+BRN43-C10,U4487,SO,2016-05-27,D22,50.243773,-125.397476,90,95,8.3,2017-10-05,Seymour,1,Eagle,0,Scotch,0,BRN43,NA,NA,Extra muscle stored at -20 overnight
+BRN43-B10,U4488,SO,2016-05-27,D22,50.243773,-125.397476,84,89,7.2,2017-10-05,Little,0.43,L_Adams,0.33,Chilko,0.07,BRN43,NA,NA,Extra muscle stored at -20 overnight
+BRN43-H1,U4502,SO,2016-06-01,D09,50.308769,-125.326765,82,88,7.4,2017-10-01,L_Shuswap,0.49,Scotch,0.25,L_Adams,0.22,BRN43,NA,NA,NA
+BRN43-G1,U4503,SO,2016-06-01,D09,50.308769,-125.326765,87,92,7.6,2017-10-01,L_Shuswap,0.98,Little,0.01,MiddleShuswap,0,BRN43,NA,"Slice on tail, bloody pelvic fins",NA
+BRN43-F1,U4504,SO,2016-06-01,D09,50.308769,-125.326765,100,105,11.5,2017-10-01,Chilko,1,L_Adams,0,Stellako,0,BRN43,NA,Large chunk of flesh missing from in front of dorsal fin,NA
+BRN43-E1,U4505,SO,2016-06-01,D09,50.308769,-125.326765,83,NA,7.1,2017-10-01,Horsefly,0.98,McKinley,0.01,L_Shuswap,0,BRN43,NA,NA,NA
+BRN43-D1,U4506,SO,2016-06-01,D09,50.308769,-125.326765,97,NA,10,2017-10-02,L_Shuswap,0.67,L_Adams,0.27,Little,0.03,BRN43,NA,NA,NA
+BRN43-C1,U4507,SO,2016-05-14,D07,50.19304,-125.136573,101,NA,12.6,2017-10-02,NA,NA,NA,NA,NA,NA,BRN43,NA,Fish had large white mass on liver,NA
+BRN43-B1,U4508,SO,2016-05-14,D07,50.19304,-125.136573,86,90,7,2017-10-02,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-A1,U4509,SO,2016-05-14,D07,50.19304,-125.136573,84,NA,6.8,2017-10-02,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-H4,U4510,SO,2016-05-14,D07,50.19304,-125.136573,118,124,15.9,2017-10-02,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-G4,U4511,SO,2016-05-14,D07,50.19304,-125.136573,100,105,10.7,2017-10-02,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-F4,U4512,SO,2016-06-09,J09,50.544941,-126.816489,91,96,8.7,2017-10-02,MiddleShuswap,0.95,L_Shuswap,0.03,Chilko,0.01,BRN43,Dropped brain on bench,"Lots of blood on back half of fish, liver really pale",Dropped brain on bench
+BRN43-F2,U4513,SO,2016-05-14,D07,50.19304,-125.136573,95,NA,8.2,2017-10-02,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-E2,U4514,SO,2016-05-14,D07,50.19304,-125.136573,113,118,14.2,2017-10-02,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-D2,U4515,SO,2016-05-14,D07,50.19304,-125.136573,89,95,7.5,2017-10-02,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-C2,U4516,SO,2016-05-14,D07,50.19304,-125.136573,116,123,18.1,2017-10-02,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-B2,U4517,SO,2016-05-14,D07,50.19304,-125.136573,117,124,17.8,2017-10-02,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-A2,U4518,SO,2016-05-14,D07,50.19304,-125.136573,106,111,12.4,2017-10-02,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-H5,U4519,SO,2016-06-21,D09,50.30661,-125.335266,99,104,11.3,2017-10-03,Fennell,0.99,Chilko,0,Chilko_south,0,BRN43,NA,NA,NA
+BRN43-G5,U4520,SO,2016-05-27,J09,50.543432,-126.8134,97,102,9.3,2017-10-03,Chilko,0.8,Little,0.12,Tachie,0.04,BRN43,NA,NA,NA
+BRN43-F5,U4521,SO,2016-05-27,J09,50.543432,-126.8134,93,98,9.1,2017-10-03,Quesnel_Horsef,0.85,U_Horsefly,0.11,Little,0.01,BRN43,NA,NA,NA
+BRN43-E5,U4522,SO,2016-05-27,J09,50.543432,-126.8134,95,100,10,2017-10-03,Quesnel_Horsef,0.75,U_Horsefly,0.15,Horsefly,0.06,BRN43,NA,NA,NA
+BRN43-D5,U4523,SO,2016-05-27,J09,50.543432,-126.8134,85,NA,7.1,2017-10-03,Little,0.64,L_Adams,0.18,Scotch,0.1,BRN43,NA,NA,NA
+BRN43-C11,U4524,SO,2016-06-09,D07,50.190683,-125.143138,90,95,7.7,2017-10-10,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-B11,U4525,SO,2016-06-09,D07,50.190683,-125.143138,88,NA,7.3,2017-10-10,NA,NA,NA,NA,NA,NA,BRN43,NA,Lesions and scars on right lower flank,NA
+BRN43-A11,U4526,SO,2016-05-23,D09,50.30908,-125.325703,88,93,7.4,2017-10-10,L_Shuswap,0.96,MiddleShuswap,0.04,Little,0,BRN43,NA,NA,NA
+BRN43-E4,U4537,SO,2016-06-09,J09,50.544941,-126.816489,72,78,5.1,2017-10-02,Chilko,0.53,Quesnel_Horsef,0.2,L_Adams,0.19,BRN43,NA,NA,NA
+BRN43-D4,U4538,SO,2016-06-09,J09,50.544941,-126.816489,95,NA,8.3,2017-10-02,MiddleShuswap,0.92,L_Shuswap,0.07,L_Adams,0.01,BRN43,NA,NA,NA
+BRN43-C4,U4539,SO,2016-06-09,J09,50.544941,-126.816489,88,93,6.9,2017-10-03,MiddleShuswap,0.83,L_Shuswap,0.17,L_Adams,0,BRN43,NA,NA,NA
+BRN43-B4,U4540,SO,2016-06-21,D09,50.30661,-125.335266,99,105,10,2017-10-03,MiddleShuswap,0.98,L_Adams,0.01,Little,0.01,BRN43,NA,NA,NA
+BRN43-A4,U4541,SO,2016-06-21,D09,50.30661,-125.335266,89,NA,8.1,2017-10-03,MiddleShuswap,0.77,L_Adams,0.21,Little,0.02,BRN43,NA,NA,NA
+BRN43-H7,U4542,SO,2016-06-21,D09,50.30661,-125.335266,97,102,9.8,2017-10-03,MiddleShuswap,0.98,L_Adams,0.02,Little,0,BRN43,NA,NA,NA
+BRN43-G7,U4543,SO,2016-05-27,J09,50.543432,-126.8134,91,97,8.5,2017-10-03,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-F7,U4544,SO,2016-05-27,J09,50.543432,-126.8134,92,NA,8,2017-10-03,L_Shuswap,0.99,MiddleShuswap,0.01,L_Adams,0,BRN43,NA,NA,NA
+BRN43-E7,U4545,SO,2016-05-27,J09,50.543432,-126.8134,95,101,9.7,2017-10-03,Scotch,0.92,Seymour,0.06,Eagle,0.01,BRN43,NA,NA,NA
+BRN43-D7,U4546,SO,2016-05-27,J09,50.543432,-126.8134,87,NA,7.2,2017-10-03,Little,0.73,L_Adams,0.15,Tachie,0.04,BRN43,NA,NA,NA
+BRN43-C7,U4547,SO,2016-05-27,J09,50.543432,-126.8134,78,82,5.7,2017-10-03,Chilko,0.88,Quesnel_Horsef,0.06,U_Horsefly,0.02,BRN43,NA,NA,NA
+BRN43-B7,U4548,SO,2016-05-27,J09,50.543432,-126.8134,94,99,8.8,2017-10-03,L_Shuswap,0.96,L_Adams,0.02,Little,0.01,BRN43,NA,NA,NA
+BRN43-A7,U4549,SO,2016-06-03,J07,50.459012,-126.1695,92,97,9.1,2017-10-04,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-H8,U4550,SO,2016-06-03,J07,50.459012,-126.1695,92,96,9.3,2017-10-04,NA,NA,NA,NA,NA,NA,BRN43,NA,Pale liver,NA
+BRN43-G8,U4551,SO,2016-06-03,J07,50.459012,-126.1695,96,NA,10,2017-10-04,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-F8,U4552,SO,2016-05-14,D07,50.19304,-125.136573,83,89,6.7,2017-10-04,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-E8,U4553,SO,2016-05-27,D22,50.243773,-125.397476,92,98,8.7,2017-10-04,L_Adams,0.93,L_Shuswap,0.04,Seymour,0.02,BRN43,Dropped kidney on cool rack,NA,Dropped kidney on cool rack
+BRN43-B5,U4585,SO,2016-06-03,J07,50.459012,-126.1695,90,95,7.8,2017-10-04,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-A5,U4586,SO,2016-05-27,D22,50.243773,-125.397476,85,NA,7.1,2017-10-04,L_Shuswap,0.82,Little,0.1,L_Adams,0.08,BRN43,NA,NA,NA
+BRN43-H11,U4587,SO,2016-05-27,D22,50.243773,-125.397476,93,NA,8.5,2017-10-04,Seymour,0.99,L_Adams,0,Little,0,BRN43,NA,NA,NA
+BRN43-G11,U4588,SO,2016-06-09,D07,50.190683,-125.143138,89,NA,6.9,2017-10-06,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-F11,U4589,SO,2016-06-09,D07,50.190683,-125.143138,91,NA,8.2,2017-10-06,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-E11,U4590,SO,2016-06-09,D07,50.190683,-125.143138,85,NA,6.8,2017-10-06,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-D11,U4591,SO,2016-06-09,D07,50.190683,-125.143138,90,NA,7.8,2017-10-06,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-A10,U4609,SO,2016-05-27,D22,50.243773,-125.397476,85,89,7.2,2017-10-05,L_Adams,0.44,Seymour,0.3,Little,0.15,BRN43,NA,NA,Extra muscle stored at -20 overnight
+BRN43-D8,U4610,SO,2016-05-27,D22,50.243773,-125.397476,98,103,9.9,2017-10-05,L_Shuswap,0.25,Kuzkwa_Cr,0.24,L_Adams,0.17,BRN43,NA,NA,Extra muscle stored at -20 overnight
+BRN43-C8,U4611,SO,2016-05-27,D22,50.243773,-125.397476,88,93,8,2017-10-05,L_Adams,0.64,Little,0.2,L_Shuswap,0.13,BRN43,NA,NA,Extra muscle stored at -20 overnight
+BRN43-B8,U4612,SO,2016-05-27,D22,50.243773,-125.397476,81,85,6.4,2017-10-05,Chilko,0.96,Roaring,0.03,Horsefly,0,BRN43,NA,NA,Extra muscle stored at -20 overnight
+BRN43-A8,U4613,SO,2016-06-09,D07,50.190683,-125.143138,86,91,6.9,2017-10-05,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,Extra muscle stored at -20 overnight
+BRN43-H12,U4614,SO,2016-06-09,D07,50.190683,-125.143138,109,115,14.8,2017-10-10,NA,NA,NA,NA,NA,NA,BRN43,NA,NA,NA
+BRN43-G12,U4615,SO,2016-05-23,D09,50.30908,-125.325703,83,NA,6.2,2017-10-10,Chilko,0.97,L_Adams,0.02,L_Shuswap,0,BRN43,NA,NA,NA
+BRN43-F12,U4616,SO,2016-05-23,D09,50.30908,-125.325703,91,96,7.6,2017-10-10,Middle,0.34,L_Shuswap,0.28,Tachie,0.14,BRN43,NA,NA,NA
+BRN43-E12,U4617,SO,2016-05-23,D09,50.30908,-125.325703,100,105,10.7,2017-10-10,Middle,0.37,Kuzkwa_Cr,0.26,Tachie,0.23,BRN43,NA,NA,NA
+BRN43-D12,U4618,SO,2016-05-23,D09,50.30908,-125.325703,78,NA,5.4,2017-10-10,Chilko,0.99,L_Adams,0,Chilko_south,0,BRN43,NA,NA,NA
+BRN43-C12,U4619,SO,2016-05-23,D09,50.30908,-125.325703,84,89,6.5,2017-10-10,L_Adams,0.72,Little,0.07,Roaring,0.06,BRN43,NA,NA,NA
+BRN43-B12,U4620,SO,2016-05-23,D09,50.30908,-125.325703,74,78,4.9,2017-10-10,Chilko,0.5,L_Adams,0.25,Little,0.18,BRN43,NA,NA,NA
+BRN43-A12,U4621,SO,2016-05-23,D09,50.30908,-125.325703,79,NA,5.5,2017-10-10,Roaring,0.77,Quesnel_Mitche,0.2,Quesnel_Horsef,0.02,BRN43,NA,NA,NA
+BRN44-A10,U1755,SO,2016-06-02,J09,50.543432,-126.8134,91,99,9.2,2017-10-16,L_Adams,0.57,L_Shuswap,0.35,Seymour,0.05,BRN44,NA,NA,Enumerated for sea lice only 2016-09-07 by bj. qa/qc by cj
+BRN44-B10,U1760,SO,2016-06-02,J09,50.543432,-126.8134,102,108,14.4,2017-10-16,Quesnel_Horsef,0.81,M_Horsefly,0.13,Horsefly,0.06,BRN44,NA,NA,Enumerated for sea lice only 2016-09-07 by bj. qa/qc by cj
+BRN44-C11,U1875,SO,2016-06-16,D07,50.191383,-125.143884,101,104,10.7,2017-10-18,NA,NA,NA,NA,NA,NA,BRN44,NA,NA,Sea-lice enumeration only 2016-09-21 by bj. qc by cj
+BRN44-D11,U1883,SO,2016-06-16,D07,50.191383,-125.143884,91,98,7.8,2017-10-18,NA,NA,NA,NA,NA,NA,BRN44,NA,NA,Sea-lice enumeration only 2016-09-21 by cj. qc by bj
+BRN44-A12,U2192,SO,2016-06-10,J03,50.547475,-126.676942,94,98,10,2017-10-17,L_Adams,0.61,MiddleShuswap,0.35,L_Shuswap,0.02,BRN44,NA,NA,Sea lice enumeration 2016-10-16 by cvj (qa/qc by bmm)
+BRN44-B12,U2193,SO,2016-06-10,J03,50.547475,-126.676942,94,98,9.3,2017-10-17,Chilko,0.71,L_Adams,0.17,Seymour,0.05,BRN44,NA,Back half of fish has lots of missing scales and can see muslce tissue through skin,Sea lice enumeration 2016-10-16 by cvj (qa/qc by bmm). fork length estimated.
+BRN44-C12,U2194,SO,2016-06-10,J03,50.547475,-126.676942,121,136,18.2,2017-10-17,Chilko,0.92,Chilko-North,0.08,NA,NA,BRN44,NA,NA,Sea lice enumeration 2016/10/16 by cvj
+BRN44-F12,U2195,SO,2016-06-10,J03,50.547475,-126.676942,103,114,11.5,2017-10-17,L_Shuswap,0.64,MiddleShuswap,0.36,NA,NA,BRN44,NA,NA,Sea lice enumeration 2016/10/16 by cvj
+BRN44-D12,U2196,SO,2016-06-10,J03,50.547475,-126.676942,97,101,10.3,2017-10-17,MiddleShuswap,0.5,L_Adams,0.25,Quesnel_Horsef,0.2,BRN44,NA,NA,Sea lice enumeration 2016/10/16 by cvj
+BRN44-E12,U2197,SO,2016-06-10,J03,50.547475,-126.676942,110,112,15.2,2017-10-17,Quesnel_Horsef,0.73,McKinley,0.14,L_Adams,0.05,BRN44,NA,NA,Sea lice enumeration 2016/10/16 by cvj
+BRN44-F11,U2198,SO,2016-06-10,J03,50.547475,-126.676942,105,108,13.7,2017-10-17,L_Adams,0.62,MiddleShuswap,0.22,Chilko-North,0.07,BRN44,NA,NA,Sea lice enumeration 2016-10-16 by cvj (qa/qc by bmm)
+BRN44-E11,U2200,SO,2016-06-10,J03,50.547475,-126.676942,98,104,10.8,2017-10-17,L_Adams,0.91,Seymour,0.03,MiddleShuswap,0.03,BRN44,NA,NA,Sea lice enumeration 2016-10-16 by cvj (qa/qc by bmm)
+BRN44-H2,U4391,SO,2016-06-09,D07,50.190683,-125.143138,91,NA,8,2017-10-10,NA,NA,NA,NA,NA,NA,BRN44,NA,NA,NA
+BRN44-G2,U4392,SO,2016-05-23,D09,50.30908,-125.325703,86,NA,7.1,2017-10-10,Little,0.5,L_Shuswap,0.34,L_Adams,0.14,BRN44,NA,NA,NA
+BRN44-H4,U4527,SO,2016-05-23,D09,50.30908,-125.325703,92,NA,8.3,2017-10-10,Seymour,1,Scotch,0,Eagle,0,BRN44,NA,NA,NA
+BRN44-G4,U4528,SO,2016-05-23,D09,50.30908,-125.325703,92,97,8.2,2017-10-10,Horsefly,0.42,U_Horsefly,0.28,Quesnel_Horsef,0.21,BRN44,NA,NA,NA
+BRN44-F4,U4529,SO,2016-05-23,D09,50.30908,-125.325703,84,NA,5.7,2017-10-10,L_Shuswap,1,MiddleShuswap,0,NA,NA,BRN44,NA,NA,Fatty acid sample fell on floor.
+BRN44-E4,U4530,SO,2016-05-23,D09,50.30908,-125.325703,89,NA,6.4,2017-10-10,Roaring,1,U_Horsefly,0,NA,NA,BRN44,NA,NA,NA
+BRN44-D4,U4531,SO,2016-05-23,D09,50.30908,-125.325703,93,NA,8.9,2017-10-10,L_Adams,0.61,Little,0.25,L_Shuswap,0.13,BRN44,NA,NA,NA
+BRN44-C4,U4532,SO,2016-06-01,J02,50.60125,-126.704457,95,NA,9.7,2017-10-10,NA,NA,NA,NA,NA,NA,BRN44,NA,NA,NA
+BRN44-B4,U4533,SO,2016-06-04,J03,50.543029,-126.632233,87,NA,6.7,2017-10-10,Quesnel_Horsef,0.58,Horsefly,0.12,Seymour,0.09,BRN44,NA,NA,NA
+BRN44-A4,U4534,SO,2016-06-04,J03,50.543029,-126.632233,105,111,12.4,2017-10-10,Kynock,0.26,Porter_Cr,0.14,Rossette,0.13,BRN44,NA,NA,NA
+BRN44-H5,U4535,SO,2016-06-04,J03,50.543029,-126.632233,92,NA,7.7,2017-10-10,L_Shuswap,0.62,L_Adams,0.36,MiddleShuswap,0.02,BRN44,NA,"Very pale gills, and liver. brain was completely white. pale organs in general. gall blader was amber in colour.",NA
+BRN44-G5,U4536,SO,2016-06-04,J03,50.543029,-126.632233,91,NA,6.7,2017-10-10,Chilko,0.74,L_Adams,0.18,Chilko_south,0.06,BRN44,NA,NA,Fish fell on floor.
+BRN44-H1,U4554,SO,2016-06-09,D07,50.190683,-125.143138,92,98,8.5,2017-10-10,NA,NA,NA,NA,NA,NA,BRN44,NA,NA,"Fish fell off scale , landed on scale sample side"
+BRN44-G1,U4555,SO,2016-05-23,D09,50.30908,-125.325703,81,86,5.7,2017-10-10,Little,0.63,Horsefly,0.15,L_Adams,0.08,BRN44,NA,White spot on liver,NA
+BRN44-F1,U4556,SO,2016-05-23,D09,50.30908,-125.325703,92,NA,7.5,2017-10-10,L_Shuswap,0.31,L_Adams,0.2,Seymour,0.19,BRN44,NA,"Large spleen, white worm in body cavity",NA
+BRN44-E1,U4557,SO,2016-05-23,D09,50.30908,-125.325703,89,NA,6.9,2017-10-10,L_Adams,0.43,L_Shuswap,0.3,Little,0.2,BRN44,fish slid on to sterilized part of bench,NA,Fish slid on to sterilized part of bench
+BRN44-D1,U4558,SO,2016-05-23,D09,50.30908,-125.325703,88,93,7.5,2017-10-10,Seymour,0.48,L_Adams,0.27,L_Shuswap,0.2,BRN44,NA,NA,NA
+BRN44-C1,U4559,SO,2016-06-01,J02,50.60125,-126.704457,98,104,11.2,2017-10-10,NA,NA,NA,NA,NA,NA,BRN44,NA,NA,NA
+BRN44-B1,U4560,SO,2016-06-04,J03,50.543029,-126.632233,89,93,9.7,2017-10-10,Quesnel_Horsef,0.84,M_Horsefly,0.11,Horsefly,0.04,BRN44,cut for fatty acid sample went a bit deep exposing posterior kidney,Lots of scales missing on both sides,Cut for fatty acid sample went a bit deep exposing posterior kidney
+BRN44-A1,U4561,SO,2016-06-04,J03,50.543029,-126.632233,85,90,7,2017-10-10,L_Adams,0.88,L_Shuswap,0.1,Chilko,0.01,BRN44,NA,NA,NA
+BRN44-H6,U4562,SO,2016-06-01,D09,50.308769,-125.326765,91,96,8.3,2017-10-11,L_Shuswap,0.97,L_Adams,0.02,Little,0,BRN44,NA,NA,NA
+BRN44-G6,U4563,SO,2016-06-01,D09,50.308769,-125.326765,80,84,6.7,2017-10-11,L_Shuswap,1,MiddleShuswap,0,NA,NA,BRN44,NA,NA,NA
+BRN44-F6,U4564,SO,2016-06-01,D22,50.24565,-125.396035,84,89,6.6,2017-10-11,L_Adams,0.56,L_Shuswap,0.39,Little,0.02,BRN44,Gill missing from RNA well,NA,Gill missing from RNA well
+BRN44-E6,U4565,SO,2016-06-01,D22,50.24565,-125.396035,89,NA,7.7,2017-10-11,L_Adams,0.75,L_Shuswap,0.21,Little,0.02,BRN44,Lost spleen sample,NA,"Lost spleen samples from RNA wells e,d,c,b,a"
+BRN44-D6,U4566,SO,2016-05-19,D07,50.191099,-125.138578,88,94,6.7,2017-10-11,NA,NA,NA,NA,NA,NA,BRN44,Lost spleen sample,White worm in body cavity,"Lost spleen samples from RNA wells e,d,c,b,a"
+BRN44-C6,U4567,SO,2016-05-19,D07,50.191099,-125.138578,84,90,6.7,2017-10-11,NA,NA,NA,NA,NA,NA,BRN44,Lost spleen sample,NA,"Lost spleen samples from RNA wells e,d,c,b,a"
+BRN44-B6,U4568,SO,2016-05-19,D07,50.191099,-125.138578,83,88,6,2017-10-11,NA,NA,NA,NA,NA,NA,BRN44,Lost spleen sample,NA,"Lost spleen samples from RNA wells e,d,c,b,a"
+BRN44-A6,U4569,SO,2016-05-19,D07,50.191099,-125.138578,84,NA,6.1,2017-10-11,NA,NA,NA,NA,NA,NA,BRN44,Lost spleen sample,Small scratch on back half of belly,"Lost spleen samples from RNA wells e,d,c,b,a"
+BRN44-H9,U4570,SO,2016-05-19,D07,50.191099,-125.138578,78,83,4.2,2017-10-11,NA,NA,NA,NA,NA,NA,BRN44,NA,NA,NA
+BRN44-G9,U4571,SO,2016-06-07,D09,50.30436,-125.332956,99,104,11.4,2017-10-12,L_Shuswap,0.95,Scotch,0.04,Little,0.01,BRN44,NA,NA,NA
+BRN44-F9,U4572,SO,2016-06-07,D09,50.30436,-125.332956,86,92,6.9,2017-10-12,L_Shuswap,0.88,L_Adams,0.07,Chilko-North,0.03,BRN44,NA,NA,NA
+BRN44-E9,U4573,SO,2016-06-07,D09,50.30436,-125.332956,87,93,7.3,2017-10-12,Scotch,0.59,L_Shuswap,0.3,L_Adams,0.09,BRN44,NA,NA,NA
+BRN44-D9,U4574,SO,2016-06-07,D09,50.30436,-125.332956,90,95,7.9,2017-10-12,Quesnel_Horsef,0.53,L_Adams,0.2,L_Shuswap,0.13,BRN44,NA,NA,NA
+BRN44-C9,U4575,SO,2016-06-16,D07,50.191383,-125.143884,98,103,10.2,2017-10-12,NA,NA,NA,NA,NA,NA,BRN44,NA,NA,NA
+BRN44-B9,U4576,SO,2016-06-16,D07,50.191383,-125.143884,95,100,9.4,2017-10-12,NA,NA,NA,NA,NA,NA,BRN44,NA,NA,NA
+BRN44-A9,U4577,SO,2016-06-16,D07,50.191383,-125.143884,94,99,9.2,2017-10-12,NA,NA,NA,NA,NA,NA,BRN44,NA,NA,"One otolith broke, most of it is missing"
+BRN44-H3,U4622,SO,2016-06-04,J03,50.543029,-126.632233,81,85,6.2,2017-10-10,L_Adams,0.91,Seymour,0.07,L_Shuswap,0.01,BRN44,brain fell on dissection tray.,Flabellifera on ventral side,Brain fell on dissection tray.
+BRN44-G3,U4623,SO,2016-06-04,J03,50.543029,-126.632233,95,100,8.9,2017-10-10,L_Shuswap,0.99,L_Adams,0.01,MiddleShuswap,0,BRN44,NA,Flabellifera on dorsal side,NA
+BRN44-F3,U4624,SO,2016-06-04,J03,50.543029,-126.632233,89,NA,8.6,2017-10-10,Mitchell,0.92,Quesnel_Horsef,0.04,Quesnel_Decept,0.02,BRN44,NA,NA,NA
+BRN44-E3,U4625,SO,2016-06-04,J03,50.543029,-126.632233,81,86,5.8,2017-10-10,Chilko,0.92,Pinchi_Cr,0.03,Chilko_south,0.01,BRN44,NA,NA,NA
+BRN44-D3,U4626,SO,2016-06-01,D09,50.308769,-125.326765,85,89,7.1,2017-10-11,Scotch,1,NA,NA,NA,NA,BRN44,NA,NA,NA
+BRN44-C3,U4627,SO,2016-06-01,D09,50.308769,-125.326765,91,NA,7.7,2017-10-11,L_Shuswap,0.78,L_Adams,0.18,Little,0.03,BRN44,NA,NA,Stomach broke in half
+BRN44-B3,U4628,SO,2016-06-01,D09,50.308769,-125.326765,91,96,7.7,2017-10-11,L_Adams,0.94,L_Shuswap,0.06,Scotch,0,BRN44,NA,NA,NA
+BRN44-A3,U4629,SO,2016-06-01,D22,50.24565,-125.396035,89,94,7,2017-10-11,L_Adams,0.83,L_Shuswap,0.11,Little,0.06,BRN44,NA,NA,NA
+BRN44-H7,U4630,SO,2016-06-01,D22,50.24565,-125.396035,88,92,7.9,2017-10-11,L_Adams,0.93,Horsefly,0.04,Scotch,0.02,BRN44,NA,NA,NA
+BRN44-G7,U4631,SO,2016-06-01,D22,50.24565,-125.396035,91,95,7.6,2017-10-11,Scotch,0.97,L_Adams,0.02,L_Shuswap,0,BRN44,NA,Ventral lesion between pectoral & pelvic fins,NA
+BRN44-F7,U4632,SO,2016-05-19,D07,50.191099,-125.138578,85,NA,6.3,2017-10-11,NA,NA,NA,NA,NA,NA,BRN44,NA,NA,NA
+BRN44-F2,U4633,SO,2016-05-23,D09,50.30908,-125.325703,99,NA,11,2017-10-10,Middle,0.3,FiveMile,0.28,Kynock,0.09,BRN44,NA,NA,NA
+BRN44-E2,U4634,SO,2016-05-23,D09,50.30908,-125.325703,87,NA,7.3,2017-10-10,Little,0.85,L_Adams,0.12,Fennell,0.02,BRN44,NA,NA,NA
+BRN44-D2,U4635,SO,2016-06-01,D09,50.308769,-125.326765,89,NA,8.3,2017-10-11,L_Shuswap,0.82,L_Adams,0.09,Scotch,0.07,BRN44,NA,NA,NA
+BRN44-C2,U4636,SO,2016-06-01,D09,50.308769,-125.326765,93,98,9.2,2017-10-11,L_Shuswap,1,L_Adams,0,MiddleShuswap,0,BRN44,NA,NA,Heart touched chamois
+BRN44-B2,U4637,SO,2016-06-01,D22,50.24565,-125.396035,79,NA,5.5,2017-10-11,Nahatlatch,1,NA,NA,NA,NA,BRN44,NA,NA,1 otolith
+BRN44-A2,U4638,SO,2016-06-01,D22,50.24565,-125.396035,94,99,8.4,2017-10-11,Scotch,0.94,L_Adams,0.04,L_Shuswap,0.01,BRN44,NA,NA,NA
+BRN44-H12,U4639,SO,2016-06-16,D07,50.191383,-125.143884,99,NA,9.9,2017-10-12,NA,NA,NA,NA,NA,NA,BRN44,NA,Knick out of rear dorsal area,NA
+BRN44-G12,U4640,SO,2016-06-16,D07,50.191383,-125.143884,90,95,8.1,2017-10-12,NA,NA,NA,NA,NA,NA,BRN44,NA,NA,1 otolith
+BRN44-F5,U4657,SO,2016-06-01,D09,50.308769,-125.326765,92,98,7.7,2017-10-11,L_Shuswap,0.83,L_Adams,0.11,Chilko,0.04,BRN44,NA,"Lesion on bottom, cut, slash",NA
+BRN44-E5,U4658,SO,2016-06-01,D09,50.308769,-125.326765,96,101,10.8,2017-10-11,Horsefly,0.78,L_Adams,0.15,Little,0.04,BRN44,NA,Small pin lesion spot on right,NA
+BRN44-D5,U4659,SO,2016-06-01,D09,50.308769,-125.326765,90,94,7.6,2017-10-11,L_Shuswap,0.91,L_Adams,0.06,Little,0.02,BRN44,NA,NA,NA
+BRN44-C5,U4660,SO,2016-06-01,D22,50.24565,-125.396035,84,NA,5.9,2017-10-11,L_Adams,0.5,Little,0.28,L_Shuswap,0.15,BRN44,NA,NA,NA
+BRN44-B5,U4661,SO,2016-06-01,D22,50.24565,-125.396035,87,NA,6.7,2017-10-11,Chilko,0.97,L_Adams,0.02,Little,0,BRN44,NA,Hemorraghing gills,NA
+BRN44-A5,U4662,SO,2016-06-01,D22,50.24565,-125.396035,83,87,6.2,2017-10-11,L_Shuswap,0.99,MiddleShuswap,0,L_Adams,0,BRN44,NA,NA,NA
+BRN44-H8,U4663,SO,2016-05-19,D07,50.191099,-125.138578,80,85,5.2,2017-10-11,NA,NA,NA,NA,NA,NA,BRN44,NA,NA,NA
+BRN44-G8,U4664,SO,2016-05-19,D07,50.191099,-125.138578,81,85,5.1,2017-10-11,NA,NA,NA,NA,NA,NA,BRN44,NA,NA,NA
+BRN44-F8,U4665,SO,2016-05-19,D07,50.191099,-125.138578,86,NA,5.9,2017-10-11,NA,NA,NA,NA,NA,NA,BRN44,NA,NA,NA
+BRN44-E8,U4666,SO,2016-05-19,D07,50.191099,-125.138578,77,82,5,2017-10-11,NA,NA,NA,NA,NA,NA,BRN44,NA,Lesion near vent,NA
+BRN44-D8,U4667,SO,2016-05-19,D07,50.191099,-125.138578,85,NA,5.8,2017-10-11,NA,NA,NA,NA,NA,NA,BRN44,NA,NA,NA
+BRN44-C8,U4668,SO,2016-05-19,D07,50.191099,-125.138578,79,83,5.1,2017-10-11,NA,NA,NA,NA,NA,NA,BRN44,NA,NA,NA
+BRN44-B8,U4669,SO,2016-05-19,D07,50.191099,-125.138578,91,94,6.5,2017-10-11,NA,NA,NA,NA,NA,NA,BRN44,NA,NA,NA
+BRN44-A8,U4670,SO,2016-05-19,D07,50.191099,-125.138578,86,NA,5.7,2017-10-11,NA,NA,NA,NA,NA,NA,BRN44,NA,NA,NA
+BRN44-H11,U4671,SO,2016-06-07,D09,50.30436,-125.332956,92,97,7.6,2017-10-11,Little,0.62,L_Adams,0.34,L_Shuswap,0.03,BRN44,NA,NA,NA
+BRN44-G11,U4672,SO,2016-06-07,D09,50.30436,-125.332956,90,95,7.1,2017-10-11,L_Shuswap,0.97,Scotch,0.02,MiddleShuswap,0,BRN44,NA,NA,NA
+BRN44-E7,U4681,SO,2016-05-19,D07,50.191099,-125.138578,89,94,7.4,2017-10-11,NA,NA,NA,NA,NA,NA,BRN44,Kidney touched dissection tray,NA,Kidney touched dissection tray
+BRN44-D7,U4682,SO,2016-05-19,D07,50.191099,-125.138578,85,90,6.2,2017-10-11,NA,NA,NA,NA,NA,NA,BRN44,NA,NA,NA
+BRN44-C7,U4683,SO,2016-05-19,D07,50.191099,-125.138578,81,85,5.5,2017-10-11,NA,NA,NA,NA,NA,NA,BRN44,NA,NA,NA
+BRN44-B7,U4684,SO,2016-05-19,D07,50.191099,-125.138578,76,NA,4.7,2017-10-11,NA,NA,NA,NA,NA,NA,BRN44,NA,NA,1 otolith
+BRN44-A7,U4685,SO,2016-05-19,D07,50.191099,-125.138578,83,88,5.3,2017-10-11,NA,NA,NA,NA,NA,NA,BRN44,heart touched dissection tray,NA,Heart touched dissection tray
+BRN44-H10,U4686,SO,2016-05-19,D07,50.191099,-125.138578,76,80,5.1,2017-10-11,NA,NA,NA,NA,NA,NA,BRN44,outside foreceps touched brain,NA,Outside foreceps touched brain
+BRN44-G10,U4687,SO,2016-06-07,D09,50.30436,-125.332956,92,97,8.7,2017-10-11,L_Shuswap,0.86,L_Adams,0.06,Little,0.06,BRN44,NA,NA,NA
+BRN44-F10,U4688,SO,2016-06-07,D09,50.30436,-125.332956,89,NA,7.6,2017-10-12,L_Shuswap,0.86,L_Adams,0.12,Little,0.02,BRN44,NA,NA,1 broken otolith
+BRN44-E10,U4689,SO,2016-06-07,D09,50.30436,-125.332956,106,112,13.3,2017-10-12,Scotch,0.99,Seymour,0.01,Little,0,BRN44,brain fell on tray,NA,Brain fell on tray
+BRN44-D10,U4690,SO,2016-06-07,D09,50.30436,-125.332956,87,91,6.9,2017-10-12,Scotch,1,Seymour,0,Eagle,0,BRN44,NA,NA,NA
+BRN44-C10,U4691,SO,2016-06-16,D07,50.191383,-125.143884,111,117,16.5,2017-10-12,NA,NA,NA,NA,NA,NA,BRN44,brain fell on coolrack,NA,Brain fell on coolrack
+BRN20-H1,U2513,PI,2015-06-07,D07,50.1915,-125.14292,87,92,9.1,2016-12-04,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-G1,U2514,PI,2015-06-22,D09,50,-125,105,110,12.6,2016-12-04,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-F1,U2515,PI,2015-06-22,D09,50,-125,91,96,8.7,2016-12-04,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-E1,U2516,PI,2015-06-22,D09,50,-125,110,NA,15.9,2016-12-04,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-D1,U2517,PI,2015-06-09,D07,50.19077,-125.14249,96,NA,10.6,2016-12-04,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-C1,U2518,PI,2015-06-23,J09,50.54414,-126.81843,123,129,25,2016-12-04,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-B1,U2519,PI,2015-06-23,J09,50.54414,-126.81843,131,138,24.1,2016-12-04,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-A1,U2520,PI,2015-06-23,J09,50.54414,-126.81843,126,132,25,2016-12-04,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-H5,U2521,PI,2015-06-16,J09,50.54327,-126.81252,129,NA,24.1,2016-12-13,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-G5,U2522,PI,2015-06-16,J09,50.54327,-126.81252,115,120,17.4,2016-12-13,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-F5,U2523,PI,2015-06-19,J09,50.54362,-126.81951,121,127,20.2,2016-12-13,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-E5,U2524,PI,2015-06-19,J09,50.54362,-126.81951,127,132,23.6,2016-12-15,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,Only one otolith
+BRN20-D5,U2525,PI,2015-06-07,D07,50.1915,-125.14292,95,100,10.2,2016-12-15,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-C5,U2526,PI,2015-06-13,D07,50.19051,-125.1444,101,106,12.3,2016-12-15,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-B5,U2527,PI,2015-07-14,D09,50.30717,-125.33303,119,125,17.5,2016-12-15,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-A5,U2528,PI,2015-05-21,D07,50.18217,-125.1493,84,NA,7.1,2016-12-15,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-H8,U2529,PI,2015-06-13,D07,50.19051,-125.1444,99,NA,11.1,2016-12-15,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-G8,U2530,PI,2015-06-07,D07,50.1915,-125.14292,93,98,9.7,2016-12-15,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-F8,U2531,PI,2015-06-07,J09,50.539,-126.7781,119,124,18.7,2016-12-15,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-E8,U2532,PI,2015-06-07,J09,50.539,-126.7781,117,122,16.5,2016-12-15,NA,NA,NA,NA,NA,NA,BRN20,NA,Bloody vent,NA
+BRN20-D8,U2533,PI,2015-06-07,J09,50.539,-126.7781,123,129,18.9,2016-12-15,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-H3,U2637,PI,2015-06-16,J02,50.59549,-126.69036,97,NA,9.2,2016-12-06,NA,NA,NA,NA,NA,NA,BRN20,NA,Pale liver; tiny spleen,1 otolith
+BRN20-G3,U2638,PI,2015-06-16,J02,50.59549,-126.69036,106,NA,13.1,2016-12-06,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-F3,U2639,PI,2015-06-16,J02,50.59549,-126.69036,94,NA,9,2016-12-06,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,1 otolith
+BRN20-E3,U2640,PI,2015-06-16,J02,50.59549,-126.69036,94,NA,9.7,2016-12-06,NA,NA,NA,NA,NA,NA,BRN20,Fish fell on floor,NA,Fish fell on floor before any cuts made; broken otolith
+BRN20-D3,U2641,PI,2015-06-16,J02,50.59549,-126.69036,105,NA,11.7,2016-12-06,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-C3,U2642,PI,2015-06-16,J09,50.54327,-126.81252,121,126,17.3,2016-12-08,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-B3,U2643,PI,2015-06-16,J09,50.54327,-126.81252,115,NA,15.1,2016-12-08,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-A3,U2644,PI,2015-06-16,J09,50.54327,-126.81252,112,NA,13.5,2016-12-08,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-B12,U2658,PI,2015-06-19,J02,50.60263,-126.70188,121,126,19.8,2017-01-05,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,1 broken otolith
+BRN20-A12,U2659,PI,2015-06-19,J02,50.60263,-126.70188,101,105,11.5,2017-01-05,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-H2,U2834,PI,2015-06-22,D09,50,-125,108,NA,13.8,2016-12-04,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-G2,U2835,PI,2015-06-22,D09,50,-125,115,119,12.9,2016-12-04,NA,NA,NA,NA,NA,NA,BRN20,NA,Nematode parasite. lesions from sea lice.,NA
+BRN20-F2,U2836,PI,2015-06-22,D09,50,-125,97,111,10.8,2016-12-04,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-E2,U2837,PI,2015-06-22,D09,50,-125,113,117,12.9,2016-12-04,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-D2,U2838,PI,2015-06-09,D09,50.30734,-125.33514,118,122,18.4,2016-12-04,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-C2,U2839,PI,2015-06-09,D07,50.19077,-125.14249,90,95,10,2016-12-04,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-B2,U2840,PI,2015-06-23,J09,50.54414,-126.81843,134,139,27,2016-12-04,NA,NA,NA,NA,NA,NA,BRN20,NA,Large liver.,NA
+BRN20-A2,U2841,PI,2015-06-23,J09,50.54414,-126.81843,123,128,20.4,2016-12-04,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-H4,U2842,PI,2015-06-16,J02,50.59549,-126.69036,102,106,12.6,2016-12-05,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-G4,U2843,PI,2015-06-16,J02,50.59549,-126.69036,96,100,9.3,2016-12-05,NA,NA,NA,NA,NA,NA,BRN20,NA,"Redness, maybe bleeding, around the brain.",NA
+BRN20-F4,U2844,PI,2015-06-16,J02,50.59549,-126.69036,89,NA,8.8,2016-12-05,NA,NA,NA,NA,NA,NA,BRN20,NA,Pale liver,Only one otolith found.
+BRN20-E4,U2845,PI,2015-06-16,J02,50.59549,-126.69036,99,NA,9.9,2016-12-05,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-D4,U2846,PI,2015-06-16,J02,50.59549,-126.69036,99,104,11.1,2016-12-05,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,Only one otolith found.
+BRN20-C4,U2847,PI,2015-06-16,J09,50.54327,-126.81252,108,112,12.7,2016-12-13,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-B4,U2848,PI,2015-06-16,J09,50.54327,-126.81252,121,125,17.3,2016-12-13,NA,NA,NA,NA,NA,NA,BRN20,Heart sample missing (fell and lost),NA,"Heart sample missing, fell and lost."
+BRN20-A4,U2849,PI,2015-06-16,J09,50.54327,-126.81252,117,122,16,2016-12-13,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-H6,U2850,PI,2015-06-16,J09,50.54327,-126.81252,127,132,24.9,2016-12-13,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-G6,U2851,PI,2015-06-19,J09,50.54362,-126.81951,119,NA,18.1,2016-12-13,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-F6,U2852,PI,2015-06-19,J09,50.54362,-126.81951,127,133,22.8,2016-12-13,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-E6,U2853,PI,2015-06-19,J09,50.54362,-126.81951,133,NA,25.6,2016-12-14,NA,NA,NA,NA,NA,NA,BRN20,NA,"Large spleen, pale liver and heart.",NA
+BRN20-D6,U2854,PI,2015-06-19,J09,50.54362,-126.81951,117,122,17.5,2016-12-14,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-C6,U2855,PI,2015-06-19,J09,50.54362,-126.81951,127,132,23.1,2016-12-14,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-B6,U2856,PI,2015-06-19,J09,50.54362,-126.81951,121,126,18,2016-12-15,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-A6,U2857,PI,2015-06-19,J09,50.54362,-126.81951,117,NA,16.7,2016-12-15,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-H7,U2858,PI,2015-06-19,J09,50.54362,-126.81951,122,127,18.8,2016-12-15,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-G7,U2859,PI,2015-05-21,D07,50.18217,-125.1493,83,87,6.8,2016-12-15,NA,NA,NA,NA,NA,NA,BRN20,NA,Pale gills and heart.,NA
+BRN20-F7,U2860,PI,2015-06-13,D07,50.19051,-125.1444,99,103,9.7,2016-12-15,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-E7,U2861,PI,2015-06-07,D07,50.1915,-125.14292,93,NA,9,2016-12-15,NA,NA,NA,NA,NA,NA,BRN20,NA,Pale heart.,NA
+BRN20-D7,U2862,PI,2015-06-07,D07,50.1915,-125.14292,99,103,10.5,2016-12-15,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-C7,U2863,PI,2015-06-07,D07,50.1915,-125.14292,94,NA,8.9,2016-12-15,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,Only one broken otolith found.
+BRN20-B7,U2864,PI,2015-06-07,J09,50.539,-126.7781,127,132,22.6,2016-12-15,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-A7,U2865,PI,2015-06-07,J09,50.539,-126.7781,106,111,11.6,2016-12-15,NA,NA,NA,NA,NA,NA,BRN20,NA,Pale liver and heart.,NA
+BRN20-H9,U2866,PI,2015-06-07,J09,50.539,-126.7781,119,124,18.7,2016-12-15,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-G9,U2867,PI,2015-06-07,J09,50.539,-126.7781,121,126,18.3,2016-12-16,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-F9,U2868,PI,2015-06-07,J09,50.539,-126.7781,119,124,18.8,2016-12-16,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-E9,U2869,PI,2015-06-07,J09,50.539,-126.7781,102,NA,11.3,2016-12-16,NA,NA,NA,NA,NA,NA,BRN20,NA,Large otolith,NA
+BRN20-D9,U2870,PI,2015-06-07,J09,50.539,-126.7781,117,123,17.4,2016-12-16,NA,NA,NA,NA,NA,NA,BRN20,Brain & spleen fell on chamois,NA,Brain and spleem fell on chamois.
+BRN20-C9,U2871,PI,2015-07-07,J09,NA,NA,158,164,45.8,2016-12-16,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-B9,U2872,PI,2015-07-07,J09,NA,NA,121,NA,17.9,2016-12-16,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-A9,U2873,PI,2015-07-07,J09,NA,NA,131,NA,27,2016-12-16,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,Scale smear drifted into cell 30 and 39.
+BRN20-H10,U2874,PI,2015-07-07,J09,NA,NA,115,NA,15.6,2016-12-16,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-G10,U2875,PI,2015-07-07,J09,NA,NA,128,NA,19.7,2016-12-16,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-F10,U2876,PI,2015-07-07,J09,NA,NA,146,151,34.5,2016-12-16,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-E10,U2877,PI,2015-07-07,J09,NA,NA,122,126,19.6,2016-12-16,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-D10,U2878,PI,2015-07-07,J09,NA,NA,113,118,11.2,2016-12-16,NA,NA,NA,NA,NA,NA,BRN20,NA,Only found one otolith.,NA
+BRN20-C10,U2879,PI,2015-07-07,J09,NA,NA,139,144,27.2,2016-12-17,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-B10,U2880,PI,2015-07-07,J09,NA,NA,133,138,24.6,2016-12-17,NA,NA,NA,NA,NA,NA,BRN20,NA,Only found one otolith.,NA
+BRN20-A10,U2881,PI,2015-06-23,J02,50.60237,-126.70219,131,139,NA,2016-12-17,NA,NA,NA,NA,NA,NA,BRN20,NA,Forgot to record weight.,NA
+BRN20-C8,U2882,PI,2015-06-23,J02,50.60237,-126.70219,130,135,24.2,2016-12-17,NA,NA,NA,NA,NA,NA,BRN20,NA,Only found one otolith. nematode parasite on stomach.,NA
+BRN20-B8,U2883,PI,2015-06-23,J02,50.60237,-126.70219,127,NA,19.3,2016-12-17,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-A8,U2884,PI,2015-06-23,J02,50.60237,-126.70219,132,NA,27,2016-12-17,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-H11,U2885,PI,2015-06-23,J02,50.60237,-126.70219,133,136,24.2,2017-01-03,NA,NA,NA,NA,NA,NA,BRN20,NA,Pale heart,NA
+BRN20-G11,U2886,PI,2015-06-23,J02,50.60237,-126.70219,140,NA,31.3,2017-01-03,NA,NA,NA,NA,NA,NA,BRN20,NA,Pale liver,NA
+BRN20-F11,U2887,PI,2015-06-23,J02,50.60237,-126.70219,128,133,22.2,2017-01-03,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-E11,U2888,PI,2015-06-23,J02,50.60237,-126.70219,133,137,25.1,2017-01-03,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-D11,U2889,PI,2015-06-23,J02,50.60237,-126.70219,130,135,25.2,2017-01-03,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-C11,U2890,PI,2015-06-23,J02,50.60237,-126.70219,127,134,22.7,2017-01-03,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-B11,U2891,PI,2015-06-19,J02,50.60263,-126.70188,129,133,23.9,2017-01-03,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-A11,U2892,PI,2015-06-19,J02,50.60263,-126.70188,113,118,16.2,2017-01-03,NA,NA,NA,NA,NA,NA,BRN20,NA,"Pale liver, small spleen, pale kidney.",NA
+BRN20-H12,U2893,PI,2015-06-19,J02,50.60263,-126.70188,117,124,19.4,2017-01-03,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-G12,U2894,PI,2015-06-19,J02,50.60263,-126.70188,134,NA,29.5,2017-01-03,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-F12,U2895,PI,2015-06-19,J02,50.60263,-126.70188,115,NA,15.6,2017-01-04,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-E12,U2896,PI,2015-06-19,J02,50.60263,-126.70188,131,136,26.2,2017-01-04,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-D12,U2897,PI,2015-06-19,J02,50.60263,-126.70188,104,107,12.6,2017-01-04,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN20-C12,U2898,PI,2015-06-19,J02,50.60263,-126.70188,98,NA,9.3,2017-01-04,NA,NA,NA,NA,NA,NA,BRN20,NA,NA,NA
+BRN23-H1,U2017,CU,2015-06-27,J09,50.5438,-126.81988,NA,116,16.3,2016-10-02,NA,NA,NA,NA,NA,NA,BRN23,NA,Heart and liver pale. Nematode parasite found on chamois.,NA
+BRN23-G1,U2018,CU,2015-06-27,J09,50.5438,-126.81988,NA,133,25.6,2016-10-02,NA,NA,NA,NA,NA,NA,BRN23,NA,Pale heart.,NA
+BRN23-F1,U2019,CU,2015-06-27,J09,50.5438,-126.81988,NA,132,22.1,2016-10-03,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-E1,U2020,CU,2015-06-27,J09,50.5438,-126.81988,NA,152,34.7,2016-10-03,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-D1,U2031,CU,2015-06-27,J09,50.5438,-126.81988,NA,119,17,2016-10-03,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-C1,U2032,CU,2015-06-07,D07,50.1915,-125.14292,NA,123,17.9,2016-10-03,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-A2,U2512,CU,2015-06-19,J09,50.54362,-126.81951,119,124,18.9,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-H2,U2625,CU,2015-06-05,D07,50.19112,-125.14202,89,94,9.6,2016-11-28,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-G2,U2626,CU,2015-05-21,D07,50.18217,-125.1493,91,96,9.6,2016-11-28,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-F2,U2627,CU,2015-05-21,D07,50.18217,-125.1493,117,NA,18.4,2016-11-28,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-E2,U2628,CU,2015-06-05,D07,50.19112,-125.14202,83,86,8,2016-11-30,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-D2,U2629,CU,2015-06-05,D07,50.19112,-125.14202,88,NA,8.2,2016-11-30,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-C2,U2630,CU,2015-06-19,J09,50.54362,-126.81951,124,128,19.1,2016-11-30,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,1 otolith only
+BRN23-B2,U2631,CU,2015-06-19,J09,50.54362,-126.81951,118,123,17.6,2016-11-30,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-G5,U2632,CU,2015-06-19,J09,50.54362,-126.81951,124,128,20.4,2016-12-01,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-F5,U2633,CU,2015-06-05,D07,50.19112,-125.14202,84,NA,6.6,2016-12-01,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-E5,U2634,CU,2015-05-21,D07,50.18217,-125.1493,85,90,7.5,2016-12-01,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-D5,U2635,CU,2015-05-16,D07,50.16412,-125.1602,109,NA,14.9,2016-12-01,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-E11,U2636,CU,2015-05-26,J09,50.53989,-126.78256,82,86,6.3,2016-12-05,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-C5,U2789,CU,2015-06-16,J02,50.59549,-126.69036,126,132,24.7,2016-12-01,NA,NA,NA,NA,NA,NA,BRN23,Head kidney detached with stomach,NA,Head kidney detached with stomach
+BRN23-B5,U2790,CU,2015-06-16,J02,50.59549,-126.69036,117,122,19.9,2016-12-01,NA,NA,NA,NA,NA,NA,BRN23,Heart fell on chamois,NA,Heart fell on chamois
+BRN23-A5,U2791,CU,2015-06-16,J02,50.59549,-126.69036,121,127,21.6,2016-12-01,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-H8,U2792,CU,2015-07-01,J09,50.54329,-126.8169,121,127,19.5,2016-12-01,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-G7,U2793,CU,2015-07-07,J09,NA,NA,126,132,22.6,2016-12-02,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-F7,U2794,CU,2015-07-07,J09,NA,NA,123,129,21.5,2016-12-02,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-E7,U2795,CU,2015-06-18,D09,50.30819,-125.32694,102,NA,12,2016-12-02,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-D7,U2796,CU,2015-06-18,D09,50.30819,-125.32694,106,122,17.9,2016-12-02,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-C7,U2798,CU,2015-07-07,J09,NA,NA,122,128,20.2,2016-12-02,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-B7,U2799,CU,2015-07-01,J09,50.54329,-126.8169,126,131,24,2016-12-02,NA,NA,NA,NA,NA,NA,BRN23,Brain fell on chamois,NA,Brain fell on chamois. day of sampling not written on tag.
+BRN23-A7,U2800,CU,2015-06-18,D09,50.30819,-125.32694,125,131,22,2016-12-02,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-B1,U2824,CU,2015-06-05,D07,50.19112,-125.14202,89,94,8,2016-11-28,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-A1,U2825,CU,2015-06-19,J09,50.54362,-126.81951,120,126,17.2,2016-11-30,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-H5,U2826,CU,2015-06-01,J02,50.60051,-126.70319,117,123,18.3,2016-11-30,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-G8,U2827,CU,2015-05-16,D07,50.16412,-125.1602,108,114,14.6,2016-12-02,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-F8,U2828,CU,2015-05-16,D07,50.16412,-125.1602,118,122,17.9,2016-12-02,NA,NA,NA,NA,NA,NA,BRN23,NA,Small spleen,NA
+BRN23-E8,U2829,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,BRN23,Heart fell onto bench,NA,NA
+BRN23-D8,U2830,CU,2015-05-16,D07,50.16412,-125.1602,96,101,10.7,2016-12-02,NA,NA,NA,NA,NA,NA,BRN23,Outside blade touched heart,Small spleen,Outside blade touched heart.
+BRN23-C8,U2831,CU,2015-05-21,D07,50.18217,-125.1493,79,84,5.1,2016-12-02,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-B8,U2832,CU,2015-05-24,J02,50.60101,-126.70394,113,118,13.4,2016-12-03,NA,NA,NA,NA,NA,NA,BRN23,"Contaminated inside of fish with outside scalpen (heart, liver, spleen)",NA,"Contaminated inside of fish with the outside scapel. (heart, liver, spleen)."
+BRN23-A8,U2833,CU,2015-05-24,J02,50.60101,-126.70394,114,120,16.9,2016-12-03,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-H9,U2904,CU,2015-07-07,J09,NA,NA,135,141,26.5,2016-12-02,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-G9,U2905,CU,2015-07-07,J09,NA,NA,128,133,22.9,2016-12-02,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-F9,U2906,CU,2015-06-18,D09,50.30819,-125.32694,107,NA,13.3,2016-12-02,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-E9,U2907,CU,2015-06-18,D09,50.30819,-125.32694,111,117,15.4,2016-12-02,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-D9,U2908,CU,2015-07-01,J09,50.54329,-126.8169,109,NA,14.4,2016-12-02,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-C9,U2909,CU,2015-06-16,J02,50.59549,-126.69036,125,130,21.4,2016-12-02,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-B9,U2910,CU,2015-06-16,J09,50.54327,-126.81252,131,137,24.3,2016-12-02,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-A9,U2911,CU,2015-06-16,J09,50.54327,-126.81252,125,131,19.5,2016-12-02,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-H6,U2912,CU,2015-05-16,D07,50.16412,-125.1602,85,90,7.1,2016-11-30,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-G6,U2913,CU,2015-06-19,J09,50.54362,-126.81951,127,133,20.6,2016-11-30,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-F6,U2914,CU,2015-05-31,J09,50.53808,-126.77494,140,146,30.5,2016-12-02,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-E6,U2915,CU,2015-06-16,J09,50.54327,-126.81252,108,113,14.7,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-D6,U2916,CU,2015-05-31,J09,50.53808,-126.77494,120,126,16.6,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-C6,U2917,CU,2015-07-01,J09,50.54329,-126.8169,125,NA,21.1,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-B6,U2918,CU,2015-06-07,J09,50.539,-126.7781,118,124,18.7,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-A6,U2919,CU,2015-06-07,D07,50.1915,-125.14292,89,NA,8.4,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-H10,U2920,CU,2015-06-22,D09,50,-125,96,101,8.7,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-G10,U2921,CU,2015-05-24,J02,50.60101,-126.70394,118,124,18.4,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-F10,U2922,CU,2015-05-24,J02,50.60101,-126.70394,97,102,10.1,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-E10,U2923,CU,2015-05-24,J02,50.60101,-126.70394,121,127,19.1,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-D10,U2924,CU,2015-06-22,D09,50,-125,105,111,13,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-C10,U2925,CU,2015-07-14,D09,50.30717,-125.33303,157,162,42.8,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-B10,U2926,CU,2015-07-14,D09,50.30717,-125.33303,131,137,25.9,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-A10,U2927,CU,2015-06-13,D07,50.19051,-125.1444,106,111,13.5,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-H11,U2928,CU,2015-06-13,D07,50.19051,-125.1444,106,111,13.4,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-G11,U2929,CU,2015-07-14,D09,50.30717,-125.33303,134,NA,27.5,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-F11,U2930,CU,2015-07-14,D09,50.30717,-125.33303,154,160,40.3,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-D11,U2931,CU,2015-06-09,D07,50.19077,-125.14249,100,105,11.1,2016-12-06,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-C11,U2932,CU,2015-06-07,J09,50.539,-126.7781,119,125,16.2,2016-12-06,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-B11,U2933,CU,2015-05-26,J09,50.53989,-126.78256,115,121,16.4,2016-12-06,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-A11,U2934,CU,2015-06-07,D07,50.1915,-125.14292,93,NA,8.2,2016-12-06,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-H3,U3001,CU,2015-05-31,J09,50.53808,-126.77494,111,NA,15.9,2016-12-02,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-G3,U3002,CU,2015-06-16,J09,50.54327,-126.81252,124,129,21.6,2016-12-03,NA,NA,NA,NA,NA,NA,BRN23,NA,Lots of fecal matter on fish at weigh,NA
+BRN23-F3,U3003,CU,2015-05-31,J09,50.53808,-126.77494,108,NA,14.8,2016-12-03,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-E3,U3004,CU,2015-06-16,J09,50.54327,-126.81252,119,124,20,2016-12-03,NA,NA,NA,NA,NA,NA,BRN23,Heart fell on chamois,Lots of fecal matter on fish at weigh,Heart fell on chamois
+BRN23-D3,U3005,CU,2015-05-31,J09,50.53808,-126.77494,103,109,11.7,2016-12-03,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-C3,U3006,CU,2015-07-01,J09,50.54329,-126.8169,118,123,19.1,2016-12-03,NA,NA,NA,NA,NA,NA,BRN23,Heart & kidney switched in RNA tray,NA,Day of sampling not written on tag. heart & kidney switched in RNA tray.
+BRN23-B3,U3007,CU,2015-05-21,D07,50.18217,-125.1493,92,NA,9.7,2016-12-03,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-A3,U3008,CU,2015-06-07,D07,50.1915,-125.14292,83,NA,7.1,2016-12-03,NA,NA,NA,NA,NA,NA,BRN23,NA,Small spleen,NA
+BRN23-H4,U3009,CU,2015-06-22,D09,50,-125,102,108,12.4,2016-12-03,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-G4,U3010,CU,2015-06-22,D09,50,-125,115,120,16.7,2016-12-03,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-F4,U3011,CU,2015-05-26,J09,50.53989,-126.78256,133,NA,26.6,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,Small spleen,NA
+BRN23-E4,U3012,CU,2015-05-26,J09,50.53989,-126.78256,104,109,17.4,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-D4,U3013,CU,2015-06-22,D09,50,-125,106,112,11.8,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,Muscle fell on dissection tray,NA,Muscle (for RNA) fell on dissection tray
+BRN23-C4,U3014,CU,2015-07-14,D09,50.30717,-125.33303,133,139,27.4,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,Heart fell on dissection tray,"Huge spleen, liver & gall bladder",Heart fell on dissection tray
+BRN23-B4,U3015,CU,2015-07-14,D09,50.30717,-125.33303,127,133,23.3,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-A4,U3016,CU,2015-07-14,D09,50.30717,-125.33303,134,140,26,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,Only 1 otolith
+BRN23-H12,U3017,CU,2015-06-13,D07,50.19051,-125.1444,109,114,14.4,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-G12,U3018,CU,2015-05-26,J09,50.53989,-126.78256,110,116,15,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,Heart fell on lab bench,NA,Heart fell on lab bench
+BRN23-F12,U3019,CU,2015-07-14,D09,50.30717,-125.33303,93,98,9.3,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,1 broken otlith
+BRN23-E12,U3020,CU,2015-06-09,D07,50.19077,-125.14249,106,112,13.9,2016-12-04,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-D12,U3021,CU,2015-06-13,D07,50.19051,-125.1444,95,100,9.6,2016-12-05,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-C12,U3022,CU,2015-06-09,D07,50.19077,-125.14249,116,121,19.6,2016-12-05,NA,NA,NA,NA,NA,NA,BRN23,NA,Pale liver,NA
+BRN23-B12,U3023,CU,2015-06-13,D07,50.19051,-125.1444,95,100,10.6,2016-12-05,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN23-A12,U3024,CU,2015-06-09,D07,50.19077,-125.14249,94,99,9.9,2016-12-05,NA,NA,NA,NA,NA,NA,BRN23,NA,NA,NA
+BRN35-H1,U3779,PI,2016-06-24,J02,50.6017,-126.70318,116,121,15,2017-02-16,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-G1,U3780,PI,2016-06-24,J02,50.6017,-126.70318,116,122,14.8,2017-02-16,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-F1,U3781,PI,2016-06-24,J02,50.6017,-126.70318,119,124,16.4,2017-02-16,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-E1,U3782,PI,2016-06-01,D22,50.24565,-125.396035,114,119,12.1,2017-02-16,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,Broken otoliths
+BRN35-D1,U3783,PI,2016-06-01,D22,50.24565,-125.396035,93,98,8,2017-02-16,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-C1,U3784,PI,2016-06-01,D22,50.24565,-125.396035,92,96,8.2,2017-02-16,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-B1,U3785,PI,2016-06-01,D22,50.24565,-125.396035,95,100,10,2017-02-16,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-A1,U3786,PI,2016-06-01,D22,50.24565,-125.396035,93,99,8.2,2017-02-16,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-H2,U3787,PI,2016-06-01,D22,50.24565,-125.396035,97,NA,8.6,2017-02-18,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-G2,U3788,PI,2016-06-01,D22,50.24565,-125.396035,93,NA,7.9,2017-02-18,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-F2,U3789,PI,2016-06-01,D22,50.24565,-125.396035,91,95,7,2017-02-18,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-E2,U3790,PI,2016-06-01,D22,50.24565,-125.396035,89,93,6.6,2017-02-18,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-D2,U3791,PI,2016-06-01,D22,50.24565,-125.396035,97,103,9.2,2017-02-18,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-C2,U3792,PI,2016-05-27,D09,50.304166,-125.333511,104,109,11.3,2017-02-18,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-B2,U3793,PI,2016-05-27,D09,50.304166,-125.333511,98,102,10.2,2017-02-19,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-A2,U3794,PI,2016-05-27,D09,50.304166,-125.333511,101,105,10.6,2017-02-19,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-H3,U3795,PI,2016-05-27,D09,50.304166,-125.333511,95,99,8.8,2017-02-19,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-G3,U3796,PI,2016-05-27,D09,50.304166,-125.333511,95,NA,8.2,2017-02-19,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-F3,U3797,PI,2016-05-27,D09,50.304166,-125.333511,85,NA,6.1,2017-02-19,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-E3,U3798,PI,2016-05-27,D09,50.304166,-125.333511,87,NA,6.9,2017-02-19,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,One otolith broken
+BRN35-D3,U3799,PI,2016-05-27,D09,50.304166,-125.333511,109,113,13,2017-02-19,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,Only one otolith
+BRN35-C3,U3800,PI,2016-05-27,D09,50.304166,-125.333511,93,98,8.2,2017-02-20,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-B3,U3801,PI,2016-06-01,J02,50.60125,-126.704457,118,123,16.5,2017-02-20,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-A3,U3802,PI,2016-06-01,J02,50.60125,-126.704457,105,111,12.9,2017-02-20,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-H5,U3803,PI,2016-06-01,J02,50.60125,-126.704457,109,113,13.9,2017-02-20,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-G5,U3804,PI,2016-06-01,J02,50.60125,-126.704457,110,114,14.2,2017-02-20,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-F5,U3805,PI,2016-06-01,J02,50.60125,-126.704457,115,119,12,2017-02-20,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-E5,U3806,PI,2016-06-01,J02,50.60125,-126.704457,119,NA,17.6,2017-02-24,NA,NA,NA,NA,NA,NA,BRN35,DNA samples is a kidney sample.,NA,DNA samples is a kidney sample.
+BRN35-D5,U3807,PI,2016-06-01,J02,50.60125,-126.704457,108,113,12.6,2017-02-24,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-C5,U3808,PI,2016-05-28,J02,50.60125,-126.704457,116,NA,14.9,2017-02-26,NA,NA,NA,NA,NA,NA,BRN35,NA,"Lacerations on left side, could be from use forecetps, not sure.",NA
+BRN35-B5,U3809,PI,2016-05-28,J02,50.60125,-126.704457,100,NA,8.7,2017-02-26,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-A5,U3810,PI,2016-05-28,J02,50.60125,-126.704457,116,122,14,2017-02-26,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-H6,U3811,PI,2016-05-28,J02,50.60125,-126.704457,101,105,8.9,2017-02-27,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-G6,U3812,PI,2016-05-28,J02,50.60125,-126.704457,114,119,14.4,2017-02-27,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-F6,U3813,PI,2016-05-28,J02,50.60125,-126.704457,114,120,13.6,2017-02-27,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-E6,U3814,PI,2016-05-22,J02,50.601718,-126.701857,103,108,12.6,2017-02-27,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-D6,U3815,PI,2016-05-22,J02,50.601718,-126.701857,120,NA,20.2,2017-02-27,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-C6,U3816,PI,2016-05-22,J02,50.601718,-126.701857,116,122,16.2,2017-02-27,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-B6,U3817,PI,2016-05-22,J02,50.601718,-126.701857,96,100,9.2,2017-02-27,NA,NA,NA,NA,NA,NA,BRN35,Heart cross contaminated with that of U3816's heart.,NA,Heart cross contaminated with that of u3816's heart. DNA sample is from the kindey.
+BRN35-A6,U3818,PI,2016-05-22,J02,50.601718,-126.701857,102,106,13.1,2017-02-27,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-H4,U3819,PI,2016-06-01,J02,50.60125,-126.704457,114,NA,17.5,2017-02-20,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-G4,U3820,PI,2016-06-01,J02,50.60125,-126.704457,115,NA,15.3,2017-02-20,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-F4,U3821,PI,2016-06-01,J02,50.60125,-126.704457,117,122,18,2017-02-20,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-H9,U3822,PI,2016-05-22,J09,50.543296,-126.816816,118,NA,16.9,2017-03-09,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-G9,U3823,PI,2016-05-22,J09,50.543296,-126.816816,122,NA,17.5,2017-03-09,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-A9,U3824,PI,2016-06-14,D22,50.235322,-125.39888,109,114,12.7,2017-03-19,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-G11,U3826,PI,2016-06-14,D22,50.235322,-125.39888,102,106,10.3,2017-03-19,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-F11,U3827,PI,2016-06-14,D22,50.235322,-125.39888,103,108,11,2017-03-19,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-E11,U3828,PI,2016-06-14,D22,50.235322,-125.39888,113,118,14.2,2017-03-19,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-D11,U3829,PI,2016-06-14,D22,50.235322,-125.39888,104,109,10.4,2017-03-19,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-C11,U3830,PI,2016-06-14,D22,50.235322,-125.39888,107,111,10.8,2017-03-19,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,Only 1 otolith
+BRN35-B11,U3831,PI,2016-06-14,D22,50.235322,-125.39888,103,107,10.7,2017-03-19,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-A11,U3832,PI,2016-06-14,D22,50.235322,-125.39888,106,111,12.2,2017-03-19,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-H12,U3833,PI,2016-06-14,D22,50.235322,-125.39888,103,108,11.7,2017-03-19,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-G12,U3834,PI,2016-06-09,J02,50.602327,-126.701507,111,116,15.3,2017-03-19,NA,NA,NA,NA,NA,NA,BRN35,Gill from U3835 touched inner wall of tube,NA,Gill from u3835 touched inner wall of tube
+BRN35-F12,U3835,PI,2016-06-09,J02,50.602327,-126.701507,106,NA,12.6,2017-03-19,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,Only 1 otolith
+BRN35-E12,U3836,PI,2016-06-09,J02,50.602327,-126.701507,105,110,13.6,2017-03-19,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-D12,U3837,PI,2016-06-09,J02,50.602327,-126.701507,115,120,18.1,2017-03-19,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-C12,U3838,PI,2016-06-09,J02,50.602327,-126.701507,103,106,14,2017-03-20,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,1 broken otolith
+BRN35-B12,U3839,PI,2016-06-09,J02,50.602327,-126.701507,92,96,8.6,2017-03-20,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-A12,U3840,PI,2016-06-09,J02,50.602327,-126.701507,130,NA,27.2,2017-03-20,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-E4,U3852,PI,2016-05-22,J02,50.601718,-126.701857,109,114,14.5,2017-02-27,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-D4,U3853,PI,2016-05-22,J02,50.601718,-126.701857,99,103,9.5,2017-02-27,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-C4,U3854,PI,2016-05-22,J02,50.601718,-126.701857,99,105,10.2,2017-02-27,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-B4,U3855,PI,2016-05-22,J02,50.601718,-126.701857,97,102,9.5,2017-02-27,NA,NA,NA,NA,NA,NA,BRN35,NA,Nematode on lower intestines.,Only one otolith.
+BRN35-A4,U3856,PI,2016-05-22,J02,50.601718,-126.701857,127,133,26.3,2017-02-27,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-H7,U3857,PI,2016-05-23,D22,50.224106,-125.395004,102,107,10.3,2017-03-07,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-G7,U3858,PI,2016-05-23,D22,50.224106,-125.395004,87,NA,7.8,2017-03-07,NA,NA,NA,NA,NA,NA,BRN35,Heart touched outside of fish.,NA,Heart touched outside of fish.
+BRN35-F7,U3859,PI,2016-05-23,D22,50.224106,-125.395004,92,97,7.9,2017-03-07,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-E7,U3860,PI,2016-05-23,D22,50.224106,-125.395004,104,NA,10.8,2017-03-07,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-D7,U3861,PI,2016-05-23,D22,50.224106,-125.395004,93,NA,8.5,2017-03-07,NA,NA,NA,NA,NA,NA,BRN35,Fish fell on floor,NA,Fish fell on floor!
+BRN35-C7,U3862,PI,2016-05-23,D22,50.224106,-125.395004,89,NA,7.1,2017-03-07,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-B7,U3863,PI,2016-05-23,D22,50.224106,-125.395004,92,NA,8,2017-03-07,NA,NA,NA,NA,NA,NA,BRN35,NA,Pale spots on heart.,NA
+BRN35-A7,U3864,PI,2016-05-23,D22,50.224106,-125.395004,98,NA,8.7,2017-03-07,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-F9,U3865,PI,2016-06-01,D09,50.308769,-125.326765,98,102,10.5,2017-03-09,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-E9,U3866,PI,2016-05-22,J09,50.543296,-126.816816,105,NA,12.3,2017-03-09,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-D9,U3867,PI,2016-06-02,J09,50.543432,-126.8134,100,115,10.2,2017-03-09,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-H8,U3868,PI,2016-05-23,D22,50.224106,-125.395004,94,NA,8.8,2017-03-08,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-G8,U3869,PI,2016-05-22,J09,50.543296,-126.816816,108,113,11.9,2017-03-08,NA,NA,NA,NA,NA,NA,BRN35,NA,"Rocinela propodialis present on gills, under operculum.",NA
+BRN35-F8,U3870,PI,2016-05-22,J09,50.543296,-126.816816,105,NA,11.4,2017-03-08,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-E8,U3871,PI,2016-05-22,J09,50.543296,-126.816816,105,111,11.2,2017-03-08,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,DNA sample is kindey.
+BRN35-D8,U3872,PI,2016-05-22,J09,50.543296,-126.816816,117,NA,15.5,2017-03-08,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-C8,U3873,PI,2016-05-22,J09,50.543296,-126.816816,108,114,13.3,2017-03-08,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-B8,U3874,PI,2016-05-22,J09,50.543296,-126.816816,112,117,11.6,2017-03-08,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-A8,U3875,PI,2016-05-22,J09,50.543296,-126.816816,111,116,14.9,2017-03-09,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-H10,U3876,PI,2016-05-14,D08,50.32113,-125.040588,54,NA,1.6,2017-03-09,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-G10,U3877,PI,2016-06-01,D09,50.308769,-125.326765,100,106,9.8,2017-03-09,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-F10,U3878,PI,2016-06-02,J09,50.543432,-126.8134,108,112,12.7,2017-03-09,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-E10,U3879,PI,2016-06-02,J09,50.543432,-126.8134,106,110,11.5,2017-03-09,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-D10,U3880,PI,2016-06-02,J09,50.543432,-126.8134,107,NA,12.5,2017-03-09,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-C10,U3881,PI,2016-06-02,J09,50.543432,-126.8134,107,NA,12.6,2017-03-09,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-B10,U3882,PI,2016-06-01,D09,50.308769,-125.326765,93,98,8.9,2017-03-09,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-C9,U3883,PI,2016-05-15,D22,50.243454,-125.398108,126,132,23,2017-03-16,NA,NA,NA,NA,NA,NA,BRN35,Fish fell on floor,NA,1 otolith; fish hit floor before dissection
+BRN35-B9,U3884,PI,2016-05-15,D22,50.243454,-125.398108,100,NA,9.6,2017-03-16,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,NA
+BRN35-A10,U3885,PI,2016-05-14,D08,50.32113,-125.040588,59,62,1.7,2017-03-10,NA,NA,NA,NA,NA,NA,BRN35,NA,NA,Fish had no scales.
+BRN38-H1,U3332,CU,2016-06-14,D22,50.235322,-125.39888,92,97,8,2017-02-06,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-G1,U3333,CU,2016-06-14,D22,50.235322,-125.39888,98,103,10.4,2017-02-06,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,Lost 1 otolith
+BRN38-F1,U3334,CU,2016-06-14,D22,50.235322,-125.39888,102,107,12.9,2017-02-06,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-E1,U3335,CU,2016-06-14,D22,50.235322,-125.39888,102,107,12.4,2017-02-06,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-D1,U3336,CU,2016-06-07,D22,50.242671,-125.398265,108,113,13.8,2017-02-06,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-C1,U3337,CU,2016-06-07,D22,50.242671,-125.398265,99,104,10.8,2017-02-06,NA,NA,NA,NA,NA,NA,BRN38,Brain fell on cool rack,NA,Brain fell on cool rack
+BRN38-B1,U3338,CU,2016-06-07,D22,50.242671,-125.398265,114,120,16.5,2017-02-06,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-A1,U3339,CU,2016-06-07,D22,50.242671,-125.398265,106,111,13.9,2017-02-06,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-H2,U3340,CU,2016-06-07,D22,50.242671,-125.398265,103,108,11.9,2017-02-06,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-G2,U3341,CU,2016-06-07,D22,50.242671,-125.398265,115,121,15.2,2017-02-06,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-F2,U3601,CU,2016-06-07,D22,50.242671,-125.398265,119,NA,21,2017-02-14,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-E2,U3602,CU,2016-06-07,D22,50.242671,-125.398265,88,93,7.8,2017-02-14,NA,NA,NA,NA,NA,NA,BRN38,Dropped muscle sample into RNA vial 38-F2 by accident; retrieved.,NA,Dropped muscle sample into RNA vial 38 f2 by accident; retrieved.
+BRN38-D2,U3603,CU,2016-06-07,D22,50.242671,-125.398265,108,113,12.4,2017-02-14,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-C2,U3604,CU,2016-06-07,D22,50.242671,-125.398265,106,NA,11.9,2017-02-14,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-B2,U3605,CU,2016-05-27,D22,50.243773,-125.397476,94,99,9.3,2017-02-14,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-A2,U3606,CU,2016-05-27,D22,50.243773,-125.397476,83,88,6.6,2017-02-15,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-H3,U3607,CU,2016-05-27,D22,50.243773,-125.397476,90,96,8.2,2017-02-15,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-G3,U3608,CU,2016-05-27,D22,50.243773,-125.397476,92,97,8.4,2017-02-15,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-F3,U3609,CU,2016-05-27,D22,50.243773,-125.397476,74,79,4.4,2017-02-15,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-E3,U3610,CU,2016-05-27,D22,50.243773,-125.397476,98,103,11.6,2017-02-15,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-D3,U3611,CU,2016-05-27,D22,50.243773,-125.397476,95,100,9.2,2017-02-15,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-C3,U3612,CU,2016-05-27,D22,50.243773,-125.397476,95,100,9,2017-02-15,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-B3,U3613,CU,2016-07-06,D09,50.307066,-125.322977,120,125,17.9,2017-02-16,NA,NA,NA,NA,NA,NA,BRN38,NA,Nematode behind spleen,NA
+BRN38-A3,U3614,CU,2016-07-06,D09,50.307066,-125.322977,127,133,23,2017-02-16,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-H4,U3615,CU,2016-07-06,D09,50.307066,-125.322977,143,149,31.7,2017-02-16,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-G4,U3616,CU,2016-07-06,D09,50.307066,-125.322977,146,152,33.5,2017-02-16,NA,NA,NA,NA,NA,NA,BRN38,Kidney fell in cool rack,NA,Kidney fell in cool rack
+BRN38-F4,U3617,CU,2016-07-06,D09,50.307066,-125.322977,129,135,24.8,2017-02-16,NA,NA,NA,NA,NA,NA,BRN38,NA,Tiny flabellifera on underside,Stomach broke in half; one broken otolith
+BRN38-E4,U3618,CU,2016-07-06,D09,50.307066,-125.322977,120,125,18,2017-02-16,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-D4,U3619,CU,2016-07-06,D09,50.307066,-125.322977,133,NA,27,2017-02-16,NA,NA,NA,NA,NA,NA,BRN38,Brain fell in cool rack,NA,Brain fell in cool rack
+BRN38-C4,U3620,CU,2016-07-06,D09,50.307066,-125.322977,143,144,30.5,2017-02-16,NA,NA,NA,NA,NA,NA,BRN38,Spleen fell on chamois,NA,Spleen fell on chamois
+BRN38-B4,U3621,CU,2016-07-06,D09,50.307066,-125.322977,112,NA,14.2,2017-02-16,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-A4,U3622,CU,2016-07-06,D09,50.307066,-125.322977,135,140,29.1,2017-02-16,NA,NA,NA,NA,NA,NA,BRN38,Brain fell in cool rack,Huge flabellifera (in bag),Brain fell in cool rack
+BRN38-H5,U3623,CU,2016-05-23,D22,50.224106,-125.395004,87,92,7.8,2017-02-16,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-G5,U3624,CU,2016-05-23,D22,50.224106,-125.395004,122,127,21.4,2017-02-16,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-F5,U3625,CU,2016-05-23,D22,50.224106,-125.395004,92,97,9.6,2017-02-16,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-E5,U3626,CU,2016-05-23,D22,50.224106,-125.395004,92,97,8.5,2017-02-16,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-D5,U3627,CU,2016-05-23,D22,50.224106,-125.395004,94,100,10.2,2017-02-17,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-C5,U3628,CU,2016-05-23,D22,50.224106,-125.395004,98,103,10.3,2017-02-17,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-B5,U3629,CU,2016-05-23,D22,50.224106,-125.395004,85,90,7.2,2017-02-17,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,Lost 1 otolith.
+BRN38-A5,U3630,CU,2016-05-23,D22,50.224106,-125.395004,93,98,9.8,2017-02-17,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-H6,U3631,CU,2016-05-23,D22,50.224106,-125.395004,82,NA,6.3,2017-02-17,NA,NA,NA,NA,NA,NA,BRN38,Heart fell into G6 (retrieved). Left in -20 freezer overnight,NA,Heart fell into g6 (retrieved). samples left in -20 freezer overnight
+BRN38-G6,U3632,CU,2016-05-23,D22,50.224106,-125.395004,90,95,8.6,2017-02-17,NA,NA,NA,NA,NA,NA,BRN38,Left in -20 freezer overnight,NA,G6 previously had heart from u3680. samples left in -20 freezer overnight
+BRN38-F6,U3633,CU,2016-06-01,D22,50.24565,-125.396035,88,92,7.3,2017-02-17,NA,NA,NA,NA,NA,NA,BRN38,Left in -20 freezer overnight,NA,Samples left in -20 freezer overnight
+BRN38-E6,U3634,CU,2016-06-01,D22,50.24565,-125.396035,91,97,8.3,2017-02-17,NA,NA,NA,NA,NA,NA,BRN38,Left in -20 freezer overnight,NA,Samples left in -20 freezer overnight
+BRN38-D6,U3635,CU,2016-06-01,D22,50.24565,-125.396035,81,86,6.5,2017-02-17,NA,NA,NA,NA,NA,NA,BRN38,Left in -20 freezer overnight,Noticeable scale loss (2 photos taken),Samples left in -20 freezer overnight
+BRN38-C6,U3636,CU,2016-06-01,D22,50.24565,-125.396035,77,81,5.7,2017-02-17,NA,NA,NA,NA,NA,NA,BRN38,Spleen slightly thawed. Left in -20 freezer overnight,Very small spleen,Spleen slightly thawed. lost 1 otolith. samples left in -20 freezer overnight
+BRN38-B6,U3637,CU,2016-06-01,D22,50.24565,-125.396035,84,88,7.7,2017-02-17,NA,NA,NA,NA,NA,NA,BRN38,Left in -20 freezer overnight,NA,Samples left in -20 freezer overnight
+BRN38-A6,U3638,CU,2016-06-01,D22,50.24565,-125.396035,85,89,6.7,2017-02-17,NA,NA,NA,NA,NA,NA,BRN38,Left in -20 freezer overnight,NA,Samples left in -20 freezer overnight
+BRN38-H7,U3639,CU,2016-06-01,D22,50.24565,-125.396035,84,88,7.5,2017-02-18,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-G7,U3640,CU,2016-06-01,D22,50.24565,-125.396035,80,84,6,2017-02-18,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-F7,U3641,CU,2016-06-01,D22,50.24565,-125.396035,86,90,7.3,2017-02-18,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-E7,U3642,CU,2016-06-01,D22,50.24565,-125.396035,97,102,10.6,2017-02-18,NA,NA,NA,NA,NA,NA,BRN38,NA,Nematode between heart & livier,NA
+BRN38-D7,U3643,CU,2016-06-02,J09,50.543432,-126.8134,97,102,9.5,2017-02-18,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-C7,U3644,CU,2016-06-02,J09,50.543432,-126.8134,106,111,13.7,2017-02-18,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-B7,U3645,CU,2016-06-02,J09,50.543432,-126.8134,97,101,10.7,2017-02-18,NA,NA,NA,NA,NA,NA,BRN38,NA,Pale kidney,NA
+BRN38-A7,U3646,CU,2016-06-02,J09,50.543432,-126.8134,95,100,9.9,2017-02-18,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-H8,U3647,CU,2016-06-02,J09,50.543432,-126.8134,104,110,12.4,2017-02-18,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-G8,U3648,CU,2016-06-02,J09,50.543432,-126.8134,98,NA,10.4,2017-02-19,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-F8,U3649,CU,2016-06-02,J09,50.543432,-126.8134,113,118,15.2,2017-02-19,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-E8,U3650,CU,2016-06-02,J09,50.543432,-126.8134,100,NA,11.2,2017-02-19,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-D8,U3651,CU,2016-06-02,J09,50.543432,-126.8134,101,107,11.8,2017-02-19,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-C8,U3652,CU,2016-06-02,J09,50.543432,-126.8134,95,100,11.6,2017-02-19,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-B8,U3653,CU,2016-06-01,J02,50.60125,-126.704457,127,132,25.8,2017-02-20,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-A8,U3654,CU,2016-06-01,J02,50.60125,-126.704457,114,119,17.7,2017-02-20,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-H9,U3655,CU,2016-06-01,J02,50.60125,-126.704457,103,109,12.4,2017-02-20,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-G9,U3656,CU,2016-06-01,J02,50.60125,-126.704457,108,113,14,2017-02-20,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-F9,U3657,CU,2016-06-01,J02,50.60125,-126.704457,104,109,13.2,2017-02-20,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-E9,U3658,CU,2016-06-01,J02,50.60125,-126.704457,140,147,33.1,2017-02-20,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-D9,U3659,CU,2016-06-01,J02,50.60125,-126.704457,125,130,23.9,2017-02-20,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,Lost 1 otolith
+BRN38-C9,U3660,CU,2016-06-01,J02,50.60125,-126.704457,122,128,22,2017-02-20,NA,NA,NA,NA,NA,NA,BRN38,Outside scalpel touched spleen,"Nematode on intestine, behind spleen",Outside scalpel touched spleen
+BRN38-B9,U3661,CU,2016-06-01,J02,50.60125,-126.704457,120,126,20,2017-02-20,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-A9,U3662,CU,2016-06-01,J02,50.60125,-126.704457,130,137,28.3,2017-02-20,NA,NA,NA,NA,NA,NA,BRN38,Kidney thawed,NA,Kidney thawed
+BRN38-H10,U3663,CU,2016-05-22,J09,50.543296,-126.816816,112,118,15.5,2017-02-21,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-G10,U3664,CU,2016-05-22,J09,50.543296,-126.816816,110,115,13.3,2017-02-21,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-F10,U3665,CU,2016-05-22,J09,50.543296,-126.816816,124,130,20.6,2017-02-21,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-E10,U3666,CU,2016-05-22,J09,50.543296,-126.816816,110,116,14.1,2017-02-21,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-D10,U3667,CU,2016-05-22,J09,50.543296,-126.816816,117,123,19.2,2017-02-21,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-C10,U3668,CU,2016-05-22,J09,50.543296,-126.816816,111,116,13.6,2017-02-21,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-B10,U3669,CU,2016-05-22,J09,50.543296,-126.816816,125,131,20.1,2017-02-21,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-A10,U3670,CU,2016-05-22,J09,50.543296,-126.816816,113,118,17.8,2017-02-21,NA,NA,NA,NA,NA,NA,BRN38,Heart accidentally put in B10 (subsequently put in A10),NA,Heart accidentally put in b10 (subsequently put in a10)
+BRN38-H11,U3671,CU,2016-05-22,J09,50.543296,-126.816816,106,111,13.2,2017-02-22,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-G11,U3672,CU,2016-05-28,J02,50.60125,-126.704457,124,NA,24.5,2017-02-22,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-F11,U3673,CU,2016-05-28,J02,50.60125,-126.704457,116,122,16.8,2017-02-22,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-E11,U3674,CU,2016-05-28,J02,50.60125,-126.704457,117,122,17.2,2017-02-22,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-D11,U3675,CU,2016-05-28,J02,50.60125,-126.704457,112,116,16.2,2017-02-22,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-C11,U3676,CU,2016-05-28,J02,50.60125,-126.704457,107,112,15.4,2017-02-24,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,Only one otolith
+BRN38-B11,U3677,CU,2016-05-28,J02,50.60125,-126.704457,116,122,17.4,2017-02-24,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-A11,U3678,CU,2016-05-28,J02,50.60125,-126.704457,110,116,16.6,2017-02-24,NA,NA,NA,NA,NA,NA,BRN38,NA,Large spleen,NA
+BRN38-H12,U3679,CU,2016-05-28,J02,50.60125,-126.704457,102,NA,12,2017-02-24,NA,NA,NA,NA,NA,NA,BRN38,NA,Tiny spleen,NA
+BRN38-G12,U3680,CU,2016-05-28,J02,50.60125,-126.704457,120,124,18.3,2017-02-24,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-F12,U3681,CU,2016-05-28,J02,50.60125,-126.704457,123,128,19.4,2017-02-24,NA,NA,NA,NA,NA,NA,BRN38,Outside forceps touched spleen,NA,Outside foreceps touched spleen. one broken otolith
+BRN38-E12,U3682,CU,2016-05-27,J09,50.543432,-126.8134,103,108,12.1,2017-02-24,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,Lost one otolith
+BRN38-D12,U3683,CU,2016-06-01,D09,50.308769,-125.326765,86,90,7.4,2017-02-24,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-C12,U3684,CU,2016-06-01,D09,50.308769,-125.326765,94,99,8.9,2017-02-26,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-B12,U3685,CU,2016-06-01,D09,50.308769,-125.326765,107,112,12.7,2017-02-26,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
+BRN38-A12,U3686,CU,2016-06-01,D09,50.308769,-125.326765,94,99,8,2017-02-26,NA,NA,NA,NA,NA,NA,BRN38,NA,NA,NA
