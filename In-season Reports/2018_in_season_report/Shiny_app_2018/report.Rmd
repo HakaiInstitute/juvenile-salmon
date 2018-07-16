@@ -1,0 +1,74 @@
+---
+title: "Dynamic report"
+output: pdf_document
+params:
+  species: NA
+  printcode: false
+  
+---
+
+```{r setup, echo = FALSE, inlcude = FALSE}
+library(tidyverse)
+
+knitr::opts_chunk$set(echo = T, warning = FALSE, message = FALSE, error = FALSE)
+```
+
+# Overview
+
+The Hakai Institute Juvenile Salmon Program was launched in the spring of 2015 in a collaborative partnership with UBC, SFU, Salmon Coast, Pacific Salmon Foundation, and DFO. The program operates in the Discovery Islands and Johnstone Strait (Figure 1) and thus provides information on the health of juvenile salmon after passage through: 
+
+1) Strait of Georgia – stratified high plankton biomass zone; and 
+
+2) Discovery Islands & Johnstone Strait – highly-mixed low-plankton-biomass zone, and area of high wild-farmed fish interactions.
+
+## Program Objectives
+
+1) Determine migration timing and pathways; 
+
+2) Migration habitat mapping - oceanographic conditions along the migration route;
+
+3) Understand the dynamics of the plankton food-webs that underpin juvenile salmon growth and
+health;
+
+4) Understand parasite and pathogen infection dynamics and their impact on juvenile salmon growth and
+health.
+
+## Key Parameters Reported
+* Catch Statistics
+* Lengths
+* Parasite Loads
+* Oceanographic Conditions
+
+
+```{r, echo = FALSE}
+spp_labels <- c(CU = "Chum", PI = "Pink", SO = "Sockeye", DI = "Discovery Islands",
+                JS = "Johnstone Strait")
+```
+
+A plot of `r params$species` migration timing
+
+```{r echo = FALSE}
+species <- params$species
+
+ survey_seines %>%
+      select(year, region, sampling_week, species) %>%
+      group_by(year, region, sampling_week) %>%
+      summarise(mean = mean(get(params$species), na.rm = T), se = sd(species) / sqrt(n())) %>%
+      ungroup() %>%
+      ggplot(aes(x = as_factor(sampling_week), y = mean, colour = region, group = region))+
+      geom_line(size = 1)+
+      geom_point() +
+      geom_errorbar(aes(ymin = mean - se, ymax = mean + se, width = 0.2)) +
+      scale_colour_discrete(name = "",
+                            breaks=c("DI","JS"),
+                            labels=c("Discovery Islands", "Johnstone Strait"))+
+      theme(legend.justification=c(1,0), legend.position=c(.8,.8),
+            legend.background = element_rect(fill=alpha(0.1))) +
+      theme(legend.text = element_text(colour="black", size = 12)) +
+      theme(axis.text=element_text(size=12),
+            axis.title=element_text(size=12,face="bold")) +
+      xlab("Date") +
+      ylab("Abundance") +
+      theme(legend.title = element_blank()) +
+      theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
+```
