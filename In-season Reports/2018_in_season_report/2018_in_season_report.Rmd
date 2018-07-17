@@ -407,12 +407,12 @@ cum_abund_plot
 ## Fish Lengths
 ```{r DI Length Histogram, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap = "Fork length boxplots of juvenile salmon in the Discovery Islands in 2018 grouped by week, and represented by the middle day of each week, compared to the average length from 2015, 2016 and 2017."}
 annual_di_length_histo <- hakaisalmon::survey_seines_fish %>% 
-  select(sampling_week, region, species, fork_length) %>% 
+  select(sampling_week, survey_date, region, species, fork_length) %>% 
   filter(species %in% c("SO", "PI", "CU"), region == "DI") %>% 
   mutate(year = "2015-2017")
 
 di_length_histo <- fish_and_sealice_field_data %>% 
-  select(sampling_week, region, species, fork_length) %>% 
+  select(sampling_week, survey_date, region, species, fork_length) %>% 
   filter(species %in% c("SO", "PI", "CU"), region == "DI") %>% 
   mutate(year = "2018")
 
@@ -438,12 +438,12 @@ di_length_hist_plot
 
 ```{r JS Length Histogram, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap = "Fork length boxplots of juvenile salmon in Johnstone Strait in 2018 grouped by week, and represented by the middle day of each week, compared to the average length from 2015, 2016 and 2017."}
 annual_js_length_histo <- hakaisalmon::survey_seines_fish %>% 
-  select(sampling_week, region, species, fork_length) %>% 
+  select(sampling_week, survey_date, region, species, fork_length) %>% 
   filter(species %in% c("SO", "PI", "CU"), region == "JS") %>% 
   mutate(year = "2015-2017")
 
 js_length_histo <- fish_and_sealice_field_data %>% 
-  select(sampling_week, region, species, fork_length) %>% 
+  select(sampling_week, survey_date, region, species, fork_length) %>% 
   filter(species %in% c("SO", "PI", "CU"), region == "JS") %>% 
   mutate(year = "2018")
 
@@ -831,4 +831,36 @@ p <- p +
 p
 ```
 
+```{r length anomaly plot}
+di_2018_so_length_histo <- di_length_histo %>% 
+  mutate(yday = yday(survey_date)) %>% 
+  filter(year == 2018, species == "SO")  
+
+annual_di_sockeye <- annual_di_length_histo %>% 
+  filter(species == "SO") %>% 
+  drop_na(fork_length)
+
+loess_all_so <- loess(fork_length ~ yday, data = annual_di_sockeye, span = 1.)
+annual_di_sockeye$loess <- predict(loess_all_so)
+
+annual_loess <- annual_di_sockeye %>% 
+  select(yday, loess) %>% 
+  rename("loess_annual" = "loess")
+
+di_2018_so_length_histo <- left_join(di_2018_so_length_histo, annual_loess, by = "yday")
+
+di_2018_so_length_histo <- di_2018_so_length_histo %>% 
+  mutate(higher_or_lower = if_else(fork_length < loess_annual, "lower", "higher"))
+
+annual_di_length_histo %>% 
+  mutate(yday = yday(survey_date)) %>% 
+  filter(yday < 190, species == "SO") %>% 
+  ggplot(aes(x = yday, y = fork_length)) +
+  geom_point(data = di_2018_so_length_histo, aes(x = yday, y = fork_length, colour = higher_or_lower)) +
+  geom_smooth(method = "loess", span = 1.)
+```
+
+```{r condition anomaly plot}
+
+```
 

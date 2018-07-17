@@ -1,9 +1,15 @@
 library(shiny)
 library(dplyr)
 library(ggplot2)
+library(hakaisalmon)
 
 survey_seines <- readRDS("data/survey_seines.RDS") %>% 
   rename("Sockeye" = "so_total", "Pink" = "pi_total", "Chum" = "cu_total")
+
+fish_and_sealice_field_data <- readRDS("data/fish_and_sealice_field_data.RDS")
+
+spp_labels <- c(CU = "Chum", PI = "Pink", SO = "Sockeye", DI = "Discovery Islands", 
+                JS = "Johnstone Strait")
 
 #######
 
@@ -19,7 +25,7 @@ ui <-fluidPage(
   title = div(img(src="Hakai_red.png", height = 30, width = 92), 'Juvenile Salmon Program'),
   tabPanel("Overview",
            sidebarLayout(
-             sidebarPanel(
+             sidebarPanel(width = 3,
                helpText("Adjust figures, return here and save as pdf"),
                downloadButton("report", "Generate PDF report")
              ),
@@ -31,9 +37,9 @@ ui <-fluidPage(
   ),
   tabPanel("Migration Timing",
            sidebarLayout(
-             sidebarPanel(
+             sidebarPanel(width = 3,
                helpText("Select the species you'd like to plot"),
-               selectInput("species", label = h3("Species"),
+               selectInput("Species", label = h3("Species"),
                            choices = list("Sockeye" = "Sockeye", "Pink" = "Pink",
                                           "Chum" = "Chum"),
                            selected = "Sockeye")
@@ -42,7 +48,25 @@ ui <-fluidPage(
                plotOutput("migration_timing")
              )
            )
-  )
+  ),
+  tabPanel("Length",
+           sidebarLayout(
+             sidebarPanel(width = 3,
+               helpText(),
+               selectInput("Region", label = h3("Region"),
+                           choices = list("Discovery Islands" = "DI", "Johnstone Strait" = "JS"),
+                           selected = "Discovery Islands"),
+               selectInput("Length_Species", label = h3("Species"),
+                           choices = list("Sockeye" = "SO", "Pink" = "PI",
+                                          "Chum" = "CU"),
+                           selected = "Sockeye")
+             ),
+             mainPanel(
+               plotOutput("Length")
+             )
+                             
+)
+)
 )
 )
 
@@ -60,9 +84,10 @@ server <- function(input, output) {
       # can happen when deployed).
       tempReport <- file.path(tempdir(), "report.Rmd")
       file.copy("report.Rmd", tempReport, overwrite = TRUE)
-      
       # Set up parameters to pass to Rmd document
-      params <- list(species = input$species)
+      params <- list(Species = input$Species, Region = input$Region, 
+                     Length_Species = input$Length_Species)
+      
       
       # Knit the document, passing in the `params` list, and eval it in a
       # child of the global environment (this isolates the code in the document
@@ -76,9 +101,9 @@ server <- function(input, output) {
   output$migration_timing <- renderPlot({
     
     survey_seines %>% 
-      select(year, region, sampling_week, input$species) %>%
+      select(year, region, sampling_week, input$Species) %>%
       group_by(year, region, sampling_week) %>% 
-      summarise(mean = mean(get(input$species), na.rm = T), se = sd(get(input$species)) / sqrt(n())) %>% 
+      summarise(mean = mean(get(input$Species), na.rm = T), se = sd(get(input$Species)) / sqrt(n())) %>% 
       ungroup() %>% 
       ggplot(aes(x = as_factor(sampling_week), y = mean, colour = region, group = region))+
       geom_line(size = 1)+  
@@ -97,9 +122,42 @@ server <- function(input, output) {
       theme(legend.title = element_blank()) +
       theme(axis.text.x = element_text(angle = 45, vjust = 0.5)) +
       labs(
-        title = input$species,
+        title = input$Species,
         caption = "Average number (± 1 SE) caught in each seine in 2018 averaged over one week periods for each region and represented by the middle day of each week"
       )    
+  }
+  )
+  output$Length <- renderPlot({
+    length_species <- input$Length_Species
+    length_region <- input$Region
+    length_histo_15_17 <- hakaisalmon::survey_seines_fish %>% 
+      select(sampling_week, survey_date, region, species, fork_length) %>% 
+      drop_na(fork_length) %>% 
+      filter(species == length_species, region == length_region) %>% 
+      mutate(year = year(survey_date))
+    
+    length_histo_2018 <- fish_and_sealice_field_data %>% 
+      select(sampling_week, survey_date, region, species, fork_length) %>% 
+      filter(species == length_species, region == length_region) %>% 
+      mutate(year = year(survey_date))
+    
+    length_histo <- rbind(length_histo_2018, length_histo_15_17) %>% 
+      drop_na(fork_length) %>% 
+      mutate(year = as.factor(year))
+    
+    ggplot(length_histo, aes(x = sampling_week, y = fork_length, fill = year)) +
+      geom_boxplot()+
+      ylab("Fork Length (mm)")+
+      xlab("Date")+
+      theme(legend.text = element_text(colour="black", size = 12)) + 
+      theme(axis.text=element_text(size=12),
+            axis.title=element_text(size=12,face="bold")) +
+      ggtitle(input$Region) +
+      theme(legend.position="bottom") +
+      theme(axis.text.x = element_text(angle = 45, vjust = 0.5)) +
+      labs(
+        caption = "Fork length boxplots of juvenile salmon grouped by week, and represented by the middle day of each week, compared to the average length from 2015, 2016 and 2017."
+      )
   }
   )
 }

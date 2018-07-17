@@ -32,6 +32,15 @@ survey_seines <- left_join(seine_data, survey_data) %>%
 saveRDS(survey_seines, here::here("In-season Reports", "2018_in_season_report", "Shiny_app_2018",
                    "data", "survey_seines.RDS"))
 
+fish_and_sealice_field_data <- gs_read(field_2018, 
+                                       ws = "fish_and_sealice_field_data")
+
+fish_and_sealice_field_data <- left_join(fish_and_sealice_field_data, 
+                                         survey_seines, by = "seine_id")
+
+saveRDS(fish_and_sealice_field_data, here::here("In-season Reports", "2018_in_season_report", "Shiny_app_2018",
+                     "data", "fish_and_sealice_field_data.RDS"))
+
 # fish_and_sealice_field_data <- gs_read(field_2018, 
 #                                        ws = "fish_and_sealice_field_data")
 # 
