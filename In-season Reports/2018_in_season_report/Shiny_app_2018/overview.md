@@ -1,4 +1,8 @@
-# Overview
+# 2018 Migration Summary
+This year we saw high numbers of juvenile pink salmon, as we would expect given 
+the odd year cycle for spawning adults in the Fraser River.
+
+## Background
 
 The Hakai Institute Juvenile Salmon Program was launched in the spring of 2015 in a collaborative partnership with UBC, SFU, Salmon Coast, Pacific Salmon Foundation, and DFO. The program operates in the Discovery Islands and Johnstone Strait (Figure 1) and thus provides information on the health of juvenile salmon after passage through: 
 

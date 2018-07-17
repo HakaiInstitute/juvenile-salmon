@@ -45,15 +45,15 @@ spp_labels <- c(CU = "Chum", PI = "Pink", SO = "Sockeye", DI = "Discovery Island
                 JS = "Johnstone Strait")
 ```
 
-A plot of `r params$species` migration timing
 
-```{r echo = FALSE}
+```{r echo = FALSE, fig.cap="Average number (± 1 SE) caught in each seine in 2018 averaged over one week periods for each region and represented by the middle day of each week."}
 species <- params$species
 
  survey_seines %>%
+      rename("Sockeye" = "so_total", "Pink" = "pi_total", "Chum" = "cu_total") %>% 
       select(year, region, sampling_week, species) %>%
       group_by(year, region, sampling_week) %>%
-      summarise(mean = mean(get(params$species), na.rm = T), se = sd(species) / sqrt(n())) %>%
+      summarise(mean = mean(get(params$species), na.rm = T), se = sd(get(params$species)) / sqrt(n())) %>%
       ungroup() %>%
       ggplot(aes(x = as_factor(sampling_week), y = mean, colour = region, group = region))+
       geom_line(size = 1)+

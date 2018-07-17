@@ -2,33 +2,40 @@ library(shiny)
 library(dplyr)
 library(ggplot2)
 
-survey_seines <- readRDS("data/survey_seines.RDS")
-spp_labels <- c(CU = "Chum", PI = "Pink", SO = "Sockeye", DI = "Discovery Islands", 
-                JS = "Johnstone Strait")
+survey_seines <- readRDS("data/survey_seines.RDS") %>% 
+  rename("Sockeye" = "so_total", "Pink" = "pi_total", "Chum" = "cu_total")
 
 #######
 
-ui <- navbarPage(
-  title = 'Hakai Institute Juvenile Salmon Program',
+ui <-fluidPage(
+  list(tags$head(HTML('<link rel="icon", href="square hakai favicon.png", 
+                                   type="image/png" />'))),
+  div(style="padding: 1px 0px; width: '100%'",
+      titlePanel(
+        title="", windowTitle="Hakai Juvenile Salmon Program"
+      )
+  ), 
+  navbarPage(
+  title = div(img(src="Hakai_red.png", height = 30, width = 92), 'Juvenile Salmon Program'),
   tabPanel("Overview",
            sidebarLayout(
              sidebarPanel(
-               helpText(),
+               helpText("Adjust figures, return here and save as pdf"),
                downloadButton("report", "Generate PDF report")
              ),
              mainPanel(
                includeMarkdown('overview.md'),
-               img(src = "map_2018.jpg", height = 800, width = 960)
+               img(src = "map_2018.jpg", height = 600, width = 720)
              )
            )
   ),
   tabPanel("Migration Timing",
            sidebarLayout(
              sidebarPanel(
-               helpText(),
+               helpText("Select the species you'd like to plot"),
                selectInput("species", label = h3("Species"),
-                           choices = list("Sockeye" = "so_total", "Pink" = "pi_total",
-                                          "Chum" = "cu_total"),
+                           choices = list("Sockeye" = "Sockeye", "Pink" = "Pink",
+                                          "Chum" = "Chum"),
                            selected = "Sockeye")
              ),
              mainPanel(
@@ -36,6 +43,7 @@ ui <- navbarPage(
              )
            )
   )
+)
 )
 
 
@@ -79,16 +87,19 @@ server <- function(input, output) {
       scale_colour_discrete(name = "",
                             breaks=c("DI","JS"),
                             labels=c("Discovery Islands", "Johnstone Strait"))+
-      theme(legend.justification=c(1,0), legend.position=c(.8,.8),
-            legend.background = element_rect(fill=alpha(0.1))) + 
+      #theme(legend.justification=c(1,0), legend.position=c(.8,.8),
+            #legend.background = element_rect(fill=alpha(0.1))) + 
       theme(legend.text = element_text(colour="black", size = 12)) +
       theme(axis.text=element_text(size=12),
             axis.title=element_text(size=12,face="bold")) +
       xlab("Date") +
       ylab("Abundance") +
       theme(legend.title = element_blank()) +
-      theme(axis.text.x = element_text(angle = 45, vjust = 0.5)) 
-    
+      theme(axis.text.x = element_text(angle = 45, vjust = 0.5)) +
+      labs(
+        title = input$species,
+        caption = "Average number (± 1 SE) caught in each seine in 2018 averaged over one week periods for each region and represented by the middle day of each week"
+      )    
   }
   )
 }
