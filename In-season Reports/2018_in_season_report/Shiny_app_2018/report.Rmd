@@ -41,6 +41,7 @@ health.
 * Parasite Loads
 * Oceanographic Conditions
 
+![Salmon sampling locations in the Discovery Islands and Johnstone Strait in 2018.](./map_2018.jpg)
 
 ```{r, echo = FALSE}
 spp_labels <- c(CU = "Chum", PI = "Pink", SO = "Sockeye", DI = "Discovery Islands",

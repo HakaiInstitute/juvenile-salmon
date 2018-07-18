@@ -83,7 +83,9 @@ server <- function(input, output) {
       # case we don't have write permissions to the current working dir (which
       # can happen when deployed).
       tempReport <- file.path(tempdir(), "report.Rmd")
+      src2 <- file.path(tempdir(), "map_2018.jpg")
       file.copy("report.Rmd", tempReport, overwrite = TRUE)
+      file.copy("map_2018.jpg", src2, overwrite = TRUE)
       # Set up parameters to pass to Rmd document
       params <- list(Species = input$Species, Region = input$Region, 
                      Length_Species = input$Length_Species)
