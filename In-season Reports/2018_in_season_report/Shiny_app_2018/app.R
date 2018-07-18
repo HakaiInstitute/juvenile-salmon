@@ -8,6 +8,8 @@ survey_seines <- readRDS("data/survey_seines.RDS") %>%
 
 fish_and_sealice_field_data <- readRDS("data/fish_and_sealice_field_data.RDS")
 
+summary_sealice <- readRDS("data/summary_sealice.RDS")
+
 spp_labels <- c(CU = "Chum", PI = "Pink", SO = "Sockeye", DI = "Discovery Islands", 
                 JS = "Johnstone Strait")
 
@@ -65,11 +67,31 @@ ui <-fluidPage(
                plotOutput("Length")
              )
                              
+            )
+  ),
+  tabPanel("Parasite Loads",
+           sidebarLayout(
+             sidebarPanel(width = 3,
+              helpText(),
+              selectInput("Indice", label = h3("Indice"),
+                          choices = list("Prevalence" = "prevalence",
+                                         "Intensity" = "intensity",
+                                         "Abundance" = "abundance"),
+                          selected = "Prevalence"),
+              selectInput("Parasite_Region", label = h3("Region"),
+                          choices = list("Discovery Islands" = "DI", "Johnstone Strait" = "JS"),
+                          selected = "Discovery Islands"),
+              selectInput("Sealice_Species", label = h3("Sealice Species"),
+                          choices = list("Caligus clemensi" = "motile_caligus", "Lepeoptheirus salmonis" = "motile_lep"),
+                          selected = "Caligus clemensi")
+             ),
+             mainPanel(
+               plotOutput("Parasite_Loads")
+             )
 )
 )
 )
 )
-
 
 ################ Server
 
@@ -166,8 +188,19 @@ server <- function(input, output) {
       )
   }
   )
+  output$Parasite_Loads <- renderPlot({
+    parasite_region <- input$Parasite_Region
+    Louse_Species <- input$Louse_Species
+    indice <- input$Indice
+    
+    summary_sealice %>% 
+      #filter(region == input$Parasite_Region) %>% 
+      ggplot(aes(x = factor(year), y = get(input$Indice), fill = factor(louse_species))) +
+      geom_bar(stat = "identity", position = position_dodge()) +
+      facet_grid(region ~ species)
+  }
+  )
 }
-
 # Run the application 
 shinyApp(ui = ui, server = server)
 

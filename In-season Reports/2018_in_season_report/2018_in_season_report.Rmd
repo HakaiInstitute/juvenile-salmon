@@ -503,7 +503,7 @@ sea_lice_2018_summary <- fish_and_sealice_field_data %>%
 ```
 
 
-```{r All stages Lice Abundance, include = FALSE, fig.cap= "The abundance ± SE of all three developmental stages of combined _Lepeoptheirus salmonis_ and _Caligus clemensi_ sea lice  per juvenile sockeye salmon in 2018."}
+```{r All stages Lice Abundance, include = FALSE, fig.cap= "The abundance ± SE of all three developmental stages of combined _Lepeoptheirus salmonis_ and _Caligus clemensi_ sea lice per juvenile sockeye salmon in 2018."}
 
 sea_lice_2018_avg <- sea_lice_2018_summary %>%
   filter(species == "SO") %>% 
@@ -666,7 +666,7 @@ motile_abundance_plot
 
 #### Motile Sea Lice Infection Intensity 
 ```{r Lice cal intensity, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE, fig.cap = "The mean infection intensity ± SE of __motile__ _Lepeoptheirus salmonis_ and _Caligus clemensi_ sea lice per juvenile salmon infected with one or more motile _Lepeoptheirus salmonis_ and _Caligus clemensi_ louse in 2018."}
-# Leps
+
 sea_lice_2018_cal_mot_intensity <- sea_lice_2018_summary %>% 
   filter(motile_caligus > 0) %>% 
   select(region, species, sampling_week, motile_caligus) %>% 
@@ -831,7 +831,7 @@ p <- p +
 p
 ```
 
-```{r length anomaly plot}
+```{r Failed Peter Chandler style length anomaly plot, include = FALSE}
 di_2018_so_length_histo <- di_length_histo %>% 
   mutate(yday = yday(survey_date)) %>% 
   filter(year == 2018, species == "SO")  
@@ -860,7 +860,7 @@ annual_di_length_histo %>%
   geom_smooth(method = "loess", span = 1.)
 ```
 
-```{r condition anomaly plot}
+```{r sealice annual comparison plot}
 
 ```
 
