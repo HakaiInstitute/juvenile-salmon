@@ -1,6 +1,19 @@
 ---
-title: "Dynamic report"
-output: pdf_document
+title: "Juvenile salmon migration report; northern
+Strait of Georgia to Johnstone Strait"
+output:
+  rmarkdown::pdf_document:
+    
+    fig_caption: yes
+    includes:
+      in_header: figure_opts.tex
+    latex_engine: xelatex
+sansfont: Times New Roman
+fontsize: 12pt
+
+header-includes:
+- \usepackage{booktabs}
+- \usepackage{sectsty} \sectionfont{\centering \emph}
 params:
   Species: NA
   printcode: false
@@ -8,6 +21,11 @@ params:
   Length_Species: NA
   
 ---
+
+\begin{center}
+\large
+— Hakai Institute Juvenile Salmon Program 2018 —
+\end{center}
 
 ```{r setup, echo = FALSE, inlcude = FALSE}
 library(tidyverse)

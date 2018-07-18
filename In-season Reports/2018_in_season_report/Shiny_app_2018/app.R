@@ -84,8 +84,12 @@ server <- function(input, output) {
       # can happen when deployed).
       tempReport <- file.path(tempdir(), "report.Rmd")
       src2 <- file.path(tempdir(), "map_2018.jpg")
+      tex_file <- file.path(tempdir(), "figure_opts.tex")
+      hakai_logo <- file.path(tempdir(), "Hakai Institute Logo Vector.png")
       file.copy("report.Rmd", tempReport, overwrite = TRUE)
       file.copy("map_2018.jpg", src2, overwrite = TRUE)
+      file.copy("figure_opts.tex", tex_file, overwrite = TRUE)
+      file.copy("Hakai Institute Logo Vector.png", hakai_logo, overwrite = TRUE)
       # Set up parameters to pass to Rmd document
       params <- list(Species = input$Species, Region = input$Region, 
                      Length_Species = input$Length_Species)
