@@ -53,6 +53,7 @@ sea_lice_2018_summary <- fish_and_sealice_field_data %>%
   select(ufn, survey_date, site_id, region, species, motile_caligus, motile_lep)
 
 # Import motile time series data
+  
 sealice_15_17 <- hakaisalmon::sealice_lab_motiles %>%
   mutate(
     motile_caligus = cm_lab + cpaf_lab + caf_lab + cgf_lab + ucal_lab,
@@ -63,10 +64,32 @@ sealice_15_17 <- hakaisalmon::sealice_lab_motiles %>%
     ufn, survey_date, site_id, region, species, motile_caligus, motile_lep
   )
 
+#Some of the fish from 2017 have been dissected but that data have not been
+# put into the database and the WIP, nor the hakaisalmon package
+sealice_not_in_WIP_book <- gs_key("1zFL-bMWL5O5PfoATjYHJACsORKVKlyfg3bg4YqK3kRQ",
+                                  lookup = FALSE, visibility = "private")
+
+sealice_not_in_WIP <- gs_read(sealice_not_in_WIP_book, ws = "sealice_lab") %>%
+  mutate(
+    motile_caligus = cm_lab + cpaf_lab + caf_lab + cgf_lab + ucal_lab,
+    motile_lep = lpam_lab + lpaf_lab + lam_lab + laf_lab + lgf_lab + ulep_lab
+  ) %>% 
+  select(
+    ufn, motile_caligus, motile_lep
+  ) 
+    
+sealice_15_17 <- left_join(sealice_15_17, sealice_not_in_WIP, by = "ufn") %>% 
+  replace_na(list(motile_caligus.y = 0, motile_lep.y = 0)) %>%
+  mutate(motile_caligus = motile_caligus.x + motile_caligus.y,
+         motile_lep = motile_lep.x + motile_lep.y) %>% 
+  select(-motile_caligus.x, -motile_caligus.y, -motile_lep.x, -motile_lep.y)
+
 sealice_time_series <- rbind(sea_lice_2018_summary, sealice_15_17) %>% 
   drop_na() %>% 
   mutate(year = year(survey_date), sampling_week = as.numeric((yday(survey_date) + 4) %/% 7)) %>% 
-  filter(sampling_week <= 28) %>% 
+  filter(sampling_week <= 28, species %in% c("SO", "PI", "CU")) %>% 
+  filter(site_id %in% c("D07", "D09", "D22", "D27", "D10", "D08", "D34",
+                        "D20", "J03", "J02", "J09", "J11")) %>% 
   gather(`motile_caligus`, `motile_lep`, key = louse_species, value = n_lice)
 
 sealice_time_series <- sealice_time_series %>% 
@@ -75,19 +98,16 @@ sealice_time_series <- sealice_time_series %>%
                                        `23` = "June 9", `24` = "June 16", `25` = "June 23",
                                        `26` = "June 30", `27` = "July 6", `28` = "July 13"))
 
-#TODO: Filter down sites comparable core stations for each year
-#TODO: Calculate weekly average of all indices, and average those for the annual index 
-
 # Generate sealice prevalence column
 motile_infected_hosts <- sealice_time_series %>%
-  group_by(year, region, species, louse_species) %>%
-  filter(n_lice >= 1, species %in% c("SO", "PI", "CU")) %>% 
+  filter(n_lice > 0, species %in% c("SO", "PI", "CU")) %>% 
+  group_by(year, region, species, sampling_week, louse_species) %>%
   summarise(n_infected = n())
 
 hosts <- sealice_time_series %>%
-  group_by(year, region, species, louse_species) %>%
+  group_by(year, region, species, sampling_week, louse_species) %>%
   summarise(n_examined = n()) %>%
-  filter(n_examined >= 3, species %in% c("SO", "PI", "CU")) 
+  filter(species %in% c("SO", "PI", "CU")) 
 
 summary_sealice <- left_join(hosts, motile_infected_hosts) %>% 
   replace_na(list(n_infected = 0)) %>% 
@@ -97,10 +117,9 @@ summary_sealice <- left_join(hosts, motile_infected_hosts) %>%
 # Generate abundance column for summary_sealice
 
 abundance <- sealice_time_series %>% 
-  select(year, region, species, louse_species, n_lice) %>% 
-  group_by(year, region, species, louse_species) %>%
-  summarise(abundance = mean(n_lice, na.rm = T), 
-            abundance_se = sd(n_lice, na.rm = T) / sqrt(n())
+  select(year, region, species, sampling_week, louse_species, n_lice) %>% 
+  group_by(year, region, species, sampling_week, louse_species) %>%
+  summarise(abundance = mean(n_lice, na.rm = T)
             )
 
 summary_sealice <- left_join(summary_sealice, abundance)
@@ -108,16 +127,16 @@ summary_sealice <- left_join(summary_sealice, abundance)
 # Generate intensity column
 intensity <- sealice_time_series %>% 
   filter(n_lice > 0) %>% 
-  select(year, region, species, louse_species, n_lice) %>% 
-  group_by(year, region, species, louse_species) %>%
-  summarise(intensity =  mean(n_lice, na.rm = T),
-            itensity_se = sd(n_lice, na.rm = T)/sqrt(n())
+  select(year, region, species, sampling_week, louse_species, n_lice) %>% 
+  group_by(year, region, species, sampling_week, louse_species) %>%
+  summarise(intensity =  mean(n_lice, na.rm = T)
             )
 
 summary_sealice <- left_join(summary_sealice, intensity)
 
 saveRDS(summary_sealice, here::here("In-season Reports", "2018_in_season_report", "Shiny_app_2018",
                                                "data", "summary_sealice.RDS"))
+
 # # Get oceanoraphy data
 # oceanography_metadata <- gs_read(field_2018, ws = "ctd_data") %>% 
 #   drop_na(ctd_cast_id)

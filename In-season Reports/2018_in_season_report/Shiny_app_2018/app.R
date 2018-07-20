@@ -13,6 +13,7 @@ summary_sealice <- readRDS("data/summary_sealice.RDS")
 spp_labels <- c(CU = "Chum", PI = "Pink", SO = "Sockeye", DI = "Discovery Islands", 
                 JS = "Johnstone Strait")
 
+theme_set(theme_bw(base_size = 17))
 #######
 
 ui <-fluidPage(
@@ -73,17 +74,11 @@ ui <-fluidPage(
            sidebarLayout(
              sidebarPanel(width = 3,
               helpText(),
-              selectInput("Indice", label = h3("Indice"),
+              selectInput("Parameter", label = h3("Parameter"),
                           choices = list("Prevalence" = "prevalence",
                                          "Intensity" = "intensity",
                                          "Abundance" = "abundance"),
-                          selected = "Prevalence"),
-              selectInput("Parasite_Region", label = h3("Region"),
-                          choices = list("Discovery Islands" = "DI", "Johnstone Strait" = "JS"),
-                          selected = "Discovery Islands"),
-              selectInput("Sealice_Species", label = h3("Sealice Species"),
-                          choices = list("Caligus clemensi" = "motile_caligus", "Lepeoptheirus salmonis" = "motile_lep"),
-                          selected = "Caligus clemensi")
+                          selected = "Prevalence")
              ),
              mainPanel(
                plotOutput("Parasite_Loads")
@@ -114,7 +109,8 @@ server <- function(input, output) {
       file.copy("Hakai Institute Logo Vector.png", hakai_logo, overwrite = TRUE)
       # Set up parameters to pass to Rmd document
       params <- list(Species = input$Species, Region = input$Region, 
-                     Length_Species = input$Length_Species)
+                     Length_Species = input$Length_Species, 
+                     Parameter = input$Parameter)
       
       
       # Knit the document, passing in the `params` list, and eval it in a
@@ -142,17 +138,17 @@ server <- function(input, output) {
                             labels=c("Discovery Islands", "Johnstone Strait"))+
       #theme(legend.justification=c(1,0), legend.position=c(.8,.8),
             #legend.background = element_rect(fill=alpha(0.1))) + 
-      theme(legend.text = element_text(colour="black", size = 12)) +
-      theme(axis.text=element_text(size=12),
-            axis.title=element_text(size=12,face="bold")) +
       xlab("Date") +
       ylab("Abundance") +
       theme(legend.title = element_blank()) +
       theme(axis.text.x = element_text(angle = 45, vjust = 0.5)) +
       labs(
         title = input$Species,
-        caption = "Average number (± 1 SE) caught in each seine in 2018 averaged over one week periods for each region and represented by the middle day of each week"
-      )    
+        caption = "Average catch (± 1 SE) in 2018 for one week periods represented by the middle day of each week."
+      ) +
+      theme(
+        plot.caption = element_text(hjust = 0)
+      )
   }
   )
   output$Length <- renderPlot({
@@ -177,27 +173,47 @@ server <- function(input, output) {
       geom_boxplot()+
       ylab("Fork Length (mm)")+
       xlab("Date")+
-      theme(legend.text = element_text(colour="black", size = 12)) + 
-      theme(axis.text=element_text(size=12),
-            axis.title=element_text(size=12,face="bold")) +
-      ggtitle(input$Region) +
+      ggtitle(ifelse(input$Region == "DI", "Discovery Islands", "Johnstone Strait")) +
       theme(legend.position="bottom") +
       theme(axis.text.x = element_text(angle = 45, vjust = 0.5)) +
       labs(
-        caption = "Fork length boxplots of juvenile salmon grouped by week, and represented by the middle day of each week, compared to the average length from 2015, 2016 and 2017."
+        caption = "Fork length boxplots of juvenile salmon grouped by week and represented by the middle day of each week."
+      ) +
+      theme(
+        plot.caption = element_text(hjust = 0)
       )
   }
   )
   output$Parasite_Loads <- renderPlot({
-    parasite_region <- input$Parasite_Region
-    Louse_Species <- input$Louse_Species
-    indice <- input$Indice
-    
-    summary_sealice %>% 
-      #filter(region == input$Parasite_Region) %>% 
-      ggplot(aes(x = factor(year), y = get(input$Indice), fill = factor(louse_species))) +
+      summary_sealice %>% 
+      group_by(year, region, louse_species, species) %>% 
+      summarize(mean = mean(get(input$Parameter), na.rm = TRUE),
+                sd = sd(get(input$Parameter), na.rm = TRUE),
+                se = sd(get(input$Parameter), na.rm = TRUE)/sqrt(n())) %>%
+      ungroup() %>% 
+      ggplot(aes(x = factor(year), y = mean, fill = factor(louse_species),
+                 group = factor(louse_species))) +
       geom_bar(stat = "identity", position = position_dodge()) +
-      facet_grid(region ~ species)
+      geom_errorbar(aes(ymin = mean - se, 
+                        ymax = mean + se), 
+                        width = 0.2,
+                        position = position_dodge(0.9)
+                        ) +
+      facet_grid(region ~ species, labeller = labeller(species = spp_labels, 
+                                                       region = spp_labels)) +
+      labs(x = "Year", y = input$Parameter) +
+      theme(legend.text = element_text(face = "italic")) +
+      scale_fill_discrete(name="Louse Species",
+                            breaks=c("motile_caligus", "motile_lep"),
+                            labels=c("C. clemensi", "L. salmonis")) +
+      theme(legend.position="bottom") +
+      labs(caption = paste("The", input$Parameter, " (± SE) of sealice per juvenile salmon infected with motile Lepeoptheirus salmonis and Caligus clemensi \n louse in 2018."
+      )
+      ) +
+      theme(
+        plot.caption = element_text(hjust = 0)
+      ) +
+        geom_text(aes(label = ifelse(mean == 0, round(mean, 1), '')), hjust = -2.5)
   }
   )
 }

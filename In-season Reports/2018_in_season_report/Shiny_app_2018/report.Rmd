@@ -19,6 +19,7 @@ params:
   printcode: false
   Region: NA
   Length_Species: NA
+  Parameter: NA
   
 ---
 
@@ -31,6 +32,7 @@ params:
 library(tidyverse)
 
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, error = FALSE)
+theme_set(theme_bw(base_size = 14))
 ```
 
 # Overview
@@ -61,11 +63,20 @@ health.
 
 ![Salmon sampling locations in the Discovery Islands and Johnstone Strait in 2018.](./map_2018.jpg)
 
+The following plots are subject to change as the underlying data are preliminary and subject to further quality assurance. 
+
+We are endeavouring to provide useful information for the entire salmon research community. As such we welcome any feedback. Please direct questions or comments to Brian Hunt (B.Hunt@oceans.ubc.ca) and/or Brett Johnson (Brett.Johnson@hakai.org). 
+
+__Report prepared by:__ Brett Johnson, Carly Janusson, Julian Gan, and Brian Hunt  
+__Updated:__ `r Sys.Date()`  
+
+
 ```{r, echo = FALSE}
 spp_labels <- c(CU = "Chum", PI = "Pink", SO = "Sockeye", DI = "Discovery Islands",
                 JS = "Johnstone Strait")
 ```
 
+## Catch Statistics
 
 ```{r echo = FALSE, fig.cap="Average number (± 1 SE) caught in each seine in 2018 averaged over one week periods for each region and represented by the middle day of each week."}
 Species <- params$Species
@@ -93,6 +104,8 @@ Species <- params$Species
       theme(legend.title = element_blank()) +
       theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
 ```
+
+## Fish Lengths
 
 ```{r lengths, fig.cap = "Fork length boxplots of juvenile salmon grouped by week, and represented by the middle day of each week, compared to the average length from 2015, 2016 and 2017."}
 
@@ -125,5 +138,37 @@ length_histo_15_17 <- hakaisalmon::survey_seines_fish %>%
       ggtitle(Region) +
       theme(legend.position="bottom") +
       theme(axis.text.x = element_text(angle = 45, vjust = 0.5)) 
+```
+
+## Parasite Loads
+
+```{r Parasite loads, fig.cap = paste("The ", Parameter, " (± SE) of sealice per juvenile salmon infected  with motile Lepeoptheirus salmonis and Caligus clemensi \n louse in 2018.")}
+Parameter <- params$Parameter
+
+      summary_sealice %>% 
+      group_by(year, region, louse_species, species) %>% 
+      summarize(mean = mean(get(Parameter), na.rm = TRUE),
+                sd = sd(get(Parameter), na.rm = TRUE),
+                se = sd(get(Parameter), na.rm = TRUE)/sqrt(n())) %>%
+      ungroup() %>% 
+      ggplot(aes(x = factor(year), y = mean, fill = factor(louse_species),
+                 group = factor(louse_species))) +
+      geom_bar(stat = "identity", position = position_dodge()) +
+      geom_errorbar(aes(ymin = mean - se, 
+                        ymax = mean + se), 
+                        width = 0.2,
+                        position = position_dodge(0.9)
+                        ) +
+      facet_grid(region ~ species, labeller = labeller(species = spp_labels, 
+                                                       region = spp_labels)) +
+      labs(x = "Year", y = Parameter) +
+      theme(legend.text = element_text(face = "italic")) +
+      scale_fill_discrete(name="Louse Species",
+                            breaks=c("motile_caligus", "motile_lep"),
+                            labels=c("C. clemensi", "L. salmonis")) +
+      theme(legend.position="bottom") +
+      theme(
+        plot.caption = element_text(hjust = 0)
+) 
 ```
 
