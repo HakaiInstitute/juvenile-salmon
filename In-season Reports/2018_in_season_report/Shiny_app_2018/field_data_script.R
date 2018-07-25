@@ -165,16 +165,16 @@ js2_12_all <-rbind(js2_all, js12_all)
 
 js2_12_all$station <- "js2_12"
   
-# Create time series of average conditions which excludes the current year, using a loess function
-# Do this using base R so thatI can extract the loess predictions to include in data frame to provide the value for
+# Create time series of average conditions which includes the current year, using a loess function
+# Do this using base R so that I can extract the loess predictions to include in data frame to provide the value for
 # which to test if the current years value falls above or below, given a date.
-ctd_pre_2018 <- rbind(qu39_all, qu29_all, js2_12_all) %>% 
+ctd_all <- rbind(qu39_all, qu29_all, js2_12_all) %>% 
   mutate(year = year(start_dt), date = as_date(start_dt), yday = yday(start_dt),
          week = week(start_dt)) %>%
-  filter(year < 2018, depth <= 30) %>% 
+  filter(depth <= 30) %>% 
   select(year, date, week, yday, station, conductivity, temperature, depth, salinity, 
          dissolved_oxygen_ml_l) %>% 
-  group_by(station, week, yday) %>% 
+  group_by(station, yday) %>% 
   summarise(mean_temp = mean(temperature, na.rm = T), 
             mean_do = mean(dissolved_oxygen_ml_l, na.rm = T),
             mean_salinity = mean(salinity, na.rm = T))
@@ -195,54 +195,57 @@ ctd_post_time_series <- rbind(qu39_all, qu29_all, js2_12_all) %>%
 ## test out sst anomaly plot
 
 ## QU39
-qu39_average <- ctd_pre_2018 %>% 
+qu39_average <- ctd_all %>% 
   filter(station == "QU39")
 
 # Filter down to station of interest
 qu39_this_year <- ctd_post_time_series %>% 
   filter(station == "QU39")
 
-temp.lo_qu39 <- loess(mean_temp ~ yday, qu39_average, SE = T)
+temp.lo_qu39 <- loess(mean_temp ~ yday, qu39_average, SE = T, span = 0.65)
 
 #create table for predicitions from loess function
 sim_temp_data_qu39 <- tibble(yday = seq(min(qu39_average$yday), max(qu39_average$yday), 0.1))
 #Predict temp in 0.1 day increments to provide smooth points to join
 sim_temp_data_qu39$predicted_mean_temp <- predict(temp.lo_qu39, sim_temp_data_qu39, SE = T)
 
-#Join simulated/predicted temp values from loess function to, observations from this year
-qu39_temp_anomaly_data <- left_join(sim_temp_data_qu39, qu39_this_year) %>% 
-  mutate(diff = if_else(mean_temp > predicted_mean_temp, "pos", "neg")) %>% 
-  drop_na(diff) %>% 
-  add_row(yday = (44+37)/2, predicted_mean_temp = predict(temp.lo_qu39, (44+37)/2), mean_temp = predict(temp.lo_qu39, (44+37)/2)) %>% 
-  add_row(yday = 44.5, predicted_mean_temp = predict(temp.lo_qu39, 44.5), mean_temp = predict(temp.lo_qu39, 44.5)) %>% 
-  add_row(yday = 124, predicted_mean_temp = predict(temp.lo_qu39, 124), mean_temp = predict(temp.lo_qu39, 124)) %>% 
-  add_row(yday = (192 + 177) / 2, predicted_mean_temp = predict(temp.lo_qu39, (192 + 177) / 2), mean_temp = predict(temp.lo_qu39,(192 + 177) / 2))
 
 # Create a linear interpolation of points that have zero difference between 
 # loess model and 'observed data' so that an area plot will look right
-
-
+# manually identify intersections and create values that fall on the line
+qu39_temp_anomaly_data <- left_join(sim_temp_data_qu39, qu39_this_year) %>% 
+  mutate(diff = if_else(mean_temp > predicted_mean_temp, "pos", "neg")) %>% 
+  drop_na(diff) %>% 
+  add_row(yday = 47.5, predicted_mean_temp = predict(temp.lo_qu39, 47.5), mean_temp = predict(temp.lo_qu39, 47.5)) %>% 
+  add_row(yday = 124, predicted_mean_temp = predict(temp.lo_qu39, 124), mean_temp = predict(temp.lo_qu39, 124)) %>% 
+  add_row(yday = (145 + 149) / 2, predicted_mean_temp = predict(temp.lo_qu39, (145 + 149) / 2), mean_temp = predict(temp.lo_qu39,(145 + 149) / 2)) %>% 
+  add_row(yday = (155 + 149) / 2, predicted_mean_temp = predict(temp.lo_qu39, (155 + 149) / 2), mean_temp = predict(temp.lo_qu39,(155 + 149) / 2)) %>% 
+  add_row(yday = (192 + 177) / 2, predicted_mean_temp = predict(temp.lo_qu39, (192 + 177) / 2), mean_temp = predict(temp.lo_qu39,(192 + 177) / 2))
 
 # Create min and max for any given day of the time series
-qu39_min <- qu39_average %>% group_by(yday) %>% filter(mean_temp == min(mean_temp))
-qu39_max <- qu39_average %>% group_by(yday) %>% filter(mean_temp == max(mean_temp))
-
+qu39_min_max <- qu39_all %>%
+  filter(depth <= 30) %>% 
+  group_by(year, yday) %>%
+  summarise(mean_temp = mean(temperature)) %>% 
+  ungroup() %>% 
+  group_by(yday) %>% 
+  summarise(min_temp = min(mean_temp), max_temp = max(mean_temp))
 
 ## Plot it
 ggplot(data = qu39_temp_anomaly_data, aes(x = yday, y = mean_temp)) +
-  geom_point(aes(x = yday, y = predicted_mean_temp))+
+  geom_point(aes(x = yday, y = predicted_mean_temp), size = 0.1)+
   geom_line(aes(x = yday, y = predicted_mean_temp)) +
   geom_ribbon(data = subset(qu39_temp_anomaly_data, mean_temp >= predicted_mean_temp), aes(ymin = predicted_mean_temp, ymax = mean_temp), fill = 'red', size = 4)+
   geom_ribbon(data = subset(qu39_temp_anomaly_data, mean_temp <= predicted_mean_temp), aes(ymin = mean_temp, ymax = predicted_mean_temp), fill = 'blue', size = 4)+
   theme_bw() +
-  geom_smooth(data = qu39_average, aes(x = yday, y = mean_temp), size = 2, colour = 'black', se = T) +
-  geom_point(data = qu39_min,
-              aes(x = yday, y = mean_temp))+
-  geom_point(data = qu39_max,
-             aes(x = yday, y = mean_temp)) + 
+  geom_smooth(data = qu39_average, aes(x = yday, y = mean_temp), size = 1, colour = 'black', se = T, span = .65) +
+  geom_point(data = qu39_min_max,
+              aes(x = yday, y = min_temp))+
+  geom_point(data = qu39_min_max,
+             aes(x = yday, y = max_temp)) + 
   scale_x_continuous(breaks = (c(32, 60, 91, 121, 152, 182, 213)),
-                    labels = (c("Feb 1", "Mar 1", "Apr 1", "May 1", "June 1", 
-                                "July 1", "Aug 1"))) +
+                    labels = (c("Feb", "Mar", "Apr", "May", "Jun", 
+                                "Jul", "Aug"))) +
   labs(x = "Date", y = "Temperature [°C]") +
   coord_cartesian(xlim = c(32,213))
   
