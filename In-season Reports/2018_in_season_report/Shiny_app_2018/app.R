@@ -1,4 +1,6 @@
 library(shiny)
+library(forcats)
+library(lubridate)
 library(dplyr)
 library(ggplot2)
 library(hakaisalmon)
@@ -216,6 +218,9 @@ server <- function(input, output) {
         geom_text(aes(label = ifelse(mean == 0, round(mean, 1), '')), hjust = -2.5)
   }
   )
+  output$sst <- renderPlot({
+    
+  })
 }
 # Run the application 
 shinyApp(ui = ui, server = server)

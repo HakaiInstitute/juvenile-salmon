@@ -838,29 +838,100 @@ di_2018_so_length_histo <- di_length_histo %>%
 
 annual_di_sockeye <- annual_di_length_histo %>% 
   filter(species == "SO") %>% 
+  mutate(yday = yday(survey_date)) %>% 
   drop_na(fork_length)
 
-loess_all_so <- loess(fork_length ~ yday, data = annual_di_sockeye, span = 1.)
+loess_all_so <- loess(fork_length ~ yday, data = annual_di_sockeye, span = 1)
 annual_di_sockeye$loess <- predict(loess_all_so)
 
 annual_loess <- annual_di_sockeye %>% 
   select(yday, loess) %>% 
   rename("loess_annual" = "loess")
 
-di_2018_so_length_histo <- left_join(di_2018_so_length_histo, annual_loess, by = "yday")
+di_2018_so_length_histo <- left_join(di_2018_so_length_histo, annual_loess, by = "yday") %>% 
+  drop_na(loess_annual)
 
 di_2018_so_length_histo <- di_2018_so_length_histo %>% 
-  mutate(higher_or_lower = if_else(fork_length < loess_annual, "lower", "higher"))
+  mutate(higher_or_lower = if_else(fork_length < loess, "lower", "higher"))
 
 annual_di_length_histo %>% 
   mutate(yday = yday(survey_date)) %>% 
   filter(yday < 190, species == "SO") %>% 
   ggplot(aes(x = yday, y = fork_length)) +
-  geom_point(data = di_2018_so_length_histo, aes(x = yday, y = fork_length, colour = higher_or_lower)) +
+  geom_area(data = di_2018_so_length_histo, aes(x = yday, y = fork_length, colour = higher_or_lower)) +
   geom_smooth(method = "loess", span = 1.)
 ```
 
-```{r sealice annual comparison plot}
+```{r attempt two at anomaly plot}
+
+d <- data.frame(x = c(1:6),
+                y = c(-1, 2, 1, 2, -1, 1))
+d$grp <- "orig"
+
+
+d <- d[order(d$x),]
+
+new_d <- do.call("rbind",
+              sapply(1:(nrow(d) -1), function(i){
+                f <- lm(x ~ y, d[i:(i+1), ])
+                if (f$qr$rank < 2) return(NULL)
+                r <- predict(f, newdata = data.frame(y = 0))
+                if(d[i, ]$x < r & r < d[i+1, ]$x)
+                  return(data.frame(x = r, y = 0))
+                else return(NULL)
+              })
+)
+
+new_d$grp <- "new"
+
+d2 <- rbind(d, new_d)
+d2$lm <- c(-4,-3,-2,-1,1,2,3,4,5)
+fm <- lm(lm ~ x, d2)
+loess <- loess(lm ~ x, data = d2,
+               control = loess.control(surface = "direct"))
+
+d2$fm <- fitted(fm)
+d2$loess <- predict(loess)
+
+c <- tibble(x = seq(-6,6,0.001))
+c$loess <- loess(loess)
+
+ggplot(data = d2, aes(x = x, y = y)) +
+  geom_point()+
+  geom_smooth(se = FALSE) +
+  geom_ribbon(data = subset(d2, y > fm), aes(ymin = fm, ymax = y), fill = 'red')+
+  geom_ribbon(data = subset(d2, y < fm), aes(ymin = y, ymax = fm), fill = 'blue')+
+  geom_line(aes(x = x, y = fm)) +
+  theme_bw()
+```
+
+```{r}
+df <- tibble(dist = cars$dist,
+             speed = cars$speed)
+
+cars.lo <- loess(dist ~ speed, df)
+
+dist.predict <- predict(cars.lo, df)
+df$dist.predict <- y.predict
+
+plot(dist~speed, df)
+
+new_data <- tibble(speed = seq(0,100,0.1))
+new_data$dist.predicted <- predict(cars.lo, new_data)
+
+plot(dist.predicted ~ speed, new_data)
+```
+
+```{r}
+data(mtcars) #is already available in R
+attach(mtcars) # attach it to the environment so you can use column names directly
+m1 = loess(mpg ~ cyl + disp)
+# the prdedict function works well
+y.predict <- predict(m1, data.frame(cyl, disp))
+
+# add new data
+new.data = data.frame(cyl = c(6,8), disp = c(150,100))
+y.predict <- predict(m1, new.data)
 
 ```
 
