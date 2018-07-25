@@ -107,7 +107,7 @@ life_aquatic_discrete <- wes_palette("Zissou1", 5, type = "discrete")
 theme <- theme_classic(base_size = 18)
 theme_set(theme)
 # read in dfo data that Chrys Neville provided that I tidied up first in excel
-dfo_data <- read_csv(here::here("data","dfo_data.csv"))
+dfo_data <- read_csv(here::here("Fine-scale migration dynamics", "data","dfo_data.csv"))
 
 dfo_data <- dfo_data %>% 
   add_column(ufn = "ufn", .before = "org") %>% 
@@ -189,7 +189,7 @@ ggplot(gsi_okisollo, aes(x = org, y = proportion, fill = collapsed_fraser_stocks
   ylab("Proportion") +
   scale_fill_discrete(name = "Genetic Stock")
 
-ggsave(here::here("figs", "annual_gsi.png"), width = 9, height = 6)
+ggsave(here::here("Fine-scale migration dynamics", "figs", "annual_gsi.png"), width = 9, height = 6)
 
 #TODO: update figure lables and include N
 #TODO: filter hakai prob_1 to > 0.6
@@ -217,7 +217,7 @@ ggplot(gsi_weekly_okisollo, aes(x = org, y = proportion, fill = collapsed_fraser
   ylab("Proportion") +
   scale_fill_discrete(name = "Genetic Stock")
 
-ggsave(here::here("figs", "weekly_gsi.png"), width = 15, height = 6)
+ggsave(here::here("Fine-scale migration dynamics", "figs", "weekly_gsi.png"), width = 15, height = 6)
 
 ```
 ### Additional stock ID
@@ -262,9 +262,14 @@ dates_worth_comparing <- as.Date(dates_worth_comparing$survey_date)
 
 additional_2015_hakai_fish <- hakai_same_date %>% 
   filter(survey_date %in% dates_worth_comparing) %>% 
-  left_join(package_data, additional_2015_hakai_fish, by = "package_id")
+  left_join(package_data, additional_2015_hakai_fish, by = "package_id") %>% 
+  select(survey_date, site_id, species, semsp_id) %>% 
+  mutate(date_site = paste(survey_date, "-", site_id)) %>% 
+  distinct(date_site)
 
 print(additional_2015_hakai_fish)
+write_csv(additional_2015_hakai_fish, here::here("Fine-scale migration dynamics",
+                                                 "data", "additional_2015_hakai_fish.csv"))
 
 rm(dfo_same_date, hakai_same_date, dates_worth_comparing, dfo_so, hakai_so, hakai_same_date_summary)
 ```

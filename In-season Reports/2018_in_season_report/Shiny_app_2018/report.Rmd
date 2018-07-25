@@ -1,0 +1,174 @@
+---
+title: "Juvenile salmon migration report; northern
+Strait of Georgia to Johnstone Strait"
+output:
+  rmarkdown::pdf_document:
+    
+    fig_caption: yes
+    includes:
+      in_header: figure_opts.tex
+    latex_engine: xelatex
+sansfont: Times New Roman
+fontsize: 12pt
+
+header-includes:
+- \usepackage{booktabs}
+- \usepackage{sectsty} \sectionfont{\centering \emph}
+params:
+  Species: NA
+  printcode: false
+  Region: NA
+  Length_Species: NA
+  Parameter: NA
+  
+---
+
+\begin{center}
+\large
+— Hakai Institute Juvenile Salmon Program 2018 —
+\end{center}
+
+```{r setup, echo = FALSE, inlcude = FALSE}
+library(tidyverse)
+
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, error = FALSE)
+theme_set(theme_bw(base_size = 14))
+```
+
+# Overview
+
+The Hakai Institute Juvenile Salmon Program was launched in the spring of 2015 in a collaborative partnership with UBC, SFU, Salmon Coast, Pacific Salmon Foundation, and DFO. The program operates in the Discovery Islands and Johnstone Strait (Figure 1) and thus provides information on the health of juvenile salmon after passage through: 
+
+1) Strait of Georgia – stratified high plankton biomass zone; and 
+
+2) Discovery Islands & Johnstone Strait – highly-mixed low-plankton-biomass zone, and area of high wild-farmed fish interactions.
+
+## Program Objectives
+
+1) Determine migration timing and pathways; 
+
+2) Migration habitat mapping - oceanographic conditions along the migration route;
+
+3) Understand the dynamics of the plankton food-webs that underpin juvenile salmon growth and
+health;
+
+4) Understand parasite and pathogen infection dynamics and their impact on juvenile salmon growth and
+health.
+
+## Key Parameters Reported
+* Catch Statistics
+* Lengths
+* Parasite Loads
+* Oceanographic Conditions
+
+![Salmon sampling locations in the Discovery Islands and Johnstone Strait in 2018.](./map_2018.jpg)
+
+The following plots are subject to change as the underlying data are preliminary and subject to further quality assurance. 
+
+We are endeavouring to provide useful information for the entire salmon research community. As such we welcome any feedback. Please direct questions or comments to Brian Hunt (B.Hunt@oceans.ubc.ca) and/or Brett Johnson (Brett.Johnson@hakai.org). 
+
+__Report prepared by:__ Brett Johnson, Carly Janusson, Julian Gan, and Brian Hunt  
+__Updated:__ `r Sys.Date()`  
+
+
+```{r, echo = FALSE}
+spp_labels <- c(CU = "Chum", PI = "Pink", SO = "Sockeye", DI = "Discovery Islands",
+                JS = "Johnstone Strait")
+```
+
+## Catch Statistics
+
+```{r echo = FALSE, fig.cap="Average number (± 1 SE) caught in each seine in 2018 averaged over one week periods for each region and represented by the middle day of each week."}
+Species <- params$Species
+
+ survey_seines %>%
+      rename("Sockeye" = "so_total", "Pink" = "pi_total", "Chum" = "cu_total") %>% 
+      select(year, region, sampling_week, Species) %>%
+      group_by(year, region, sampling_week) %>%
+      summarise(mean = mean(get(params$Species), na.rm = T), se = sd(get(params$Species)) / sqrt(n())) %>%
+      ungroup() %>%
+      ggplot(aes(x = as_factor(sampling_week), y = mean, colour = region, group = region))+
+      geom_line(size = 1)+
+      geom_point() +
+      geom_errorbar(aes(ymin = mean - se, ymax = mean + se, width = 0.2)) +
+      scale_colour_discrete(name = "",
+                            breaks=c("DI","JS"),
+                            labels=c("Discovery Islands", "Johnstone Strait"))+
+      theme(legend.justification=c(1,0), legend.position=c(.8,.8),
+            legend.background = element_rect(fill=alpha(0.1))) +
+      theme(legend.text = element_text(colour="black", size = 12)) +
+      theme(axis.text=element_text(size=12),
+            axis.title=element_text(size=12,face="bold")) +
+      xlab("Date") +
+      ylab("Abundance") +
+      theme(legend.title = element_blank()) +
+      theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
+```
+
+## Fish Lengths
+
+```{r lengths, fig.cap = "Fork length boxplots of juvenile salmon grouped by week, and represented by the middle day of each week, compared to the average length from 2015, 2016 and 2017."}
+
+Region <- params$Region
+Length_Species <- params$Length_Species
+
+length_histo_15_17 <- hakaisalmon::survey_seines_fish %>% 
+      select(sampling_week, survey_date, region, species, fork_length) %>% 
+      drop_na(fork_length) %>% 
+      filter(species == Length_Species, region == Region) %>% 
+      mutate(year = year(survey_date))
+    
+    length_histo_2018 <- fish_and_sealice_field_data %>% 
+      select(sampling_week, survey_date, region, species, fork_length) %>% 
+      filter(species == Length_Species, region == Region) %>% 
+      mutate(year = year(survey_date))
+    
+    length_histo <- rbind(length_histo_2018, length_histo_15_17) %>% 
+      drop_na(fork_length) %>% 
+      mutate(year = as.factor(year))
+    
+    ggplot(length_histo, aes(x = sampling_week, y = fork_length, fill = year)) +
+      geom_boxplot()+
+      ylab("Fork Length (mm)")+
+      xlab("Date")+
+      theme(legend.text = element_text(colour="black", size = 12)) + 
+      theme(axis.text=element_text(size=12),
+            axis.title=element_text(size=12,face="bold")) +
+      facet_grid(species~., labeller=labeller(species = spp_labels)) +
+      ggtitle(Region) +
+      theme(legend.position="bottom") +
+      theme(axis.text.x = element_text(angle = 45, vjust = 0.5)) 
+```
+
+## Parasite Loads
+
+```{r Parasite loads, fig.cap = paste("The ", Parameter, " (± SE) of sealice per juvenile salmon infected  with motile Lepeoptheirus salmonis and Caligus clemensi \n louse in 2018.")}
+Parameter <- params$Parameter
+
+      summary_sealice %>% 
+      group_by(year, region, louse_species, species) %>% 
+      summarize(mean = mean(get(Parameter), na.rm = TRUE),
+                sd = sd(get(Parameter), na.rm = TRUE),
+                se = sd(get(Parameter), na.rm = TRUE)/sqrt(n())) %>%
+      ungroup() %>% 
+      ggplot(aes(x = factor(year), y = mean, fill = factor(louse_species),
+                 group = factor(louse_species))) +
+      geom_bar(stat = "identity", position = position_dodge()) +
+      geom_errorbar(aes(ymin = mean - se, 
+                        ymax = mean + se), 
+                        width = 0.2,
+                        position = position_dodge(0.9)
+                        ) +
+      facet_grid(region ~ species, labeller = labeller(species = spp_labels, 
+                                                       region = spp_labels)) +
+      labs(x = "Year", y = Parameter) +
+      theme(legend.text = element_text(face = "italic")) +
+      scale_fill_discrete(name="Louse Species",
+                            breaks=c("motile_caligus", "motile_lep"),
+                            labels=c("C. clemensi", "L. salmonis")) +
+      theme(legend.position="bottom") +
+      theme(
+        plot.caption = element_text(hjust = 0)
+) 
+```
+
