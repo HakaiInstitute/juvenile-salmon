@@ -137,6 +137,121 @@ summary_sealice <- left_join(summary_sealice, intensity)
 saveRDS(summary_sealice, here::here("In-season Reports", "2018_in_season_report", "Shiny_app_2018",
                                                "data", "summary_sealice.RDS"))
 
+
+##### Read in CTD data 
+## Get CTD data from EIMS database using R API
+library(tidyverse)
+library(hakaiApi)
+client <- hakaiApi::Client$new()
+
+qu39_endpoint <- sprintf("%s/%s", client$api_root, "ctd/views/file/cast/data?station=QU39&limit=-1")
+qu39_all <- client$get(qu39_endpoint) %>% 
+  mutate(year = year(start_dt), date = as_date(start_dt), yday = yday(start_dt)) 
+
+qu29_endpoint <- sprintf("%s/%s", client$api_root, "ctd/views/file/cast/data?station=QU29&limit=-1")
+qu29_all <- client$get(qu29_endpoint) %>% 
+  mutate(year = year(start_dt), date = as_date(start_dt), yday = yday(start_dt))
+
+js2_endpoint <- sprintf("%s/%s", client$api_root, "ctd/views/file/cast/data?station=JS2&limit=-1")
+js2_all <- client$get(js2_endpoint)  %>% 
+  mutate(year = year(start_dt), date = as_date(start_dt), yday = yday(start_dt))
+
+
+js12_endpoint <- sprintf("%s/%s", client$api_root, "ctd/views/file/cast/data?station=JS12&limit=-1")
+js12_all <- client$get(js12_endpoint)  %>% 
+  mutate(year = year(start_dt), date = as_date(start_dt), yday = yday(start_dt))
+
+js2_12_all <-rbind(js2_all, js12_all)
+
+js2_12_all$station <- "js2_12"
+  
+# Create time series of average conditions which includes the current year, using a loess function
+# Do this using base R so that I can extract the loess predictions to include in data frame to provide the value for
+# which to test if the current years value falls above or below, given a date.
+ctd_all <- rbind(qu39_all, qu29_all, js2_12_all) %>% 
+  mutate(year = year(start_dt), date = as_date(start_dt), yday = yday(start_dt),
+         week = week(start_dt)) %>%
+  filter(depth <= 30) %>% 
+  select(year, date, week, yday, station, conductivity, temperature, depth, salinity, 
+         dissolved_oxygen_ml_l) %>% 
+  group_by(station, yday) %>% 
+  summarise(mean_temp = mean(temperature, na.rm = T), 
+            mean_do = mean(dissolved_oxygen_ml_l, na.rm = T),
+            mean_salinity = mean(salinity, na.rm = T))
+
+#Create current year data to compare to time series
+ctd_post_time_series <- rbind(qu39_all, qu29_all, js2_12_all) %>%  
+  filter(year == 2018, yday > 32, yday < 213,  depth <= 30) %>% 
+  select(year, date, yday, station, conductivity, temperature, depth, salinity, 
+         dissolved_oxygen_ml_l) %>% 
+  group_by(station, yday) %>% 
+  summarise(mean_temp = mean(temperature, na.rm = T), 
+            mean_do = mean(dissolved_oxygen_ml_l, na.rm = T),
+            mean_salinity = mean(salinity, na.rm = T))
+
+#saveRDS(js2_12, here::here("In-season Reports", "2018_in_season_report",
+ #                          "Shiny_app_2018", "data", "js2_12.RDS"))
+
+## test out sst anomaly plot
+
+## QU39
+qu39_average <- ctd_all %>% 
+  filter(station == "QU39")
+
+# Filter down to station of interest
+qu39_this_year <- ctd_post_time_series %>% 
+  filter(station == "QU39")
+
+temp.lo_qu39 <- loess(mean_temp ~ yday, qu39_average, SE = T, span = 0.65)
+
+#create table for predicitions from loess function
+sim_temp_data_qu39 <- tibble(yday = seq(min(qu39_average$yday), max(qu39_average$yday), 0.1))
+#Predict temp in 0.1 day increments to provide smooth points to join
+sim_temp_data_qu39$predicted_mean_temp <- predict(temp.lo_qu39, sim_temp_data_qu39, SE = T)
+
+
+# Create a linear interpolation of points that have zero difference between 
+# loess model and 'observed data' so that an area plot will look right
+# manually identify intersections and create values that fall on the line
+qu39_temp_anomaly_data <- left_join(sim_temp_data_qu39, qu39_this_year) %>% 
+  mutate(diff = if_else(mean_temp > predicted_mean_temp, "pos", "neg")) %>% 
+  drop_na(diff) %>% 
+  add_row(yday = 47.5, predicted_mean_temp = predict(temp.lo_qu39, 47.5), mean_temp = predict(temp.lo_qu39, 47.5)) %>% 
+  add_row(yday = 124, predicted_mean_temp = predict(temp.lo_qu39, 124), mean_temp = predict(temp.lo_qu39, 124)) %>% 
+  add_row(yday = (145 + 149) / 2, predicted_mean_temp = predict(temp.lo_qu39, (145 + 149) / 2), mean_temp = predict(temp.lo_qu39,(145 + 149) / 2)) %>% 
+  add_row(yday = (155 + 149) / 2, predicted_mean_temp = predict(temp.lo_qu39, (155 + 149) / 2), mean_temp = predict(temp.lo_qu39,(155 + 149) / 2)) %>% 
+  add_row(yday = (192 + 177) / 2, predicted_mean_temp = predict(temp.lo_qu39, (192 + 177) / 2), mean_temp = predict(temp.lo_qu39,(192 + 177) / 2))
+
+# Create min and max for any given day of the time series
+qu39_min_max <- qu39_all %>%
+  filter(depth <= 30) %>% 
+  group_by(year, yday) %>%
+  summarise(mean_temp = mean(temperature)) %>% 
+  ungroup() %>% 
+  group_by(yday) %>% 
+  summarise(min_temp = min(mean_temp), max_temp = max(mean_temp))
+
+## Plot it
+ggplot(data = qu39_temp_anomaly_data, aes(x = yday, y = mean_temp)) +
+  geom_point(aes(x = yday, y = predicted_mean_temp), size = 0.1)+
+  geom_line(aes(x = yday, y = predicted_mean_temp)) +
+  geom_ribbon(data = subset(qu39_temp_anomaly_data, mean_temp >= predicted_mean_temp), aes(ymin = predicted_mean_temp, ymax = mean_temp), fill = 'red', size = 4)+
+  geom_ribbon(data = subset(qu39_temp_anomaly_data, mean_temp <= predicted_mean_temp), aes(ymin = mean_temp, ymax = predicted_mean_temp), fill = 'blue', size = 4)+
+  theme_bw() +
+  geom_smooth(data = qu39_average, aes(x = yday, y = mean_temp), size = 1, colour = 'black', se = T, span = .65) +
+  geom_point(data = qu39_min_max,
+              aes(x = yday, y = min_temp))+
+  geom_point(data = qu39_min_max,
+             aes(x = yday, y = max_temp)) + 
+  scale_x_continuous(breaks = (c(32, 60, 91, 121, 152, 182, 213)),
+                    labels = (c("Feb", "Mar", "Apr", "May", "Jun", 
+                                "Jul", "Aug"))) +
+  labs(x = "Date", y = "Temperature [°C]") +
+  coord_cartesian(xlim = c(32,213))
+  
+##QU29
+
+
 # # Get oceanoraphy data
 # oceanography_metadata <- gs_read(field_2018, ws = "ctd_data") %>% 
 #   drop_na(ctd_cast_id)
