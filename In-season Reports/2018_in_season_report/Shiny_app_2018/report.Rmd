@@ -20,6 +20,7 @@ params:
   Region: NA
   Length_Species: NA
   Parameter: NA
+  Station: NA
   
 ---
 
@@ -33,6 +34,8 @@ library(tidyverse)
 
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, error = FALSE)
 theme_set(theme_bw(base_size = 14))
+
+ocgy_region <- ifelse(params$Station == "QU39", "the northern Strait of Georgia", ifelse(params$Station == "QU29", "Okisollo Channel", "Johnstone Strait"))
 ```
 
 # Overview
@@ -170,5 +173,43 @@ Parameter <- params$Parameter
       theme(
         plot.caption = element_text(hjust = 0)
 ) 
+```
+## Temperature
+
+```{r Temperature anomalies, fig.cap = paste("Time series of 30 m depth integrated temperature anomalies, blue areas represent temperatures that are below normal, red areas represent above normal temperatures at station ", Station, " in ", ocgy_region, "in 2018. Normal is the solid black line which is a loess regression based on temperatures from 2015-2018. The shaded grey area is 1 SE of the loess regression. The black dots are the minimum and maximum temperatures observed each day of the year.")}
+
+Station <- params$Station
+
+temperature_anomaly_data <- temperature_anomaly_data %>% 
+      filter(station == Station)
+    
+min_max_data <- min_max_data %>% 
+      filter(station == Station)
+    
+average_temps <- average_temps %>% 
+      filter(station == Station)
+
+
+ 
+ggplot(data = temperature_anomaly_data, aes(x = yday, y = mean_temp)) +
+      geom_point(aes(x = yday, y = predicted_mean_temp), size = 0.1)+
+      geom_line(aes(x = yday, y = predicted_mean_temp)) +
+      geom_ribbon(data = subset(temperature_anomaly_data, mean_temp >= predicted_mean_temp),
+                  aes(ymin = predicted_mean_temp, ymax = mean_temp), fill = 'red', size = 1)+
+      geom_ribbon(data = subset(temperature_anomaly_data, mean_temp <= predicted_mean_temp),
+                  aes(ymin = mean_temp, ymax = predicted_mean_temp), fill = 'blue', size = 1)+
+      theme_bw() +
+      geom_smooth(data = average_temps, aes(x = yday, y = mean_temp),
+                  size = 1, colour = 'black', se = T, span = .65) +
+      geom_point(data = min_max_data,
+                 aes(x = yday, y = min_temp), size = 0.5)+
+      geom_point(data = min_max_data,
+                 aes(x = yday, y = max_temp), size = 0.5) + 
+      # scale_x_continuous(breaks = (c(32, 60, 91, 121, 152, 182, 213)),
+      #                    labels = (c("Feb", "Mar", "Apr", "May", "Jun", 
+      #                                "Jul", "Aug"))) +
+      labs(x = "Date", y = "Temperature [°C]") +
+      coord_cartesian(xlim = c(32,213))
+    
 ```
 

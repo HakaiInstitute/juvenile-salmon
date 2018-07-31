@@ -12,6 +12,7 @@ survey_data <- survey_data %>%
   mutate(sampling_week = as.numeric((yday(survey_date) + 4) %/% 7))
 
 survey_data$sampling_week <- recode_factor(survey_data$sampling_week, 
+                                           `17` = "April 29",
                                            `18` = "May 5",
                                            `19` = "May 12" ,
                                            `20` = "May 19", 
@@ -138,9 +139,8 @@ saveRDS(summary_sealice, here::here("In-season Reports", "2018_in_season_report"
                                                "data", "summary_sealice.RDS"))
 
 
-##### Read in CTD data 
+# READ IN THE CTD DATA
 ## Get CTD data from EIMS database using R API
-library(tidyverse)
 library(hakaiApi)
 client <- hakaiApi::Client$new()
 
@@ -189,11 +189,8 @@ ctd_post_time_series <- rbind(qu39_all, qu29_all, js2_12_all) %>%
             mean_do = mean(dissolved_oxygen_ml_l, na.rm = T),
             mean_salinity = mean(salinity, na.rm = T))
 
-#saveRDS(js2_12, here::here("In-season Reports", "2018_in_season_report",
- #                          "Shiny_app_2018", "data", "js2_12.RDS"))
 
-## test out sst anomaly plot
-
+# SST ANOMALY DATA
 ## QU39
 qu39_average <- ctd_all %>% 
   filter(station == "QU39")
@@ -216,11 +213,12 @@ sim_temp_data_qu39$predicted_mean_temp <- predict(temp.lo_qu39, sim_temp_data_qu
 qu39_temp_anomaly_data <- left_join(sim_temp_data_qu39, qu39_this_year) %>% 
   mutate(diff = if_else(mean_temp > predicted_mean_temp, "pos", "neg")) %>% 
   drop_na(diff) %>% 
-  add_row(yday = 47.5, predicted_mean_temp = predict(temp.lo_qu39, 47.5), mean_temp = predict(temp.lo_qu39, 47.5)) %>% 
-  add_row(yday = 124, predicted_mean_temp = predict(temp.lo_qu39, 124), mean_temp = predict(temp.lo_qu39, 124)) %>% 
-  add_row(yday = (145 + 149) / 2, predicted_mean_temp = predict(temp.lo_qu39, (145 + 149) / 2), mean_temp = predict(temp.lo_qu39,(145 + 149) / 2)) %>% 
-  add_row(yday = (155 + 149) / 2, predicted_mean_temp = predict(temp.lo_qu39, (155 + 149) / 2), mean_temp = predict(temp.lo_qu39,(155 + 149) / 2)) %>% 
-  add_row(yday = (192 + 177) / 2, predicted_mean_temp = predict(temp.lo_qu39, (192 + 177) / 2), mean_temp = predict(temp.lo_qu39,(192 + 177) / 2))
+  add_row(station = "QU39", yday = 47.5, predicted_mean_temp = predict(temp.lo_qu39, 47.5), mean_temp = predict(temp.lo_qu39, 47.5)) %>% 
+  add_row(station = "QU39", yday = 124, predicted_mean_temp = predict(temp.lo_qu39, 124), mean_temp = predict(temp.lo_qu39, 124)) %>% 
+  add_row(station = "QU39", yday = (145 + 149) / 2, predicted_mean_temp = predict(temp.lo_qu39, (145 + 149) / 2), mean_temp = predict(temp.lo_qu39,(145 + 149) / 2)) %>% 
+  add_row(station = "QU39", yday = (155 + 149) / 2, predicted_mean_temp = predict(temp.lo_qu39, (155 + 149) / 2), mean_temp = predict(temp.lo_qu39,(155 + 149) / 2)) %>% 
+  add_row(station = "QU39", yday = (192 + 177) / 2, predicted_mean_temp = predict(temp.lo_qu39, (192 + 177) / 2), mean_temp = predict(temp.lo_qu39,(192 + 177) / 2)) %>% 
+  add_row(station = "QU39", yday = 211.5, predicted_mean_temp = predict(temp.lo_qu39, 211.5), mean_temp = predict(temp.lo_qu39, 211.5))
 
 # Create min and max for any given day of the time series
 qu39_min_max <- qu39_all %>%
@@ -229,28 +227,91 @@ qu39_min_max <- qu39_all %>%
   summarise(mean_temp = mean(temperature)) %>% 
   ungroup() %>% 
   group_by(yday) %>% 
-  summarise(min_temp = min(mean_temp), max_temp = max(mean_temp))
-
-## Plot it
-ggplot(data = qu39_temp_anomaly_data, aes(x = yday, y = mean_temp)) +
-  geom_point(aes(x = yday, y = predicted_mean_temp), size = 0.1)+
-  geom_line(aes(x = yday, y = predicted_mean_temp)) +
-  geom_ribbon(data = subset(qu39_temp_anomaly_data, mean_temp >= predicted_mean_temp), aes(ymin = predicted_mean_temp, ymax = mean_temp), fill = 'red', size = 4)+
-  geom_ribbon(data = subset(qu39_temp_anomaly_data, mean_temp <= predicted_mean_temp), aes(ymin = mean_temp, ymax = predicted_mean_temp), fill = 'blue', size = 4)+
-  theme_bw() +
-  geom_smooth(data = qu39_average, aes(x = yday, y = mean_temp), size = 1, colour = 'black', se = T, span = .65) +
-  geom_point(data = qu39_min_max,
-              aes(x = yday, y = min_temp))+
-  geom_point(data = qu39_min_max,
-             aes(x = yday, y = max_temp)) + 
-  scale_x_continuous(breaks = (c(32, 60, 91, 121, 152, 182, 213)),
-                    labels = (c("Feb", "Mar", "Apr", "May", "Jun", 
-                                "Jul", "Aug"))) +
-  labs(x = "Date", y = "Temperature [°C]") +
-  coord_cartesian(xlim = c(32,213))
+  summarise(min_temp = min(mean_temp), max_temp = max(mean_temp)) %>% 
+  mutate(station = "QU39")
   
-##QU29
+##QU29 
+qu29_average <- ctd_all %>% 
+  filter(station == "QU29")
 
+# Filter down to station of interest
+qu29_this_year <- ctd_post_time_series %>% 
+  filter(station == "QU29")
+
+temp.lo_qu29 <- loess(mean_temp ~ yday, qu29_average, span = 0.65)
+
+#create table for predicitions from loess function
+sim_temp_data_qu29 <- tibble(yday = seq(min(qu29_average$yday), max(qu29_average$yday), 0.1))
+#Predict temp in 0.1 day increments to provide smooth points to join
+sim_temp_data_qu29$predicted_mean_temp <- predict(temp.lo_qu29, sim_temp_data_qu29, SE = T)
+
+
+# Create a linear interpolation of points that have zero difference between 
+# loess model and 'observed data' so that an area plot will look right
+# manually identify intersections and create values that fall on the line
+qu29_temp_anomaly_data <- left_join(sim_temp_data_qu29, qu29_this_year) %>% 
+  mutate(diff = if_else(mean_temp > predicted_mean_temp, "pos", "neg")) %>% 
+  drop_na(diff) %>% 
+  add_row(station = "QU29", yday = (51 + 36) / 2, predicted_mean_temp = predict(temp.lo_qu29, (51 + 36) / 2), mean_temp = predict(temp.lo_qu29, (51 + 36) / 2)) %>% 
+  add_row(station = "QU29", yday = (157 + 136 ) / 2, predicted_mean_temp = predict(temp.lo_qu29, (157 + 136 ) / 2), mean_temp = predict(temp.lo_qu29, (157 + 136 ) / 2)) %>% 
+  add_row(station = "QU29", yday = (157 + 201 ) / 2, predicted_mean_temp = predict(temp.lo_qu29, (157 + 201 ) / 2), mean_temp = predict(temp.lo_qu29, (157 + 201 ) / 2)) 
+# Create min and max for any given day of the time series
+
+qu29_min_max <- qu29_all %>%
+  filter(depth <= 30) %>% 
+  group_by(year, yday) %>%
+  summarise(mean_temp = mean(temperature)) %>% 
+  ungroup() %>% 
+  group_by(yday) %>% 
+  summarise(min_temp = min(mean_temp), max_temp = max(mean_temp)) %>% 
+  mutate(station = "QU29")
+
+## JS2+12
+js2_12_average <- ctd_all %>% 
+  filter(station == "js2_12")
+
+# Filter down to station of interest
+js2_12_this_year <- ctd_post_time_series %>% 
+  filter(station == "js2_12")
+
+temp.lo_js2_12 <- loess(mean_temp ~ yday, js2_12_average, SE = T, span = 0.65)
+
+#create table for predicitions from loess function
+sim_temp_data_js2_12 <- tibble(yday = seq(min(js2_12_average$yday), max(js2_12_average$yday), 0.1))
+#Predict temp in 0.1 day increments to provide smooth points to join
+sim_temp_data_js2_12$predicted_mean_temp <- predict(temp.lo_js2_12, sim_temp_data_js2_12, SE = T)
+
+
+# Create a linear interpolation of points that have zero difference between 
+# loess model and 'observed data' so that an area plot will look right
+# manually identify intersections and create values that fall on the line
+js2_12_temp_anomaly_data <- left_join(sim_temp_data_js2_12, js2_12_this_year) %>% 
+  mutate(diff = if_else(mean_temp > predicted_mean_temp, "pos", "neg")) %>% 
+  drop_na(diff) 
+
+# Create min and max for any given day of the time series
+js2_12_min_max <- js2_12_all %>%
+  filter(depth <= 30) %>% 
+  group_by(year, yday) %>%
+  summarise(mean_temp = mean(temperature)) %>% 
+  ungroup() %>% 
+  group_by(yday) %>% 
+  summarise(min_temp = min(mean_temp), max_temp = max(mean_temp)) %>% 
+  mutate(station = "js2_12")
+
+
+min_max_data <- rbind(js2_12_min_max, qu39_min_max, qu29_min_max)
+saveRDS(min_max_data,  here::here("In-season Reports", "2018_in_season_report", "Shiny_app_2018",
+                                  "data", "min_max_temps.RDS"))
+
+average_temps <- rbind(qu39_average, qu29_average, js2_12_average)
+saveRDS(average_temps, here::here("In-season Reports", "2018_in_season_report", "Shiny_app_2018",
+                             "data", "average_temps.RDS"))
+
+temperature_anomaly_data <- rbind(js2_12_temp_anomaly_data, qu29_temp_anomaly_data,
+                           qu39_temp_anomaly_data)
+saveRDS(temperature_anomaly_data, here::here("In-season Reports", "2018_in_season_report", "Shiny_app_2018",
+        "data", "temperature_anomaly_data.RDS"))
 
 # # Get oceanoraphy data
 # oceanography_metadata <- gs_read(field_2018, ws = "ctd_data") %>% 

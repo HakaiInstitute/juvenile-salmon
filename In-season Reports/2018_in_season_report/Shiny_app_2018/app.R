@@ -5,17 +5,20 @@ library(dplyr)
 library(ggplot2)
 library(hakaisalmon)
 
+# Setup and read in data sets
 survey_seines <- readRDS("data/survey_seines.RDS") %>% 
   rename("Sockeye" = "so_total", "Pink" = "pi_total", "Chum" = "cu_total")
-
 fish_and_sealice_field_data <- readRDS("data/fish_and_sealice_field_data.RDS")
-
 summary_sealice <- readRDS("data/summary_sealice.RDS")
+temperature_anomaly_data <- readRDS("data/temperature_anomaly_data.RDS")
+min_max_data <- readRDS("data/min_max_temps.RDS")
+average_temps <- readRDS("data/average_temps.RDS")
 
 spp_labels <- c(CU = "Chum", PI = "Pink", SO = "Sockeye", DI = "Discovery Islands", 
                 JS = "Johnstone Strait")
 
 theme_set(theme_bw(base_size = 17))
+
 #######
 
 ui <-fluidPage(
@@ -50,7 +53,8 @@ ui <-fluidPage(
                            selected = "Sockeye")
              ),
              mainPanel(
-               plotOutput("migration_timing")
+               plotOutput("migration_timing"),
+               h6("Average catch (± 1 SE) in 2018 for one week periods represented by the middle day of each week.")
              )
            )
   ),
@@ -67,7 +71,8 @@ ui <-fluidPage(
                            selected = "Sockeye")
              ),
              mainPanel(
-               plotOutput("Length")
+               plotOutput("Length"),
+               h6("Fork length boxplots of juvenile salmon grouped by week and represented by the middle day of each week.")
              )
                              
             )
@@ -83,16 +88,34 @@ ui <-fluidPage(
                           selected = "Prevalence")
              ),
              mainPanel(
-               plotOutput("Parasite_Loads")
+               plotOutput("Parasite_Loads"),
+               h6("The prevalence, intensity, or abundance (± SE) of motile Lepeoptheirus salmonis and Caligus clemensi louse in 2018")
              )
+          )
+  ),
+  tabPanel("Sea Surface Temperature",
+           sidebarLayout(
+              sidebarPanel(width = 3,
+              helpText(),
+              selectInput("Station", label = h3("Station"),
+                                      choices = list("Northern Strait of Georgia(QU39)" = "QU39",
+                                                     "Okisollo Channel(QU29)" = "QU29",
+                                                     "Johnstone Strait(JS2 + JS12)" = "js2_12"),
+                          selected = "Northern Strait of Georgia")
+              ),
+                          
+              mainPanel(
+                plotOutput("Temperature_Anomalies"),
+                h6(paste("Time series of 30 m depth integrated temperature anomalies, blue areas represent temperatures that are below normal, red areas represent above normal temperatures at the selected station in 2018. Normal is the solid black line which is a loess regression based on temperatures from 2015-2018. The shaded grey area is 1 SE of the loess regression. The black dots are the minimum and maximum temperatures observed each day of the year."))
+              )
+             )
+           )
 )
 )
-)
-)
+
 
 ################ Server
 
-# Define server logic required to draw a histogram
 server <- function(input, output) {
   output$report <- downloadHandler(
     # For PDF output, change this to "report.pdf"
@@ -110,9 +133,11 @@ server <- function(input, output) {
       file.copy("figure_opts.tex", tex_file, overwrite = TRUE)
       file.copy("Hakai Institute Logo Vector.png", hakai_logo, overwrite = TRUE)
       # Set up parameters to pass to Rmd document
-      params <- list(Species = input$Species, Region = input$Region, 
+      params <- list(Species = input$Species,
+                     Region = input$Region, 
                      Length_Species = input$Length_Species, 
-                     Parameter = input$Parameter)
+                     Parameter = input$Parameter,
+                     Station = input$Station)
       
       
       # Knit the document, passing in the `params` list, and eval it in a
@@ -143,13 +168,7 @@ server <- function(input, output) {
       xlab("Date") +
       ylab("Abundance") +
       theme(legend.title = element_blank()) +
-      theme(axis.text.x = element_text(angle = 45, vjust = 0.5)) +
-      labs(
-        title = input$Species,
-        caption = "Average catch (± 1 SE) in 2018 for one week periods represented by the middle day of each week."
-      ) +
-      theme(
-        plot.caption = element_text(hjust = 0)
+      theme(axis.text.x = element_text(angle = 45, vjust = 0.5)
       )
   }
   )
@@ -177,13 +196,7 @@ server <- function(input, output) {
       xlab("Date")+
       ggtitle(ifelse(input$Region == "DI", "Discovery Islands", "Johnstone Strait")) +
       theme(legend.position="bottom") +
-      theme(axis.text.x = element_text(angle = 45, vjust = 0.5)) +
-      labs(
-        caption = "Fork length boxplots of juvenile salmon grouped by week and represented by the middle day of each week."
-      ) +
-      theme(
-        plot.caption = element_text(hjust = 0)
-      )
+      theme(axis.text.x = element_text(angle = 45, vjust = 0.5)) 
   }
   )
   output$Parasite_Loads <- renderPlot({
@@ -209,19 +222,42 @@ server <- function(input, output) {
                             breaks=c("motile_caligus", "motile_lep"),
                             labels=c("C. clemensi", "L. salmonis")) +
       theme(legend.position="bottom") +
-      labs(caption = paste("The", input$Parameter, " (± SE) of sealice per juvenile salmon infected with motile Lepeoptheirus salmonis and Caligus clemensi \n louse in 2018."
-      )
-      ) +
-      theme(
-        plot.caption = element_text(hjust = 0)
-      ) +
-        geom_text(aes(label = ifelse(mean == 0, round(mean, 1), '')), hjust = -2.5)
+      geom_text(aes(label = ifelse(mean == 0, round(mean, 1), '')), hjust = -2.5)
   }
   )
-  output$sst <- renderPlot({
+  output$Temperature_Anomalies <- renderPlot({
     
+temperature_anomaly_data <- temperature_anomaly_data %>% 
+      filter(station == input$Station)
+    
+    min_max_data <- min_max_data %>% 
+      filter(station == input$Station)
+    
+    average_temps <- average_temps %>% 
+      filter(station == input$Station)
+
+ocgy_region <- ifelse(input$Station == "QU39", "the northern Strait of Georgia", ifelse(input$Station == "QU29", "Okisollo Channel", "Johnstone Strait"))
+
+ggplot(data = temperature_anomaly_data, aes(x = yday, y = mean_temp)) +
+      geom_point(aes(x = yday, y = predicted_mean_temp), size = 0.1)+
+      geom_line(aes(x = yday, y = predicted_mean_temp)) +
+      geom_ribbon(data = subset(temperature_anomaly_data, mean_temp >= predicted_mean_temp), aes(ymin = predicted_mean_temp, ymax = mean_temp), fill = 'red', size = 1)+
+      geom_ribbon(data = subset(temperature_anomaly_data, mean_temp <= predicted_mean_temp), aes(ymin = mean_temp, ymax = predicted_mean_temp), fill = 'blue', size = 1)+
+      theme_bw() +
+      geom_smooth(data = average_temps, aes(x = yday, y = mean_temp), size = 1, colour = 'black', se = T, span = .65) +
+      geom_point(data = min_max_data,
+                 aes(x = yday, y = min_temp), size = 0.5) +
+      geom_point(data = min_max_data,
+                 aes(x = yday, y = max_temp), size = 0.5) + 
+      scale_x_continuous(breaks = (c(32, 60, 91, 121, 152, 182, 213)),
+                         labels = (c("Feb", "Mar", "Apr", "May", "Jun", 
+                                     "Jul", "Aug"))) +
+      theme_bw(base_size = 17) +
+      labs(x = "Date", y = "Temperature [°C]") +
+      coord_cartesian(xlim = c(32,213)) 
   })
 }
-# Run the application 
-shinyApp(ui = ui, server = server)
 
+# Run the application 
+
+shinyApp(ui = ui, server = server)
