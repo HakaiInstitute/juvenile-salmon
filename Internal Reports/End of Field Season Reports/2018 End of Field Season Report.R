@@ -7,10 +7,11 @@ library(here)
 # Import current data from Google Sheets --------------------------------------
 field_data_workbook_2018 <- gs_key("1iRQCKMTznHbMeI9GunbsgPyb-rtWgwj-0IfxLw7NBJE", 
                                    lookup = F, visibility = "private")
+
 surveys <- gs_read(field_data_workbook_2018, ws = "survey_data")
 seines <- gs_read(field_data_workbook_2018, ws = "seine_data")
 survey_seines_2018 <- full_join(surveys, seines, by = "survey_id")
-write_csv(survey_seines, here("Internal Reports", "End of Field Season Reports", "Raw Data", "survey_seines_2018.csv"))
+write_csv(survey_seines_2018, here("Internal Reports", "End of Field Season Reports", "Raw Data", "survey_seines_2018.csv"))
 survey_seines_2018 <- read_csv(here("Internal Reports", "End of Field Season Reports", "Raw Data", "survey_seines_2018.csv"))
   
 packages_2018 <- gs_read(field_data_workbook_2018, ws = "package_data")
@@ -27,4 +28,4 @@ sealice_field_2018 <- sealice_field_2018[c(1:3,10:34,37)]
 write_csv(sealice_field_2018, here("Internal Reports", "End of Field Season Reports", "Raw Data", "sealice_field_2018.csv"))
 sealice_field_2018 <- read_csv(here("Internal Reports", "End of Field Season Reports", "Raw Data", "sealice_field_2018.csv"))
 
-
+# Catch Statistique

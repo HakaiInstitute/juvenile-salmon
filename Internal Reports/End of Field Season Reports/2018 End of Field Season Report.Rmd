@@ -43,11 +43,26 @@ sealice_field_2018 <- read_csv(here("Internal Reports", "End of Field Season Rep
 
 ```
 
-#Catch Statistics: 
+# Catch Statistics: 
 ```{r}
 field_2018_sites_spp_summary <- survey_seines_2018 %>%
-  select(survey_date, site_id, so_taken, pi_taken, cu_taken, co_taken, he_taken, ck_taken, region, zone)
+  select(survey_date, site_id, so_taken, pi_taken, cu_taken, co_taken, he_taken, ck_taken, region, zone) %>%
+   rename(chinook = ck_taken,
+         coho = co_taken,
+         chum = cu_taken,
+         herring = he_taken,
+         pink = pi_taken,
+         sockeye = so_taken) %>% 
+  gather(sockeye, pink, chum, coho, chinook, herring, key = "species", value = "n") %>% 
+  replace_na(list( n = 0)) 
 
+species_summary <- field_2018_sites_spp_summary %>%
+  group_by(species) %>% 
+  summarize(n = sum(n)) %>% 
+  rename(total = n) %>% 
+  arrange(desc(total))
+
+kable( species_summary, type = "markdown")
 
 ```
 
