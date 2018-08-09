@@ -62,7 +62,7 @@ species_summary <- field_2018_sites_spp_summary %>%
   rename(total = n) %>% 
   arrange(desc(total))
 
-kable( species_summary, type = "markdown")
+knitr::kable(species_summary)
 
 ```
 
