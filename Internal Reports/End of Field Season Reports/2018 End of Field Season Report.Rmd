@@ -2,7 +2,7 @@
 title: "2018 End of Season Report"
 author: "Sara Tremblay-Boyer"
 date: "9 août 2018"
-output: pdf_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
@@ -15,7 +15,7 @@ library(knitr)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
+#Loading data: 
 
 ```{r import data}
 field_data_workbook_2018 <- gs_key("1iRQCKMTznHbMeI9GunbsgPyb-rtWgwj-0IfxLw7NBJE", 
@@ -24,7 +24,7 @@ field_data_workbook_2018 <- gs_key("1iRQCKMTznHbMeI9GunbsgPyb-rtWgwj-0IfxLw7NBJE
 surveys <- gs_read(field_data_workbook_2018, ws = "survey_data")
 seines <- gs_read(field_data_workbook_2018, ws = "seine_data")
 survey_seines_2018 <- full_join(surveys, seines, by = "survey_id")
-write_csv(survey_seines, here("Internal Reports", "End of Field Season Reports", "Raw Data", "survey_seines_2018.csv"))
+write_csv(survey_seines_2018, here("Internal Reports", "End of Field Season Reports", "Raw Data", "survey_seines_2018.csv"))
 survey_seines_2018 <- read_csv(here("Internal Reports", "End of Field Season Reports", "Raw Data", "survey_seines_2018.csv"))
   
 packages_2018 <- gs_read(field_data_workbook_2018, ws = "package_data")
@@ -42,3 +42,12 @@ write_csv(sealice_field_2018, here("Internal Reports", "End of Field Season Repo
 sealice_field_2018 <- read_csv(here("Internal Reports", "End of Field Season Reports", "Raw Data", "sealice_field_2018.csv"))
 
 ```
+
+#Catch Statistics: 
+```{r}
+field_2018_sites_spp_summary <- survey_seines_2018 %>%
+  select(survey_date, site_id, so_taken, pi_taken, cu_taken, co_taken, he_taken, ck_taken, region, zone)
+
+
+```
+
