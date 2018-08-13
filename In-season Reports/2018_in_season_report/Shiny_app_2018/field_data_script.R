@@ -1,6 +1,7 @@
 library(googlesheets)
 library(tidyverse)
 library(lubridate)
+library(car)
 
 field_2018 <- gs_key("1iRQCKMTznHbMeI9GunbsgPyb-rtWgwj-0IfxLw7NBJE", 
                      lookup = FALSE, visibility = "private")
@@ -313,25 +314,140 @@ temperature_anomaly_data <- rbind(js2_12_temp_anomaly_data, qu29_temp_anomaly_da
 saveRDS(temperature_anomaly_data, here::here("In-season Reports", "2018_in_season_report", "Shiny_app_2018",
         "data", "temperature_anomaly_data.RDS"))
 
-# # Get oceanoraphy data
-# oceanography_metadata <- gs_read(field_2018, ws = "ctd_data") %>% 
-#   drop_na(ctd_cast_id)
-# 
-# di_ctd_data <- read_csv(here("In-season Reports", "2018_in_season_report",
-#                              "data", "di_ctd_data.csv"))
-# 
-# js_ctd_data <- read_csv(here("In-season Reports", "2018_in_season_report",
-#                              "data", "js_ctd_data.csv"))
-# 
-# qu29 <- read_csv(here("In-season Reports", "2018_in_season_report",
-#                       "data", "qu29.csv"))
-# 
-# qu39 <- read_csv(here("In-season Reports", "2018_in_season_report",
-#                       "data", "qu39.csv"))
-# 
-# # Create primary key to join ctd data with fish field data
-# di_ctd_data$ctd_cast_id <- paste(di_ctd_data$station, as_date(di_ctd_data$start_dt), di_ctd_data$cast_number, sep = "_")
-# js_ctd_data$ctd_cast_id <- paste(js_ctd_data$station, as_date(js_ctd_data$start_dt), js_ctd_data$cast_number, sep = "_")
-# 
-# # Join survey and oceanography data
-# survey_oceanography <- left_join(survey_data, oceanography_metadata)
+# CUMULATIVE ABUNDANCE
+
+#survey_seines is a hakaisalmon dataset loaded into memory on calling library('hakaisalmon')
+tidy_catch_15_17 <- hakaisalmon::survey_seines %>%
+  # remove ad-hoc collections from migration timing calcs
+  filter(survey_type == "standard", collection_protocol == "SEMSP", set_type == "targeted") %>% 
+  # only include consistently sampled sites with similar catchabilities
+  filter(site_id %in% c("D07", "D09", "D22", "D27", "D10", "D08", "D34",
+                        "D20", "J03", "J02", "J09", "J11")) %>%
+  select(survey_date, seine_id, region, so_total, pi_total, cu_total, co_total, he_total, lat, lon, sampling_week) %>% 
+  mutate(year = year(survey_date)) %>% 
+  # remove instances when there was not a complete enumeration of all species in the seine
+  gather(`so_total`, `pi_total`, `cu_total`, `co_total`, `he_total`, key = "species",
+         value = "n") %>% 
+  drop_na()
+
+tidy_catch_15_17 <- as.data.frame(tidy_catch_15_17)
+
+## 2018 catch
+tidy_catch_18 <- survey_seines %>%
+  # remove ad-hoc collections from migration timing calcs
+  filter(survey_type == "standard", collection_protocol == "SEMSP", set_type == "targeted") %>% 
+  # only include consistently sampled sites with similar catchabilities
+  select(survey_date, seine_id, region, so_total, pi_total, cu_total, co_total, he_total, lat, lon, sampling_week) %>% 
+  mutate(year = year(survey_date)) %>% 
+  gather(`so_total`, `pi_total`, `cu_total`, `co_total`, `he_total`, key = "species",
+         value = "n") 
+
+tidy_catch_18 <- as.data.frame(tidy_catch_18)
+# make the unit of observation one fish, based on total catch numbers in seine_data
+
+tidy_so_catch <- rbind(tidy_catch_15_17, tidy_catch_18) %>% 
+  mutate(yday = yday(survey_date)) %>% 
+  filter(species == 'so_total', yday < 190)
+
+
+
+## Create helper function to help calculate cumulative abundance and model a logistic growth function
+
+log_cumul_abund <- function(percent, date){
+  coefs <- coef(lm(logit(percent / 100) ~ date))
+  phi2 <- coefs[1]
+  phi3 <- coefs[2]
+  wilson <- nls(percent ~ phi1 / (1 + exp(-(phi2 + phi3 * date))),
+                start = list(phi1 = 100, phi2 = phi2, phi3 = phi3), trace = TRUE)
+  min <- min(date, na.rm = T)
+  max <- max(date, na.rm = T)
+  phi1 <- 100
+  phi2 <- coef(wilson)[2]
+  phi3 <- coef(wilson)[3]
+  x <- c(seq(min, to = max, by = 1))
+  y <- phi1 / (1 + exp(-(phi2 + phi3 * x)))
+  out <- data_frame(x, y)
+  return(out)
+}
+
+daily_mean_cumul_abund <- tidy_so_catch %>%  
+  mutate(yday = yday(survey_date), year = year(survey_date)) %>% 
+  group_by(year, region) %>% 
+  mutate(percent = cumsum(n / sum(n) * 100), non_cumul_prop = n / sum(n)) %>% 
+  ungroup() %>% 
+  transmute(year = year, survey_date = yday, region = region, percent = percent, non_cumul_prop = non_cumul_prop) %>% 
+  ungroup() %>% 
+  group_by(region, survey_date) %>% 
+  summarize(percent = mean(percent), non_cumul_prop = mean(non_cumul_prop) * 100, n = n())
+
+
+# Create Johnstone strait time series of cumulative abundance migration timing
+so_catch_expanded_cum_JS <- daily_mean_cumul_abund %>% 
+  filter(region == "JS")
+
+predict_average_prop_JS <- log_cumul_abund(so_catch_expanded_cum_JS$percent, so_catch_expanded_cum_JS$survey_date) %>% 
+  mutate(region = "JS")
+
+# Create Discovery Islands time series of cumulative abundance migration timing
+so_catch_expanded_cum_DI <- daily_mean_cumul_abund %>% 
+  filter(region == "DI")
+
+predict_average_prop_DI <- log_cumul_abund(so_catch_expanded_cum_DI$percent, so_catch_expanded_cum_DI$survey_date) %>% 
+  mutate(region = "DI")
+
+#Combine JS and DI time series average data
+predict_average_prop <- rbind(predict_average_prop_DI, predict_average_prop_JS) %>% 
+  mutate(year = 'average')
+
+
+### Generate 2018 DI cumulative catch abundance fit to logitic growth curver
+
+# Create observations of when zero fish were caught early season each year because the current method of generating a tidy table of catches
+# excludes surveys where sockeye were not present.
+
+daily_mean_cumul_abund_2018 <- tidy_so_catch %>%  
+  filter(year == 2018) %>% 
+  mutate(yday = yday(survey_date)) %>% 
+  group_by(region) %>% 
+  mutate(percent = cumsum(n / sum(n) * 100), non_cumul_prop = n / sum(n)) %>% 
+  ungroup() %>% 
+  transmute(year = year, survey_date = yday, region = region, percent = percent, non_cumul_prop = non_cumul_prop) %>% 
+  ungroup() %>% 
+  group_by(region, survey_date) %>% 
+  summarize(percent = mean(percent), non_cumul_prop = mean(non_cumul_prop) * 100, n = n())
+
+cum_abund_2018_DI <- daily_mean_cumul_abund_2018 %>% 
+  filter(region == "DI")
+
+predict_2018_prop_DI <- log_cumul_abund(cum_abund_2018_DI$percent, cum_abund_2018_DI$survey_date) %>% 
+  mutate(region = "DI", year = 2018)
+
+## Generate 2018 JS prediction
+cum_abund_2018_JS <- daily_mean_cumul_abund_2018 %>% 
+  filter(region == "JS")
+
+predict_2018_prop_JS <- log_cumul_abund(cum_abund_2018_JS$percent, cum_abund_2018_JS$survey_date) %>% 
+  mutate(region = "JS") %>% 
+  mutate(year = 2018)
+
+predict_average_prop <- rbind(predict_average_prop, predict_2018_prop_DI, predict_2018_prop_JS)
+### Plot avg cumulative abundance
+
+ggplot(data=predict_average_prop,aes(x = x, y = y))+
+  labs(x='Date', y='% of total catch')+
+  #geom_point(size=1)+
+  #scale_x_continuous(breaks=c(0,250,500,750, 1000,1250))+
+  #scale_y_continuous(breaks=c(0,10,20,30,40,50,60,70,80))+
+  geom_line(aes(linetype = year)) +
+  #geom_point(aes(x = survey_date, y = percent), size = 2) +
+  #geom_vline(data=so_mt, aes(xintercept = avg_date, linetype = region),
+            # size=.75) +
+  facet_grid(region~.) +
+  # scale_shape_discrete(name = "Region") +
+  # scale_linetype_discrete(name = "Region") +
+  scale_x_continuous(breaks = c(135, 152, 166, 182, 196), 
+                     labels = c("May 15", "June 1", "June 15", "July 1", "July 15"))
+
+#
+
+
