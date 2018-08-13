@@ -1,10 +1,23 @@
+---
+title: "2018 End of Season Report"
+author: "Sara Tremblay-Boyer"
+date: "9 août 2018"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+
 library(lubridate)
 library(tidyverse)
 library(googlesheets)
 library(here)
+library(knitr)
+knitr::opts_chunk$set(echo = TRUE)
+```
 
+#Loading data: 
 
-# Import current data from Google Sheets --------------------------------------
+```{r import data}
 field_data_workbook_2018 <- gs_key("1iRQCKMTznHbMeI9GunbsgPyb-rtWgwj-0IfxLw7NBJE", 
                                    lookup = F, visibility = "private")
 
@@ -28,4 +41,36 @@ sealice_field_2018 <- sealice_field_2018[c(1:3,10:34,37)]
 write_csv(sealice_field_2018, here("Internal Reports", "End of Field Season Reports", "Raw Data", "sealice_field_2018.csv"))
 sealice_field_2018 <- read_csv(here("Internal Reports", "End of Field Season Reports", "Raw Data", "sealice_field_2018.csv"))
 
-# Catch Statistique
+```
+
+# Catch Statistics: 
+```{r}
+#table of the species summary
+field_2018_sites_spp_summary <- survey_seines_2018 %>%
+  select(survey_date, site_id, so_taken, pi_taken, cu_taken, co_taken, he_taken, ck_taken, region, zone) %>%
+   rename(chinook = ck_taken,
+         coho = co_taken,
+         chum = cu_taken,
+         herring = he_taken,
+         pink = pi_taken,
+         sockeye = so_taken) %>% 
+  gather(sockeye, pink, chum, coho, chinook, herring, key = "species", value = "n") %>% 
+  replace_na(list( n = 0)) 
+
+species_summary <- field_2018_sites_spp_summary %>%
+  group_by(species) %>% 
+  summarize(n = sum(n)) %>% 
+  rename(total = n) %>% 
+  arrange(desc(total))
+
+knitr::kable(species_summary)
+
+# looking at the distribution of sockeye retained by each migration zone. Discovery Island versus. Johnstone Strait
+
+sockeye_distribution <- field_2018_sites_spp_summary %>% 
+  filter(species == "sockeye") %>% 
+  arrange(region, zone, n) %>% 
+  na.omit()
+
+```
+
