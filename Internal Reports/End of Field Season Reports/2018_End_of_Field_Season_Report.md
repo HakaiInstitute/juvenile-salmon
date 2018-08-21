@@ -277,10 +277,30 @@ knitr::kable(species_summary)
 | chinook |      9|
 
 ``` r
-# looking at the distribution of sockeye retained by each migration zone. Discovery Island versus. Johnstone Strait
-
-sockeye_distribution <- field_2018_sites_spp_summary %>% 
+sockeye_distribution <-field_2018_sites_spp_summary %>% 
   filter(species == "sockeye") %>% 
   arrange(region, zone, n) %>% 
   na.omit()
+
+# looking at the distribution of sockeye retained by each migration zone. Discovery Island versus. Johnstone Strait
+
+sockeye_distribution <- survey_seines_2018 %>%
+   select(survey_date, region, zone, so_taken) %>%
+  arrange(region, zone) %>%
+  rename(sockeye = so_taken) %>% 
+  na.omit()
+
+# TO FIX: need to group by region, not alphabetial order
+# need to change the months on X axis to english
+s_colors <- brewer.pal(n = 3, name = "Dark2")
+s <- ggplot(sockeye_distribution, aes(x = survey_date, y = zone, color = region)) + geom_count(aes( size = sockeye), alpha = 4 / 5) +
+  labs(x = NULL, y = NULL)+
+  scale_color_manual(values = s_colors,
+                     name = "",
+                     breaks= c("DI", "JS"),
+labels=c("Discovery Islands", "Jonhstone Strait")) +
+  theme(panel.grid.minor.y = element_blank(), panel.grid.major.y = element_blank())
+s
 ```
+
+![](2018_End_of_Field_Season_Report_files/figure-markdown_github/unnamed-chunk-1-1.png)
