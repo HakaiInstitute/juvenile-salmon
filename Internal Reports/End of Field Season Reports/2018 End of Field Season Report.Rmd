@@ -12,6 +12,7 @@ library(tidyverse)
 library(googlesheets)
 library(here)
 library(knitr)
+library(RColorBrewer)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -65,12 +66,26 @@ species_summary <- field_2018_sites_spp_summary %>%
 
 knitr::kable(species_summary)
 
-# looking at the distribution of sockeye retained by each migration zone. Discovery Island versus. Johnstone Strait
-
-sockeye_distribution <- field_2018_sites_spp_summary %>% 
+sockeye_distribution <-field_2018_sites_spp_summary %>% 
   filter(species == "sockeye") %>% 
   arrange(region, zone, n) %>% 
   na.omit()
 
+# looking at the distribution of sockeye retained by each migration zone. Discovery Island versus. Johnstone Strait
+
+sockeye_distribution <- survey_seines_2018 %>%
+   select(survey_date, region, zone, so_taken) %>%
+  arrange(region, zone) %>%
+  rename(sockeye = so_taken) %>% 
+  na.omit()
+
+# need to group by region, not alphabetial order
+s_colors <- brewer.pal(n = 3, name = "Dark2")
+s <- ggplot(sockeye_distribution, aes(x = survey_date, y = zone, color = region)) + geom_count(aes( size = sockeye), alpha = 4 / 5) +
+  labs(x = NULL, y = NULL)+
+  scale_color_manual(values = s_colors)
+
+  
 ```
 
+scale_fill_manual( values = c("DI" = "#1B9E77", "JS" = "#D95F02"))
