@@ -246,6 +246,7 @@ Catch Statistics:
 =================
 
 ``` r
+#table of the species summary
 field_2018_sites_spp_summary <- survey_seines_2018 %>%
   select(survey_date, site_id, so_taken, pi_taken, cu_taken, co_taken, he_taken, ck_taken, region, zone) %>%
    rename(chinook = ck_taken,
@@ -274,3 +275,12 @@ knitr::kable(species_summary)
 | herring |     52|
 | coho    |     39|
 | chinook |      9|
+
+``` r
+# looking at the distribution of sockeye retained by each migration zone. Discovery Island versus. Johnstone Strait
+
+sockeye_distribution <- field_2018_sites_spp_summary %>% 
+  filter(species == "sockeye") %>% 
+  arrange(region, zone, n) %>% 
+  na.omit()
+```
