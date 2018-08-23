@@ -79,7 +79,7 @@ sockeye_distribution <- survey_seines_2018 %>%
   rename(sockeye = so_taken) %>% 
   na.omit()
 
-# TO FIX: need to change the months on X axis to english, 
+# TO FIX: need to change the months on X axis to english, add may 
  
 
 s_colors <- brewer.pal(n = 3, name = "Dark2")

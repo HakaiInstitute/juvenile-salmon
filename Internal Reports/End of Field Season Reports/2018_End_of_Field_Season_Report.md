@@ -277,7 +277,7 @@ knitr::kable(species_summary)
 | chinook |      9|
 
 ``` r
-sockeye_distribution <-field_2018_sites_spp_summary %>% 
+sockeye_exemple <-field_2018_sites_spp_summary %>% 
   filter(species == "sockeye") %>% 
   arrange(region, zone, n) %>% 
   na.omit()
@@ -290,16 +290,20 @@ sockeye_distribution <- survey_seines_2018 %>%
   rename(sockeye = so_taken) %>% 
   na.omit()
 
-# TO FIX: need to group by region, not alphabetial order
-# need to change the months on X axis to english
+# TO FIX: need to change the months on X axis to english, 
+ 
+
 s_colors <- brewer.pal(n = 3, name = "Dark2")
-s <- ggplot(sockeye_distribution, aes(x = survey_date, y = zone, color = region)) + geom_count(aes( size = sockeye), alpha = 4 / 5) +
+s <- ggplot(sockeye_distribution, aes(x = survey_date, y = zone, color = region)) + geom_count(aes( size = sockeye)) +
   labs(x = NULL, y = NULL)+
   scale_color_manual(values = s_colors,
                      name = "",
                      breaks= c("DI", "JS"),
 labels=c("Discovery Islands", "Jonhstone Strait")) +
-  theme(panel.grid.minor.y = element_blank(), panel.grid.major.y = element_blank())
+  theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank(), panel.background = element_blank(), axis.ticks.y = element_blank(), axis.text = element_text(color = "gray56"), axis.ticks.x = element_line(color = "gray56")) +
+  scale_y_discrete(limits= c("N", "S", "W","C", "E"),
+    breaks= c("W", "S", "N", "E", "C"),
+                   labels= c("West", "South", "North", "East", "Central"))
 s
 ```
 
