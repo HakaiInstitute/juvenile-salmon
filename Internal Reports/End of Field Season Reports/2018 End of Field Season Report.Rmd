@@ -116,10 +116,12 @@ arrange(region, zone, site_id) %>%
 rename(sockeye = so_taken) %>% 
   na.omit()
 
-    breaks= c("J11", "J09", "J03","J02", "D30", "D27","D22", "D10", "D09", "D08", "D07")
+#changing facet labels and order of sites
+region_labels <- c(DI = "Discovery Islands", JS = "Johnstone Strait")
 
 for_fun$site_id <- factor(for_fun$site_id, levels = c("J11", "J09", "J03","J02","D10","D30", "D09","D07", "D27", "D22", "D08"))
 
+#The graph 
 f <- ggplot(for_fun, aes(x = survey_date, y = site_id, color = zone)) + geom_count(aes( size = sockeye), alpha = 1/ 2) +
 labs(x = NULL, y = NULL)+
   scale_color_manual(values = s_colors,
@@ -127,7 +129,9 @@ labs(x = NULL, y = NULL)+
                      breaks= c("W","C","E","N", "S"),
 labels=c("West", "Central", "East", "North", "South")) +
   theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank(), panel.background = element_blank(), axis.ticks.y = element_blank(), axis.text = element_text(color = "gray56"), axis.ticks.x = element_line(color = "gray56")) +
-   facet_wrap(~region, nrow = 2, scales = "free_y")+
+   facet_wrap(~region, nrow = 2, scales = "free_y", labeller = labeller( region = region_labels))+
   scale_size_continuous(range = c(0.5,5))
 f
+
+ggsave("site_id_sockeye.png",f)
 ```
