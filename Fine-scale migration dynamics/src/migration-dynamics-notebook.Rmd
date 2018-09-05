@@ -67,6 +67,7 @@ library(lubridate)
 library(knitr)
 library(broom)
 library(wesanderson)
+library(vegan)
 mutate_cond <- function(.data, condition, ..., envir = parent.frame()) {
   condition <- eval(substitute(condition), .data, envir)
   .data[condition, ] <- .data[condition, ] %>% mutate(...)
@@ -220,6 +221,52 @@ ggplot(gsi_weekly_okisollo, aes(x = org, y = proportion, fill = collapsed_fraser
 ggsave(here::here("Fine-scale migration dynamics", "figs", "weekly_gsi.png"), width = 15, height = 6)
 
 ```
+
+```{r gsi prop by seine}
+by_seine_okisollo_gsi <- okisollo %>% 
+  filter(collapsed_fraser_stocks != 0, collapsed_fraser_stocks != "") %>% 
+  drop_na(site_id) %>% 
+  drop_na(collapsed_fraser_stocks) %>%
+  filter(year(survey_date) != 2016) %>% 
+  group_by(org, survey_date, site_id, collapsed_fraser_stocks) %>% 
+  summarize(n = n()) %>% 
+  mutate(proportion = n / sum(n)) %>% 
+  mutate(set = paste(org,"_", survey_date,"_", site_id)) %>% 
+  ungroup()
+
+#spread stocks for analysis in vegan
+by_seine_okisollo_gsi_for_vegan <- by_seine_okisollo_gsi %>% 
+  select(set, collapsed_fraser_stocks, proportion) %>% 
+  spread(key = collapsed_fraser_stocks, proportion, fill = 0) %>% 
+  separate(set, into = c("org", "survey_date", "site_id"), sep = "_", remove = FALSE) %>% 
+  select(-site_id)
+
+write_csv(by_seine_okisollo_gsi_for_vegan, here::here("Fine-scale migration dynamics", "data", "stock_props_for_NMDS.csv"))
+
+row_names <- c(paste("dfo", 1:15, sep = ""), paste("hakai", 16:33, sep = ""))
+row.names(by_seine_okisollo_gsi_for_vegan) <- row_names
+
+by_seine_okisollo_gsi_for_vegan <- by_seine_okisollo_gsi_for_vegan %>% 
+  select(-set, -survey_date, -org)
+
+test_nmds <- metaMDS(by_seine_okisollo_gsi_for_vegan, k = 2)
+stressplot(test_nmds)
+
+
+# Create treatment groups for hakai and dfo seines to visually group
+treat=c(rep("dfo",15),rep("hakai", 18))
+# First, create a vector of color values corresponding of the 
+# same length as the vector of treatment values
+colors=c(rep("red",15),rep("blue",18))
+ordiplot(test_nmds,type="n")
+#Plot convex hulls with colors baesd on organization
+for(i in unique(treat)) {
+  ordiellipse(test_nmds$point[grep(i,treat),],draw="polygon",
+   groups=treat[treat==i],col=colors[grep(i,treat)],label=F) } 
+orditorp(test_nmds,display="sites",col=c(rep("red",15),
+  rep("blue",18)),air=0.01,cex=1.)
+```
+
 ### Additional stock ID
 
 Something that is important is to try to increase the sample size of hakai 
@@ -356,7 +403,7 @@ okisollo %>%
 #TODO: Label stocks on bar plots
 #TODO: sort out 2016 dfo stock cateegorizations
 
-ggsave(here::here("figs", "gsi_props_by_week.png"))
+ggsave(here::here("Fine-scale migration dynamics", "figs", "gsi_props_by_week.png"))
 ```
 
 # Lengths 
@@ -449,7 +496,7 @@ okisollo %>%
   ylab("Fork Length (mm)") +
   xlab("Week")
 
-ggsave(here::here("figs", "chilko_lengths_weekly_boxplot.png"))
+ggsave(here::here("Fine-scale migration dynamics", "figs", "chilko_lengths_weekly_boxplot.png"))
 ```
 
 There is no significant difference in the lenth of chilko sockeye caught by DFO compared to length of chilko sockeye caught by hakai. 
@@ -500,7 +547,7 @@ okisollo %>%
   ylab("Fork Length (mm)") +
   xlab("Week")
 
-ggsave(here::here("figs", "shuswap_weekly_lengths_boxplot_2016.png"))
+ggsave(here::here("Fine-scale migration dynamics", "figs", "shuswap_weekly_lengths_boxplot_2016.png"))
 ```
 
 No significant difference in the length of hakai and dfo shuswap sockeye
@@ -540,7 +587,7 @@ ggplot(all_SO_by_week_by_org_2015, aes(x = numeric_sampling_week, y = diff)) +
                                "2015-07-06", "2015-07-13")) +
   ggtitle("2015")
 
-ggsave(here::here("figs", "2015_sockeye_diff_trend.png"))
+ggsave(here::here("Fine-scale migration dynamics", "figs", "2015_sockeye_diff_trend.png"))
 
 lm_hakai_dfo_sockeye <- lm(diff ~ numeric_sampling_week, data = all_SO_by_week_by_org_2015)
 summary(lm_hakai_dfo_sockeye)
@@ -572,7 +619,7 @@ okisollo %>%
    theme(axis.text.x  = element_text(angle=45, vjust=0.5))
 
   
-ggsave(here::here("figs", "sockeye_weekly_boxplot.png"), width = 8, height = 5)
+ggsave(here::here("Fine-scale migration dynamics", "figs", "sockeye_weekly_boxplot.png"), width = 8, height = 5)
 
 
 ```
@@ -600,7 +647,7 @@ ggplot(all_SO_by_week_by_org_2016, aes(x = numeric_sampling_week, y = diff)) +
                                "2016-06-16")) +
   ggtitle("2016")
 
-ggsave(here::here("figs", "2016_sockeye_diff_trend.png"))
+ggsave(here::here("Fine-scale migration dynamics", "figs", "2016_sockeye_diff_trend.png"))
 
 lm_hakai_dfo_sockeye <- lm(diff ~ numeric_sampling_week, data = all_SO_by_week_by_org_2016)
 summary(lm_hakai_dfo_sockeye)
@@ -640,7 +687,7 @@ ggplot(all_diff, aes(numeric_sampling_week, diff)) +
   ggtitle("Sockeye Length Differences") +
   theme_classic(base_size = 18)
 
-ggsave(here::here("figs", "sockeye_length_trends.png"), width = 12)
+ggsave(here::here("Fine-scale migration dynamics", "figs", "sockeye_length_trends.png"), width = 12)
 
 ```
 DFO sockeye from 2015 are significantly longer than Hakai sockeye
@@ -737,7 +784,7 @@ ggplot(all_CU_by_week_by_org_2015, aes(x = numeric_sampling_week, y = diff)) +
                                "2015-06-16", "2015-06-23", "2015-06-30", "2015-07-06", "2015-07-13")) +
   ggtitle("2015")
 
-ggsave(here::here("figs", "chum_trend_2015.png"))
+ggsave(here::here("Fine-scale migration dynamics", "figs", "chum_trend_2015.png"))
 
 lm_hakai_dfo_chum_2015 <- lm(diff ~ numeric_sampling_week, data = all_CU_by_week_by_org_2015) 
 summary(lm_hakai_dfo_chum_2015)
@@ -777,7 +824,7 @@ ggplot(all_CU_by_week_by_org_2016, aes(x = numeric_sampling_week, y = diff)) +
                                "2016-06-16", "2016-06-23", "2015-07-06")) +
   ggtitle("2016")
 
-ggsave(here::here("figs", "chum_trend_2016.png"))
+ggsave(here::here("Fine-scale migration dynamics", "figs", "chum_trend_2016.png"))
 lm_hakai_dfo_chum_2016 <- lm(diff ~ numeric_sampling_week, data = all_CU_by_week_by_org_2016) 
 summary(lm_hakai_dfo_chum_2016)
 ```
@@ -824,7 +871,7 @@ ggplot(all_cu_diff, aes(x = numeric_sampling_week, y = diff)) +
   ggtitle("Chum Length Differences") +
   facet_grid(~year)
 
-ggsave(here::here("figs", "chum_length_trend.png"), width = 12)
+ggsave(here::here("Fine-scale migration dynamics", "figs", "chum_length_trend.png"), width = 12)
 ```
 
 ### Species lengths annually by region
@@ -865,7 +912,7 @@ lengths %>% ggplot(aes(x = species, y = mean, fill = org)) +
                           breaks=c("DFO", "hakai"),
                          labels=c("Mid-channel", "Nearshore"))
 
-ggsave(here::here("figs", "fork_length_barplot.png"), width = 8, height = 7)
+ggsave(here::here("Fine-scale migration dynamics", "figs", "fork_length_barplot.png"), width = 8, height = 7)
 ```
 
 ## Map
@@ -905,7 +952,7 @@ ggplot(both_coords, aes(x = lon, y = lat, colour = org, group = seine_id)) +
   xlim(-125.340, -125.320) +
   guides(alpha="none")
 
-ggsave(here::here("figs", "KDE_map.png"))
+ggsave(here::here("Fine-scale migration dynamics", "figs", "KDE_map.png"))
 
 same_as_dfo_sites <- survey_seines_fish_stock_id %>%
  filter(seine_id %in% c("DN391", "DN401", "DN251", "DN336"))
@@ -925,5 +972,87 @@ ggplot(tag_plot, aes(x = res)) +
   xlab("Okisollo Residency Duration (hh:mm:ss)")+
   ylab("count")
 
-ggsave(here::here("figs", "okisollo_tag_duration.png"))
+ggsave(here::here("Fine-scale migration dynamics", "figs", "okisollo_tag_duration.png"))
 ```
+
+
+
+
+# Species Proportions 
+
+```{r}
+species_prop_nmds_ <- okisollo %>% 
+  mutate(year = year(survey_date)) %>%
+  #remove 2016 because I don't have every seine conducted by DFO in 2016
+  filter(year == 2015) %>% 
+  group_by(org, survey_date, site_id, species) %>% 
+  summarise(n = n()) %>% 
+  mutate(prop = n / sum(n)) %>% 
+  mutate(set = paste(org, "_", survey_date, "_", site_id)) %>% 
+  select(set, species, prop) %>% 
+  spread(key = species, value = prop, fill = 0) %>% 
+  separate(set, into = c("org", "survey_date", "site_id"), sep = "_", remove = FALSE) %>% 
+  ungroup() %>% 
+  select(set, survey_date, org, SO, PI, CU, CO, HE)
+
+write_csv(species_prop_nmds_, here::here("Fine-scale migration dynamics", "data", "species_props_for_NMDS.csv"))
+
+row_names <- c(paste("dfo", 1:17, sep = ""), paste("hakai", 18:36, sep = ""))
+row.names(species_prop_nmds_) <- row_names
+
+species_prop_nmds_ <- species_prop_nmds_ %>% 
+  select(-set, -survey_date, -org)
+
+test_nmds <- metaMDS(species_prop_nmds_, k = 2)
+stressplot(test_nmds)
+
+
+# Create treatment groups for hakai and dfo seines to visually group
+treat=c(rep("dfo",17),rep("hakai",18))
+# First, create a vector of color values corresponding of the 
+# same length as the vector of treatment values
+colors=c(rep("red",17),rep("blue",18))
+ordiplot(test_nmds,type="n")
+#Plot convex hulls with colors baesd on organization
+for(i in unique(treat)) {
+  ordiellipse(test_nmds$point[grep(i,treat),],draw="polygon",
+   groups=treat[treat==i],col=colors[grep(i,treat)],label=F) } 
+# orditorp(test_nmds,display="species",col="red",air=0.01)
+orditorp(test_nmds,display="sites",col=c(rep("red",17),
+  rep("blue",18)),air=0.01,cex=1.)
+
+```
+
+
+```{r}
+data(dune)
+data(dune.env)
+adonis(dune ~ Management*A1, data=dune.env, permutations=99)
+
+### Example of use with strata, for nested (e.g., block) designs.
+
+dat <- expand.grid(rep=gl(2,1), NO3=factor(c(0,10)),field=gl(3,1) )
+dat
+Agropyron <- with(dat, as.numeric(field) + as.numeric(NO3)+2) +rnorm(12)/2
+Schizachyrium <- with(dat, as.numeric(field) - as.numeric(NO3)+2) +rnorm(12)/2
+total <- Agropyron + Schizachyrium
+library(lattice)
+dotplot(total ~ NO3, dat, jitter.x=TRUE, groups=field,
+        type=c('p','a'), xlab="NO3", auto.key=list(columns=3, lines=TRUE) )
+
+Y <- data.frame(Agropyron, Schizachyrium)
+mod <- metaMDS(Y)
+plot(mod)
+### Hulls show treatment
+ordihull(mod, group=dat$NO3, show="0")
+ordihull(mod, group=dat$NO3, show="10", col=3)
+### Spider shows fields
+ordispider(mod, group=dat$field, lty=3, col="red")
+
+### Correct hypothesis test (with strata)
+adonis(Y ~ NO3, data=dat, strata=dat$field, perm=1e3)
+
+### Incorrect (no strata)
+adonis(Y ~ NO3, data=dat, perm=1e3)
+```
+
