@@ -38,8 +38,8 @@ surveys <- gs_read(field_data_workbook_2018, ws = "survey_data")
     ##   tide_state = col_character(),
     ##   survey_time_start = col_time(format = ""),
     ##   survey_time_end = col_time(format = ""),
-    ##   survey_type = col_character(),
     ##   net_sets = col_integer(),
+    ##   survey_type = col_character(),
     ##   survey_comments = col_character(),
     ##   lab_qc = col_character()
     ## )
@@ -246,6 +246,7 @@ Catch Statistics:
 =================
 
 ``` r
+#table of the species summary
 field_2018_sites_spp_summary <- survey_seines_2018 %>%
   select(survey_date, site_id, so_taken, pi_taken, cu_taken, co_taken, he_taken, ck_taken, region, zone) %>%
    rename(chinook = ck_taken,
@@ -255,7 +256,7 @@ field_2018_sites_spp_summary <- survey_seines_2018 %>%
          pink = pi_taken,
          sockeye = so_taken) %>% 
   gather(sockeye, pink, chum, coho, chinook, herring, key = "species", value = "n") %>% 
-  replace_na(list( n = 0)) 
+  replace_na(list( n = 0)) %>% na.omit()
 
 species_summary <- field_2018_sites_spp_summary %>%
   group_by(species) %>% 
@@ -274,3 +275,63 @@ knitr::kable(species_summary)
 | herring |     52|
 | coho    |     39|
 | chinook |      9|
+
+``` r
+# ording the facets in the right order
+field_2018_sites_spp_summary$species <-
+  factor(field_2018_sites_spp_summary$species, levels = c("sockeye", "chum", "pink", "coho", "chinook", "herring"))
+
+#making the graph of fish caught for each species in each zone
+#TO FIX: etting rid of the double seines 
+
+d <- ggplot(field_2018_sites_spp_summary, aes(x = survey_date, y = zone), group = species) +
+  geom_count(aes( size = n, alpha = n)) +
+  facet_wrap(~species) +
+  scale_y_discrete(limits= c("N", "S", "W","C", "E"),
+    breaks= c("W", "S", "N", "E", "C"), 
+    labels= c("West", "South", "North", "East", "Central")) +
+  labs(x = NULL, y = NULL) +
+  theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank(), panel.background = element_blank(), axis.ticks.y = element_blank(), axis.text = element_text(color = "gray56"), axis.ticks.x = element_line(color = "gray56")) + scale_size_continuous(range = c(0.5,3.5))
+d
+```
+
+![](2018_End_of_Field_Season_Report_files/figure-markdown_github/unnamed-chunk-1-1.png)
+
+``` r
+ggsave("species_distribution.png", d)  
+```
+
+    ## Saving 7 x 5 in image
+
+``` r
+# looking at the distribution of sockeye retained by each migration zone. Discovery Island versus. Johnstone Strait
+
+sockeye_distribution <- survey_seines_2018 %>%
+   select(survey_date, region, zone, so_taken) %>%
+  arrange(region, zone) %>%
+  rename(sockeye = so_taken) %>% 
+  na.omit()
+
+# TO FIX: add May ?
+
+s_colors <- brewer.pal(n = 3, name = "Dark2")
+s <- ggplot(sockeye_distribution, aes(x = survey_date, y = zone, color = region)) + geom_count(aes( size = sockeye)) +
+  labs(x = NULL, y = NULL)+
+  scale_color_manual(values = s_colors,
+                     name = "",
+                     breaks= c("DI", "JS"),
+labels=c("Discovery Islands", "Jonhstone Strait")) +
+  theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank(), panel.background = element_blank(), axis.ticks.y = element_blank(), axis.text = element_text(color = "gray56"), axis.ticks.x = element_line(color = "gray56")) +
+  scale_y_discrete(limits= c("N", "S", "W","C", "E"),
+    breaks= c("W", "S", "N", "E", "C"),
+                   labels= c("West", "South", "North", "East", "Central"))
+s
+```
+
+![](2018_End_of_Field_Season_Report_files/figure-markdown_github/unnamed-chunk-1-2.png)
+
+``` r
+ggsave("sockeye_distribution.png", s)
+```
+
+    ## Saving 7 x 5 in image

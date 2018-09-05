@@ -12,6 +12,7 @@ library(tidyverse)
 library(googlesheets)
 library(here)
 library(knitr)
+library(RColorBrewer)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -55,7 +56,7 @@ field_2018_sites_spp_summary <- survey_seines_2018 %>%
          pink = pi_taken,
          sockeye = so_taken) %>% 
   gather(sockeye, pink, chum, coho, chinook, herring, key = "species", value = "n") %>% 
-  replace_na(list( n = 0)) 
+  replace_na(list( n = 0)) %>% na.omit()
 
 species_summary <- field_2018_sites_spp_summary %>%
   group_by(species) %>% 
@@ -65,12 +66,72 @@ species_summary <- field_2018_sites_spp_summary %>%
 
 knitr::kable(species_summary)
 
+# ording the facets in the right order
+field_2018_sites_spp_summary$species <-
+  factor(field_2018_sites_spp_summary$species, levels = c("sockeye", "chum", "pink", "coho", "chinook", "herring"))
+
+#making the graph of nbr of fish caught for each species in each zone
+#TO IMPROVE: getting rid of the double seines points
+
+d <- ggplot(field_2018_sites_spp_summary, aes(x = survey_date, y = zone), group = species) +
+  geom_count(aes( size = n, alpha = n)) +
+  facet_wrap(~species) +
+  scale_y_discrete(limits= c("N", "S", "W","C", "E"),
+    breaks= c("W", "S", "N", "E", "C"), 
+    labels= c("West", "South", "North", "East", "Central")) +
+  labs(x = NULL, y = NULL) +
+  theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank(), panel.background = element_blank(), axis.ticks.y = element_blank(), axis.text = element_text(color = "gray56"), axis.ticks.x = element_line(color = "gray56")) + scale_size_continuous(range = c(0.5,3.5))
+d
+ggsave("species_distribution.png", d)  
 # looking at the distribution of sockeye retained by each migration zone. Discovery Island versus. Johnstone Strait
 
-sockeye_distribution <- field_2018_sites_spp_summary %>% 
-  filter(species == "sockeye") %>% 
-  arrange(region, zone, n) %>% 
+sockeye_distribution <- survey_seines_2018 %>%
+   select(survey_date, region, zone, so_taken) %>%
+  arrange(region, zone) %>%
+  rename(sockeye = so_taken) %>% 
   na.omit()
 
-```
+# TO IMPROVE: add May ?
 
+s_colors <- brewer.pal(n = 5, name = "Dark2")
+s <- ggplot(sockeye_distribution, aes(x = survey_date, y = zone, color = region)) + geom_count(aes( size = sockeye)) +
+  labs(x = NULL, y = NULL)+
+  scale_color_manual(values = s_colors,
+                     name = "",
+                     breaks= c("DI", "JS"),
+labels=c("Discovery Islands", "Jonhstone Strait")) +
+  theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank(), panel.background = element_blank(), axis.ticks.y = element_blank(), axis.text = element_text(color = "gray56"), axis.ticks.x = element_line(color = "gray56")) +
+  scale_y_discrete(limits= c("N", "S", "W","C", "E"),
+    breaks= c("W", "S", "N", "E", "C"),
+                   labels= c("West", "South", "North", "East", "Central"))
+s
+
+ggsave("sockeye_distribution.png", s)
+
+#FOR FUN... maybe by site_id instead of region 
+
+for_fun <- survey_seines_2018 %>%
+select(survey_date, region, zone, site_id, so_taken) %>%
+arrange(region, zone, site_id) %>%
+rename(sockeye = so_taken) %>% 
+  na.omit()
+
+#changing facet labels and order of sites
+region_labels <- c(DI = "Discovery Islands", JS = "Johnstone Strait")
+
+for_fun$site_id <- factor(for_fun$site_id, levels = c("J11", "J09", "J03","J02","D10","D30", "D09","D07", "D27", "D22", "D08"))
+
+#The graph 
+f <- ggplot(for_fun, aes(x = survey_date, y = site_id, color = zone)) + geom_count(aes( size = sockeye), alpha = 1/ 2) +
+labs(x = NULL, y = NULL)+
+  scale_color_manual(values = s_colors,
+                     name = "Zone",
+                     breaks= c("W","C","E","N", "S"),
+labels=c("West", "Central", "East", "North", "South")) +
+  theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank(), panel.background = element_blank(), axis.ticks.y = element_blank(), axis.text = element_text(color = "gray56"), axis.ticks.x = element_line(color = "gray56")) +
+   facet_wrap(~region, nrow = 2, scales = "free_y", labeller = labeller( region = region_labels))+
+  scale_size_continuous(range = c(1,5))
+f
+
+ggsave("site_id_sockeye.png",f)
+```
