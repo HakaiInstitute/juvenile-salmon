@@ -1,5 +1,5 @@
 ---
-title: "Hakai Institute Juvenile Salmon Report"email Brian Eric, Wayne 
+title: "Hakai Institute Juvenile Salmon Report"
 author: "Brett Johnson"
 date: '`r date()`'
 output:
