@@ -155,10 +155,9 @@ field_2018_zone_so_summary <- survey_seines_2018 %>%
 
 ggplot(field_2018_zone_so_summary, aes(x = survey_date, y = zone, colour = so_taken))+
   geom_point(size = 3) +
-  scale_colour_gradient() +
+  scale_colour_gradient(high = "#132B43", low = "#56B1F7") +
   facet_wrap( ~ region, scales = "free_y") +
   scale_x_date(breaks = date_breaks("months"), labels = date_format("%b %d"), limits = as.Date(c("2018-05-01", "2018-08-22"))) +
-
   theme_bw() + 
   theme(panel.border = element_blank(), panel.grid.major = element_blank(),panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
 ggsave(here("Internal Reports", "End of Field Season Reports", "2018", "Figures", "so_zone_success.png"), height = 3, width = 6)
