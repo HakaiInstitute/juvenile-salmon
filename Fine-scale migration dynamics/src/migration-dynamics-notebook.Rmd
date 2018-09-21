@@ -105,7 +105,7 @@ collapse_fraser_sockeye_stocks_neville_pdf <- function(x) {
 life_aquatic_cont <- wes_palette("Zissou1", 100, type = "continuous")
 life_aquatic_discrete <- wes_palette("Zissou1", 5, type = "discrete")
 
-theme <- theme_classic(base_size = 18)
+theme <- theme_bw(base_size = 18)
 theme_set(theme)
 # read in dfo data that Chrys Neville provided that I tidied up first in excel
 dfo_data <- read_csv(here::here("Fine-scale migration dynamics", "data","dfo_data.csv"))
@@ -1054,5 +1054,126 @@ adonis(Y ~ NO3, data=dat, strata=dat$field, perm=1e3)
 
 ### Incorrect (no strata)
 adonis(Y ~ NO3, data=dat, perm=1e3)
+```
+
+
+
+# Migration Timing
+
+```{r 2015 all species migration timing}
+
+#build dataset of tidy catches per seine per species
+dfo_2015_tidy_catch <- read_csv(here::here("Fine-scale migration dynamics", "data", "dfo_2015_tidy_catch.csv")) %>% 
+  mutate(yday = yday(date)) %>% 
+  group_by(species) %>% 
+  mutate(org = "dfo", percent = cumsum(n / sum(n) * 100), non_cumul_prop = n / sum(n)) %>% 
+  ungroup()
+  
+dfo_2015_tidy_catch <- dfo_2015_tidy_catch %>% 
+  select(species, yday, n, org, percent, non_cumul_prop) 
+
+hakai_2015 <- hakaisalmon::survey_seines %>% 
+  filter(site_id == "D09", survey_type == "standard",
+         year(survey_date) == 2015, collection_protocol == "SEMSP") %>%
+  select(survey_date, so_total, cu_total) %>% 
+  gather(`so_total`, `cu_total`, key = "species", value = "n") %>% 
+  drop_na() %>% 
+  mutate(species = recode(species, "so_total" = "SO", "cu_total" = "CU")) %>% 
+  mutate(yday = yday(survey_date)) %>% 
+  group_by(species) %>% 
+  mutate(org = "hakai", percent = cumsum(n / sum(n) * 100), non_cumul_prop = n / sum(n)) %>% 
+  ungroup()
+
+hakai_2015 <- hakai_2015 %>% 
+  select(species, yday, n, org, percent, non_cumul_prop)
+
+tidy_okisollo_catch_2015 <- rbind(hakai_2015, dfo_2015_tidy_catch)
+# Plot non-modelled data
+
+ggplot(tidy_okisollo_catch_2015, aes(x = yday, y = percent, colour = org)) + geom_point() +
+  #geom_smooth(se = F) +
+  facet_wrap(species ~., nrow = 2)
+
+# Try and plot semsp cumulative abundance of hakai as a function of cumaltive abundance of dfo to create linear model
+
+tidy_by_week <- tidy_okisollo_catch_2015 %>% 
+  mutate(week = yday %/% 4) %>% 
+  group_by(org, species, week) %>% 
+  summarize(percent = sum(non_cumul_prop)) %>% 
+  mutate(percent = cumsum(percent)) %>% 
+  filter(week > 18) %>% 
+  ungroup()
+
+dfo_so_lm <- tidy_by_week %>% 
+  filter(species == "SO", org == "dfo") %>% 
+  select(week, percent)
+
+hakai_so_lm <- tidy_by_week %>% 
+  filter(species == "SO", org == "hakai") %>% 
+  select(week, percent)
+
+so_lm_data <- full_join(dfo_so_lm, hakai_so_lm, by = 'week') %>% 
+  drop_na()
+
+so_lm <- lm(data = so_lm_data, percent.x ~ percent.y)
+
+summary(so_lm)
+
+ggplot(data = so_lm_data, aes(x = percent.x, y = percent.y)) +
+  geom_point() +
+ geom_smooth(method = lm, fullrange = TRUE, se = F) +
+  ylab("Hakai Catch Proportion") +
+  xlab("DFO Catch Proportion") +
+  xlim(c(0,1))+
+  ylim(c(0,1))
+
+```
+
+## Modelled migration timing estimates
+
+I see some potential issues with converting this to a normal distribution because its clear the distributions are right skewed. If I'm going to model this as thoguh it;s normal, I should try to include some parameter in the function that allows me to add a skew. The other potential issue, is how it seems to be sensitive to zeros. the more zeros at the front, likely the better estimate versus no zeroes?
+
+```{r}
+# Chum dfo
+chum_dfo <- tidy_okisollo_catch_2015 %>% 
+  filter(species == "CU", org == "dfo")
+
+chum_dfo_predicted <- log_cumul_abund(chum_dfo$percent, chum_dfo$yday) %>% 
+  mutate(org = "dfo", species = "CU") %>% 
+  mutate(daily_percent = y - lag(y)) 
+
+#chum hakai
+chum_hakai <- tidy_okisollo_catch_2015 %>% 
+  filter(species == "CU", org == "hakai")
+
+chum_hakai_predicted <- log_cumul_abund(chum_hakai$percent, chum_hakai$yday) %>% 
+  mutate(org = "hakai", species = "CU") %>% 
+  mutate(daily_percent = y - lag(y)) 
+
+# sockeye dfo
+sockeye_dfo <- tidy_okisollo_catch_2015 %>% 
+  filter(species == "SO", org == "dfo")
+
+sockeye_dfo_predicted <- log_cumul_abund(sockeye_dfo$percent, sockeye_dfo$yday) %>% 
+  mutate(org = "dfo", species = "SO") %>% 
+  mutate(daily_percent = y - lag(y)) 
+
+#sockeye hakai
+sockeye_hakai <- tidy_okisollo_catch_2015 %>% 
+  filter(species == "SO", org == "hakai")
+
+sockeye_hakai_predicted <- log_cumul_abund(sockeye_hakai$percent, sockeye_hakai$yday) %>% 
+  mutate(org = "hakai", species = "SO") %>% 
+  mutate(daily_percent = y - lag(y)) 
+
+
+
+predicted <- rbind(chum_dfo_predicted, chum_hakai_predicted, sockeye_dfo_predicted, sockeye_hakai_predicted)
+
+ggplot(predicted, aes(x = x, y = y, colour = org)) +
+  geom_point() +
+  facet_wrap(species ~ ., nrow = 2)
+
+
 ```
 
