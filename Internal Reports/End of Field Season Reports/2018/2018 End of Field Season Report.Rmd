@@ -116,6 +116,7 @@ ggsave(here("Internal Reports", "End of Field Season Reports", "2018", "Figures"
 ```
 
 ```{r Catch Statistics}
+library(scales)
 
 # Summary table of number of each species retained
 field_2018_sites_spp_summary <- survey_seines_2018 %>%
@@ -229,4 +230,36 @@ labels=c("West", "Central", "East", "North", "South")) +
 f
 
 ggsave("site_id_sockeye.png",f)
+```
+
+```{r YSI sampling study}
+
+ysi <- gs_key("1yxot3J5Iltf66bB0KWgRxdSu58vpQvRk4cfm6p-TkVo", visibility = "private", lookup = F)
+
+avg <- gs_read(ysi, ws="avg") %>% 
+  filter(site_id == "D09_Ocgy_Near" | site_id == "D09_Ocgy" | site_id == "D09_Ocgy_Far")
+avg$time.class = factor(avg$time.class, levels=c("Before","After"))
+avg$site_id = factor(avg$site_id, levels=c("D09_Ocgy_Near","D09_Ocgy","D09_Ocgy_Far"))
+
+# s_time <- ggplot(avg, aes(x=time.class, y=sal_avg)) +
+#   geom_boxplot()
+# s_time
+# 
+# t_time <- ggplot(avg, aes(x=time.class, y=temp_avg)) +
+#   geom_boxplot()
+# t_time
+
+s_site <- ggplot(avg) +
+  geom_boxplot(mapping = aes(x=site_id, y=sal_avg, color=time.class)) +
+  scale_x_discrete(labels = c("Nearshore", "Standard", "Far Shore")) +
+  labs(color="Sampling Period", x = "D09 Oceanography Site", y = "Average Salinity (ppt)")
+s_site 
+ggsave(here("Internal Reports", "End of Field Season Reports", "2018", "Figures", "YSI_salinity_D09_by_site.png"))
+
+t_site <- ggplot(avg) +
+  geom_boxplot(mapping = aes(x=site_id, y=temp_avg, color=time.class)) +
+  scale_x_discrete(labels = c("Nearshore", "Standard", "Far Shore")) +
+  labs(color="Sampling Period", x = "D09 Oceanography Site", y = "Average Temperature (°C)")
+t_site 
+ggsave(here("Internal Reports", "End of Field Season Reports", "2018", "Figures", "YSI_temp_D09_by_site.png"))
 ```
