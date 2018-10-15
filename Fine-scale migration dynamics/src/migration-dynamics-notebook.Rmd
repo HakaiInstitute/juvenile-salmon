@@ -1496,7 +1496,74 @@ ggsave(here::here("Fine-scale migration dynamics", "figs", "box_plot_stock_speci
 ```
 # Species Diversity
 
-```{r}
+```{r species}
+# Create dataset of comparable species matrices
 
+library(vegan)
+BCI
+diversity(BCI)
+
+dfo_diversity <- dfo_data %>% 
+  filter(site_id == "D09") %>% 
+  group_by(year_tow, species) %>% 
+  summarize(n = n()) %>% 
+  spread(key = species, value = n, fill = 0) %>% 
+  ungroup() %>% 
+  select(-year_tow)
+  
+H_dfo <- diversity(dfo_diversity)
+H_dfo
+
+J_dfo <- H_dfo / log(specnumber(dfo_diversity))
+J_dfo 
+
+hakai_diversity <- hakai_okisollo %>% 
+  group_by(survey_date, species) %>% 
+  summarize(n = n()) %>% 
+  spread(key = species, value = n, fill = 0) %>% 
+  ungroup() %>% 
+  select(-survey_date)
+
+H_hakai <- diversity(hakai_diversity) 
+H_hakai
+
+J_hakai <- H_hakai / log(specnumber(hakai_diversity))
+J_hakai
+
+
+t.test(H_hakai, H_dfo)
+```
+
+## Stock Diversity
+```{r}
+dfo_diversity <- dfo_data %>% 
+  filter(site_id == "D09") %>% 
+  group_by(year_tow, collapsed_fraser_stocks) %>% 
+  summarize(n = n()) %>% 
+  spread(key = collapsed_fraser_stocks, value = n, fill = 0) %>% 
+  ungroup() %>% 
+  select(-year_tow)
+  
+H_dfo <- diversity(dfo_diversity)
+H_dfo
+
+J_dfo <- H_dfo / log(specnumber(dfo_diversity))
+J_dfo 
+
+hakai_diversity <- hakai_okisollo %>% 
+  group_by(survey_date, collapsed_fraser_stocks) %>% 
+  summarize(n = n()) %>% 
+  spread(key = collapsed_fraser_stocks, value = n, fill = 0) %>% 
+  ungroup() %>% 
+  select(-survey_date)
+
+H_hakai <- diversity(hakai_diversity) 
+H_hakai
+
+J_hakai <- H_hakai / log(specnumber(hakai_diversity))
+J_hakai
+
+
+t.test(H_hakai, H_dfo)
 ```
 
