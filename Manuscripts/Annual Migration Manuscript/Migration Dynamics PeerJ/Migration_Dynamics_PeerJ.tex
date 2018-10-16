@@ -31,7 +31,7 @@ Johnstone Strait in 2018}
 \corrauthor[1]{Brett T. Johnson}{\href{mailto:brett.johnson@hakai.org}{\nolinkurl{brett.johnson@hakai.org}}}
 \author[]{Julian C.L. Gan}
 
-\author[1]{Brian P.V. Hunt}
+\author[2, 3]{Brian P.V. Hunt}
 
 
 \affil[1]{Hakai Institute Quadra Island Ecological Observatory, Heriot Bay, BC
@@ -47,6 +47,47 @@ V0P1H0}
 % \corrauthor[1]{First Author}{f.author@email.com}
 
 % 
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
 
 \begin{abstract}
 The majority of out-migrating juvenile Fraser River salmon pass
@@ -71,22 +112,105 @@ catch in 2018, followed by chum and then sockeye.
 % Dummy abstract text. Dummy abstract text. Dummy abstract text. Dummy abstract text. Dummy abstract text. Dummy abstract text. Dummy abstract text. Dummy abstract text. Dummy abstract text. Dummy abstract text. Dummy abstract text.
 \end{abstract}
 
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{proposition}{Proposition}[section]
+\theoremstyle{definition}
+\newtheorem{example}{Example}[section]
+\theoremstyle{definition}
+\newtheorem{exercise}{Exercise}[section]
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newtheorem*{solution}{Solution}
 \begin{document}
 
 \flushbottom
 \maketitle
 \thispagestyle{empty}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# All data used for this analysis is from the hakaisalmon R package v0.2.0 at https://hakaiinstitute.github.io/hakaisalmon/}
+\KeywordTok{library}\NormalTok{(hakaisalmon)}
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'ggplot2' was built under R version 3.4.4
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: package 'purrr' was built under R version 3.4.4
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: package 'dplyr' was built under R version 3.4.4
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(lubridate)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'lubridate' was built under R version 3.4.4
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(knitr)}
+\KeywordTok{library}\NormalTok{(here)}
+\end{Highlighting}
+\end{Shaded}
+
 \section*{Introduction}\label{introduction}
 \addcontentsline{toc}{section}{Introduction}
 
-Your introduction goes here! Some examples of commonly used commands and
-features are listed below, to help you get started.
+Pacific salmon (\emph{Oncorhynchus} spp.) traverse a number of aquatic
+landscapes during different phases of their lifecyle to reach a habitat
+which ultimately offers some reward. While undergoing these migrations,
+salmon are subjected to risks associated with each new environemnt they
+encounter. The risks and associated mortality from these migrations can
+be understood in aggregate by quantifying the productivity (recruits per
+spawner) of a certain stock. Salmon are an excellent indicator species
+beacuse they act as an integrator of terrestrial, lacustrine, fluvial,
+estuarine, nearshore marine, and high-seas conditions. A problem in any
+one of these environments will be reflected in the productivity of a
+salmon stocks. To better manage and predict the producitivty of salmon
+stocks we need estimates of mortality and an understanding of the
+factors driving mortality in each landscape that salmon traverse. The
+early marine environment is one which estimates of mortality and it's
+drivers, is lacking. Juvenile salmon are particularly vulnerable during
+the early marine phase of their life history because they are undergoing
+physiological adaptations to a saline environment.
 
-If you have a question, please use the help menu in the top right of the
-screen to get in touch. When your article or pre-print is complete, use
-the ``Submit to PeerJ'' button in the topbar to send your files to
-PeerJ.
+The Hakai Institute Juvenile Salmon Program has been monitoring juvenile
+salmon migrations in the Discovery Islands and Johnstone Strait (Figure
+\ref{fig:map}) 2015 in an effort to understand what factors may be
+influencing early marine survival of sockeye, pink, and chum (Hunt et
+al. 2018). The effects of pathogens, parasites, predators, and the
+impacts of climate change on food web dynamics may be amplified during
+this stressful transition period and are the primary aspects of the
+salmon migration we are monitoring and reporting on here.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{include_graphics}\NormalTok{(}\StringTok{'map.pdf'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+
+\includegraphics{map} \hfill{}
+
+\caption{Sampling locations in 2018}\label{fig:map}
+\end{figure}
 
 \subsection*{About PeerJ}\label{about-peerj}
 \addcontentsline{toc}{subsection}{About PeerJ}
@@ -115,9 +239,9 @@ label commands for cross-references.
 \addcontentsline{toc}{subsection}{Figures and Tables}
 
 Use the table and tabular commands for basic tables --- see Table
-@ref(tab:widgets), for example. You can upload a figure (JPEG, PNG or
+\ref{tab:widgets}, for example. You can upload a figure (JPEG, PNG or
 PDF) using the project menu. To include it in your document, use the
-includegraphics command as in the code for Figure @ref(fig:view) below.
+includegraphics command as in the code for Figure \ref{fig:view} below.
 
 Standard \LaTeX references will work as well (e.g.~Fig. \ref{fig:view}).
 
@@ -126,7 +250,7 @@ Standard \LaTeX references will work as well (e.g.~Fig. \ref{fig:view}).
 \end{figure}
 
 \begin{longtable}[]{@{}lr@{}}
-\caption{(\#tab:widgets) An Example Table.}\tabularnewline
+\caption{\label{tab:widgets} An Example Table.}\tabularnewline
 \toprule
 Item & Quantity\tabularnewline
 \midrule
@@ -231,7 +355,7 @@ text are included in the following pages.
 \includegraphics[width=1\linewidth]{Migration_Dynamics_PeerJ_files/figure-latex/results-1} \caption{In-text Picture}\label{fig:results}
 \end{figure}
 
-Reference to Figure @ref(fig:results).
+Reference to Figure \ref{fig:results}.
 
 \section*{Results and Discussion}\label{results-and-discussion}
 \addcontentsline{toc}{section}{Results and Discussion}
