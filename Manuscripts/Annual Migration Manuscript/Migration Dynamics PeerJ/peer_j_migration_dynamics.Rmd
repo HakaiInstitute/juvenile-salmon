@@ -1,6 +1,6 @@
 ---
 title: Juvenile Salmon Migration Dynamics in the Discovery Islands and Johnstone Strait in 2018
-preprint: false
+preprint: true
 author: 
   - name: Brett T. Johnson
     affiliation: 1
@@ -32,6 +32,8 @@ library(tidyverse)
 library(lubridate)
 library(knitr)
 library(here)
+library(car)
+library(ggridges)
 
 survey_seines <- read_csv(here("data", "survey_seines.csv")) %>% 
   rename("Sockeye" = "so_total", "Pink" = "pi_total", "Chum" = "cu_total") 
@@ -49,6 +51,9 @@ peak_dates <- read_csv(here("data", "peak_dates.csv"))
 
 spp_labels <- c(CU = "Chum", PI = "Pink", SO = "Sockeye", DI = "Discovery Islands", 
                 JS = "Johnstone Strait")
+
+pl_colours <- c("pi_total" = "pink", "so_total" = "#00BFC4", "cu_total" = "#7CAE00", 
+                    "co_total" = "#F8766D", "he_total" = "#C77CFF")
 ```
 
 
@@ -58,7 +63,7 @@ Pacific salmon (_Oncorhynchus_ spp.) traverse a number of aquatic landscapes dur
 
 The Hakai Institute Juvenile Salmon Program has been monitoring juvenile salmon migrations in the Discovery Islands and Johnstone Strait (Figure \@ref(fig:map)) 2015 in an effort to understand what factors may be influencing early marine survival of sockeye, pink, and chum (Hunt et al. 2018). The effects of pathogens, parasites, predators, and the impacts of climate change on food web dynamics may be amplified during this stressful transition period and are the primary aspects of the salmon migration we are monitoring and reporting on here.
 
-```{r map, fig.cap = "Sampling locations in 2018", fig.align='left', out.width='450pt'}
+```{r map, fig.cap = "Sampling locations in 2018", fig.align='left', out.width='80%'}
 include_graphics('map.pdf')
 ```
 
@@ -70,140 +75,278 @@ See Hunt et al. (2018) for a detailed description of field and lab methods. Brie
 ## Statistical methods {-}
 All metrics reported are in relation to the time series average (2015—2018). The mean for each parameter was calculated for all years combined, and the z-score was calculated for each parameter to determine the number of standard deviations away from the mean a given parameter was in each year.
 
+For sea-surface temperature anomalies, the average is based on 30 m depth integrated temperature from station QU39 in the northern Strait of Georgia from May and June.
+
 # Results {-}
 
-## Migration Timing
-
-Sockeye migration timing to the Discovery Islands in 2018 was: earlier than normal for sockeye, later than normal for pink, and later than normal for chum \@ref(fig:migration timing).
-
-```{r migration timing}
+The sea-surface temperature in May and June was higher than normal, and sockeye peak migration date in the Discovery Islands was earlier than normal in 2018. Parasite loads were less than normal, and lengths were longer than normal (Figure \@ref(fig:heatmap)).
 
 
+```{r heatmap setup, include = FALSE}
+  
+peak_dates <- peak_dates %>%
+  filter(species == "SO")
+
+mean_of_median_date <- mean(peak_dates$median)
+sd_of_median_date <- sd(peak_dates$median)
+
+
+peak_dates <- peak_dates %>%
+  arrange(year) %>%
+  mutate(z_score = (median - mean_of_median_date) / sd_of_median_date)
+
+migration_dates_z <- peak_dates$z_score
+
+# Length z-scores
+
+so_mean_sd <- length_histo %>%
+  group_by(year, species) %>%
+  summarise(mean = mean(fork_length, na.rm = T),
+            sd = sd(fork_length)) %>%
+  filter(species == "SO")
+
+avg_length <- as.numeric(so_mean_sd %>%
+                           group_by(species) %>%
+                           summarize(mean_fl = mean(mean)))
+
+sd_length <- as.numeric(so_mean_sd %>%
+                          group_by(species) %>%
+                          summarize(sd_fl = sd(mean)))
+
+length_z <- (so_mean_sd$mean - avg_length[2]) / sd_length[2]
+
+# Parasite loads Z scores
+## The idea here is to create an aggregated parasite index for both motile leps and caligus sealice
+
+api_annual_mean <- summary_sealice %>%
+  ungroup() %>%
+  filter(louse_species == "motile_caligus") %>%
+  filter(species == "SO") %>%
+  select(year, species, prevalence, abundance, intensity) %>%
+  group_by(year) %>%
+  summarize_all(c("mean"), na.rm = T)
+
+api_mean <- mean(api_annual_mean$intensity)
+api_sd <- sd(api_annual_mean$intensity)
+
+api_z <- (api_annual_mean$intensity - api_mean) / api_sd
+api_z
+
+# SST z-score
+## I'm going to filter the time period down to May and Juen because that's the most relevant period that juvenile salmon are likely to be in the Strait of Georgia
+
+sst_annual_mean <- ctd_all %>%
+  ungroup() %>%
+  mutate(date = as_date(date)) %>%
+  mutate(month = month(date), year = year(date)) %>%
+  filter(month >= 5 & month <= 6, station == "QU39") %>%
+  select(year, mean_temp) %>%
+  group_by(year) %>%
+  summarise(mean_temp = mean(mean_temp, na.rm = T))
+
+sst_mean <- mean(sst_annual_mean$mean_temp)
+sst_sd <- sd(sst_annual_mean$mean_temp)
+
+sst_z <- (sst_annual_mean$mean_temp - sst_mean) / sst_sd
+
+heatmap_data <-
+  tibble(
+    year = rep(c(2015, 2016, 2017, 2018), 4),
+    metric = rep(
+      c(
+        "Peak Migration Date",
+        "Length",
+        "Parasite Loads",
+        "Sea-surface Temp"
+      ),
+      each = 4
+    ),
+    SD = c(migration_dates_z, length_z, api_z, sst_z)
+  )
+
+
+#cols <- rev(rainbow(5)[-5])
+cols <- c("#4575b4",
+          "#f7f7f7",
+          "#d73027")
+```
+
+```{r heatmap, fig.cap="This heatmap indicates the number of standard deviations (Z-score) from the time series average (2015-2018) for key migration parameters. Blue colour indicates less than average, white indicates average, red indicates greater than average, and grey indicates insufficient data. Mean sea-surface temperature is 30 m depth integrated temperature from station QU39 in the Northern Strait of Georgia from May and June. Peak migration date is based on the median date of fish capture in the Discovery Islands. Parasite load is the average prevalence of all sea lice species in their motile life stage for both the Discovery Islands and Johnstone Strait regions combined.", out.width= '80%'}
+
+
+
+heatmap <-
+  ggplot(heatmap_data, aes(year, metric, fill = SD)) + geom_tile() +
+  ylab("")  +
+  xlab("Year") +
+  scale_fill_gradientn(colours = cols) +
+  theme(legend.position = "bottom") +
+  guides(fill = guide_colorbar(barwidth = 15, barheight = 1))
+
+heatmap
 ```
 
 
-## Species Proportions
+## Migration Timing {-}
 
-## Length
+Sockeye migration timing to the Discovery Islands in 2018 was: earlier than normal for sockeye (Figure \@ref(fig:mt)), later than normal for pink, and later than normal for chum.
 
-## Abundance
+```{r mt setup, include = FALSE}
 
-## Parasite Loads
+daily_mean_cumul_abund_annual <- tidy_catch %>%  
+      ungroup() %>% 
+      filter(year == 2018, species == "so_total") %>%
+      mutate(year = as.factor(year)) %>% 
+      group_by(region) %>% 
+      mutate(percent = cumsum(n / sum(n) * 100), non_cumul_prop = n / sum(n)) %>% 
+      ungroup() %>% 
+      transmute(year = year, survey_date = yday, region = region, percent = percent, non_cumul_prop = non_cumul_prop) %>% 
+      ungroup() %>% 
+      group_by(year, region, survey_date) %>% 
+      summarize(percent = mean(percent), non_cumul_prop = mean(non_cumul_prop) * 100, n = n())
+    
+    cum_abund_annual_DI <- daily_mean_cumul_abund_annual %>% 
+      filter(region == "DI") 
+    
+    predict_annual_prop_DI <- log_cumul_abund(cum_abund_annual_DI$percent, cum_abund_annual_DI$survey_date) %>% 
+      mutate(region = "DI", year = 2018) %>% 
+      mutate(daily_percent = y - lag(y)) 
+    
+    cum_abund_annual_JS <- daily_mean_cumul_abund_annual %>% 
+      filter(region == "JS") 
+    
+    predict_annual_prop_JS <- log_cumul_abund(cum_abund_annual_JS$percent, cum_abund_annual_JS$survey_date) %>% 
+      mutate(region = "JS", year = 2018) %>% 
+      mutate(daily_percent = y - lag(y)) 
+    
+    predict_annual_prop <- rbind(predict_annual_prop_JS, predict_annual_prop_DI)
+    
+    # Filer out the timeseries (2015-2018) table based on inputs
+    predict_average_prop <- predict_average_prop %>% 
+      filter(species == "so_total")
+    
+    cols <- c("2015-2018" = "#F8766D", "2018" = "#00BFC4", "2017" = "#00BFC4", "2016" = "#00BFC4", "2015" = "#00BFC4")
+    shapes <- c("2015-2018" = "triangle", "2018" = "circle", "2017" = "circle", "2016" = "circle", "2015" = "circle")
+```
 
-## Sea Surface Temperature
-
-# EXAMPLE STUFF BELOW HERE
-
-# Some \LaTeX{} Examples {-}
-
-Use section and subsection commands to organize your document. \LaTeX{} handles all the formatting and numbering automatically. Use ref and label commands for cross-references.
-
-## Figures and Tables {-}
-
-Use the table and tabular commands for basic tables --- see Table \@ref(tab:widgets), for example. You can upload a figure (JPEG, PNG or PDF) using the project menu. To include it in your document, use the includegraphics command as in the code for Figure \@ref(fig:view) below.
-
-Standard \LaTeX references will work as well (e.g. Fig. \ref{fig:view}).
-
-
-Item     Quantity
-------- ---------
-Widgets        42
-Gadgets        13
-
-Table: (\#tab:widgets) An Example Table.
-
-## Citations {-}
-
-LaTeX formats citations and references automatically using the bibliography records in your .bib file, which you can edit via the project menu. Use the cite command for an inline citation, like @Figueredo:2009dg, and the citep command for a citation in parentheses [@Figueredo:2009dg].
-
-## Mathematics {-}
-
-\LaTeX{} is great at typesetting mathematics. Let $X_1, X_2, \ldots, X_n$ be a sequence of independent and identically distributed random variables with $\text{E}[X_i] = \mu$ and $\text{Var}[X_i] = \sigma^2 < \infty$, and let
-$$S_n = \frac{X_1 + X_2 + \cdots + X_n}{n}
-      = \frac{1}{n}\sum_{i}^{n} X_i$$
-denote their mean. Then as $n$ approaches infinity, the random variables $\sqrt{n}(S_n - \mu)$ converge in distribution to a normal $\mathcal{N}(0, \sigma^2)$.
-
-## Lists {-}
-
-You can make lists with automatic numbering \dots
-
-
-1. Like this,
-1. and like this.
-
-or bullet points...
-
-- Like this,
-- and like this.
-
-or with descriptions...
-
-- **Word** Definition
-- **Concept** Explanation
-- **Idea** Text
-
-
-We hope you find write\LaTeX\ useful for your PeerJ submission, and please let us know if you have any feedback. Further examples with dummy text are included in the following pages.
-
-# Methods {-}
-
-\lipsum[4] 
-
-\begin{equation}
-\cos^3 \theta =\frac{1}{4}\cos\theta+\frac{3}{4}\cos 3\theta
-\label{eq:refname2}
-\end{equation}
-
-\lipsum[5] 
-
-## Subsection {-}
-
-\lipsum[6] 
-
-\paragraph{Paragraph} \lipsum[7] 
-\paragraph{Paragraph} \lipsum[8] 
-
-## Subsection {-}
-
-\lipsum[9] 
-
-<!-- \begin{figure}[ht]\centering -->
-<!-- \includegraphics[width=\linewidth]{results} -->
-<!-- \caption{In-text Picture} -->
-<!-- \label{fig:results} -->
-<!-- \end{figure} -->
-
-```{r results, fig.width = 5, fig.height = 4, out.width = "100%", fig.cap = "In-text Picture", echo = FALSE}
-time = seq(1.5, 8, 0.1)
-plot(time, sin(time), type = "l", xlab = "time [s]", ylab = "amplitude [m]", 
-     cex.main = 2, col = "blue", lwd = 3, font = 2, font.main = 2)
+```{r mt, fig.cap="Cumulative catch of the selected juvenile salmon migrating through the Discovery Islands compared to the average for 2015—2018. Migration curves were predicted by fitting a logistic growth equation to the cumulative percent the selected fish caught. The points (circles) for the year being compared to the time-series is the cumulative catch percent", out.width='80%'}
+    cum_abund_plot <- ggplot()+
+      labs(x = 'Date', y = 'Percent')+
+      #geom_point(data = predict_average_prop, aes(x = x, y = y, shape = year, colour = year), size = 2) +
+      geom_point(data = daily_mean_cumul_abund_annual, aes(x = survey_date, y = percent, color = year), size = 3) +
+      geom_line(data = predict_average_prop, aes(x = x, y = y, color = year), size = 1.5) +
+      geom_line(data = predict_annual_prop, aes(x = x, y = y, color = as.factor(year)), size = 1.5) +
+      scale_linetype_manual(values = c("dashed", "solid")) +
+      scale_x_continuous(breaks = c(135, 152, 166, 182, 196), 
+                         labels = c("May 15", "June 1", "June 15", "July 1", "July 15")) +
+      #coord_cartesian(ylim = c(0,6.5)) + 
+      facet_wrap(~ region, nrow = 2, labeller = labeller(region = spp_labels)) +
+      scale_colour_manual(values = cols) +
+      scale_shape_manual(values = shapes)
+    cum_abund_plot
 ```
 
 
-Reference to Figure \@ref(fig:results).
 
-# Results and Discussion {-}
 
-\lipsum[10] 
+## Species Proportions {-}
 
-## Subsection {-}
+Pink salmon dominated the catch in the Discovery Islands and Johnstone Strait in 2018 (Figure \@ref(fig:prop)).
 
-\lipsum[11] 
+```{r prop, out.width = '80%', fig.cap="The annual proportion of fish captured in the Discovery Islands and Johnstone Strait combined."}
+    
+    ggplot(data = proportion, aes(x = year, y = proportion, fill = species)) +
+      geom_bar(stat="identity", position = 'stack') +
+      scale_fill_manual(values = pl_colours, name = "Species",
+                        breaks=c("so_total","cu_total","pi_total","co_total", "he_total"),
+                        labels=c("sockeye", "chum", "pink", "herring", "coho")) +
+      xlab("Year") +
+      ylab("Proportion") 
+```
 
-### Subsubsection {-}
 
-\lipsum[12] 
+## Length {-}
 
-### Subsubsection {-}
+Fish lengths varied between regions, species and year (Figure \@ref(fig:length)). Sockeye were longer than average in 2018...
 
-\lipsum[14] 
+```{r length, out.width='80%', fig.cap="Kernel density distributions of juvenile salmon fork lengths for each year in the selected region. Note that these distributions contain multiple age-classes."}
 
-## Subsection {-}
 
-\lipsum[15-20] 
+ggplot(length_histo, aes(fork_length, y = factor(year))) +
+  ggridges::geom_density_ridges() +
+  xlab("Fork Length (mm)") +
+  facet_grid(species ~ region, labeller = labeller(region = spp_labels, species = spp_labels)) +
+  coord_cartesian(xlim = c(60, 180)) +
+  ylab("Year")
 
-# Acknowledgments {-}
+```
 
-So long and thanks for all the fish.
+## Parasite Loads {-}
 
-# References
+The prevalence of sea lice in 2018 was the lowest recorded in the time-series (Figure \@ref(fig:sealice))
+
+```{r sealice, out.width='80%', fig.cap= "The prevalence (+/-SE) of motile sea lice on juvenile salmon in the Discovery Islands and Johnstone Strait."}
+
+summary_sealice %>% 
+      group_by(year, region, louse_species, species) %>% 
+      summarize(mean = mean(prevalence, na.rm = TRUE),
+                sd = sd(prevalence, na.rm = TRUE),
+                se = sd(prevalence, na.rm = TRUE)/sqrt(n())) %>%
+      ungroup() %>% 
+      ggplot(aes(x = factor(year), y = mean, fill = factor(louse_species),
+                 group = factor(louse_species))) +
+      geom_bar(stat = "identity", position = position_dodge()) +
+      geom_errorbar(aes(ymin = mean - se, 
+                        ymax = mean + se), 
+                        width = 0.2,
+                        position = position_dodge(0.9)
+                        ) +
+      facet_grid(region ~ species, labeller = labeller(species = spp_labels, 
+                                                       region = spp_labels)) +
+      labs(x = "Year", y = "Prevalence") +
+      theme(legend.text = element_text(face = "italic")) +
+      scale_fill_discrete(name="Louse Species",
+                            breaks=c("motile_caligus", "motile_lep"),
+                            labels=c("C. clemensi", "L. salmonis")) +
+      theme(legend.position="bottom") +
+      geom_text(aes(label = ifelse(mean == 0, round(mean, 1), '')), hjust = -2.5)
+```
+
+
+## Sea Surface Temperature {-}
+
+Sea surface temperature was warm (Figure \@ref(fig:sst))
+
+```{r sst, out.width="80%", fig.cap="Time series of 30 m depth integrated temperature anomalies, blue areas represent temperatures that are below normal, red areas represent above normal temperatures at the selected station in 2018. Normal is the solid black line which is a loess regression based on temperatures from 2015-2018. The shaded grey area is 1 SE of the loess regression. The black dots are the daily minimum and maximum temperatures observed over the time series."}
+
+temperature_anomaly_data <- temperature_anomaly_data %>% 
+      filter(station == "QU39")
+    
+    min_max_data <- min_max_data %>% 
+      filter(station == "QU39")
+    
+    average_temps <- average_temps %>% 
+      filter(station == "QU39")
+
+ggplot(data = temperature_anomaly_data, aes(x = yday, y = mean_temp)) +
+      geom_point(aes(x = yday, y = predicted_mean_temp), size = 0.1)+
+      geom_line(aes(x = yday, y = predicted_mean_temp)) +
+      geom_ribbon(data = subset(temperature_anomaly_data, mean_temp >= predicted_mean_temp), aes(ymin = predicted_mean_temp, ymax = mean_temp), fill = 'red', size = 1)+
+      geom_ribbon(data = subset(temperature_anomaly_data, mean_temp <= predicted_mean_temp), aes(ymin = mean_temp, ymax = predicted_mean_temp), fill = 'blue', size = 1)+
+      theme_bw() +
+      geom_smooth(data = average_temps, aes(x = yday, y = mean_temp), size = 1, colour = 'black', se = T, span = .65) +
+      geom_point(data = min_max_data,
+                 aes(x = yday, y = min_temp), size = 0.5) +
+      geom_point(data = min_max_data,
+                 aes(x = yday, y = max_temp), size = 0.5) + 
+      scale_x_continuous(breaks = (c(32, 60, 91, 121, 152, 182, 213)),
+                         labels = (c("Feb", "Mar", "Apr", "May", "Jun", 
+                                     "Jul", "Aug"))) +
+      theme_bw(base_size = 17) +
+      labs(x = "Date", y = "Temperature [°C]") +
+      coord_cartesian(xlim = c(32,213)) 
+```
+
+
+# Discussion {-}
+

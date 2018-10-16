@@ -13,6 +13,8 @@ library(knitr)
 library(here)
 library(car)
 
+# This data warngling file should be the exact same for both the JSP shiny app and this manuscript
+
 survey_seines <- hakaisalmon::survey_seines %>% 
   mutate(year = year(survey_date)) %>% 
   filter(sampling_week != "July 13")
