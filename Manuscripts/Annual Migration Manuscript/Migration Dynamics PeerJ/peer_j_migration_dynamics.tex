@@ -48,46 +48,6 @@ V0P1H0}
 
 % 
 
-\usepackage{color}
-\usepackage{fancyvrb}
-\newcommand{\VerbBar}{|}
-\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
-\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
-% Add ',fontsize=\small' for more characters per line
-\usepackage{framed}
-\definecolor{shadecolor}{RGB}{248,248,248}
-\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
-\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\ImportTok}[1]{#1}
-\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
-\newcommand{\BuiltInTok}[1]{#1}
-\newcommand{\ExtensionTok}[1]{#1}
-\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
-\newcommand{\RegionMarkerTok}[1]{#1}
-\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
-\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
-\newcommand{\NormalTok}[1]{#1}
 
 \begin{abstract}
 The majority of out-migrating juvenile Fraser River salmon pass
@@ -132,43 +92,6 @@ catch in 2018, followed by chum and then sockeye.
 \maketitle
 \thispagestyle{empty}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# All data used for this analysis is from the hakaisalmon R package v0.2.0 at https://hakaiinstitute.github.io/hakaisalmon/}
-\KeywordTok{library}\NormalTok{(hakaisalmon)}
-\KeywordTok{library}\NormalTok{(tidyverse)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: package 'ggplot2' was built under R version 3.4.4
-\end{verbatim}
-
-\begin{verbatim}
-## Warning: package 'purrr' was built under R version 3.4.4
-\end{verbatim}
-
-\begin{verbatim}
-## Warning: package 'dplyr' was built under R version 3.4.4
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(lubridate)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: package 'lubridate' was built under R version 3.4.4
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(knitr)}
-\KeywordTok{library}\NormalTok{(here)}
-\end{Highlighting}
-\end{Shaded}
-
 \section*{Introduction}\label{introduction}
 \addcontentsline{toc}{section}{Introduction}
 
@@ -176,19 +99,20 @@ Pacific salmon (\emph{Oncorhynchus} spp.) traverse a number of aquatic
 landscapes during different phases of their lifecyle to reach a habitat
 which ultimately offers some reward. While undergoing these migrations,
 salmon are subjected to risks associated with each new environemnt they
-encounter. The risks and associated mortality from these migrations can
-be understood in aggregate by quantifying the productivity (recruits per
-spawner) of a certain stock. Salmon are an excellent indicator species
-beacuse they act as an integrator of terrestrial, lacustrine, fluvial,
-estuarine, nearshore marine, and high-seas conditions. A problem in any
-one of these environments will be reflected in the productivity of a
-salmon stocks. To better manage and predict the producitivty of salmon
-stocks we need estimates of mortality and an understanding of the
-factors driving mortality in each landscape that salmon traverse. The
-early marine environment is one which estimates of mortality and it's
-drivers, is lacking. Juvenile salmon are particularly vulnerable during
-the early marine phase of their life history because they are undergoing
-physiological adaptations to a saline environment.
+encounter. The risks and associated mortality from the sum of these
+migrations can be understood in aggregate by quantifying the
+productivity (recruits per spawner) of a certain stock. Salmon are an
+excellent indicator species beacuse they act as an integrator of
+terrestrial, lacustrine, fluvial, estuarine, nearshore marine, and
+high-seas conditions. A problem in any one of these environments will be
+reflected in the productivity of salmon stocks. To better manage and
+predict the producitivty of salmon stocks we need estimates of mortality
+and an understanding of the factors driving mortality in each landscape
+that salmon traverse. The early marine environment is one which
+estimates of mortality and it's drivers, is lacking. Juvenile salmon are
+particularly vulnerable during the early marine phase of their life
+history because they are undergoing physiological adaptations to a
+saline environment.
 
 The Hakai Institute Juvenile Salmon Program has been monitoring juvenile
 salmon migrations in the Discovery Islands and Johnstone Strait (Figure
@@ -199,33 +123,32 @@ impacts of climate change on food web dynamics may be amplified during
 this stressful transition period and are the primary aspects of the
 salmon migration we are monitoring and reporting on here.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{include_graphics}\NormalTok{(}\StringTok{'map.pdf'}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
 \begin{figure}
 
-\includegraphics[width=400pt]{map} \hfill{}
+\includegraphics[width=450pt]{map} \hfill{}
 
 \caption{Sampling locations in 2018}\label{fig:map}
 \end{figure}
 
-\subsection*{About PeerJ}\label{about-peerj}
-\addcontentsline{toc}{subsection}{About PeerJ}
+\section*{Methods}\label{methods}
+\addcontentsline{toc}{section}{Methods}
 
-PeerJ is an award-winning open access publisher covering the biological
-and medical sciences. PeerJ provides authors with three publication
-venues: \emph{PeerJ} and \emph{PeerJ Computer Science} (peer-reviewed
-academic journals) and \emph{PeerJ PrePrints} (a `pre-print server').
-See \url{https://peerj.com/about/publications/} for more information.
+See Hunt et al. (2018) for a detailed description of field and lab
+methods. Briefly, we collect juvenile salmon weekly from the Discovery
+Islands and Johnstone Strait during their northward migration from the
+Strait of Georgia to Queen Charlotte Strait near northern Vancouver
+Island, British Columbia. Sampling is conducted from May to July each
+year since 2015 using purse seine nets (bunt: 27 m x 9 m with 13 mm
+mesh; tow: 46 m x 9 m with 76 mm mesh). We sample in nearshore marine
+habitats with depth \textgreater{} 10 m and effectively sample sockeye
+(\emph{Oncorhynchus nerka}), pink (\emph{O. gorbuscha}), chum (\emph{O.
+keta}) and invidentally capture coho (\emph{O. kisutch}), chinook
+(\emph{O. tshawytschya}) and pacific herring (\emph{Clupea pallasii})
 
-The PeerJ model allows an author to publish articles in their
-peer-reviewed journal via the purchase of a lifetime Publication Plan.
-Prices start from just \$99 (a one-off payment) which entitles an author
-to the lifetime ability to publish 1 article per year for free.
-Publication in PeerJ PrePrints is entirely free.
+\section*{Results}\label{results}
+\addcontentsline{toc}{section}{Results}
+
+\subsection{Migration Timing}\label{migration-timing}
 
 \section*{\texorpdfstring{Some \LaTeX{}
 Examples}{Some  Examples}}\label{some-examples}
@@ -325,7 +248,7 @@ We hope you find write\LaTeX~useful for your PeerJ submission, and
 please let us know if you have any feedback. Further examples with dummy
 text are included in the following pages.
 
-\section*{Methods}\label{methods}
+\section*{Methods}\label{methods-1}
 \addcontentsline{toc}{section}{Methods}
 
 \lipsum[4] 

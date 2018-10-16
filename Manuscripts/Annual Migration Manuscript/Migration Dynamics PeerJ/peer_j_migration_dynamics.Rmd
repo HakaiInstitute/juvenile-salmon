@@ -24,7 +24,8 @@ output:
     base_format: bookdown::pdf_document2 # for using \@ref()
 ---
 
-```{r setup, include = FALSE, message = FALSE}
+```{r setup, include = FALSE, messages = FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, error = FALSE)
 # All data used for this analysis is from the hakaisalmon R package v0.2.0 at https://hakaiinstitute.github.io/hakaisalmon/
 library(hakaisalmon)
 library(tidyverse)
@@ -32,25 +33,66 @@ library(lubridate)
 library(knitr)
 library(here)
 
+survey_seines <- read_csv(here("data", "survey_seines.csv")) %>% 
+  rename("Sockeye" = "so_total", "Pink" = "pi_total", "Chum" = "cu_total") 
+summary_sealice <- read_csv(here("data", "summary_sealice.csv"))
+temperature_anomaly_data <- read_csv(here("data", "temperature_anomaly_data.csv"))
+min_max_data <- read_csv(here("data", "min_max_temps.csv"))
+average_temps <- read_csv(here("data", "average_temps.csv"))
+tidy_catch <- read_csv(here("data", "tidy_catch.csv"))
+proportion <- read_csv(here("data", "proportion.csv"))
+#Test again below here
+ctd_all <- read_csv(here("data", "ctd_all.csv"))
+predict_average_prop <- read_csv(here("data", "predict_average_prop.csv"))
+length_histo <- read_csv(here("data", "length_histo.csv"))
+peak_dates <- read_csv(here("data", "peak_dates.csv"))
 
+spp_labels <- c(CU = "Chum", PI = "Pink", SO = "Sockeye", DI = "Discovery Islands", 
+                JS = "Johnstone Strait")
 ```
 
 
 # Introduction {-}
 
-Pacific salmon (_Oncorhynchus_ spp.) traverse a number of aquatic landscapes during different phases of their lifecyle to reach a habitat which ultimately offers some reward. While undergoing these migrations, salmon are subjected to risks associated with each new environemnt they encounter. The risks and associated mortality from these migrations can be understood in aggregate by quantifying the productivity (recruits per spawner) of a certain stock. Salmon are an excellent indicator species beacuse they act as an integrator of terrestrial, lacustrine, fluvial, estuarine, nearshore marine, and high-seas conditions. A problem in any one of these environments will be reflected in the productivity of a salmon stocks. To better manage and predict the producitivty of salmon stocks we need estimates of mortality and an understanding of the factors driving mortality in each landscape that salmon traverse. The early marine environment is one which estimates of mortality and it's drivers, is lacking. Juvenile salmon are particularly vulnerable during the early marine phase of their life history because they are undergoing physiological adaptations to a saline environment. 
+Pacific salmon (_Oncorhynchus_ spp.) traverse a number of aquatic landscapes during different phases of their lifecyle to reach a habitat which ultimately offers some reward. While undergoing these migrations, salmon are subjected to risks associated with each new environemnt they encounter. The risks and associated mortality from the sum of these migrations can be understood in aggregate by quantifying the productivity (recruits per spawner) of a certain stock. Salmon are an excellent indicator species beacuse they act as an integrator of terrestrial, lacustrine, fluvial, estuarine, nearshore marine, and high-seas conditions. A problem in any one of these environments will be reflected in the productivity of salmon stocks. To better manage and predict the producitivty of salmon stocks we need estimates of mortality and an understanding of the factors driving mortality in each landscape that salmon traverse. The early marine environment is one which estimates of mortality and it's drivers, is lacking. Juvenile salmon are particularly vulnerable during the early marine phase of their life history because they are undergoing physiological adaptations to a saline environment. 
 
 The Hakai Institute Juvenile Salmon Program has been monitoring juvenile salmon migrations in the Discovery Islands and Johnstone Strait (Figure \@ref(fig:map)) 2015 in an effort to understand what factors may be influencing early marine survival of sockeye, pink, and chum (Hunt et al. 2018). The effects of pathogens, parasites, predators, and the impacts of climate change on food web dynamics may be amplified during this stressful transition period and are the primary aspects of the salmon migration we are monitoring and reporting on here.
 
-```{r map, fig.cap = "Sampling locations in 2018", fig.align='left', out.width='400pt'}
+```{r map, fig.cap = "Sampling locations in 2018", fig.align='left', out.width='450pt'}
 include_graphics('map.pdf')
 ```
 
-## About PeerJ {-}
+# Methods {-}
 
-PeerJ is an award-winning open access publisher covering the biological and medical sciences.  PeerJ provides authors with three publication venues: *PeerJ* and *PeerJ Computer Science* (peer-reviewed academic journals) and *PeerJ PrePrints* (a 'pre-print server'). See https://peerj.com/about/publications/ for more information.
+## Field methods {-}
+See Hunt et al. (2018) for a detailed description of field and lab methods. Briefly, we collect juvenile salmon weekly from the Discovery Islands and Johnstone Strait during their northward migration from the Strait of Georgia to Queen Charlotte Strait near northern Vancouver Island, British Columbia. Sampling is conducted from May to July each year since 2015 using purse seine nets (bunt: 27 m x 9 m with 13 mm mesh; tow: 46 m x 9 m with 76 mm mesh). We sample in nearshore marine habitats with depth > 10 m and effectively sample sockeye (_Oncorhynchus nerka_), pink (_O. gorbuscha_), chum (_O. keta_) and invidentally capture coho (_O. kisutch_), chinook (_O. tshawytschya_) and pacific herring (_Clupea pallasii_). All animal care was in accordance with Animal Care Guidelines using permit # ####... 
 
-The PeerJ model allows an author to publish articles in their peer-reviewed journal via the purchase of a lifetime Publication Plan. Prices start from just \$99 (a one-off payment) which entitles an author to the lifetime ability to publish 1 article per year for free. Publication in PeerJ PrePrints is entirely free.
+## Statistical methods {-}
+All metrics reported are in relation to the time series average (2015—2018). The mean for each parameter was calculated for all years combined, and the z-score was calculated for each parameter to determine the number of standard deviations away from the mean a given parameter was in each year.
+
+# Results {-}
+
+## Migration Timing
+
+Sockeye migration timing to the Discovery Islands in 2018 was: earlier than normal for sockeye, later than normal for pink, and later than normal for chum \@ref(fig:migration timing).
+
+```{r migration timing}
+
+
+```
+
+
+## Species Proportions
+
+## Length
+
+## Abundance
+
+## Parasite Loads
+
+## Sea Surface Temperature
+
+# EXAMPLE STUFF BELOW HERE
 
 # Some \LaTeX{} Examples {-}
 
@@ -62,44 +104,6 @@ Use the table and tabular commands for basic tables --- see Table \@ref(tab:widg
 
 Standard \LaTeX references will work as well (e.g. Fig. \ref{fig:view}).
 
-<!-- There are three ways to include figures: -->
-<!-- 1. The LaTeX way -->
-<!-- 
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=\linewidth]{view}
-\caption{An example image.}
-\label{fig:view}
-\end{figure} 
-
- -->
-
-<!-- 2. The RMarkdown way -->
-
-```{r view, out.width = "100%", fig.cap = "An example image.", echo = FALSE}
-knitr::include_graphics("view.pdf")
-```
-
-
-<!-- 3. The pandoc way -->
-<!-- 
-
-![An example image. Text *can* be processed with markdown.](view.pdf){#view width = 100%}
-
- -->
-
-<!-- 
-\begin{table}[ht]
-\centering
-\begin{tabular}{l|r}
-Item & Quantity \\\hline
-Widgets & 42 \\
-Gadgets & 13
-\end{tabular}
-\caption{\label{tab:widgets}An example table.}
-\end{table}
--->
 
 Item     Quantity
 ------- ---------
