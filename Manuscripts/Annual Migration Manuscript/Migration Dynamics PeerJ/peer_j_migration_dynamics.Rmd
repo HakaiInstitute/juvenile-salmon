@@ -255,7 +255,7 @@ Pink salmon dominated the catch in the Discovery Islands and Johnstone Strait in
 
 ```{r prop, out.width = '80%', fig.cap="The annual proportion of fish captured in the Discovery Islands and Johnstone Strait combined."}
     
-    ggplot(data = proportion, aes(x = year, y = proportion, fill = species)) +
+    ggplot(data = proportion, aes(x = year, y = proportion, fill = fct_reorder(species, proportion, .desc = TRUE))) +
       geom_bar(stat="identity", position = 'stack') +
       scale_fill_manual(values = pl_colours, name = "Species",
                         breaks=c("so_total","cu_total","pi_total","co_total", "he_total"),
