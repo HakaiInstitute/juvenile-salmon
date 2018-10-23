@@ -7,6 +7,7 @@ author:
     corresponding: true
     email: brett.johnson@hakai.org
   - name: Julian C.L. Gan
+  - name: Carly V. Janusson
   - name: Brian P.V. Hunt
     affiliation: 2, 3
 affiliation:
@@ -70,12 +71,17 @@ include_graphics('map.pdf')
 # Methods {-}
 
 ## Field methods {-}
-See Hunt et al. (2018) for a detailed description of field and lab methods. Briefly, we collect juvenile salmon weekly from the Discovery Islands and Johnstone Strait during their northward migration from the Strait of Georgia to Queen Charlotte Strait near northern Vancouver Island, British Columbia. Sampling is conducted from May to July each year since 2015 using purse seine nets (bunt: 27 m x 9 m with 13 mm mesh; tow: 46 m x 9 m with 76 mm mesh). We sample in nearshore marine habitats with depth > 10 m and effectively sample sockeye (_Oncorhynchus nerka_), pink (_O. gorbuscha_), chum (_O. keta_) and invidentally capture coho (_O. kisutch_), chinook (_O. tshawytschya_) and pacific herring (_Clupea pallasii_). All animal care was in accordance with Animal Care Guidelines using permit # ####... 
+
+See Hunt et al. (2018) for a detailed description of field and lab methods. Briefly, we collect juvenile salmon weekly from the Discovery Islands and Johnstone Strait during their northward migration from the Strait of Georgia to Queen Charlotte Strait near northern Vancouver Island, British Columbia. Sampling is conducted from May to July each year since 2015 using purse seine nets (bunt: 27 m x 9 m with 13 mm mesh; tow: 46 m x 9 m with 76 mm mesh). We sample in nearshore marine habitats with depth > 10 m and effectively sample sockeye (_Oncorhynchus nerka_), pink (_O. gorbuscha_), chum (_O. keta_) and invidentally capture coho (_O. kisutch_), chinook (_O. tshawytschya_) and pacific herring (_Clupea pallasii_). All animal handling and specimen collection was in accordance with UBC's Animal Animal Care Guidelines under permit A16-0101. Temperature data were collected by deploying an RBR conductivity, temperature, and depth profiler to depths > 30 m at station QU39 ( Figure \@ref(fig:map)) in the northern Strait of Georgia.
 
 ## Statistical methods {-}
-All metrics reported are in relation to the time series average (2015—2018). The mean for each parameter was calculated for all years combined, and the z-score was calculated for each parameter to determine the number of standard deviations away from the mean a given parameter was in each year.
 
-For sea-surface temperature anomalies, the average is based on 30 m depth integrated temperature from station QU39 in the northern Strait of Georgia from May and June.
+All metrics reported are in relation to the time series average (2015—2018). The mean for each parameter of interest was calculated for all years combined, and the z-score was calculated for each parameter to determine the number of standard deviations away from the mean a given parameter was in each year.
+
+$Z = {\frac{x_i - \bar X}{{S}}}$
+
+Annual migration timing for each species was measured by calculating the median date of capture in the Discovery Islands, the date at which the 50 percent of the fish passed through the region. To visualize migration timing we plotted cumulative catch abundance between May 1st and July 9th each year and fit a logistic growth line. Species proportions were calculated by dividing the total number of each species caught that season across all seines by the sum of all species caught that season. Fork length distributions were visualized by calculating density estimates from fork length data. The prevalence of sealice was calculated as the number of individuals of a host species infected with a particular parasite species divided by Number of hosts examined [@Margolis1990]. Sea surface was defined as the top 30 m of the water column. The mean temperature from which to compare any single year to was calculated from the top 30 m of the water column in May and June from all years. To visualize temperature anomalies we applied a loess regression to sea surface temperatures from all four years to develop a model that would represent the seasonal trend. 
+
 
 # Results {-}
 
@@ -184,6 +190,7 @@ heatmap <-
   guides(fill = guide_colorbar(barwidth = 15, barheight = 1))
 
 heatmap
+ggsave(here("figs/heatmap.png"))
 ```
 
 
@@ -244,6 +251,8 @@ daily_mean_cumul_abund_annual <- tidy_catch %>%
       scale_colour_manual(values = cols) +
       scale_shape_manual(values = shapes)
     cum_abund_plot
+    
+ggsave(here("figs", "migration_timing.png"))
 ```
 
 
@@ -262,6 +271,8 @@ Pink salmon dominated the catch in the Discovery Islands and Johnstone Strait in
                         labels=c("sockeye", "chum", "pink", "herring", "coho")) +
       xlab("Year") +
       ylab("Proportion") 
+
+ggsave(here("figs", "proportions.png"))
 ```
 
 
@@ -279,6 +290,7 @@ ggplot(length_histo, aes(fork_length, y = factor(year))) +
   coord_cartesian(xlim = c(60, 180)) +
   ylab("Year")
 
+ggsave(here("figs", "lengths.png"))
 ```
 
 ## Parasite Loads {-}
@@ -310,6 +322,8 @@ summary_sealice %>%
                             labels=c("C. clemensi", "L. salmonis")) +
       theme(legend.position="bottom") +
       geom_text(aes(label = ifelse(mean == 0, round(mean, 1), '')), hjust = -2.5)
+
+ggsave(here("figs", "sealice.png"))
 ```
 
 
@@ -345,6 +359,9 @@ ggplot(data = temperature_anomaly_data, aes(x = yday, y = mean_temp)) +
       theme_bw(base_size = 17) +
       labs(x = "Date", y = "Temperature [°C]") +
       coord_cartesian(xlim = c(32,213)) 
+
+ggsave(here("figs", "sst.png"))
+
 ```
 
 
