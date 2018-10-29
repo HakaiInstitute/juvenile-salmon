@@ -19,7 +19,7 @@ abstract: >
   The majority of out-migrating juvenile Fraser River salmon pass northwest through the Strait of Georgia, the Discovery Islands, and Johnstone Strait. The Discovery Islands to Johnstone Strait leg of the migration is a region of poor survival for juvenile salmon relative to the Strait of Georgia. The Hakai Institute Juvenile Salmon Program has been monitoring key components of this migration since 2015 to better understand drivers of early marine survival. Here we present key aspects of the 2018 migration in comparison to averages from the 2015—2018 study period, which we use to define 'normal'. In 2018 sockeye, pink, and chum all migrated earlier than normal. The median capture date was May 23rd for sockeye, five days earlier than normal, and June 12 for pink and chum which is five days earlier for pink and three days earlier than normal for chum. Sea lice prevalence was lower than normal for sockeye, pink, and chum. Notably there were no _Lepeoptheirus salmonis_ sea lice observed in Johnstone Strait in 2018. Sockeye were longer than normal in 2018 whereas pink and chum were smaller than normal. Sea surface temperature in May and June was the warmest on record in the study period (2015—2018). Pink salmon dominated the catch in 2018, followed by chum and then sockeye. 
 header-includes: >
   \usepackage{lipsum}
-bibliography: sample.bib
+bibliography: references.bib
 output: 
   rticles::peerj_article:
     base_format: bookdown::pdf_document2 # for using \@ref()
@@ -65,7 +65,7 @@ Pacific salmon (_Oncorhynchus_ spp.) traverse a number of aquatic landscapes dur
 The Hakai Institute Juvenile Salmon Program has been monitoring juvenile salmon migrations in the Discovery Islands and Johnstone Strait (Figure \@ref(fig:map)) 2015 in an effort to understand what factors may be influencing early marine survival of sockeye, pink, and chum (Hunt et al. 2018). The effects of pathogens, parasites, predators, and the impacts of climate change on food web dynamics may be amplified during this stressful transition period and are the primary aspects of the salmon migration we are monitoring and reporting on here.
 
 ```{r map, fig.cap = "Sampling locations in 2018", fig.align='left', out.width='80%'}
-include_graphics('map.pdf')
+include_graphics('map.png')
 ```
 
 # Methods {-}
@@ -177,7 +177,7 @@ cols <- c("#4575b4",
           "#d73027")
 ```
 
-```{r heatmap, fig.cap="This heatmap indicates the number of standard deviations (Z-score) from the time series average (2015-2018) for key migration parameters. Blue colour indicates less than average, white indicates average, red indicates greater than average, and grey indicates insufficient data. Mean sea-surface temperature is 30 m depth integrated temperature from station QU39 in the Northern Strait of Georgia from May and June. Peak migration date is based on the median date of fish capture in the Discovery Islands. Parasite load is the average prevalence of all sea lice species in their motile life stage for both the Discovery Islands and Johnstone Strait regions combined.", out.width= '80%'}
+```{r heatmap, fig.cap="This heatmap indicates the number of standard deviations (Z-score) from the time series average (2015-2018) for key migration parameters. Blue colour indicates less than average, white indicates average, red indicates greater than average. Peak migration date is based on the median date of sockeye capture in the Discovery Islands.  Mean sea-surface temperature is 30 m depth integrated temperature from station QU39 in the Northern Strait of Georgia from May and June. Parasite load is the average prevalence of all sea lice species in their motile life stage for both the Discovery Islands and Johnstone Strait regions combined.", out.width= '80%'}
 
 
 
@@ -187,9 +187,11 @@ heatmap <-
   xlab("Year") +
   scale_fill_gradientn(colours = cols) +
   theme(legend.position = "bottom") +
-  guides(fill = guide_colorbar(barwidth = 15, barheight = 1))
-
+  guides(fill = guide_colorbar(barwidth = 15, barheight = 1)) +
+  scale_y_discrete(limits=c("Sea-surface Temp", 
+                            "Parasite Loads", "Length", "Peak Migration Date"))
 heatmap
+
 ggsave(here("figs/heatmap.png"))
 ```
 
