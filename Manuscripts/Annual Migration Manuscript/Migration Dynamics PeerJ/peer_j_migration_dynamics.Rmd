@@ -16,7 +16,7 @@ affiliation:
   - code: 2
     address: UBC EOS, IOF
 abstract: >
-  The majority of out-migrating juvenile Fraser River salmon pass northwest through the Strait of Georgia, the Discovery Islands, and Johnstone Strait. The Discovery Islands to Johnstone Strait leg of the migration is a region of poor survival for juvenile salmon relative to the Strait of Georgia. The Hakai Institute Juvenile Salmon Program has been monitoring key components of this migration since 2015 to better understand drivers of early marine survival. Here we present key aspects of the 2018 migration in comparison to averages from the 2015—2018 study period, which we use to define 'normal'. In 2018 sockeye, pink, and chum all migrated earlier than normal. The median capture date was May 23rd for sockeye, five days earlier than normal, and June 12 for pink and chum which is five days earlier for pink and three days earlier than normal for chum. Sea lice prevalence was lower than normal for sockeye, pink, and chum. Notably there were no _Lepeoptheirus salmonis_ sea lice observed in Johnstone Strait in 2018. Sockeye were longer than normal in 2018 whereas pink and chum were smaller than normal. Sea surface temperature in May and June was the warmest on record in the study period (2015—2018). Pink salmon dominated the catch in 2018, followed by chum and then sockeye. 
+  The majority of out-migrating juvenile Fraser River salmon (_Oncorhynchus_ spp.) pass northwest through the Strait of Georgia, the Discovery Islands, and Johnstone Strait. The Discovery Islands to Johnstone Strait leg of the migration is a region of poor survival for juvenile salmon relative to the Strait of Georgia. The Hakai Institute Juvenile Salmon Program has been monitoring key components of this migration since 2015 to better understand drivers of early marine survival. Here we present key aspects of the 2018 migration in comparison to averages from the 2015--2018 study period, which we use to define 'normal'. In 2018 sockeye (_Oncorhynchus nerka_), pink (_O. gorbuscha_), and chum (_O. keta_) all migrated earlier than normal. The median capture date was May 23rd for sockeye, five days earlier than normal; and June 12 for pink and chum, which is five days earlier for pink and three days earlier than normal for chum. Sea lice prevalence was lower than normal for sockeye, pink, and chum. Notably, there were no _Lepeophtheirus salmonis_ sea lice observed in Johnstone Strait in 2018. Sockeye were longer than normal in 2018 whereas pink and chum were smaller than normal. Sea surface temperatures in May and June were the warmest on record in the study period (2015--2018). Pink salmon dominated the catch in 2018, followed by chum, and then sockeye.
 header-includes: >
   \usepackage{lipsum}
 bibliography: references.bib
@@ -60,9 +60,9 @@ pl_colours <- c("pi_total" = "pink", "so_total" = "#00BFC4", "cu_total" = "#7CAE
 
 # Introduction {-}
 
-Pacific salmon (_Oncorhynchus_ spp.) traverse a number of aquatic landscapes during different phases of their lifecyle to reach a habitat which ultimately offers some reward. While undergoing these migrations, salmon are subjected to risks associated with each new environemnt they encounter. The risks and associated mortality from the sum of these migrations can be understood in aggregate by quantifying the productivity (recruits per spawner) of a certain stock. Salmon are an excellent indicator species beacuse they act as an integrator of terrestrial, lacustrine, fluvial, estuarine, nearshore marine, and high-seas conditions. A problem in any one of these environments will be reflected in the productivity of salmon stocks. To better manage and predict the producitivty of salmon stocks we need estimates of mortality and an understanding of the factors driving mortality in each landscape that salmon traverse. The early marine environment is one which estimates of mortality and it's drivers, is lacking. Juvenile salmon are particularly vulnerable during the early marine phase of their life history because they are undergoing physiological adaptations to a saline environment. 
+Pacific salmon (_Oncorhynchus_ spp.) traverse a number of aquatic landscapes during different phases of their lifecycle to reach a habitat, which ultimately offers some reward. During their migrations, salmon are subjected to risks associated with each new environment they encounter. The risks and associated mortality from the sum of these migrations can be understood in aggregate by quantifying the productivity (recruits per spawner) of a certain stock. Salmon are an excellent indicator species because they integrate terrestrial, lacustrine, fluvial, estuarine, nearshore marine, and high-seas conditions; a problem in any one of these environments will be reflected in the productivity of salmon stocks. To better manage and predict the productivity of salmon stocks we need estimates of mortality and an understanding of the factors driving mortality in each landscape that salmon traverse. One such area in which we lack understanding is the early marine environment. Juvenile salmon are particularly vulnerable during the early marine phase of their life history because they are undergoing physiological adaptations to a saline environment. 
 
-The Hakai Institute Juvenile Salmon Program has been monitoring juvenile salmon migrations in the Discovery Islands and Johnstone Strait (Figure \@ref(fig:map)) 2015 in an effort to understand what factors may be influencing early marine survival of sockeye, pink, and chum (Hunt et al. 2018). The effects of pathogens, parasites, predators, and the impacts of climate change on food web dynamics may be amplified during this stressful transition period and are the primary aspects of the salmon migration we are monitoring and reporting on here.
+The Hakai Institute Juvenile Salmon Program has been monitoring juvenile salmon migrations in the Discovery Islands and Johnstone Strait (Figure \@ref(fig:map)) since 2015 in an effort to understand what factors may be influencing early marine survival of sockeye, pink, and chum (Hunt et al. 2018). The effects of pathogens, parasites, predators, and the impacts of climate change on food web dynamics may be amplified during this stressful transition period. Factors on which we are currently monitoring and reporting include migration dynamics, growth, parasites and pathogens, and the ocean's physical condition.
 
 ```{r map, fig.cap = "Sampling locations in 2018", fig.align='left', out.width='80%'}
 include_graphics('map.png')
@@ -72,11 +72,11 @@ include_graphics('map.png')
 
 ## Field methods {-}
 
-See Hunt et al. (2018) for a detailed description of field and lab methods. Briefly, we collect juvenile salmon weekly from the Discovery Islands and Johnstone Strait during their northward migration from the Strait of Georgia to Queen Charlotte Strait near northern Vancouver Island, British Columbia. Sampling is conducted from May to July each year since 2015 using purse seine nets (bunt: 27 m x 9 m with 13 mm mesh; tow: 46 m x 9 m with 76 mm mesh). We sample in nearshore marine habitats with depth > 10 m and effectively sample sockeye (_Oncorhynchus nerka_), pink (_O. gorbuscha_), chum (_O. keta_) and invidentally capture coho (_O. kisutch_), chinook (_O. tshawytschya_) and pacific herring (_Clupea pallasii_). All animal handling and specimen collection was in accordance with UBC's Animal Animal Care Guidelines under permit A16-0101. Temperature data were collected by deploying an RBR conductivity, temperature, and depth profiler to depths > 30 m at station QU39 ( Figure \@ref(fig:map)) in the northern Strait of Georgia.
+See Hunt et al. (2018) for a detailed description of field and lab methods. Briefly, we collect juvenile salmon weekly from the Discovery Islands and Johnstone Strait during their northward migration from the Strait of Georgia to Queen Charlotte Strait near northern Vancouver Island, British Columbia. Sampling is conducted from May to July each year since 2015 using purse seine nets (bunt: 27 m x 9 m with 13 mm mesh; tow: 46 m x 9 m with 76 mm mesh). We sample in nearshore marine habitats with depth > 10 m and effectively sample sockeye (_Oncorhynchus nerka_), pink (_O. gorbuscha_), chum (_O. keta_) and incidentally capture coho (_O. kisutch_), chinook (_O. tshawytschya_) and Pacific herring (_Clupea pallasii_). All animal care was in accordance with Animal Care Guidelines under permit A16-0101. Temperature data were collected by deploying an RBR conductivity, temperature, and depth profiler to depths > 30 m at station QU39 ( Figure \@ref(fig:map)) in the northern Strait of Georgia.
 
 ## Statistical methods {-}
 
-All metrics reported are in relation to the time series average (2015—2018). The mean for each parameter of interest was calculated for all years combined, and the z-score was calculated for each parameter to determine the number of standard deviations away from the mean a given parameter was in each year.
+All metrics reported are in relation to the time series average (2015-2018). The mean for each parameter of interest was calculated for all years combined, and the z-score was calculated for each parameter to determine the number of standard deviations away from the mean a given parameter was in each year.
 
 $Z = {\frac{x_i - \bar X}{{S}}}$
 
@@ -85,7 +85,9 @@ Annual migration timing for each species was measured by calculating the median 
 
 # Results {-}
 
-The sea-surface temperature in May and June was higher than normal, and sockeye peak migration date in the Discovery Islands was earlier than normal in 2018. Parasite loads were less than normal, and lengths were longer than normal (Figure \@ref(fig:heatmap)).
+The heatmap below summarizes the amount of variation each parameter exhibits over the past four years by visualizing the number of standard deviations from the time-series average (Z-score) (Figure \@ref(fig:heatmap)). Peak migration date, parasite loads, and fork lengths were all calculated for sockeye. 
+
+Sea-surface temperatures in May and June at QU39 were warmer than normal, or 1.33 standard deviations greater than the time series mean. The peak migration date in the Discovery Islands occurred earlier than average in 2018 (-0.71 SD). Across the Discovery Islands and Johnstone Strait, parasite loads were lower than average (-0.98 SD), and fork lengths were longer than average (0.62 SD).
 
 
 ```{r heatmap setup, include = FALSE}
@@ -198,7 +200,7 @@ ggsave(here("figs/heatmap.png"))
 
 ## Migration Timing {-}
 
-Sockeye migration timing to the Discovery Islands in 2018 was: earlier than normal for sockeye (Figure \@ref(fig:mt)), later than normal for pink, and later than normal for chum.
+The bulk of the sockeye migration in the Discovery Islands occurred earlier in 2018 when compared to the time-series's four-year average (Figure \@ref(fig:mt)). The median date of capture for 2018 sockeye was May 22nd, whereas the time series average was May 27th. Conversely, the 2018 sockeye migration occurred later than normal in Johnstone Strait, where the median date of capture was May 30th. 
 
 ```{r mt setup, include = FALSE}
 
@@ -236,9 +238,25 @@ daily_mean_cumul_abund_annual <- tidy_catch %>%
     
     cols <- c("2015-2018" = "#F8766D", "2018" = "#00BFC4", "2017" = "#00BFC4", "2016" = "#00BFC4", "2015" = "#00BFC4")
     shapes <- c("2015-2018" = "triangle", "2018" = "circle", "2017" = "circle", "2016" = "circle", "2015" = "circle")
+    
+    
+# Calculate IQR for sockeye, pink, and chum
+iqr_dates <- tidy_catch[rep(row.names(tidy_catch), tidy_catch$n), 1:9] %>%
+  filter(species %in% c("so_total", "pi_total", "cu_total"),
+         region == "DI") %>%
+  mutate(yday = yday(survey_date)) %>%
+  group_by(year, region, species) %>%
+  summarise(`25%`=quantile(yday, probs=0.25),
+            `50%`=quantile(yday, probs=0.5),
+            `75%`=quantile(yday, probs=0.75),
+            n=n()) %>%
+  mutate(species = replace(species, species == "so_total", "Sockeye")) %>%
+  mutate(species = replace(species, species == "pi_total", "Pink")) %>%
+  mutate(species = replace(species, species == "cu_total", "Chum"))
+
 ```
 
-```{r mt, fig.cap="Cumulative catch of the selected juvenile salmon migrating through the Discovery Islands compared to the average for 2015—2018. Migration curves were predicted by fitting a logistic growth equation to the cumulative percent the selected fish caught. The points (circles) for the year being compared to the time-series is the cumulative catch percent", out.width='80%'}
+```{r mt, fig.cap="Cumulative catch of juvenile sockeye salmon migrating through the Discovery Islands compared to the average for 2015--2018. Migration curves were predicted by fitting a logistic growth equation to the cumulative percent the selected fish caught. The points (circles) for the year being compared to the time-series is the cumulative catch percent", out.width='80%'}
     cum_abund_plot <- ggplot()+
       labs(x = 'Date', y = 'Percent')+
       #geom_point(data = predict_average_prop, aes(x = x, y = y, shape = year, colour = year), size = 2) +
@@ -262,7 +280,7 @@ ggsave(here("figs", "migration_timing.png"))
 
 ## Species Proportions {-}
 
-Pink salmon dominated the catch in the Discovery Islands and Johnstone Strait in 2018 (Figure \@ref(fig:prop)).
+Pink salmon dominated the catch in the Discovery Islands and Johnstone Strait in 2018, which is the first time observed in the time-series (Figure \@ref(fig:prop)).
 
 ```{r prop, out.width = '80%', fig.cap="The annual proportion of fish captured in the Discovery Islands and Johnstone Strait combined."}
     
@@ -297,7 +315,7 @@ ggsave(here("figs", "lengths.png"))
 
 ## Parasite Loads {-}
 
-The prevalence of sea lice in 2018 was the lowest recorded in the time-series (Figure \@ref(fig:sealice))
+The prevalence of motile (pre-adult and adult life stage) sea lice in 2018 was the lowest recorded in the time-series (Figure \@ref(fig:sealice)). Notably, no _Lepeophtheirus salmonis_ were detected on sockeye in Johnstone Strait, despite being present in the Discovery Islands. Pink salmon appeared to have higher counts of _Caligus clemensi_ in 2018 compared to chum and sockeye.
 
 ```{r sealice, out.width='80%', fig.cap= "The prevalence (+/-SE) of motile sea lice on juvenile salmon in the Discovery Islands and Johnstone Strait."}
 
@@ -333,7 +351,7 @@ ggsave(here("figs", "sealice.png"))
 
 Sea surface temperature was warm (Figure \@ref(fig:sst))
 
-```{r sst, out.width="80%", fig.cap="Time series of 30 m depth integrated temperature anomalies, blue areas represent temperatures that are below normal, red areas represent above normal temperatures at the selected station in 2018. Normal is the solid black line which is a loess regression based on temperatures from 2015-2018. The shaded grey area is 1 SE of the loess regression. The black dots are the daily minimum and maximum temperatures observed over the time series."}
+```{r sst, out.width="80%", fig.cap="Time series of 30 m depth integrated temperature anomalies observed at Hakai Oceanographic Monitoring station QU39. Blue areas represent temperatures that are below normal, red areas represent above normal temperatures at the selected station in 2018. Normal is the solid black line which is a loess regression based on temperatures from 2015-2018. The shaded grey area is 1 SE of the loess regression. The black dots are the daily minimum and maximum temperatures observed over the time series."}
 
 temperature_anomaly_data <- temperature_anomaly_data %>% 
       filter(station == "QU39")
