@@ -19,6 +19,7 @@ abstract: >
   The majority of out-migrating juvenile Fraser River salmon (_Oncorhynchus_ spp.) pass northwest through the Strait of Georgia, the Discovery Islands, and Johnstone Strait. The Discovery Islands to Johnstone Strait leg of the migration is a region of poor survival for juvenile salmon relative to the Strait of Georgia. The Hakai Institute Juvenile Salmon Program has been monitoring key components of this migration since 2015 to better understand drivers of early marine survival. Here we present key aspects of the 2018 migration in comparison to averages from the 2015--2018 study period, which we use to define 'normal'. In 2018 sockeye (_Oncorhynchus nerka_), pink (_O. gorbuscha_), and chum (_O. keta_) all migrated earlier than normal. The median capture date was May 23rd for sockeye, five days earlier than normal; and June 12 for pink and chum, which is five days earlier for pink and three days earlier than normal for chum. Sea lice prevalence was lower than normal for sockeye, pink, and chum. Notably, there were no _Lepeophtheirus salmonis_ sea lice observed in Johnstone Strait in 2018. Sockeye were longer than normal in 2018 whereas pink and chum were smaller than normal. Sea surface temperatures in May and June were the warmest on record in the study period (2015--2018). Pink salmon dominated the catch in 2018, followed by chum, and then sockeye.
 header-includes: >
   \usepackage{lipsum}
+  \usepackage{multirow}
 bibliography: references.bib
 output: 
   rticles::peerj_article:
@@ -200,7 +201,7 @@ ggsave(here("figs/heatmap.png"))
 
 ## Migration Timing {-}
 
-The bulk of the sockeye migration in the Discovery Islands occurred earlier in 2018 when compared to the time-series's four-year average (Figure \@ref(fig:mt)). The median date of capture for 2018 sockeye was May 22nd, whereas the time series average was May 27th. Conversely, the 2018 sockeye migration occurred later than normal in Johnstone Strait, where the median date of capture was May 30th. 
+The bulk of the sockeye migration in the Discovery Islands occurred earlier in 2018 when compared to the time-series's four-year average (Figure \@ref(fig:mt)). The median date of capture for 2018 sockeye was May 22nd, whereas the time series average was May 27th. Conversely, the 2018 sockeye migration occurred later than normal in Johnstone Strait, where the median date of capture was May 30th. See Table \@ref(tab:widgets) for the interqurtile range of migration timing for sockeye, pink, and chum in 2018, contrasted to the time series averages.
 
 ```{r mt setup, include = FALSE}
 
@@ -275,8 +276,24 @@ iqr_dates <- tidy_catch[rep(row.names(tidy_catch), tidy_catch$n), 1:9] %>%
 ggsave(here("figs", "migration_timing.png"))
 ```
 
-
-
+\begin{table}[ht]
+\centering
+\begin{tabular}{l|l|c|c|c}
+\multicolumn{5}{c}{\textbf{Discovery Islands}} \\
+\hline
+\textbf{Species} & \textbf{Year} & \textbf{25\%} & \textbf{50\%} & \textbf{75\%} \\
+\hline
+\multirow{2}{*}{Sockeye} & TSA & May 25 & May 27 & June 03 \\
+& 2018 & May 22 & May 22 & June 03 \\
+\hline
+\multirow{2}{*}{Pink} & TSA & June 04 & June 12 & June 15 \\
+& 2018 & June 06 & June 11 & June 17 \\
+\hline
+\multirow{2}{*}{Chum} & TSA & June 05 & June 14 & June 21 \\
+& 2018 & June 06 & June 11 & June 19 \\
+\end{tabular}
+\caption{\label{tab:widgets}Interquartile range for the cumulative catch of sockeye, pink, and chum salmon in the Discovery Islands in 2018, compared to the Time-Series Average (2015--2018). Odd years were excluded from the TSA calculation for pink salmon due being the "off" years in the outmigration cycle.}
+\end{table}
 
 ## Species Proportions {-}
 
