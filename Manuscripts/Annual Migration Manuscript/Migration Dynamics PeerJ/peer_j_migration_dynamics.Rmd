@@ -301,9 +301,11 @@ iqr_JS_tsa <- iqr_dates_JS %>%
 ggsave(here("figs", "migration_timing.png"))
 ```
 
+
+<!-- Create tables of the interquartile range for DI & JS -->
 \begin{table}[ht]
 \centering
-\begin{tabular}{l|l|c|c|c}
+\begin{tabular}{l|l||c|c|c}
 \multicolumn{5}{c}{\textbf{Discovery Islands}} \\
 \hline
 \textbf{Species} & \textbf{Year} & \textbf{25\%} & \textbf{50\%} & \textbf{75\%} \\
@@ -322,7 +324,7 @@ ggsave(here("figs", "migration_timing.png"))
 
 \begin{table}[ht]
 \centering
-\begin{tabular}{l|l|c|c|c}
+\begin{tabular}{l|l||c|c|c}
 \multicolumn{5}{c}{\textbf{Johnstone Strait}} \\
 \hline
 \textbf{Species} & \textbf{Year} & \textbf{25\%} & \textbf{50\%} & \textbf{75\%} \\
@@ -341,7 +343,7 @@ ggsave(here("figs", "migration_timing.png"))
 
 ## Species Proportions {-}
 
-Pink salmon dominated the catch in the Discovery Islands and Johnstone Strait in 2018, which is the first time observed in the time-series (Figure \@ref(fig:prop)).
+Pink salmon dominated the catch in the Discovery Islands and Johnstone Strait in 2018, which is the first time observed in the time-series (Figure \@ref(fig:prop)). This may be due to post-smolts being from the dominant odd-year pink returning broodlines [@Krkosek2011; @Beacham2012; @Irvine2014] coupled with Fraser River sockeye from the weak 2016 brood year, which was lowest recorded return in 100 years [@McKinnell2012; @Grant2017; @PacificSalmonCommission2017].
 
 ```{r prop, out.width = '80%', fig.cap="The annual proportion of fish captured in the Discovery Islands and Johnstone Strait combined."}
     
