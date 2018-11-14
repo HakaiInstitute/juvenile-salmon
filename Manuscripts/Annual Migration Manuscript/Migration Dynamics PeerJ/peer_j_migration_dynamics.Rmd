@@ -61,7 +61,7 @@ pl_colours <- c("pi_total" = "pink", "so_total" = "#00BFC4", "cu_total" = "#7CAE
 
 # Introduction {-}
 
-Pacific salmon (_Oncorhynchus_ spp.) traverse a number of aquatic landscapes during different phases of their lifecycle to reach a habitat, which ultimately offers some reward. During their migrations, salmon are subjected to risks associated with each new environment they encounter. The risks and associated mortality from the sum of these migrations can be understood in aggregate by quantifying the productivity (recruits per spawner) of a certain stock. Salmon are an excellent indicator species because they integrate terrestrial, lacustrine, fluvial, estuarine, nearshore marine, and high-seas conditions; a problem in any one of these environments will be reflected in the productivity of salmon stocks. To better manage and predict the productivity of salmon stocks we need estimates of mortality and an understanding of the factors driving mortality in each landscape that salmon traverse. One such area in which we lack understanding is the early marine environment. Juvenile salmon are particularly vulnerable during the early marine phase of their life history because they are undergoing physiological adaptations to a saline environment. 
+Pacific salmon (_Oncorhynchus_ spp.) traverse a number of aquatic landscapes during different phases of their lifecycle. During their migrations, salmon are subjected to risks associated with each new environment they encounter. The risks and associated mortality from the sum of these migrations can be understood in aggregate by quantifying the productivity (recruits per spawner) of a certain stock. Salmon are an excellent indicator species because they integrate terrestrial, lacustrine, fluvial, estuarine, nearshore marine, and high-seas conditions; a problem in any one of these environments will be reflected in the productivity of salmon stocks. To better manage and predict the productivity of salmon stocks we need estimates of mortality and an understanding of the factors driving mortality in each landscape that salmon traverse. One such area in which we lack understanding is the early marine environment. Juvenile salmon are particularly vulnerable during the early marine phase of their life history because they are undergoing physiological adaptations to a saline environment. 
 
 The Hakai Institute Juvenile Salmon Program has been monitoring juvenile salmon migrations in the Discovery Islands and Johnstone Strait (Figure \@ref(fig:map)) since 2015 in an effort to understand what factors may be influencing early marine survival of sockeye, pink, and chum (Hunt et al. 2018). The effects of pathogens, parasites, predators, and the impacts of climate change on food web dynamics may be amplified during this stressful transition period. Factors on which we are currently monitoring and reporting include migration dynamics, growth, parasites and pathogens, and the ocean's physical condition.
 
@@ -201,7 +201,9 @@ ggsave(here("figs/heatmap.png"))
 
 ## Migration Timing {-}
 
-The bulk of the sockeye migration in the Discovery Islands occurred earlier in 2018 when compared to the time-series's four-year average (Figure \@ref(fig:mt)). The median date of capture for 2018 sockeye was May 22nd, whereas the time series average was May 27th. Conversely, the 2018 sockeye migration occurred later than normal in Johnstone Strait, where the median date of capture was June 6th, which is two days later than the time-series average. See Table \@ref(tab:mt_di) and Table \@ref(tab:mt_js) for the interqurtile range of migration timing for sockeye, pink, and chum in 2018, contrasted to the time series averages for the Discovery Islands and Johnstone Strait, respectively.
+The bulk of the sockeye migration in the Discovery Islands occurred earlier in 2018 when compared to the time-series's four-year average (Figure \@ref(fig:mt)). The median date of capture for 2018 sockeye was May 22nd, whereas the time series average was May 27th. Conversely, the 2018 sockeye migration occurred later than normal in Johnstone Strait, where the median date of capture was June 6th, which is two days later than the time-series average. See Table \@ref(tab:mt_di) and Table \@ref(tab:mt_js) for the interqurtile range of migration timing for sockeye, pink, and chum in 2018, contrasted to the time series averages for the Discovery Islands and Johnstone Strait, respectively. Based on the comparison of peak migration dates between the two zones, we estimate that the average residence time of juvenile salmon in the Discovery Islands for 2018 was approximately two weeks. 
+
+
 
 ```{r mt setup, include = FALSE}
 
@@ -374,6 +376,59 @@ ggplot(length_histo, aes(fork_length, y = factor(year))) +
   ylab("Year")
 
 ggsave(here("figs", "lengths.png"))
+```
+
+```{r length stats, include = FALSE}
+so_di_lengths <- length_histo %>% 
+  filter(species == "SO" & region == "DI") %>% 
+  mutate(year = as.factor(year))
+
+pi_di_lengths <- length_histo %>% 
+  filter(species == "PI" & region == "DI") %>% 
+  mutate(year = as.factor(year))
+
+cu_di_lengths <- length_histo %>% 
+  filter(species == "CU" & region == "DI") %>% 
+  mutate(year = as.factor(year))
+
+so_js_lengths <- length_histo %>% 
+  filter(species == "SO" & region == "JS") %>% 
+  mutate(year = as.factor(year))
+
+pi_js_lengths <- length_histo %>% 
+  filter(species == "PI" & region == "JS") %>% 
+  mutate(year = as.factor(year))
+
+cu_js_lengths <- length_histo %>% 
+  filter(species == "CU" & region == "JS") %>% 
+  mutate(year = as.factor(year))
+
+# DI SO summary stats
+group_by(so_di_lengths, year) %>%
+  summarise(count = n(),
+            mean = mean(fork_length, na.rm = TRUE),
+            se = sd(fork_length, na.rm = TRUE)/sqrt(length(fork_length)))
+
+so_di_lengths_p <- ggplot(data=so_di_lengths, mapping=aes(x = year, y = fork_length))+
+  geom_boxplot()
+plot(so_di_lengths_p)
+
+# One-Way ANOVA on DI SO
+so_di_aov <- aov(fork_length ~ year, data=so_di_lengths)
+summary(so_di_aov)
+
+# Test for homogeneity of variance
+plot(so_di_aov, 1)
+leveneTest(fork_length ~ year, data=so_di_lengths)
+
+# Test for normality of residuals
+plot(so_di_aov, 2)
+so_di_aov_residuals <- residuals(object = so_di_aov)
+shapiro.test(x = so_di_aov_residuals)
+
+# Non-parametric ANOVA
+kruskal.test(fork_length ~ year, data = so_di_lengths)
+
 ```
 
 ## Parasite Loads {-}
