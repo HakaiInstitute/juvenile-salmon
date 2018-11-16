@@ -85,11 +85,6 @@ $Z = {\frac{x_i - \bar X}{{S}}}$
 
 Annual migration timing for each species was measured by calculating the median date of capture in the Discovery Islands, the date at which the 50 percent of the fish passed through the region. To visualize migration timing we plotted cumulative catch abundance between May 1st and July 9th each year and fit a logistic growth line. Species proportions were calculated by dividing the total number of each species caught that season across all seines by the sum of all species caught that season. Fork length distributions were visualized by calculating density estimates from fork length data. The prevalence of sealice was calculated as the number of individuals of a host species infected with a particular parasite species divided by Number of hosts examined [@Margolis1990]. Sea surface was defined as the top 30 m of the water column. The mean temperature from which to compare any single year to was calculated from the top 30 m of the water column in May and June from all years. To visualize temperature anomalies we applied a loess regression to sea surface temperatures from all four years to develop a model that would represent the seasonal trend. 
 
-Item     Quantity
-------- ---------
-Widgets        42
-Gadgets        13
-
 # Results {-}
 
 The heatmap below summarizes the amount of variation each parameter exhibits over the past four years by visualizing the number of standard deviations from the time-series average (Z-score) (Figure \@ref(fig:heatmap)). Peak migration date, parasite loads, and fork lengths were all calculated for sockeye. 
