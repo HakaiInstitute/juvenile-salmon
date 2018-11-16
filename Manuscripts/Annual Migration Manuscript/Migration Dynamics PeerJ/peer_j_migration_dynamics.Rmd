@@ -486,10 +486,9 @@ ggsave(here("figs", "proportions.png"))
 
 ## Length {-}
 
-Fish lengths varied between regions, species and year (Figure \@ref(fig:length)). Sockeye were longer than average in 2018...
+Fish lengths varied between regions, species and year (Figure \@ref(fig:length)). Sockeye in 2018 were longer than the time-series average (Discovery Islands M = 116, 95% CI = 113, 120; Johnstone Strait M = 117, CI = 113, 122). However, pink were shorter than average in both regions (8.3 % in the Discovery Islands and 4.4 % Johnstone Strait), as well as chum (8.1 % in the Discovery Islands and 3.6 % Johnstone Strait).
 
 ```{r length, out.width='80%', fig.cap="Kernel density distributions of juvenile salmon fork lengths for each year in the selected region. Note that these distributions contain multiple age-classes."}
-
 
 ggplot(length_histo, aes(fork_length, y = factor(year))) +
   ggridges::geom_density_ridges() +
@@ -502,55 +501,48 @@ ggsave(here("figs", "lengths.png"))
 ```
 
 ```{r length stats, include = FALSE}
-so_di_lengths <- length_histo %>% 
-  filter(species == "SO" & region == "DI") %>% 
-  mutate(year = as.factor(year))
+length_histo_tsa <- length_histo %>% 
+  mutate(TSA = "TSA") %>% 
+  select(region, species, fork_length, year = TSA)
 
-pi_di_lengths <- length_histo %>% 
-  filter(species == "PI" & region == "DI") %>% 
-  mutate(year = as.factor(year))
+lengths_2018 <- length_histo %>% 
+  filter(year == "2018") %>% 
+  select(region, species, fork_length, year)
 
-cu_di_lengths <- length_histo %>% 
-  filter(species == "CU" & region == "DI") %>% 
-  mutate(year = as.factor(year))
+all_lengths_vs_tsa <- rbind(length_histo_tsa, lengths_2018)
 
-so_js_lengths <- length_histo %>% 
-  filter(species == "SO" & region == "JS") %>% 
-  mutate(year = as.factor(year))
-
-pi_js_lengths <- length_histo %>% 
-  filter(species == "PI" & region == "JS") %>% 
-  mutate(year = as.factor(year))
-
-cu_js_lengths <- length_histo %>% 
-  filter(species == "CU" & region == "JS") %>% 
-  mutate(year = as.factor(year))
+summary_lengths <- all_lengths_vs_tsa %>% 
+  mutate(year = as.factor(year)) %>% 
+  group_by(species, region, year) %>% 
+  summarise (mean = mean(fork_length, na.rm = TRUE),
+             sd = sd(fork_length, na.rm = TRUE),
+             n = n()) %>% 
+  mutate(se = sd/sqrt(n),
+         lower_ci = mean - qt(1 - (0.05/2), n - 1) * se,
+         upper_ci = mean + qt(1 - (0.05/2), n - 1) * se,
+         diff = (mean - lag(mean))/lag(mean)*100)
 
 # DI SO summary stats
-group_by(so_di_lengths, year) %>%
-  summarise(count = n(),
-            mean = mean(fork_length, na.rm = TRUE),
-            se = sd(fork_length, na.rm = TRUE)/sqrt(length(fork_length)))
 
-so_di_lengths_p <- ggplot(data=so_di_lengths, mapping=aes(x = year, y = fork_length))+
-  geom_boxplot()
-plot(so_di_lengths_p)
-
-# One-Way ANOVA on DI SO
-so_di_aov <- aov(fork_length ~ year, data=so_di_lengths)
-summary(so_di_aov)
-
-# Test for homogeneity of variance
-plot(so_di_aov, 1)
-leveneTest(fork_length ~ year, data=so_di_lengths)
-
-# Test for normality of residuals
-plot(so_di_aov, 2)
-so_di_aov_residuals <- residuals(object = so_di_aov)
-shapiro.test(x = so_di_aov_residuals)
-
-# Non-parametric ANOVA
-kruskal.test(fork_length ~ year, data = so_di_lengths)
+# so_di_lengths_p <- ggplot(data=so_di_lengths, mapping=aes(x = year, y = fork_length))+
+#   geom_boxplot()
+# plot(so_di_lengths_p)
+# 
+# # One-Way ANOVA on DI SO
+# so_di_aov <- aov(fork_length ~ year, data=so_di_lengths)
+# summary(so_di_aov)
+# 
+# # Test for homogeneity of variance
+# plot(so_di_aov, 1)
+# leveneTest(fork_length ~ year, data=so_di_lengths)
+# 
+# # Test for normality of residuals
+# plot(so_di_aov, 2)
+# so_di_aov_residuals <- residuals(object = so_di_aov)
+# shapiro.test(x = so_di_aov_residuals)
+# 
+# # Non-parametric ANOVA
+# kruskal.test(fork_length ~ year, data = so_di_lengths)
 
 ```
 
@@ -590,7 +582,7 @@ ggsave(here("figs", "sealice.png"))
 
 ## Sea Surface Temperature {-}
 
-Sea surface temperature was warm (Figure \@ref(fig:sst))
+Sea surface temperatures between May and July of 2018 were warmer than the time series average. (Figure \@ref(fig:sst))
 
 ```{r sst, out.width="80%", fig.cap="Time series of 30 m depth integrated temperature anomalies observed at Hakai Oceanographic Monitoring station QU39. Blue areas represent temperatures that are below normal, red areas represent above normal temperatures at the selected station in 2018. Normal is the solid black line which is a loess regression based on temperatures from 2015-2018. The shaded grey area is 1 SE of the loess regression. The black dots are the daily minimum and maximum temperatures observed over the time series."}
 
