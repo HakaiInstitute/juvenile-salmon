@@ -20,6 +20,8 @@ abstract: >
 header-includes: >
   \usepackage{lipsum}
   \usepackage{multirow}
+  \usepackage{float}
+  \floatplacement{figure}{H}
 bibliography: references.bib
 output: 
   rticles::peerj_article:
@@ -27,7 +29,7 @@ output:
 ---
 
 ```{r setup, include = FALSE, messages = FALSE}
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, error = FALSE)
+knitr::opts_chunk$set(fig.pos = 'H', echo = FALSE, warning = FALSE, message = FALSE, error = FALSE)
 # All data used for this analysis is from the hakaisalmon R package v0.2.0 at https://hakaiinstitute.github.io/hakaisalmon/
 library(hakaisalmon)
 library(tidyverse)
@@ -203,8 +205,6 @@ ggsave(here("figs/heatmap.png"))
 
 The bulk of the sockeye migration in the Discovery Islands occurred earlier in 2018 when compared to the time-series's four-year average (Figure \@ref(fig:mt)). The median date of capture for 2018 sockeye was May 22nd, whereas the time series average was May 27th. Conversely, the 2018 sockeye migration occurred later than normal in Johnstone Strait, where the median date of capture was June 6th, which is two days later than the time-series average. See Table \@ref(tab:mtdi) and Table \@ref(tab:mtjs) for the interqurtile range of migration timing for sockeye, pink, and chum in 2018, contrasted to the time series averages for the Discovery Islands and Johnstone Strait, respectively. Based on the comparison of peak migration dates between the two zones, we estimate that the average residence time of juvenile salmon in the Discovery Islands for 2018 was approximately two weeks. 
 
-
-
 ```{r mt setup, include = FALSE}
 
 daily_mean_cumul_abund_annual <- tidy_catch %>%  
@@ -242,7 +242,29 @@ daily_mean_cumul_abund_annual <- tidy_catch %>%
     cols <- c("2015-2018" = "#F8766D", "2018" = "#00BFC4", "2017" = "#00BFC4", "2016" = "#00BFC4", "2015" = "#00BFC4")
     shapes <- c("2015-2018" = "triangle", "2018" = "circle", "2017" = "circle", "2016" = "circle", "2015" = "circle")
     
+```
+
+```{r mt, fig.cap="Cumulative catch of juvenile sockeye salmon migrating through the Discovery Islands compared to the average for 2015--2018. Migration curves were predicted by fitting a logistic growth equation to the cumulative percent the selected fish caught. The points (circles) for the year being compared to the time-series is the cumulative catch percent", out.width='80%'}
+    cum_abund_plot <- ggplot()+
+      labs(x = 'Date', y = 'Percent')+
+      #geom_point(data = predict_average_prop, aes(x = x, y = y, shape = year, colour = year), size = 2) +
+      geom_point(data = daily_mean_cumul_abund_annual, aes(x = survey_date, y = percent, color = year), size = 3) +
+      geom_line(data = predict_average_prop, aes(x = x, y = y, color = year), size = 1.5) +
+      geom_line(data = predict_annual_prop, aes(x = x, y = y, color = as.factor(year)), size = 1.5) +
+      scale_linetype_manual(values = c("dashed", "solid")) +
+      scale_x_continuous(breaks = c(135, 152, 166, 182, 196), 
+                         labels = c("May 15", "June 1", "June 15", "July 1", "July 15")) +
+      #coord_cartesian(ylim = c(0,6.5)) + 
+      facet_wrap(~ region, nrow = 2, labeller = labeller(region = spp_labels)) +
+      scale_colour_manual(values = cols) +
+      scale_shape_manual(values = shapes)
+    cum_abund_plot
     
+ggsave(here("figs", "migration_timing.png"))
+```
+
+```{r mt-iqr tables, include=FALSE}
+
 # Calculate IQR for sockeye, pink, and chum
 iqr_dates_DI <- tidy_catch[rep(row.names(tidy_catch), tidy_catch$n), 1:9] %>%
   filter(species %in% c("so_total", "pi_total", "cu_total"),
@@ -413,25 +435,6 @@ cu_q3_JS_2018 <- as.character(iqr_JS_allyears %>%
   filter(species == "Chum" & year == "2018") %>% 
   select(`75%`))
 
-```
-
-```{r mt, fig.cap="Cumulative catch of juvenile sockeye salmon migrating through the Discovery Islands compared to the average for 2015--2018. Migration curves were predicted by fitting a logistic growth equation to the cumulative percent the selected fish caught. The points (circles) for the year being compared to the time-series is the cumulative catch percent", out.width='80%'}
-    cum_abund_plot <- ggplot()+
-      labs(x = 'Date', y = 'Percent')+
-      #geom_point(data = predict_average_prop, aes(x = x, y = y, shape = year, colour = year), size = 2) +
-      geom_point(data = daily_mean_cumul_abund_annual, aes(x = survey_date, y = percent, color = year), size = 3) +
-      geom_line(data = predict_average_prop, aes(x = x, y = y, color = year), size = 1.5) +
-      geom_line(data = predict_annual_prop, aes(x = x, y = y, color = as.factor(year)), size = 1.5) +
-      scale_linetype_manual(values = c("dashed", "solid")) +
-      scale_x_continuous(breaks = c(135, 152, 166, 182, 196), 
-                         labels = c("May 15", "June 1", "June 15", "July 1", "July 15")) +
-      #coord_cartesian(ylim = c(0,6.5)) + 
-      facet_wrap(~ region, nrow = 2, labeller = labeller(region = spp_labels)) +
-      scale_colour_manual(values = cols) +
-      scale_shape_manual(values = shapes)
-    cum_abund_plot
-    
-ggsave(here("figs", "migration_timing.png"))
 ```
 
 <!-- Discovery Islands Migration Timing --->
@@ -618,6 +621,5 @@ ggsave(here("figs", "sst.png"))
 
 ```
 
-
-# Discussion {-}
+# References {-}
 
