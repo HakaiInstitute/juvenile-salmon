@@ -1494,7 +1494,50 @@ okisollo %>%
 
 ggsave(here::here("Fine-scale migration dynamics", "figs", "box_plot_stock_specific_migration_timing.png"))
 ```
+
+```{r stock specific migration timing stats}
+
+okisollo %>% 
+  filter(year == 2015, collapsed_fraser_stocks %in% c("Chilko", "Quesnel", "Late_Shuswap_Portage", 
+  "Early_Thomson", "Late_Stuart_Stellako")) %>% 
+  mutate(yday = yday(survey_date)) %>% 
+  select(yday, org, collapsed_fraser_stocks) %>%
+  group_by(collapsed_fraser_stocks) %>%
+  do(tidy(t.test(yday~org, data=.)))
+
+
+okisollo %>% 
+  filter(year == 2016, collapsed_fraser_stocks %in% c("Chilko", "Quesnel", "Late_Shuswap_Portage", 
+  "Early_Thomson", "Late_Stuart_Stellako")) %>% 
+  mutate(yday = yday(survey_date)) %>% 
+  select(yday, org, collapsed_fraser_stocks) %>% group_by(collapsed_fraser_stocks) %>% do(tidy(t.test(yday~org, data=.)))
+```
+
+```{r t test lengths}
+okisollo %>% 
+  filter(year == 2015, collapsed_fraser_stocks %in% c("Chilko", "Quesnel", "Late_Shuswap_Portage", 
+  "Early_Thomson", "Late_Stuart_Stellako")) %>% 
+  mutate(yday = yday(survey_date)) %>% 
+  select(sampling_week, fork_length, org, collapsed_fraser_stocks) %>%
+  group_by(collapsed_fraser_stocks) %>% do(tidy(t.test(fork_length~org, data=.)))
+
+okisollo %>% 
+  filter(year == 2016, collapsed_fraser_stocks %in% c("Chilko", "Quesnel", "Late_Shuswap_Portage", 
+  "Early_Thomson", "Late_Stuart_Stellako")) %>% 
+  mutate(yday = yday(survey_date)) %>% 
+  select(fork_length, org, collapsed_fraser_stocks) %>%
+  group_by(collapsed_fraser_stocks) %>% do(tidy(t.test(fork_length~org, data=.)))
+
+okisollo %>% 
+  group_by(collapsed_fraser_stocks, year(survey_date)) %>% 
+  summarize(n = n(), mean_fl = mean(fork_length)) %>% 
+  arrange(mean_fl)
+```
+
+
 # Species Diversity
+
+Not sure if below is the best method. I should consider rarefaction
 
 ```{r species}
 # Create dataset of comparable species matrices
@@ -1535,6 +1578,7 @@ t.test(H_hakai, H_dfo)
 ```
 
 ## Stock Diversity
+
 ```{r}
 dfo_diversity <- dfo_data %>% 
   filter(site_id == "D09") %>% 
@@ -1565,5 +1609,9 @@ J_hakai
 
 
 t.test(H_hakai, H_dfo)
+
+rarefy <- rarefy(dfo_diversity, min(rowSums(dfo_diversity)))
+
+plot(rarefy)
 ```
 
