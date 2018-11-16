@@ -481,7 +481,7 @@ ggsave(here("figs", "proportions.png"))
 
 ## Length {-}
 
-Fish lengths varied between regions, species and year (Figure \@ref(fig:length)). Sockeye in 2018 were longer than the time-series average (Discovery Islands M = 116, 95% CI = 113, 120; Johnstone Strait M = 117, CI = 113, 122). However, pink were shorter than average in both regions (8.3 % in the Discovery Islands and 4.4 % Johnstone Strait), as well as chum (8.1 % in the Discovery Islands and 3.6 % Johnstone Strait).
+Fish lengths varied between regions, species and year (Figure \@ref(fig:length)). Sockeye in 2018 were longer than the time-series average (Discovery Islands M = 116, 95% CI = 113, 120; Johnstone Strait M = 117, CI = 113, 122). However, pink were shorter than average in both regions (8.3 % in the Discovery Islands and 4.4 % Johnstone Strait), as well as chum (8.1 % in the Discovery Islands and 3.6 % Johnstone Strait).  Figure \@ref(fig:lengthstatsDI) and Figure \@ref(fig:lengthstatsJS) compare and contrast the average lengths in 2018 against the time-series average.
 
 ```{r length, out.width='80%', fig.cap="Kernel density distributions of juvenile salmon fork lengths for each year in the selected region. Note that these distributions contain multiple age-classes."}
 
@@ -495,7 +495,7 @@ ggplot(length_histo, aes(fork_length, y = factor(year))) +
 ggsave(here("figs", "lengths.png"))
 ```
 
-```{r length stats, include = FALSE}
+```{r lengthstats setup, include = FALSE}
 length_histo_tsa <- length_histo %>% 
   mutate(TSA = "TSA") %>% 
   select(region, species, fork_length, year = TSA)
@@ -516,6 +516,13 @@ summary_lengths <- all_lengths_vs_tsa %>%
          lower_ci = mean - qt(1 - (0.05/2), n - 1) * se,
          upper_ci = mean + qt(1 - (0.05/2), n - 1) * se,
          diff = (mean - lag(mean))/lag(mean)*100)
+
+summary_lengths_DI <-  summary_lengths %>% 
+  filter(region == "DI")
+
+summary_lengths_JS <- summary_lengths %>%
+  filter(region == "JS")
+
 
 # DI SO summary stats
 
@@ -540,6 +547,33 @@ summary_lengths <- all_lengths_vs_tsa %>%
 # kruskal.test(fork_length ~ year, data = so_di_lengths)
 
 ```
+
+```{r lengthstatsDI, out.width = '80%', fig.cap="The average fork length +/- 95% C.I. of juvenile salmon in the Discovery Islands. TSA is the Time Series Average taken over 2015 -- 2018."}
+
+ggplot(data = summary_lengths_DI) +
+  geom_point(mapping = aes(x=species, y = mean, shape = year, colour = year), size = 4) + 
+  geom_errorbar(mapping = aes(x = species, ymin = lower_ci, ymax = upper_ci), width = 0.2) + 
+  labs(x = "Species", y = "Mean Fork Length (mm)") +
+  scale_colour_manual(values = c("red", "blue")) +
+  scale_x_discrete(limits = c("SO", "PI", "CU"),
+                   breaks = c("SO", "PI", "CU"),
+                   labels = c("Sockeye", "Pink", "Chum"))
+ggsave(here("figs", "avg_lengths_di.png"))
+```
+
+```{r lengthstatsJS, out.width = '80%', fig.cap="The average fork length +/- 95% C.I. of juvenile salmon in Johnstone Strait. TSA is the Time Series Average taken over 2015 -- 2018."}
+
+ggplot(data = summary_lengths_JS) +
+  geom_point(mapping = aes(x=species, y = mean, shape = year, colour = year), size = 4) + 
+  geom_errorbar(mapping = aes(x = species, ymin = lower_ci, ymax = upper_ci), width = 0.2) + 
+  labs(x = "Species", y = "Mean Fork Length (mm)") +
+  scale_colour_manual(values = c("red", "blue")) +
+  scale_x_discrete(limits = c("SO", "PI", "CU"),
+                   breaks = c("SO", "PI", "CU"),
+                   labels = c("Sockeye", "Pink", "Chum"))
+ggsave(here("figs", "avg_lengths_js.png"))
+```
+
 
 ## Parasite Loads {-}
 
