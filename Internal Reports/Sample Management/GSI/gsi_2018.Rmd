@@ -1,0 +1,88 @@
+---
+title: "Hakai Institute Juvenile Salmon Report"
+author: "Brett Johnson"
+date: '`r date()`'
+output:
+ html_document:
+   theme: cosmo
+   code_folding: show
+   toc: true
+   toc_float: true
+   number_sections: true
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, error = FALSE)
+library(hakaisalmon)
+library(tidyverse)
+library(lubridate)
+library(here)
+library(googlesheets)
+
+inventory <- gs_key('1Ti5gGvakA4DUTjCUZ_VYHULU_FJCK05-zdly5E80Tzs', lookup = FALSE, visibility = "private")
+
+dna_metadata <- gs_read(inventory, ws = "dna_metadata")
+```
+
+
+```{r 2015}
+all_gsi_samples_2015 <- survey_seines_fish_stock_id %>% 
+  mutate(year = year(survey_date)) %>% 
+  filter(year == 2015) %>% 
+  group_by(site_id, dissection_status) %>% 
+  summarise(n = n()) %>% 
+  spread(dissection_status, n)
+
+results_gsi_samples_2015 <- survey_seines_fish_stock_id %>% 
+  mutate(year = year(survey_date)) %>% 
+  filter(year == 2015) %>% 
+  drop_na(stock_1) %>% 
+  group_by(site_id) %>% 
+  summarise(results = n())
+
+summary_gsi_2015 <- full_join(all_gsi_samples_2015, results_gsi_samples_2015, by = "site_id") %>% 
+  filter(site_id %in% c('J03', 'J05', 'J06', 'J09', 'D09')) %>% 
+  mutate(dissected_w_no_results = dissected - results)
+  
+# Join collection to locations and sample status
+samples_2015 <- survey_seines_fish %>% 
+  mutate(year = year(survey_date)) %>% 
+  filter(year == 2015) %>% 
+  filter(site_id %in% c('J03', 'D09'), dissection_status == "dissected") %>% 
+  left_join(dna_metadata, by = c("ufn")) %>% 
+  left_join(sample_container_inventory) %>% 
+  select(ufn, survey_date, semsp_id, sample_id, site_id, species, dissection_status, current_location, sample_status, container_id, sample_id, sample_location) %>% 
+  filter(sample_status == "collected")
+
+ggplot(samples_2015, aes(x = survey_date)) +
+  geom_histogram()
+```
+
+
+```{r 2018 submission: 2018 SO plus all CK and CO}
+gsi_SO_2018 <- survey_seines_fish %>% 
+  filter(year(survey_date) == 2018, species == "SO") %>% 
+  nrow()
+
+CK_CO_not_dissected <- survey_seines_fish %>% 
+  filter(species %in% c('CK', 'CO')) %>% 
+  left_join(dna_metadata) %>% 
+  left_join(sample_container_inventory) %>% 
+  filter(dissection_status == "not dissected") %>% 
+  select(ufn, survey_date, semsp_id, sample_id, site_id, species, dissection_status, current_location, sample_status, container_id, sample_id, sample_location)
+
+CK_CO <- survey_seines_fish %>% 
+  filter(species %in% c('CK', 'CO')) %>% 
+  nrow() 
+
+SO_CK_CO <- CK_CO + gsi_SO_2018
+
+SO_2015 <- nrow(samples_2015)
+
+total_for_2018_submission <- SO_CK_CO + SO_2015
+```
+
+```{r}
+survey_s
+```
+

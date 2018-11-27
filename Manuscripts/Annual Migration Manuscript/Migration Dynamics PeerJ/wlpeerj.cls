@@ -181,8 +181,7 @@ THE ABSTRACT\vskip12pt}\let\go\relax\fi
 }%
 \vskip10pt\nolinenumbers
 {%
-\noindent
-\colorbox{color2}{%
+\noindent{%
 \parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
 \sffamily\small\vskip1ex\if@peerjlineno\internallinenumbers\fi\theabstract
 }%
