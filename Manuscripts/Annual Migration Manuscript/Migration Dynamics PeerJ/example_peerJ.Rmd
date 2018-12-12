@@ -18,7 +18,6 @@ abstract: >
   It can also be on *multiple* lines.
 header-includes: >
   \usepackage{lipsum}
-bibliography: sample.bib
 output: 
   rticles::peerj_article:
     base_format: bookdown::pdf_document2 # for using \@ref()

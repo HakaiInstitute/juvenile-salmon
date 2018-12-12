@@ -22,6 +22,11 @@ library(googlesheets)
 inventory <- gs_key('1Ti5gGvakA4DUTjCUZ_VYHULU_FJCK05-zdly5E80Tzs', lookup = FALSE, visibility = "private")
 
 dna_metadata <- gs_read(inventory, ws = "dna_metadata")
+
+sampling_wb <- gs_key('11HZKvkmdbG98iEIDRkeFlwZpViLxhZ8NTxIpGqx0cV0', lookup = F,
+                      visibility = "private")
+
+sites <- gs_read(sampling_wb, ws = "2015-2018")
 ```
 
 
@@ -51,10 +56,10 @@ samples_2015 <- survey_seines_fish %>%
   filter(site_id %in% c('J03', 'D09'), dissection_status == "dissected") %>% 
   left_join(dna_metadata, by = c("ufn")) %>% 
   left_join(sample_container_inventory) %>% 
-  select(ufn, survey_date, semsp_id, sample_id, site_id, species, dissection_status, current_location, sample_status, container_id, sample_id, sample_location) %>% 
+  select(ufn, survey_date, lat, lon, semsp_id, sample_id, site_id, species, dissection_status, current_location, sample_status, container_id, sample_id, sample_location) %>% 
   filter(sample_status == "collected")
 
-ggplot(samples_2015, aes(x = survey_date)) +
+ggplot(samples_2015, aes(x = survey_date, colour = species)) +
   geom_histogram()
 ```
 
@@ -82,7 +87,86 @@ SO_2015 <- nrow(samples_2015)
 total_for_2018_submission <- SO_CK_CO + SO_2015
 ```
 
-```{r}
-survey_s
+```{r chinook and coho locations}
+ck_samples <- survey_seines_fish %>% 
+  filter(species == "CK") %>% 
+  group_by(site_id, species) %>% 
+  summarise(n = n()) %>% 
+  left_join(sites, by = "site_id") %>% 
+  ungroup()
+
+co_samples <- survey_seines_fish %>% 
+  filter(species == "CO") %>% 
+  group_by(site_id, species) %>% 
+  summarise(n = n()) %>% 
+  left_join(sites, by = "site_id") %>% 
+  ungroup()
+```
+
+```{r make a map}
+library(raster)
+library(maps) 
+library(mapdata)
+library(maptools)
+library(rgeos)
+library(rgdal)
+library(ggplot2)
+library(ggsn)
+library(tidyverse)
+library(here)
+
+BC.shp <- readOGR(here("data", "2_Shapefile", "COAST_TEST2.shp"))
+
+quadra <- extent(-127.0, -124.6, 49.9, 50.8)
+
+BC.sh2 <- crop(BC.shp, quadra)
+
+BC.df <- fortify(BC.sh2)
+
+ck_map <- ggplot()+ theme_bw()+
+    geom_polygon(data= BC.df, aes(x=long,y=lat,group= group),
+      colour= "black", size=0.1, fill='grey95')+
+  geom_point(data = ck_samples, aes(x=long, y=lat, colour = species), size=5, stroke=1.5)+  #add this to plot site locations
+  scale_shape_manual(values=c(19,20))+      
+  scalebar(BC.df, dist = 10, st.size=4, height=0.01, dd2km = TRUE, model = 'WGS84', anchor = c(x = -126.5, y = 50.0))+
+  north(data = BC.df, scale = 0.15, symbol = 3, anchor= c(x = -124.6, y = 50.75)) +
+    theme(panel.grid.minor = element_line(colour = NA),
+          panel.grid.major = element_line(colour = NA),
+          axis.title.y= element_blank(), axis.title.x = element_blank(),
+          axis.text.y= element_text(size=10), axis.text.x = element_text(size=10))+
+    scale_x_continuous(limits = c(-127.0,-124.6), expand = c(0,0)) +
+    scale_y_continuous(limits = c(49.9, 50.8), expand = expand_scale(mult = c(0, 0))) +
+    geom_text(data = ck_samples, aes(x = long, y = lat, label=n),
+              hjust=.4, vjust=0.25, colour = "black", size = 4) +
+  geom_text(aes(x = -126.25, y = 50.2, label = "Northern Vancouver Island")) +
+  geom_text(aes(x = -125.25, y = 50.2, label = "Quadra")) +
+  ggtitle("Juvenile Chinook Capture Locations 2015 -- 2018")
+  
+  
+
+ck_map  
+ggsave(here("figs", "hakai_chinook_map.png"))
+
+co_map <- ggplot()+ theme_bw()+
+    geom_polygon(data= BC.df, aes(x=long,y=lat,group= group),
+      colour= "black", size=0.1, fill='grey95')+
+  geom_point(data = co_samples, aes(x=long, y=lat, colour = species), size=4, stroke=1.5)+  #add this to plot site locations
+  scale_shape_manual(values=c(19))+      
+  scalebar(BC.df, dist = 10, st.size=4, height=0.01, dd2km = TRUE, model = 'WGS84', anchor = c(x = -126.5, y = 50.0))+
+  north(data = BC.df, scale = 0.15, symbol = 3, anchor= c(x = -124.6, y = 50.75)) +
+    theme(panel.grid.minor = element_line(colour = NA),
+          panel.grid.major = element_line(colour = NA),
+          axis.title.y= element_blank(), axis.title.x = element_blank(),
+          axis.text.y= element_text(size=10), axis.text.x = element_text(size=10))+
+    scale_x_continuous(limits = c(-127.0,-124.6), expand = c(0,0)) +
+    scale_y_continuous(limits = c(49.9, 50.8), expand = expand_scale(mult = c(0, 0))) +
+    geom_text(data = co_samples, aes(x = long, y = lat, label=n),
+              hjust=.4, vjust=.25, colour = "black", size = 4) +
+  geom_text(aes(x = -126.25, y = 50.2, label = "Northern Vancouver Island")) +
+  geom_text(aes(x = -125.25, y = 50.2, label = "Quadra")) +
+  ggtitle("Juvenile Coho Capture Locations 2015 -- 2018")
+  
+co_map
+ggsave(here("figs", "hakai_coho_map.png"))
 ```
 
