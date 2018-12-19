@@ -56,6 +56,7 @@ ctd_all <- read_csv(here("data", "ctd_all.csv"))
 predict_average_prop <- read_csv(here("data", "predict_average_prop.csv"))
 length_histo <- read_csv(here("data", "length_histo.csv"))
 peak_dates <- read_csv(here("data", "peak_dates.csv"))
+summary_sealice <- read_csv(here("data", "summary_sealice.csv"))
 
 spp_labels <- c(CU = "Chum", PI = "Pink", SO = "Sockeye", DI = "Discovery Islands", 
                 JS = "Johnstone Strait")
@@ -65,6 +66,212 @@ pl_colours <- c("pi_total" = "pink", "so_total" = "#00BFC4", "cu_total" = "#7CAE
 
 current_year <- max(year(survey_data$survey_date))
 project_years <- current_year - 2015 + 1
+```
+
+
+```{r heatmap data}
+# Sockeye
+so_peak_dates <- peak_dates %>% 
+      filter(species == "SO") 
+    
+so_mean_of_median_date <- mean(so_peak_dates$median)
+so_sd_of_median_date <- sd(so_peak_dates$median)
+    
+so_peak_dates <- so_peak_dates %>% 
+      arrange(year) %>% 
+      mutate(z_score = (median - so_mean_of_median_date) / so_sd_of_median_date)
+    
+so_migration_dates_z <- so_peak_dates$z_score
+    
+# Length z-scores
+  
+so_mean_sd <- length_histo %>% 
+      group_by(year, species) %>% 
+      summarise(mean = mean(fork_length, na.rm = T), sd = sd(fork_length)) %>% 
+      filter(species == "SO")
+    
+so_avg_length <- as.numeric(so_mean_sd %>% 
+      group_by(species) %>% 
+      summarize(mean_fl = mean(mean, na.rm = T)))
+    
+so_sd_length <- as.numeric(so_mean_sd %>% 
+      group_by(species) %>% 
+      summarize(sd_fl = sd(mean, na.rm = T)))
+    
+so_length_z <- (so_mean_sd$mean - so_avg_length[2]) / so_sd_length[2]
+    
+    # Parasite loads Z scores
+    ## The idea here is to create an aggregated parasite index for both motile 
+    #   leps and caligus sealice
+    
+so_api_annual_mean <- summary_sealice %>% 
+      ungroup() %>% 
+      filter(louse_species == "motile_caligus") %>% 
+      filter(species == "SO") %>% 
+      select(year, species, prevalence, abundance, intensity) %>% 
+      group_by(year) %>% 
+      summarize_all("mean", na.rm = T) 
+    
+so_api_mean <- mean(so_api_annual_mean$prevalence)
+so_api_sd <- sd(so_api_annual_mean$prevalence)
+    
+so_api_z <- (so_api_annual_mean$prevalence - so_api_mean) / so_api_sd
+
+# Pink
+
+PI_peak_dates <- peak_dates %>% 
+      filter(species == "PI") 
+    
+PI_mean_of_median_date <- mean(PI_peak_dates$median)
+PI_sd_of_median_date <- sd(PI_peak_dates$median)
+    
+PI_peak_dates <- PI_peak_dates %>% 
+      arrange(year) %>% 
+      mutate(z_score = (median - PI_mean_of_median_date) / PI_sd_of_median_date)
+    
+PI_migration_dates_z <- PI_peak_dates$z_score
+    
+# Length z-scores
+  
+PI_mean_sd <- length_histo %>% 
+      group_by(year, species) %>% 
+      summarise(mean = mean(fork_length, na.rm = T), sd = sd(fork_length)) %>% 
+      filter(species == "PI")
+    
+PI_avg_length <- as.numeric(PI_mean_sd %>% 
+      group_by(species) %>% 
+      summarize(mean_fl = mean(mean, na.rm = T)))
+    
+PI_sd_length <- as.numeric(PI_mean_sd %>% 
+      group_by(species) %>% 
+      summarize(sd_fl = sd(mean, na.rm = T)))
+    
+PI_length_z <- (PI_mean_sd$mean - PI_avg_length[2]) / PI_sd_length[2]
+    
+# Parasite loads Z scores
+## The idea here is to create an aggregated parasite index for both motile 
+    #   leps and caligus sealice
+    
+PI_api_annual_mean <- summary_sealice %>% 
+      ungroup() %>% 
+      filter(louse_species == "motile_caligus") %>% 
+      filter(species == "PI") %>% 
+      select(year, species, prevalence, abundance, intensity) %>% 
+      group_by(year) %>% 
+      summarize_all(c("mean"), na.rm = T) 
+    
+PI_api_mean <- mean(PI_api_annual_mean$prevalence)
+PI_api_sd <- sd(PI_api_annual_mean$prevalence)
+    
+PI_api_z <- (PI_api_annual_mean$prevalence - PI_api_mean) / PI_api_sd
+
+# Chum
+
+CU_peak_dates <- peak_dates %>% 
+      filter(species == "CU") 
+    
+CU_mean_of_median_date <- mean(CU_peak_dates$median)
+CU_sd_of_median_date <- sd(CU_peak_dates$median)
+    
+CU_peak_dates <- CU_peak_dates %>% 
+      arrange(year) %>% 
+      mutate(z_score = (median - CU_mean_of_median_date) / CU_sd_of_median_date)
+    
+CU_migration_dates_z <- CU_peak_dates$z_score
+    
+# Length z-scores
+  
+CU_mean_sd <- length_histo %>% 
+      group_by(year, species) %>% 
+      summarise(mean = mean(fork_length, na.rm = T), sd = sd(fork_length)) %>% 
+      filter(species == "CU")
+    
+CU_avg_length <- as.numeric(CU_mean_sd %>% 
+      group_by(species) %>% 
+      summarize(mean_fl = mean(mean, na.rm = T)))
+    
+CU_sd_length <- as.numeric(CU_mean_sd %>% 
+      group_by(species) %>% 
+      summarize(sd_fl = sd(mean, na.rm = T)))
+    
+CU_length_z <- (CU_mean_sd$mean - CU_avg_length[2]) / CU_sd_length[2]
+    
+    # Parasite loads Z scores
+    ## The idea here is to create an aggregated parasite index for both motile 
+    #   leps and caligus sealice
+    
+CU_api_annual_mean <- summary_sealice %>% 
+      ungroup() %>% 
+      filter(louse_species == "motile_caligus") %>% 
+      filter(species == "CU") %>% 
+      select(year, species, prevalence, abundance, intensity) %>% 
+      group_by(year) %>% 
+      summarize_all(c("mean"), na.rm = T) 
+    
+CU_api_mean <- mean(CU_api_annual_mean$prevalence)
+CU_api_sd <- sd(CU_api_annual_mean$prevalence)
+    
+CU_api_z <- (CU_api_annual_mean$prevalence - CU_api_mean) / CU_api_sd
+
+# SST z-score
+    ## I'm going to filter the time period down to May and Juen because that's 
+    #   the most relevant period that juvenile salmon are likely to be in the 
+    #   Strait of Georgia
+    
+    sst_annual_mean <- ctd_all %>%
+      ungroup() %>% 
+      mutate(date = as_date(date)) %>% 
+      mutate(month = month(date), year = year(date)) %>% 
+      filter(month >= 5 & month <= 6, station == "QU39") %>% 
+      select(year, mean_temp) %>% 
+      group_by(year) %>% 
+      summarise(mean_temp = mean(mean_temp, na.rm = T))
+    
+    sst_mean <- mean(sst_annual_mean$mean_temp)  
+    sst_sd <- sd(sst_annual_mean$mean_temp)
+    
+    sst_z <- (sst_annual_mean$mean_temp - sst_mean) / sst_sd
+
+sst_anomaly_table <- tibble(year = c(2015:current_year),
+                            metric = rep(c("SST"),4),
+                            SD = sst_z)
+  
+SD <- c(so_migration_dates_z, so_length_z, so_api_z, PI_migration_dates_z, PI_length_z, PI_api_z, CU_migration_dates_z, CU_length_z, CU_api_z)
+    
+heatmap_data <- tibble(year = rep(c(2015:current_year), 9),
+                           metric = factor(rep(c("Sockeye Migration Timing", "Sockeye Length", "Sockeye Parasite Loads", "Pink Migration Timing", "Pink Length", "Pink Parasite Loads", "Chum Migration Timing", "Chum Length", "Chum Parasite Loads"), each = project_years)), SD = SD)
+
+heatmap_data <- rbind(heatmap_data, sst_anomaly_table)
+
+levels(heatmap_data$metric)
+
+heatmap_data$metric <- heatmap_data$metric %>%
+  fct_relevel("Sockeye Migration Timing", "Pink Migration Timing", "Chum Migration Timing", "Sockeye Length", "Pink Length", "Chum Length", "Sockeye Parasite Loads", "Pink Parasite Loads", "Chum Parasite Loads", "SST") %>%
+  fct_rev()
+
+```
+
+
+```{r}
+cols <- c("#4575b4",
+          "lightgrey",
+          "#d73027"
+          )
+
+# Bubble plot alternative
+
+ggplot(heatmap_data, aes(year, metric, colour = SD)) +
+  geom_point(size = abs(10 * heatmap_data$SD), alpha = 0.1) +
+  geom_point(aes(size = abs(10 * SD)), show.legend = F) +
+  scale_size_continuous(range = c(3,15)) +
+  ylab("") +
+  xlab("Year") +
+  scale_colour_gradientn(colours = cols) +
+  theme(legend.position = "bottom") +
+  guides(color = guide_legend(override.aes = list(size = c(10, 6, 3, 6, 10), alpha = 1)), name = "Strandard\nDeviations") +
+  scale_x_continuous(minor_breaks = 0) +
+  labs(color = "Standard\nDeviations")
+  
 ```
 
 # Introduction {-}
@@ -257,7 +464,15 @@ iqr_DI_allyears <- rbind(iqr_DI_tsa, peak_dates) %>%
   rename(Year = year, Species = species, Region = region, n = n, Q1 = q1, "Peak Date" = median,
          Q3 = q3) %>% 
   select(Year, Region, Species, Q1, "Peak Date", Q3) %>% 
-  mutate_if(is.numeric, round) 
+  mutate_if(is.numeric, round)
+
+# Re-make the same table but covert Julian dates to Dates
+migration_timing <- rbind(iqr_DI_tsa, peak_dates) %>% 
+  rename(Year = year, Species = species, Region = region, n = n, Q1 = q1, "Peak Date" = median,
+         Q3 = q3) %>% 
+  select(Year, Region, Species, Q1, "Peak Date", Q3) %>% 
+  mutate_if(is.numeric, round) %>% 
+  mutate_if(is.numeric, f)
 ```
 
 Migration timing in the Discovery Islands in 2018 did not differ from the time series average by more than a week for sockeye, pink, or chum (Table \@ref(tab:mtdi)). The peak migration date for sockeye in the Discovery Islands was on `r f(so_q2_DI_current)`, `r round(so_timing_diff)` days `r so_later_or_earlier` than the time series average of `r f(so_q2_DI_TSA)` (z-score = `r round(so_z_migration,2)`) (Figure \@ref(fig:mt)). The peak migration date for pink in the Discovery Islands was on `r f(pi_q2_DI_current)`, `r round(pi_timing_diff)` days `r pi_later_or_earlier` than the average of `r f(pi_q2_DI_TSA)` (z-score = `r round(pi_z_migration,2)`). The peak migration date for chum in the Discovery Islands was on `r f(cu_q2_DI_current)`, `r round(cu_timing_diff)` days `r cu_later_or_earlier` than the average of `r f(cu_q2_DI_TSA)` (z-score = `r round(cu_z_migration,2)`).
@@ -648,9 +863,14 @@ sst_current_year <- sst_time_series_stats %>%
   filter(year == current_year)
 
 sst_stats_table <- broom::tidy(t.test(sst_current_year$mean_temp, sst_time_series_stats$mean_temp))
+
+sst_nice_table <- sst_annual_mean %>% 
+  mutate(mean_temp = round(mean_temp, 2)) %>% 
+  rename(Year = year, "Temperature (C)" = mean_temp) 
+
 ```
 
-Sea-surface temperatures in May and June at QU39 in the northern Strait of Georgia was `r round(sst_stats_table$estimate, 2)` degrees C warmer than normal (Z = `r round(last(sst_z),2)`). Sea surface temperatures between May and July of 2018 were warmer than the time series average. (Figure \@ref(fig:sst))
+Sea-surface temperatures in May and June at QU39 in the northern Strait of Georgia was `r round(sst_stats_table$estimate, 2)` degrees C warmer than normal (Z = `r round(last(sst_z),2)`) (Table \@ref(tab:ssttable)). Sea surface temperatures between May and July of 2018 were warmer than the time series average. (Figure \@ref(fig:sst))
 
 ```{r sst, out.width="80%", fig.cap="Time series of 30 m depth integrated temperature anomalies observed at Hakai Oceanographic Monitoring station QU39. Blue areas represent temperatures that are below normal, red areas represent above normal temperatures at the selected station in 2018. Normal is the solid black line which is a loess regression based on temperatures from 2015-2018. The shaded grey area is 1 SE of the loess regression. The black dots are the daily minimum and maximum temperatures observed over the time series."}
 
@@ -696,7 +916,7 @@ ggsave(here("figs", "sst.png"))
 # Tables {-}
 
 ```{r mtdi}
-knitr::kable(iqr_DI_allyears, format = 'markdown')
+knitr::kable(migration_timing, format = 'markdown')
 ```
 Table: (\#tab:mtdi) Migration timing statistics for the cumulative catch of sockeye, pink, and chum salmon in the Discovery Islands in 2018, compared to the time-series average (2015 - `r current_year`). Q1 is when 25 % of the species passed through the regions, peak date is the median when 50 % passed through, and Q3 is 75%. The region DI indicates the Discovery Islands while for species SO is sockeye, PI is pink, and CU is chum. 
 
@@ -715,6 +935,11 @@ Table: (\#tab:proptable) The species proportions of total catch in each year for
 knitr::kable(time_series_parasite_summary, format = 'markdown', caption = "Mean sea-lice loads (with 95% CI calculated from annual averages) ")
 ```
 Table: (\#tab:parasites) Mean sea-lice abundance, prevalence, and intensity (Margolis et al. 1990) for the time series (2015-`r current_year`) as well as for each species, region, and year with 95% confidence interval calculated from annual averages. The region DI indicates the Discovery Islands and JS Johnstone Strait. Species codes are SO for sockeye, PI for pink, and CU for chum.
+
+```{r ssttable}
+knitr::kable(sst_nice_table, format = 'markdown')
+```
+Table: (\#tab:ssttable) Thirty meter depth integrated temperature averages from May to the end of June in the Northern Strait of Georgia station QU39.
 
 # References {-}
 
