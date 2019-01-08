@@ -18,7 +18,7 @@ affiliation:
   - code: 3
     address: Department of Earth, Ocean and Atmospheric Sciences, University of British Columbia Vancouver, B.C., Canada V6T 1Z4
 abstract: >
-  The majority of out-migrating juvenile Fraser River salmon (_Oncorhynchus_ spp.) pass northwest through the Strait of Georgia, the Discovery Islands, and Johnstone Strait. The Discovery Islands to Johnstone Strait leg of the migration is a region of poor survival for juvenile salmon relative to the Strait of Georgia. To better understand the factors that are driving early marine survival through this region the Hakai Institute Juvenile Salmon Program monitors key aspects of this migration. Here we report on the 2018 migration in comparison to averages from the 2015--2018 study period, which we use to define 'normal' in our building time series. In 2018 sockeye (_O. nerka_), pink (_O. gorbuscha_), and chum (_O. keta_) all migrated earlier than normal, though not more than by a week. The median capture date in the Discovery Isalnds was May 23rd for sockeye, five days earlier than normal; and June 12 for pink and chum, which is five days earlier for pink and three days earlier than normal for chum. Sea lice prevalence was lower than normal for sockeye, pink, and chum. Notably, there were no _Lepeophtheirus salmonis_ sea lice observed in Johnstone Strait in 2018. Sockeye were longer than normal in 2018 whereas pink and chum were smaller than normal. Pink salmon dominated the catch in 2018, followed by chum, and then socke Sea surface temperatures in May and June were the warmest on record in the study period (2015--2018). ye.
+  The majority of out-migrating juvenile Fraser River salmon (_Oncorhynchus_ spp.) pass northwest through the Strait of Georgia, the Discovery Islands, and Johnstone Strait. The Discovery Islands to Johnstone Strait leg of the migration is a region of poor survival for juvenile salmon relative to the Strait of Georgia. To better understand the factors that are driving early marine survival through this region the Hakai Institute Juvenile Salmon Program monitors key aspects of this migration. Here we report on the 2018 migration in comparison to averages from the 2015--2018 study period, which we use to define 'normal' in our building time series. In 2018 sockeye (_O. nerka_), pink (_O. gorbuscha_), and chum (_O. keta_) all migrated earlier than normal, though not more than by a week. The median capture date in the Discovery Isalnds was May 23rd for sockeye, five days earlier than normal; and June 12 for pink and chum, which is five days earlier for pink and three days earlier than normal for chum. Sea lice prevalence was lower than normal for sockeye, pink, and chum. Notably, there were no _Lepeophtheirus salmonis_ sea lice observed in Johnstone Strait in 2018. Sockeye were longer than normal in 2018 whereas pink and chum were smaller than normal. Pink salmon dominated the catch in 2018, followed by chum, and then socke Sea surface temperatures in May and June were the warmest on record in the study period (2015--2018).
 header-includes: >
   \usepackage{lipsum}
   \usepackage{multirow}
@@ -42,7 +42,7 @@ library(car)
 library(ggridges)
 library(forcats)
 
-theme_set(theme_bw())
+theme_set(ggsidekick::theme_sleek())
 
 survey_seines <- read_csv(here("data", "survey_seines.csv")) %>% 
   rename("Sockeye" = "so_total", "Pink" = "pi_total", "Chum" = "cu_total")
@@ -68,6 +68,31 @@ current_year <- max(year(survey_data$survey_date))
 project_years <- current_year - 2015 + 1
 ```
 
+# Introduction {-}
+
+The first months after marine entry have been identified as a potentially critical period [@Beamish2001] for salmon stock recruitment, which may ultimately be responsible for inter-annual variability and long term declines in salmon stocks in British Columbia [@Peterman2010; @Beamish2012]. Pathogens, parasites, predators and the impacts of climate change on food web dynamics have emerged as leading causes for the decline. The Hakai Institute Juvenile Salmon Program has been monitoring juvenile salmon migrations in the Discovery Islands and Johnstone Strait (Figure \@ref(fig:map)) since 2015 in an effort to understand what factors may be influencing early marine survival of sockeye, pink, and chum [@Hunt2018]. This report summarizes migration timing, fish length, parasite loads, species composition, and sea-surface temperature observed from the first `r project_years` years of this research and monitoring program. These estimates will provide the context from which to investigate questions and interpret results related to growth, survival, and the conditions salmon experience during their migration through this critical region. 
+
+
+
+```{r map, fig.cap = "Sampling locations in 2018", fig.align='left', out.width="90%"}
+include_graphics('map.png')
+```
+
+# Methods {-}
+
+## Field methods {-}
+
+See Hunt et al. (2018) for a detailed description of field and lab methods. Briefly, we collect juvenile salmon weekly from the Discovery Islands and Johnstone Strait during their northward migration from the Strait of Georgia to Queen Charlotte Strait near northern Vancouver Island, British Columbia. Sampling is conducted from May to July each year beginning in 2015 using purse seine nets (bunt: 27 m x 9 m with 13 mm mesh; tow: 46 m x 9 m with 76 mm mesh). We sample in nearshore marine habitats with depth > 10 m and effectively sample sockeye (_Oncorhynchus nerka_), pink (_O. gorbuscha_), chum (_O. keta_) and incidentally capture coho (_O. kisutch_), chinook (_O. tshawytschya_) and Pacific herring (_Clupea pallasii_). All animal care was in accordance with Animal Care Guidelines under permit A16-0101. Temperature data were collected by deploying an RBR conductivity, temperature, and depth profiler to depths > 30 m at station QU39 (Figure \@ref(fig:map)) in the northern Strait of Georgia.
+
+## Statistical methods {-}
+
+All metrics reported are in relation to the time series average (2015-2018). The mean for each parameter of interest was calculated for all years combined, and the z-score was calculated for each parameter to determine the number of standard deviations away from the mean a given parameter was in each year.
+
+The peak migration date for each species was estimated by calculating the median date of capture in the Discovery Islands—the date at which 50 percent of the fish passed through the region. Because very few pink are caught in odd years, only even years were included in the calculation of the time serie average. To visualize migration timing we plotted cumulative catch abundance between May 1st and July 9th each year and fit a logistic growth line. Species proportions were calculated by dividing the total number of each species caught, by the sum of all species caught that season. Only seines that contained sockeye were used in the calculation of species proportions, so in effect this species proportion measure is representative of the salmon community composition  that co-migrate with sockeye. Fork length distributions were visualized by calculating kernel density estimates from fork length data. The prevalence, intensity, and abundance of sealice was calculated as detailed in @Margolis1990. The mean sea surface temperature was calculated from the top 30 m of the water column in May and June from all years. To visualize temperature anomalies we applied a loess regression to sea surface temperatures from all four years to develop a model that would represent the seasonal trend. Catch intensity was calculated to provide a measure of interannual abundance for sockeye, pink, and chum. Catch intensity was calculated by first filter out all seines that caught greater than zero sockeye, and then the mean number of each species caught was calcuated for each year. This approach was taken primarily due to field methodologies prohibiting a more standardized measure of abundance. In effect, catch intensity summarizes the abundance of each species in a community of co-migrating sockeye, pink, and chum when sockeye are always present.
+
+# Results and Discussion {-}
+
+Most migration parameters were below average in 2018 except for sockeye length and SST (Figure \@ref(fig:heatmap)). Sockeye length tends to be the opposite anomaly compared to pink and chum which vary together.
 
 ```{r heatmap data}
 # Sockeye
@@ -208,10 +233,10 @@ CU_api_annual_mean <- summary_sealice %>%
       group_by(year) %>% 
       summarize_all(c("mean"), na.rm = T) 
     
-CU_api_mean <- mean(CU_api_annual_mean$prevalence)
-CU_api_sd <- sd(CU_api_annual_mean$prevalence)
+CU_api_mean <- mean(CU_api_annual_mean$abundance)
+CU_api_sd <- sd(CU_api_annual_mean$abundance)
     
-CU_api_z <- (CU_api_annual_mean$prevalence - CU_api_mean) / CU_api_sd
+CU_api_z <- (CU_api_annual_mean$abundance - CU_api_mean) / CU_api_sd
 
 # SST z-score
     ## I'm going to filter the time period down to May and Juen because that's 
@@ -241,9 +266,8 @@ SD <- c(so_migration_dates_z, so_length_z, so_api_z, PI_migration_dates_z, PI_le
 heatmap_data <- tibble(year = rep(c(2015:current_year), 9),
                            metric = factor(rep(c("Sockeye Migration Timing", "Sockeye Length", "Sockeye Parasite Loads", "Pink Migration Timing", "Pink Length", "Pink Parasite Loads", "Chum Migration Timing", "Chum Length", "Chum Parasite Loads"), each = project_years)), SD = SD)
 
-heatmap_data <- rbind(heatmap_data, sst_anomaly_table)
-
-levels(heatmap_data$metric)
+heatmap_data <- rbind(heatmap_data, sst_anomaly_table) %>% 
+  mutate_if(is.numeric, round, 2)
 
 heatmap_data$metric <- heatmap_data$metric %>%
   fct_relevel("Sockeye Migration Timing", "Pink Migration Timing", "Chum Migration Timing", "Sockeye Length", "Pink Length", "Chum Length", "Sockeye Parasite Loads", "Pink Parasite Loads", "Chum Parasite Loads", "SST") %>%
@@ -251,14 +275,11 @@ heatmap_data$metric <- heatmap_data$metric %>%
 
 ```
 
-
-```{r}
+```{r heatmap,  fig.cap = "This heatmap indicates the number of standard deviations (z-score) from the time series average (2015-2018) for key migration parameters. Blue colour indicates less than average, grey indicates average, red indicates greater than average. Peak migration date is based on the median date of fish capture in the Discovery Islands. Length is based on the average fork length from the the Discovery Islands and Johnstone Strait combined. Parasite load is the average abundance of all sea lice species in their motile life stage for both the Discovery Islands and Johnstone Strait regions combined. Mean sea-surface temperature is 30 m depth integrated temperature from station QU39 in the Northern Strait of Georgia from May and June.", out.width="90%"}
 cols <- c("#4575b4",
           "lightgrey",
           "#d73027"
           )
-
-# Bubble plot alternative
 
 ggplot(heatmap_data, aes(year, metric, colour = SD)) +
   geom_point(size = abs(10 * heatmap_data$SD), alpha = 0.1) +
@@ -269,37 +290,13 @@ ggplot(heatmap_data, aes(year, metric, colour = SD)) +
   scale_colour_gradientn(colours = cols) +
   theme(legend.position = "bottom") +
   guides(color = guide_legend(override.aes = list(size = c(10, 6, 3, 6, 10), alpha = 1)), name = "Strandard\nDeviations") +
-  scale_x_continuous(minor_breaks = 0) +
-  labs(color = "Standard\nDeviations")
-  
+  labs(color = "Standard\nDeviations") +
+  scale_y_discrete(expand = expand_scale(mult = c(.1, .1))) +
+  scale_x_continuous(expand = expand_scale(mult = c(.1, .1)), minor_breaks = 0) +
+  ggtitle("Time Series Anomalies")
 ```
-
-# Introduction {-}
-
-The first months after marine entry have been identified as a potentially critical period [@Beamish2001] for salmon stock recruitment, which may ultimately be responsible for inter-annual variability and long term declines in salmon stocks in British Columbia [@Peterman2010; @Beamish2012]. Pathogens, parasites, predators and the impacts of climate change on food web dynamics have emerged as leading causes for the decline. The Hakai Institute Juvenile Salmon Program has been monitoring juvenile salmon migrations in the Discovery Islands and Johnstone Strait (Figure \@ref(fig:map)) since 2015 in an effort to understand what factors may be influencing early marine survival of sockeye, pink, and chum [@Hunt2018]. This report summarizes migration timing, fish length, parasite loads, species composition, and sea-surface temperature observed from the first `r project_years` years of this research and monitoring program. These estimates will provide the context from which to investigate questions and interpret results related to growth, survival, and the conditions salmon experience during their migration through this critical region. 
-
-
-
-```{r map, fig.cap = "Sampling locations in 2018", fig.align='left', out.width='80%'}
-include_graphics('map.png')
-```
-
-# Methods {-}
-
-## Field methods {-}
-
-See Hunt et al. (2018) for a detailed description of field and lab methods. Briefly, we collect juvenile salmon weekly from the Discovery Islands and Johnstone Strait during their northward migration from the Strait of Georgia to Queen Charlotte Strait near northern Vancouver Island, British Columbia. Sampling is conducted from May to July each year since 2015 using purse seine nets (bunt: 27 m x 9 m with 13 mm mesh; tow: 46 m x 9 m with 76 mm mesh). We sample in nearshore marine habitats with depth > 10 m and effectively sample sockeye (_Oncorhynchus nerka_), pink (_O. gorbuscha_), chum (_O. keta_) and incidentally capture coho (_O. kisutch_), chinook (_O. tshawytschya_) and Pacific herring (_Clupea pallasii_). All animal care was in accordance with Animal Care Guidelines under permit A16-0101. Temperature data were collected by deploying an RBR conductivity, temperature, and depth profiler to depths > 30 m at station QU39 (Figure \@ref(fig:map)) in the northern Strait of Georgia.
-
-## Statistical methods {-}
-
-All metrics reported are in relation to the time series average (2015-2018). The mean for each parameter of interest was calculated for all years combined, and the z-score was calculated for each parameter to determine the number of standard deviations away from the mean a given parameter was in each year.
-
-The peak migration date for each species was estimated by calculating the median date of capture in the Discovery Islands—the date at which 50 percent of the fish passed through the region. Because very few pink are caught in odd years, only even years were included in the calculation of the time serie average. To visualize migration timing we plotted cumulative catch abundance between May 1st and July 9th each year and fit a logistic growth line. Species proportions were calculated by dividing the total number of each species caught, by the sum of all species caught that season. Only seines that contained sockeye were used in the calculation of species proportions, so in effect this species proportion measure is representative of the salmon community composition  that co-migrate with sockeye. Fork length distributions were visualized by calculating kernel density estimates from fork length data. The prevalence, intensity, and abundance of sealice was calculated as detailed in @Margolis1990. The mean sea surface temperature was calculated from the top 30 m of the water column in May and June from all years. To visualize temperature anomalies we applied a loess regression to sea surface temperatures from all four years to develop a model that would represent the seasonal trend. 
-
-# Results and Discussion {-}
 
 ## Migration Timing {-}
-
 
 ```{r migration stats, include=FALSE}
 
@@ -475,7 +472,7 @@ migration_timing <- rbind(iqr_DI_tsa, peak_dates) %>%
   mutate_if(is.numeric, f)
 ```
 
-Migration timing in the Discovery Islands in 2018 did not differ from the time series average by more than a week for sockeye, pink, or chum (Table \@ref(tab:mtdi)). The peak migration date for sockeye in the Discovery Islands was on `r f(so_q2_DI_current)`, `r round(so_timing_diff)` days `r so_later_or_earlier` than the time series average of `r f(so_q2_DI_TSA)` (z-score = `r round(so_z_migration,2)`) (Figure \@ref(fig:mt)). The peak migration date for pink in the Discovery Islands was on `r f(pi_q2_DI_current)`, `r round(pi_timing_diff)` days `r pi_later_or_earlier` than the average of `r f(pi_q2_DI_TSA)` (z-score = `r round(pi_z_migration,2)`). The peak migration date for chum in the Discovery Islands was on `r f(cu_q2_DI_current)`, `r round(cu_timing_diff)` days `r cu_later_or_earlier` than the average of `r f(cu_q2_DI_TSA)` (z-score = `r round(cu_z_migration,2)`).
+Migration timing in the Discovery Islands in 2018 did not differ from the time series average by more than a week for sockeye, pink, or chum (Figure \@ref(fig:mt)) (Table \@ref(tab:mtdi)). The peak migration date for sockeye in the Discovery Islands was on `r f(so_q2_DI_current)`, `r round(so_timing_diff)` days `r so_later_or_earlier` than the time series average of `r f(so_q2_DI_TSA)`. The peak migration date for pink in the Discovery Islands was on `r f(pi_q2_DI_current)`, `r round(pi_timing_diff)` days `r pi_later_or_earlier` than the average of `r f(pi_q2_DI_TSA)`. The peak migration date for chum in the Discovery Islands was on `r f(cu_q2_DI_current)`, `r round(cu_timing_diff)` days `r cu_later_or_earlier` than the average of `r f(cu_q2_DI_TSA)`.
 
 ```{r migration plot setup, include = FALSE}
 
@@ -575,7 +572,7 @@ shapes <-
 
 ```
 
-```{r mt, fig.cap="Cumulative catch of juvenile sockeye salmon migrating through the Discovery Islands compared to the average for 2015--2018. Migration curves were predicted by fitting a logistic growth equation to the cumulative percent of sockeye in each year.", out.width='80%'}
+```{r mt, fig.cap = "Cumulative abundance of sockeye, pink, and chum caught in the Discovery Islands and Johnstone Strait compared to the time series average.", out.width="90%"}
     cum_abund_plot <- ggplot()+
       labs(x = 'Date', y = 'Cumulative Catch %')+
       #geom_point(data = predict_average_prop, aes(x = x, y = y, shape = year, colour = year), size = 2) +
@@ -590,13 +587,56 @@ shapes <-
       scale_colour_manual(values = cols, name="",
                          breaks=c("2015-2018", "2015", "2016", "2017", "2018"),
                          labels=c("Average", "2015", "2016", "2017", "2018")) +
-  theme(legend.position = c(0.9, 0.5))
-
-    cum_abund_plot
+  theme(legend.position = c(0.9, 0.5)) +
+  ggtitle("Migrating Timing")
     
 ggsave(here("figs", "migration_timing.png"))
 ```
 
+## Catch Intensity {-}
+
+Sockeye catch intensity in 2018 was low while relative to sockeye in previous years and relative to pink and chum in 2018 (Figure \@ref(fig:catchintensity)). That sockeye catch intensity was low in 2018 is not surprising because 2016 brood year Shuswap or Chilko Lake sockeye are not as abundant in this cohort as they are in others (REFERENCE?). Pink catch intensity in 2018 was the highest of the four years measured. Pink outmigrants are more abundant on even years, the result of the odd-year dominant life-cycle of Fraser River pinks [@Heard1991], but 2018 catches indicate good survival in the early marine environment for pink salmon relative to 2016—the only other odd-year dominant brood year recorded by the Juvenile Salmon Program.
+
+```{r catch setup}
+catch_intensity <- survey_seines %>% 
+  # In 2015 and 2016 we only enumerated seines with sockeye, so the only comparable abundance parameter across years is 'intensity'— the number of sockeye pink and chum that were caught when greater than zero sockeye were caught.
+  filter(Sockeye > 0) %>% 
+  select(year, Sockeye, Pink, Chum) %>% 
+  gather(key = species, value = catch, - year) %>% 
+  filter(catch > 0)
+
+catch_intensity$species <- catch_intensity$species %>% 
+  fct_relevel("Sockeye", "Pink", "Chum")
+
+catch_intensity <- catch_intensity %>% 
+  group_by(year, species) %>% 
+  summarize(mean_catch = mean(catch),
+            sd = sd(catch),
+            n = n())%>% 
+  mutate(se = sd / sqrt(n),
+         lower_ci = qt(1 - (0.05 / 2), n - 1) * se,
+         upper_ci = qt(1 - (0.05 / 2), n - 1) * se) %>% 
+  ungroup() %>% 
+  mutate_if(is.numeric, round)
+```
+
+
+```{r catchintensity, fig.cap = "The catch intensity (a measure of abundance) of sockeye, pink, and chum salmon in the Discovery Islands and Johnstone Strait. Numbers under each bar indicate the number of seines in which the species was caught, and erorr bars indicate the 95 percent confidence region", out.width="90%"}
+
+ggplot2::ggplot(catch_intensity, aes(x = factor(year), y = mean_catch, fill = species)) +
+  geom_bar(colour = "black", stat="identity", position=position_dodge()) +
+  geom_errorbar(aes(ymin = mean_catch - lower_ci,
+                        ymax = mean_catch + upper_ci),
+                    width = 0.2,
+                    position = position_dodge(0.9)) +
+  geom_text(aes(y = 0.0, label = paste0(n)), size = 3.15, vjust = 1.25,
+                position = position_dodge(0.9)) +
+  xlab("Year") +
+  ylab("Catch Intensity") +
+  scale_fill_hakai()+
+  labs(fill = "Species") +
+  ggtitle("Species Abundance")
+```
 
 ## Length {-}
 
@@ -645,19 +685,23 @@ len_tt <- length_histo %>%
 
 ```
 
-
-Fish lengths varied between regions, species and year (Figure \@ref(fig:lengthplot)).
-In `r current_year` in the Discovery Islands and Johnstone Strait combined the average sockeye length was `r round(len_tt[1,3],1)` mm (Table \@ref(tab:length)), which is `r abs(round(len_tt[1,2],1))` mm `r ifelse(len_tt[1,2] > 0, "longer", "shorter")` than the time series average (_p_ < 0.0001, 95% CI `r abs(round(len_tt[1,8],1))`, `r abs(round(len_tt[1,9],1))`). Average pink lengths were `r round(len_tt[2,3],1)` mm, which is `r abs(round(len_tt[2,2],1))` mm `r ifelse(len_tt[2,2] > 0, "longer", "shorter")` than the time series average (_p_ < 0.0001, 95% CI `r abs(round(len_tt[2,8],1))`, `r abs(round(len_tt[2,9],1))`). Chum  were on average `r round(len_tt[3,3],1)` mm, which is `r abs(round(len_tt[3,2],1))` mm  `r ifelse(len_tt[3,2] > 0, "longer", "shorter")` than the time series average (_p_ < 0.0001, 95% CI `r abs(round(len_tt[3,8],1))`-`r round(len_tt[3,9],1)`).
+Fish lengths varied between regions, species and year (Figure \@ref(fig:lengthplot)) though in `r current_year` sockeye were `r ifelse(len_tt[1,2] > 0, "longer", "shorter")`, pink were `r ifelse(len_tt[2,2] > 0, "longer", "shorter")`, and chum were `r ifelse(len_tt[3,2] > 0, "longer", "shorter")` than their respective time series averages in the Discovery Islands and Johnstone Strait combined. Sockeye length was `r round(len_tt[1,3],1)` mm (Table \@ref(tab:length)), which is `r abs(round(len_tt[1,2],1))` mm `r ifelse(len_tt[1,2] > 0, "longer", "shorter")` than the time series average (_p_ < 0.0001, 95% CI `r abs(round(len_tt[1,8],1))` --`r abs(round(len_tt[1,9],1))`). Average pink lengths were `r round(len_tt[2,3],1)` mm, which is `r abs(round(len_tt[2,2],1))` mm `r ifelse(len_tt[2,2] > 0, "longer", "shorter")` than the time series average (_p_ < 0.0001, 95% CI `r abs(round(len_tt[2,8],1))`--`r abs(round(len_tt[2,9],1))`). Chum  were on average `r round(len_tt[3,3],1)` mm, which is `r abs(round(len_tt[3,2],1))` mm  `r ifelse(len_tt[3,2] > 0, "longer", "shorter")` than the time series average (_p_ < 0.0001, 95% CI `r abs(round(len_tt[3,8],1))`--`r round(len_tt[3,9],1)`).
 
 
-```{r lengthplot, out.width='80%', fig.cap="Kernel density distributions of juvenile salmon fork lengths for each year in the selected region. Note that these distributions contain multiple age-classes."}
+```{r lengthplot, out.width="90%", fig.cap="Distributions of juvenile salmon fork lengths for each year in the Discovery Islands and Johnstone Strait. Note that these distributions contain multiple age-classes."}
 
-ggplot(length_histo, aes(fork_length, y = factor(year))) +
-  ggridges::geom_density_ridges(color='black') +
+length_histo$species <- length_histo$species %>% 
+  fct_relevel("SO", "PI", "CU")
+
+ggplot(length_histo, aes(fork_length, y = factor(year), fill = species)) +
+  geom_density_ridges(color='black', scale = 3, alpha = 0.9) +
   xlab("Fork Length (mm)") +
-  facet_grid(species ~ region, labeller = labeller(region = spp_labels, species = spp_labels)) +
-  coord_cartesian(xlim = c(60, 180)) +
-  ylab("Year")
+  facet_grid(species ~ ., labeller = labeller(region = spp_labels, species = spp_labels)) +
+  ylab("Year") +
+  scale_fill_hakai() +
+  scale_y_discrete(expand = expand_scale(add = c(0.2, 2.8))) +
+  coord_cartesian(xlim = c(60, 160)) +
+  guides(fill = FALSE)
 
 ggsave(here("figs", "lengths.png"))
 ```
@@ -691,24 +735,27 @@ proportions_table <- proportion %>%
   spread(key = Species, value = Proportion)
 ```
 
-Pink salmon dominated the catch in the Discovery Islands and Johnstone in 2018 making up `r pi_prop` % of the catch (Table \@ref(tab:proptable)) while chum made up `r cu_prop` percent and sockeye `r so_prop` % (Figure \@ref(fig:prop)).
+Pink salmon dominated the catch in the Discovery Islands and Johnstone in 2018 making up `r pi_prop` % of the catch (Table \@ref(tab:proptable)) while chum made up `r cu_prop` % and sockeye `r so_prop` % (Figure \@ref(fig:prop)). This was the first time in the time series that pink dominated the catch proportion. 
 
-```{r prop, out.width = '80%', fig.cap="The annual proportion of fish captured in the Discovery Islands and Johnstone Strait combined."}
+```{r prop, out.width="90%", fig.cap="The annual proportion of fish captured in the Discovery Islands and Johnstone Strait combined."}
     
-    ggplot(data = proportion, aes(x = year, y = proportion, fill = fct_reorder(species, proportion, .desc = TRUE))) +
-      geom_bar(stat="identity", position = 'stack') +
-      scale_fill_manual(values = pl_colours, name = "Species",
-                        breaks=c("so_total","cu_total","pi_total","co_total", "he_total"),
-                        labels=c("sockeye", "chum", "pink", "herring", "coho")) +
+proportion$species <- proportion$species %>% 
+  fct_relevel("so_total", "pi_total", "cu_total", "co_total", "he_total") %>% 
+  fct_recode("Sockeye" = "so_total", "Pink" = "pi_total", "Chum" = "cu_total", "Coho" = "co_total",
+             "Herring" = "he_total")
+
+    ggplot(data = proportion, aes(x = year, y = proportion, fill = species)) +
+      geom_bar(colour = "black", stat="identity", position = 'stack') +
       xlab("Year") +
-      ylab("Proportion") 
+      ylab("Proportion") +
+      scale_fill_hakai() +
+      labs(fill = "Species") +
+      ggtitle("Length Frequency Distributions")
 
 ggsave(here("figs", "proportions.png"))
 ```
 
-
 ## Parasite Loads {-}
-
 
 ```{r}
 # Parasite loads Z scores
@@ -792,14 +839,8 @@ time_series_parasite_summary <- parasite_summary_table %>%
   rbind(parasite_summary_table) %>% 
   mutate_if(is.numeric, round, 2) %>% 
   select(Year, Region, Species, n, "Abundance, 95% CI", "Prevalence, 95% CI", "Intensity, 95% CI")
-```
 
-
-The prevalence of motile (pre-adult and adult life stage) sea lice in 2018 was the lowest recorded in the time-series (Figure \@ref(fig:sealice)). Notably, no _Lepeophtheirus salmonis_ were detected on sockeye in Johnstone Strait, despite being present in the Discovery Islands. Pink salmon appeared to have higher counts of _Caligus clemensi_ in 2018 compared to chum and sockeye.  See Table \@ref(tab:parasites),
-
-
-```{r sealice, out.width='80%', fig.cap="The abundance (+/- 95% CI) of motile sea lice on juvenile salmon in the Discovery Islands and Johnstone Strait."}
-
+# Create data for plot
 abundance <- sealice_time_series %>% 
       group_by(year, region, louse_species, species) %>% 
       summarize(abundance =  mean(n_lice, na.rm = T), 
@@ -810,27 +851,37 @@ abundance <- sealice_time_series %>%
                           upper_ci = qt(1 - (0.05 / 2), n - 1) * se) %>% 
   filter(louse_species == "all_lice")
 
-ggplot(data = abundance, aes(x = factor(year), y = abundance, fill = factor(species),
-                 group = factor(species))) +
-      geom_bar(stat = "identity", position = position_dodge()) +
+```
+
+The prevalence of motile sea lice in 2018 was the lowest recorded in the time-series (Figure \@ref(fig:sealice)). Notably, no _Lepeophtheirus salmonis_ were detected on sockeye in Johnstone Strait, despite being present in the Discovery Islands. Pink salmon had higher sea lice abundance, prevalence, and intensity compared to the chum and sockeye time series average (Table \@ref(tab:parasites)) in contrast to @Patanasatienkul2013 where they found that the prevalence and intensity of sea lice were higher on chum than pink on early marine entrants in the broughton archipelago.
+
+```{r sealice, fig.cap="The abundance of motile sea lice on juvenile salmon in the Discovery Islands and Johnstone Strait. The numbers under each bar indicate the sample size and the error bars indicate the 95 percent confidence region.", out.width="90%"}
+
+abundance$species <- abundance$species %>% 
+  fct_relevel("SO", "PI", "CU") %>% 
+  fct_recode("Sockeye" = "SO", "Pink" = "PI", "Chum" = "CU")
+
+ggplot(data = abundance, aes(x = factor(year), y = abundance, fill = species,
+                 group = species)) +
+      geom_bar(colour = "black", stat = "identity", position = position_dodge()) +
       geom_errorbar(aes(ymin = abundance - lower_ci, 
                         ymax = abundance + upper_ci), 
                     width = 0.2,
                     position = position_dodge(0.9)) +
       facet_grid(region ~., labeller = labeller(species = spp_labels, 
                                                        region = spp_labels)) +
-      labs(x = "Year", y = "abundance") +
-      scale_fill_discrete(name="Species",
-                          breaks=c("SO", "CU", "PI"),
-                          labels=c("Sockeye", "Chum", "Pink")) +
+      labs(x = "Year", y = "Abundance") +
       theme(legend.position="bottom") +
       geom_text(aes(label = ifelse(abundance == 0, round(abundance, 1), '')),
                 position = position_dodge(0.9), vjust = -0.5) +
       geom_text(aes(y = 0.0, label = paste0(n)), size = 3.15, vjust = 1.25,
                 position = position_dodge(0.9)) +
-      scale_y_continuous(expand = expand_scale(mult = c(.15, 0)))
-```
+      scale_y_continuous(expand = expand_scale(mult = c(.15, 0))) +
+      scale_fill_hakai() +
+      labs(fill = "Species") +
+  ggtitle("Sea Lice Parasite Loads")
 
+```
 
 ## Sea Surface Temperature {-}
 
@@ -872,7 +923,7 @@ sst_nice_table <- sst_annual_mean %>%
 
 Sea-surface temperatures in May and June at QU39 in the northern Strait of Georgia was `r round(sst_stats_table$estimate, 2)` degrees C warmer than normal (Z = `r round(last(sst_z),2)`) (Table \@ref(tab:ssttable)). Sea surface temperatures between May and July of 2018 were warmer than the time series average. (Figure \@ref(fig:sst))
 
-```{r sst, out.width="80%", fig.cap="Time series of 30 m depth integrated temperature anomalies observed at Hakai Oceanographic Monitoring station QU39. Blue areas represent temperatures that are below normal, red areas represent above normal temperatures at the selected station in 2018. Normal is the solid black line which is a loess regression based on temperatures from 2015-2018. The shaded grey area is 1 SE of the loess regression. The black dots are the daily minimum and maximum temperatures observed over the time series."}
+```{r sst, out.width="90%", fig.cap="Time series of 30 m depth integrated temperature anomalies observed at Hakai Oceanographic Monitoring station QU39. Blue areas represent temperatures that are below normal, red areas represent above normal temperatures at the selected station in 2018. Normal is the solid black line which is a loess regression based on temperatures from 2015-2018. The shaded grey area is 1 SE of the loess regression. The black dots are the daily minimum and maximum temperatures observed over the time series."}
 
 temperature_anomaly_data <- temperature_anomaly_data %>% 
       filter(station == "QU39")
@@ -894,7 +945,6 @@ ggplot(data = temperature_anomaly_data, aes(x = yday, y = mean_temp)) +
                                 mean_temp <= predicted_mean_temp), 
                   aes(ymin = mean_temp, ymax = predicted_mean_temp),
                   fill = 'blue', size = 1)+
-      theme_bw() +
       geom_smooth(data = average_temps, aes(x = yday, y = mean_temp),
                   size = 1, colour = 'black', se = T, span = .65) +
       geom_point(data = min_max_data,
@@ -904,9 +954,9 @@ ggplot(data = temperature_anomaly_data, aes(x = yday, y = mean_temp)) +
       scale_x_continuous(breaks = (c(32, 60, 91, 121, 152, 182, 213)),
                          labels = (c("Feb", "Mar", "Apr", "May", "Jun", 
                                      "Jul", "Aug"))) +
-      theme_bw(base_size = 17) +
       labs(x = "Date", y = "Temperature [°C]") +
-      coord_cartesian(xlim = c(32,213)) 
+      coord_cartesian(xlim = c(32,213)) +
+  ggtitle("Sea-surface Temperature Anomalies")
 
 ggsave(here("figs", "sst.png"))
 
@@ -915,10 +965,25 @@ ggsave(here("figs", "sst.png"))
 
 # Tables {-}
 
+```{r z}
+knitr::kable(heatmap_data, col.names = c("Year", "Parameter", "Z-score"), format = 'markdown')
+```
+Table: (\#tab:z) Key salmon migration health, growth, and migration parameters standardized to z-scores—the number of standard deviations observations are from the time series average.
+
 ```{r mtdi}
 knitr::kable(migration_timing, format = 'markdown')
 ```
 Table: (\#tab:mtdi) Migration timing statistics for the cumulative catch of sockeye, pink, and chum salmon in the Discovery Islands in 2018, compared to the time-series average (2015 - `r current_year`). Q1 is when 25 % of the species passed through the regions, peak date is the median when 50 % passed through, and Q3 is 75%. The region DI indicates the Discovery Islands while for species SO is sockeye, PI is pink, and CU is chum. 
+
+```{r catch-intensity}
+catch_intensity <- catch_intensity %>% 
+  select("year", "species", "mean_catch")
+
+knitr::kable(catch_intensity, format = 'markdown', 
+             col.names = c("Year", "Species", "Catch Intensity"))
+```
+Table: (\#tab:catch-intensity) Catch intensity—a measure of interannual abundance—for sockeye, pink, and chum in the Discovery Islands and Johnstone Strait combined.
+
 
 ```{r length}
 knitr::kable(tsa_length, format = 'markdown')
