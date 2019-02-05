@@ -1,0 +1,43 @@
+---
+title: "Chilko Otoliths for Yuliya"
+author: "Brett Johnson"
+date: "November 24, 2017"
+output: html_document
+---
+
+This file creates a list of sockeye otoliths that are from Chilko and Lower Adams from 2016 that are to be shipped to Yuliya at UBC.
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(googlesheets)
+library(tidyverse)
+
+db_wip <- gs_title('Database WIP')
+survey_data <- gs_read(db_wip, ws = "survey_data")
+stock_id <- gs_read(db_wip, ws = "stock_id")
+seine_data <- gs_read(db_wip, ws = "seine_data")
+fish_field_data <- gs_read(db_wip, ws = "fish_field_data")
+fish_lab_data <- gs_read(db_wip, ws = "fish_lab_data")
+sample_metadata <- gs_read(db_wip, ws = "sample_metadata")
+sample_container_inventory <- gs_read(db_wip, ws = "sample_container_inventory")
+
+fish_data <- full_join(fish_field_data, fish_lab_data) 
+survey_seines <- full_join(survey_data, seine_data)
+survey_seines_fish <- full_join(survey_seines, fish_data) %>% 
+  filter(survey_date < "2017-01-01")
+survey_seines_fish_stock <- full_join(survey_seines_fish, stock_id)
+sample <- full_join(survey_seines_fish_stock, sample_metadata, by = "ufn") %>% 
+  filter(sample_type == "otolith")
+
+sample_location <- full_join(sample, sample_container_inventory, by = "container_id") %>% 
+  filter(species == "SO") %>% 
+  select(ufn, survey_date, site_id, stock_1, current_location, container_id, storage_shelf, storage_tray) %>% 
+  drop_na(stock_1) %>% 
+  filter(stock_1 %in% c("Chilko", "L_Adams")) %>% 
+  filter(current_location == "Quadra Prep Lab")
+
+write_csv(sample_location, "2017-11-24_Yuliyas_Chilko_Lower_Adams_Sockeye_Otoliths.csv")
+```
+
+

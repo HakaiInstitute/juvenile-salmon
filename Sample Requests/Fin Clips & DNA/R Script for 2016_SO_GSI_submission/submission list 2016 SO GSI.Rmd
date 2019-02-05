@@ -1,0 +1,20 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+setwd("~/Google Drive/SEMSP/SEMSP Lab/Sample Inventory/Shipping information/Submission forms /2016_SO_GSI_submission")
+library(dplyr)
+library(lubridate)
+so_2016 <- read.csv(file="Genetic Fin CLips - Whatman 2016 SO.csv", stringsAsFactors = FALSE)
+so_2016$julian.date.caught <- yday(so_2016$julian.date.caught)
+so_2016$whatman.sheet.cell.id[duplicated(so_2016$whatman.sheet.cell.id)]
+
+write.csv(so_2016,"HAKAI_2016_SO_GSI.csv")
+
+
+
+```
+

@@ -1,0 +1,218 @@
+---
+title: "Sub-sample list for Marty"
+author: "Brett Johnson"
+date: "11/21/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(lubridate)
+library(reshape2)
+
+#source("read_current_data_package.R")
+
+fish_field_data <- read_csv("fish_field_data.csv")
+fish_lab_data <- read_csv("fish_lab_data.csv")
+sealice_lab_motiles <- read_csv("sealice_lab_motiles.csv")
+seine_data <- read_csv("seine_data.csv")
+survey_data <- read_csv("survey_data.csv")
+sample_metadata <- read_csv("sample_metadata.csv")
+sample_container_inventory <- read_csv("sample_container_inventory.csv")
+PI_CU_2015_core_dissections_update <- read_csv("PI_CU_2015_core_dissections_update.csv")
+stock_id <- read_csv("stock_id.csv")
+
+
+survey_data <- survey_data %>% 
+  mutate(sampling_week = as.numeric((yday(survey_date) + 4) %/% 7))
+
+survey_data <- survey_data %>%
+  mutate(sampling_week = recode_factor(survey_data$sampling_week, `18` = "May 5", `19` = "May 12" , 
+                                       `20` = "May 19", `21` = "May 26", `22` = "June 2",
+                                       `23` = "June 9", `24` = "June 16", `25` = "June 23",
+                                       `26` = "June 30", `27` = "July 6", `28` = "July 13"))
+
+fish_data <- left_join(fish_field_data, fish_lab_data, by = "ufn")
+survey_seines <- full_join(survey_data, seine_data)
+survey_seines_fish <- full_join(survey_seines, fish_data)
+lice_samples <- full_join(survey_seines_fish, sealice_lab_motiles)
+lice_samples <- full_join(lice_samples, sample_metadata) 
+lice_samples <- left_join(lice_samples, sample_container_inventory)
+
+mutate_cond <- function(.data, condition, ..., envir = parent.frame()) {
+  condition <- eval(substitute(condition), .data, envir)
+  .data[condition, ] <- .data[condition, ] %>% mutate(...)
+  .data
+}
+```
+
+# All Sealice Life Stage Taxonomy Samples Stored in Formalin
+
+In 2015 the SEMSP lab crew retained all life stages of sea-lice found on the
+fish they dissected. Most of the fish dissected were sockeye. Figure 1 shows a plot
+of formalin sealice samples currently available. Some of the sockeye data points already
+have results associated with them.
+
+Go to [this link](https://drive.google.com/open?id=1gUAgziF3GHbtKVEE_Sus3LRdyJ767RVn) to download the data table that underpins this plot.
+
+```{r All Formalin Sea Lice Samples plot, fig.cap = "The spatial and temporal distribution of all life stages of sea lice stored in formalin from the 2015 sampling season."}
+
+lice_samples_available <- lice_samples %>%  
+  filter(sample_type %in% c("sealice", "sealice_cal", "sealice_lep")) %>% 
+  filter(species %in% c("SO", "PI", "CU")) %>% 
+  mutate(year = as.factor(year(survey_date))) %>% 
+  select(seine_id, survey_date, year, species, site_id, sample_type, sample_status, storage_medium, lice_id_protocol_lab, current_location,
+         storage_unit, group_box, storage_shelf, storage_tray) %>% 
+  filter(storage_medium == "Formalin") %>% 
+  mutate_cond(is.na(lice_id_protocol_lab), sample_status = "collected") %>% 
+  mutate_cond(is.na(sample_status), sample_status = "results") %>% 
+  select(-sample_type, -lice_id_protocol_lab) %>% 
+  group_by(seine_id, survey_date, site_id, species, sample_status, current_location) %>% 
+  summarize(n = n()) %>% 
+  ungroup()
+
+martys_lice <- lice_samples_available %>% 
+  spread(key = sample_status, value = n) %>% 
+  mutate_cond(is.na(collected), collected = 0) %>% 
+  mutate_cond(is.na(results), results = 0) %>% 
+  mutate(sealice_collected = results + collected) %>% 
+  rename(sealice_results = results) %>% 
+  select(seine_id, survey_date, site_id, species, sealice_collected, sealice_results) 
+
+martys_collected_sealice <- martys_lice %>% 
+  select(-sealice_results) %>% 
+  spread(key = species, value = sealice_collected) %>% 
+  rename(PI_sealice_collected = PI, CU_sealice_collected = CU, SO_sealice_collected = SO)
+
+martys_results_sealice <- martys_lice %>%
+  select(-sealice_collected) %>% 
+  spread(key = species, value = sealice_results) %>% 
+  rename(PI_sealice_results = PI, CU_sealice_results = CU, SO_sealice_results = SO)
+
+martys_lice <-full_join(martys_collected_sealice, martys_results_sealice) %>% 
+  select(seine_id, survey_date, site_id, SO_sealice_collected, SO_sealice_results,
+         PI_sealice_collected, PI_sealice_results, CU_sealice_collected, CU_sealice_results)
+
+```
+
+```{r}
+pi_cu_to_dissect <- PI_CU_2015_core_dissections_update %>% 
+  filter(species %in% c("PI", "CU")) %>% 
+  select(seine_id, date_caught, site, species, n_to_dissect) %>% 
+  rename(survey_date = date_caught, site_id = site) 
+
+so_pi_cu_dissected <- survey_seines_fish %>% 
+  filter(survey_date < "2017-01-01") %>% 
+  filter(species %in% c("SO", "PI", "CU")) %>% 
+  group_by(seine_id, survey_date, site_id, species) %>% 
+  summarize(n_dissected = n())
+
+so_pi_cu_dissected <- left_join(so_pi_cu_dissected, pi_cu_to_dissect, by = c("seine_id", "survey_date", "site_id", "species")) %>% 
+  mutate_cond(is.na(n_to_dissect), n_to_dissect = 0) %>% 
+  mutate(n_more_to_dissect = n_to_dissect - n_dissected) %>% 
+  mutate_cond(n_more_to_dissect >=0, n_dissected = n_dissected + n_more_to_dissect) %>% 
+  select(-n_to_dissect, -n_more_to_dissect)
+
+to_dissect_not_joined <- anti_join(pi_cu_to_dissect, so_pi_cu_dissected, by = c("seine_id", "survey_date", "site_id", "species"))
+  
+so_pi_cu_dissected <- bind_rows(to_dissect_not_joined, so_pi_cu_dissected) %>% 
+  mutate_cond(is.na(n_dissected), n_dissected = n_to_dissect) %>% 
+  select(-n_to_dissect)
+
+so_pi_cu_dissected <- left_join(so_pi_cu_dissected, survey_seines) %>% 
+  select(seine_id, survey_date, site_id, species, n_dissected)
+
+so_pi_cu_caught <- survey_seines %>% 
+  filter(survey_date < "2017-01-01") %>% 
+  rename(SO = so_taken, PI = pi_taken, CU = cu_taken) %>% 
+  gather(`SO`, `PI`, `CU`, key = "species", value = "n_taken") %>% 
+  select(seine_id, survey_date, site_id, species, n_taken) %>% 
+  filter(n_taken > 0) %>% 
+  drop_na(n_taken)
+
+
+so_pi_cu_remaining <- left_join(so_pi_cu_caught, so_pi_cu_dissected, by = c("seine_id", "survey_date", "site_id", "species")) %>% 
+  mutate_cond(is.na(n_dissected), n_dissected = 0)
+
+
+martys_tidy_table <- full_join(so_pi_cu_remaining, lice_samples_available, by = c("seine_id", "survey_date", "site_id", "species")) %>% 
+  rename(sealice_sample_status = sample_status) %>% 
+  rename(current_sealice_sample_location = current_location) %>% 
+  rename(n_sealice_samples = n) %>% 
+  rename(n_retained = n_taken) %>% 
+  mutate(date_site_species = paste(survey_date, "-", site_id, "-", species)) %>% 
+  select(date_site_species, seine_id, survey_date, site_id, species, n_retained, n_dissected, n_sealice_samples, sealice_sample_status, current_sealice_sample_location) %>% 
+  mutate_cond(is.na(n_sealice_samples), n_sealice_samples = 0)
+
+
+martys_retained <- martys_tidy_table %>% 
+  select(seine_id, survey_date, site_id, species, n_retained) %>% 
+  distinct() %>% # This removes a set that conducted for training purposes
+  spread(key = species, value = n_retained) %>% 
+  rename(SO_retained = SO, PI_retained = PI, CU_retained = CU)
+
+martys_dissected <- martys_tidy_table %>% 
+  select(seine_id, survey_date, site_id, species, n_dissected) %>% 
+  distinct() %>% # This removes a set that conducted for training purposes
+  spread(key = species, value = n_dissected) %>% 
+  rename(SO_dissected = SO, PI_dissected = PI, CU_dissected = CU)
+
+#
+martys_catch_stats <- full_join(martys_retained, martys_dissected) %>% 
+  select(seine_id, survey_date, site_id, SO_retained, SO_dissected, PI_retained,
+         PI_dissected, CU_retained, CU_dissected)
+
+martys_dream_non_tidy_table <- full_join(martys_catch_stats, martys_lice)
+
+martys_dream_non_tidy_table[is.na(martys_dream_non_tidy_table)] <- 0
+
+martys_sockeye_stocks <- left_join(survey_seines_fish, stock_id) %>%
+  drop_na(stock_1) %>% 
+  group_by(seine_id) %>% 
+  summarize(n_sockeye_stock_id=n())
+
+martys_dream_non_tidy_table <- left_join(martys_dream_non_tidy_table, martys_sockeye_stocks) %>% replace_na(list(n_sockeye_stock_id = 0)) %>% 
+  mutate_cond(SO_retained == 0, n_sockeye_stock_id = "NA")
+
+write_csv(martys_dream_non_tidy_table, "./processed_data/seine_observations_summary.csv")
+
+```
+
+```{r number of lice per formalin sample}
+lice_summary <- full_join(survey_seines_fish, sealice_lab_motiles) 
+lice_summary <- full_join(lice_summary, sample_metadata, by = "ufn")
+lice_summary <- lice_summary %>% 
+  filter(sample_type == "sealice" )%>% 
+  select(seine_id, survey_date, site_id, so_taken, cu_taken, pi_taken, ufn, sample_id, lab_count_no_id) %>% 
+  rename(n_lice_in_sample = lab_count_no_id)
+
+martys_n_lice_tidy <- left_join(lice_summary, martys_dream_non_tidy_table)
+
+stock_id <- full_join(stock_id, sample_metadata, by = "sample_id") %>% 
+  drop_na(stock_1) %>% 
+  select(ufn, stock_1, prob_1)
+
+martys_n_lice_and_sockeye_stocks_tidy <- left_join(martys_n_lice_tidy, stock_id) 
+
+# UN comment below if you want to try to get this code working to attach location information
+
+# sealice_containers <- sample_container_inventory %>% 
+#   filter(container_type == "sea lice") %>% 
+#   select(container_id, current_location, storage_shelf, storage_tray) %>% 
+#   rename(sealice_sample_current_location = current_location,
+#          sealice_storage_shelf = storage_shelf, sealice_storage_tray = storage_tray) 
+#   
+# carcasses <- sample_container_inventory %>% 
+#   filter(container_type == "carcass") %>% 
+#   select(container_id, current_location) %>% 
+#   rename(fish_current_location = current_location)
+# 
+# martys_n_lice_and_sockeye_stocks_tidy <- left_join(martys_n_lice_and_sockeye_stocks_tidy, carcasses) 
+# 
+# martys_n_lice_and_sockeye_stocks_tidy <- left_join(martys_n_lice_and_sockeye_stocks_tidy, sealice_containers)
+                                                   
+write_csv(martys_n_lice_and_sockeye_stocks_tidy, "./processed_data/fish_observations.csv")
+
+```
+
