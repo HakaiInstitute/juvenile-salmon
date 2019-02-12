@@ -1430,6 +1430,7 @@ ggsave(here::here("Fine-scale migration dynamics", "figs", "timing_comparison.pn
 
 
 ```
+
 ```{r sockeye stock specific migration timing}
 #ssmt: stock specific migration timing
 

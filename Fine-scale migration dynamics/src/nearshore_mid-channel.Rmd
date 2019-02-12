@@ -10,6 +10,7 @@ output:
    toc_float: true
    number_sections: true
 ---
+# Setup
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, error = FALSE)
@@ -18,6 +19,9 @@ library(tidyverse)
 library(lubridate)
 library(here)
 library(hakaiApi)
+library(DescTools)
+
+theme_set(ggsidekick::theme_sleek()) #Thanks Sean Anderson
 
 client <- hakaiApi::Client$new()
 
@@ -42,7 +46,7 @@ fish_endpoint <- sprintf("%s/%s", client$api_root,
 fish <- client$get(fish_endpoint) %>% 
   select(survey_date = date, site_id, species, fork_length, weight, ufn = hakai_id) %>% 
   left_join(dna, by = c("ufn" = "fish_id")) %>% 
-  add_column(org = "hakai", .after = "ufn") %>% 
+  add_column(Habitat = "Nearshore", .after = "ufn") %>% 
   add_column(DNA = NA, .after = "weight") %>% 
   add_column(year_tow = NA, .before = "survey_date") %>% 
   add_column(lat = NA, .before = "species") %>% 
@@ -51,12 +55,13 @@ fish <- client$get(fish_endpoint) %>%
 
 # Read in DFO data from D09
 dfo_data <- read_csv(here("data", "dfo_data.csv")) %>% 
-  add_column(ufn = "ufn", .before = "org") %>% 
+  add_column(ufn = "ufn", .before = "Habitat") %>% 
   mutate(collapsed_fraser_stocks = lump_fraser_sockeye_stocks(stock_1)) %>% 
   # Filter out sits that arent from the same DFO sampling station
   filter(!year_tow %in% c("2016_109", "2015_78", "2016_34", "2015_5", "2015_73",
                           "2015_9", "2015_37", "2015_20", "2016-106")) %>% 
-  mutate(prob_1 = as.numeric(prob_1))
+  mutate(prob_1 = as.numeric(prob_1),
+         survey_date = as_date(survey_date))
 
 # Join Hakai and DFO data into one dataframe
 okisollo <- bind_rows(fish, dfo_data) %>%
@@ -90,7 +95,77 @@ rm(ethanol_dna, finclip_dna,fish, dna, dfo_data)
 
 # Sockeye Stock Composition
 
-```{r}
+Chilko sockeye in higher proportion mid channel
+
+Late Shuswap Portage consistently higher proportion in nearshore
+
+```{r annual gsi}
+
+gsi_okisollo <- okisollo %>%
+  filter(collapsed_fraser_stocks != 0, collapsed_fraser_stocks != "") %>% 
+  drop_na(site_id) %>% 
+  drop_na(collapsed_fraser_stocks) %>%
+  group_by(year, Habitat, collapsed_fraser_stocks) %>% 
+  summarize(n = n()) %>% 
+  mutate(proportion = n / sum(n)) %>% 
+  arrange(proportion) 
+
+# Breakout out habitat and year proportions to calculate CIs
+## nearshore 2015
+gsi_okisollo_nearshore_2015 <- gsi_okisollo %>% 
+  filter(year == 2015, Habitat == "Nearshore")
+h_15 <- as_data_frame(MultinomCI(gsi_okisollo_nearshore_2015$n, 
+           conf.level=0.95, 
+           method="sisonglaz")) 
+gsi_okisollo_nearshore_2015 <- bind_cols(gsi_okisollo_nearshore_2015, h_15)
+
+## nearshore 2016
+gsi_okisollo_nearshore_2016 <- gsi_okisollo %>% 
+  filter(year == 2016, Habitat == "Nearshore")
+h_16 <- as_data_frame(MultinomCI(gsi_okisollo_nearshore_2016$n, 
+           conf.level=0.95, 
+           method="sisonglaz")) 
+gsi_okisollo_nearshore_2016 <- bind_cols(gsi_okisollo_nearshore_2016, h_16)
+
+## mid-channel 2015
+gsi_okisollo_midchannel_2015 <- gsi_okisollo %>% 
+  filter(year == 2015, Habitat == "Mid Channel")
+m_15 <- as_data_frame(MultinomCI(gsi_okisollo_midchannel_2015$n, 
+           conf.level=0.95, 
+           method="sisonglaz")) 
+gsi_okisollo_midchannel_2015 <- bind_cols(gsi_okisollo_midchannel_2015, m_15)
+
+## mid-channel 2016
+gsi_okisollo_midchannel_2016 <- gsi_okisollo %>% 
+  filter(year == 2016, Habitat == "Mid Channel")
+m_16 <- as_data_frame(MultinomCI(gsi_okisollo_midchannel_2016$n, 
+           conf.level=0.95, 
+           method="sisonglaz")) 
+gsi_okisollo_midchannel_2016 <- bind_cols(gsi_okisollo_midchannel_2016, m_16)
+
+gsi_okisollo <- bind_rows(gsi_okisollo_midchannel_2016,
+                          gsi_okisollo_midchannel_2015, 
+                          gsi_okisollo_nearshore_2016, 
+                          gsi_okisollo_nearshore_2015) %>% 
+  filter(collapsed_fraser_stocks %in% c('Late_Shuswap_Portage', 'Chilko',
+                                        'Quesnel', 'Early_Thompson',
+                                        'Late_Stuart_Stellako'))
+
+rm(gsi_okisollo_midchannel_2016,
+                          gsi_okisollo_midchannel_2015, 
+                          gsi_okisollo_nearshore_2016, 
+                          gsi_okisollo_nearshore_2015, m_16, m_15, h_15)
+  
+ggplot(gsi_okisollo, aes(x = fct_reorder(collapsed_fraser_stocks, proportion), y = proportion, fill = Habitat)) +
+  geom_bar(stat="identity", position = position_dodge()) + 
+  geom_errorbar(aes(ymin = lwr.ci, ymax = upr.ci), width = 0.5, position = position_dodge(0.9)) +
+  ggtitle("Genetic Stock Proportions") +
+  facet_wrap(~year) +
+  xlab("") + 
+  ylab("Proportion") +
+  coord_flip() +
+  theme(legend.position="bottom") + 
+  scale_fill_hakai()
 
 ```
 
