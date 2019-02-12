@@ -1,0 +1,105 @@
+---
+title: "Nearshore and Mid Channel Habitat Use"
+author: "Brett Johnson"
+date: '`r date()`'
+output:
+ html_document:
+   theme: cosmo
+   code_folding: show
+   toc: true
+   toc_float: true
+   number_sections: true
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, error = FALSE)
+library(hakaisalmon)
+library(tidyverse)
+library(lubridate)
+library(here)
+library(hakaiApi)
+
+client <- hakaiApi::Client$new()
+
+# Download stock ID dna (ethanol liver samples) results from EIMS Data Portal
+dna_endpoint <- sprintf("%s/%s", client$api_root, 'eims/views/output/jsp_dna?site_id%26%26{"D09"}&limit=-1')
+ethanol_dna <- client$get(dna_endpoint)
+
+# Download stock ID finclip (whatman adhered caudal fins) results
+finclip_endpoint <-  sprintf("%s/%s", client$api_root, 
+                    'eims/views/output/jsp_fin_clip?site_id%26%26{"D09"}&limit=-1')
+finclip_dna <- client$get(finclip_endpoint)
+
+# Bind both data sets together
+dna <- bind_rows(ethanol_dna, finclip_dna) %>% 
+  select(fish_id, stock_1, prob_1)
+
+
+# Download Fish Data to join to DNA results
+fish_endpoint <- sprintf("%s/%s", client$api_root, 
+                        'eims/views/output/jsp_fish?site_id%26%26{"D09"}&limit=-1')
+
+fish <- client$get(fish_endpoint) %>% 
+  select(survey_date = date, site_id, species, fork_length, weight, ufn = hakai_id) %>% 
+  left_join(dna, by = c("ufn" = "fish_id")) %>% 
+  add_column(org = "hakai", .after = "ufn") %>% 
+  add_column(DNA = NA, .after = "weight") %>% 
+  add_column(year_tow = NA, .before = "survey_date") %>% 
+  add_column(lat = NA, .before = "species") %>% 
+  add_column(lon = NA, .after = "lat") %>% 
+  mutate(collapsed_fraser_stocks = lump_fraser_sockeye_stocks(stock_1)) 
+
+# Read in DFO data from D09
+dfo_data <- read_csv(here("data", "dfo_data.csv")) %>% 
+  add_column(ufn = "ufn", .before = "org") %>% 
+  mutate(collapsed_fraser_stocks = lump_fraser_sockeye_stocks(stock_1)) %>% 
+  # Filter out sits that arent from the same DFO sampling station
+  filter(!year_tow %in% c("2016_109", "2015_78", "2016_34", "2015_5", "2015_73",
+                          "2015_9", "2015_37", "2015_20", "2016-106")) %>% 
+  mutate(prob_1 = as.numeric(prob_1))
+
+# Join Hakai and DFO data into one dataframe
+okisollo <- bind_rows(fish, dfo_data) %>%
+  mutate(k = 10^5*(weight / fork_length ^ 3)) %>% 
+  mutate(year = year(survey_date)) %>% 
+  filter(year %in% c(2016, 2015)) %>% 
+  # categorize sampling events into categorical week and recod the categories so
+  # that the middle of the week is the label
+  mutate(sampling_week = as.numeric((yday(survey_date) + 4) %/% 7)) %>%
+  mutate(
+  sampling_week = recode_factor(sampling_week,
+  `18` = "May 5",
+  `19` = "May 12" ,
+  `20` = "May 19",
+  `21` = "May 26",
+  `22` = "June 2",
+  `23` = "June 9",
+  `24` = "June 16",
+  `25` = "June 23",
+  `26` = "June 30",
+  `27` = "July 6",
+  `28` = "July 13"
+  )
+  ) %>% 
+  #Looks like dfo data has errors in it with a fork_length of 9 and 18
+  filter(fork_length > 20)
+
+# Remove intermediate dataframes
+rm(ethanol_dna, finclip_dna,fish, dna, dfo_data)  
+```
+
+# Sockeye Stock Composition
+
+```{r}
+
+```
+
+
+# Migration Timing
+
+# Lengths
+
+# Catch Composition
+
+# Diversity
+
