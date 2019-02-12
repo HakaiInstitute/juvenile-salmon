@@ -1,0 +1,234 @@
+"","Date","Work Area","Survey","Site ID","JSP Survey ID","Seine ID","Hakai ID","Species","sample_type","sample_id","container_id","container_cell","sample_location","comments_sample","sample_status","sample_qc_flag","sample_flag_reason","sample_qc_log"
+"1",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10660","SO","fatty_acid","S10660FA1","BFA40","B4","BFA40-B4",NA,"being_processed","N",NA,NA
+"2",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10657","SO","fatty_acid","S10657FA1","BFA40","B5","BFA40-B5",NA,"being_processed","N",NA,NA
+"3",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10651","SO","fatty_acid","S10651FA1","BFA40","B6","BFA40-B6",NA,"being_processed","N",NA,NA
+"4",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10092","SO","fatty_acid","S10092FA1","BFA40","A1","BFA40-A1",NA,"being_processed","N",NA,NA
+"5",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10095","SO","fatty_acid","S10095FA1","BFA40","A2","BFA40-A2",NA,"being_processed","N",NA,NA
+"6",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10099","SO","fatty_acid","S10099FA1","BFA40","A3","BFA40-A3",NA,"being_processed","N",NA,NA
+"7",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10098","SO","fatty_acid","S10098FA1","BFA40","A4","BFA40-A4",NA,"being_processed","N",NA,NA
+"8",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10100","SO","fatty_acid","S10100FA1","BFA40","A5","BFA40-A5",NA,"being_processed","N",NA,NA
+"9",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10096","SO","fatty_acid","S10096FA1","BFA40","A6","BFA40-A6",NA,"being_processed","N",NA,NA
+"10",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10097","SO","fatty_acid","S10097FA1","BFA40","A7","BFA40-A7",NA,"being_processed","N",NA,NA
+"11",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10094","SO","fatty_acid","S10094FA1","BFA40","A8","BFA40-A8",NA,"being_processed","N",NA,NA
+"12",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10093","SO","fatty_acid","S10093FA1","BFA40","A9","BFA40-A9",NA,"being_processed","N",NA,NA
+"13",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10091","SO","fatty_acid","S10091FA1","BFA40","B1","BFA40-B1",NA,"being_processed","N",NA,NA
+"14",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10584","SO","fatty_acid","S10584FA1","BFA41","F2","BFA41-F2","ventral sample taken, posterior of dorsal fin. Sample accidentally left in dry ice cooler at -65C overnight.","being_processed","N",NA,NA
+"15",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10590","SO","fatty_acid","S10590FA1","BFA41","F3","BFA41-F3","ventral sample taken, posterior of dorsal fin. Sample accidentally left in dry ice cooler at -65C overnight.","being_processed","N",NA,NA
+"16",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10588","SO","fatty_acid","S10588FA1","BFA41","F4","BFA41-F4","ventral sample taken, posterior of dorsal fin. Sample accidentally left in dry ice cooler at -65C overnight.","being_processed","N",NA,NA
+"17",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10585","SO","fatty_acid","S10585FA1","BFA41","F5","BFA41-F5","ventral sample taken, posterior of dorsal fin. Sample accidentally left in dry ice cooler at -65C overnight.","being_processed","N",NA,NA
+"18",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10581","SO","fatty_acid","S10581FA1","BFA41","F6","BFA41-F6","ventral sample taken, posterior of dorsal fin. Sample accidentally left in dry ice cooler at -65C overnight.","being_processed","N",NA,NA
+"19",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10587","SO","fatty_acid","S10587FA1","BFA41","F7","BFA41-F7","ventral sample taken, posterior of dorsal fin. Sample accidentally left in dry ice cooler at -65C overnight.","being_processed","N",NA,NA
+"20",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10582","SO","fatty_acid","S10582FA1","BFA41","F8","BFA41-F8","ventral sample taken, posterior of dorsal fin. Sample accidentally left in dry ice cooler at -65C overnight.","being_processed","N",NA,NA
+"21",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10583","SO","fatty_acid","S10583FA1","BFA41","F9","BFA41-F9","ventral sample taken, posterior of dorsal fin. Sample accidentally left in dry ice cooler at -65C overnight.","being_processed","N",NA,NA
+"22",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10586","SO","fatty_acid","S10586FA1","BFA41","G1","BFA41-G1","ventral sample taken, posterior of dorsal fin. Sample accidentally left in dry ice cooler at -65C overnight.","being_processed","N",NA,NA
+"23",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10589","SO","fatty_acid","S10589FA1","BFA41","G2","BFA41-G2","ventral sample taken, posterior of dorsal fin. Sample accidentally left in dry ice cooler at -65C overnight.","being_processed","N",NA,NA
+"24",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10670","SO","fatty_acid","S10670FA1","BFA41","G3","BFA41-G3","ventral sample taken, posterior of dorsal fin. Sample accidentally left in dry ice cooler at -65C overnight.","being_processed","N",NA,NA
+"25",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10110","SO","fatty_acid","S10110FA1","BFA40","B3","BFA40-B3","ventral sample taken, posterior of dorsal fin","being_processed","N",NA,NA
+"26",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10103","SO","fatty_acid","S10103FA1","BFA40","B2","BFA40-B2","ventral sample taken, posterior of dorsal fin","being_processed","N",NA,NA
+"27",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10652","SO","fatty_acid","S10652FA1","BFA40","B7","BFA40-B7","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample","being_processed","N",NA,NA
+"28",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10659","SO","fatty_acid","S10659FA1","BFA40","B8","BFA40-B8","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample","being_processed","N",NA,NA
+"29",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10653","SO","fatty_acid","S10653FA1","BFA40","B9","BFA40-B9","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample","being_processed","N",NA,NA
+"30",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10658","SO","fatty_acid","S10658FA1","BFA40","C1","BFA40-C1","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample","being_processed","N",NA,NA
+"31",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10654","SO","fatty_acid","S10654FA1","BFA40","C2","BFA40-C2","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample","being_processed","N",NA,NA
+"32",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10656","SO","fatty_acid","S10656FA1","BFA40","C3","BFA40-C3","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample","being_processed","N",NA,NA
+"33",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10655","SO","fatty_acid","S10655FA1","BFA40","C4","BFA40-C4","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample","being_processed","N",NA,NA
+"34",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10736","SO","fatty_acid","S10736FA1","BFA41","H4","BFA41-H4","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample","being_processed","N",NA,NA
+"35",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10734","SO","fatty_acid","S10734FA1","BFA41","H5","BFA41-H5","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample","being_processed","N",NA,NA
+"36",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10740","SO","fatty_acid","S10740FA1","BFA41","H6","BFA41-H6","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample","being_processed","N",NA,NA
+"37",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10663","SO","fatty_acid","S10663FA1","BFA41","G4","BFA41-G4","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample. Sample accidentally left in dry ice cooler at -65C overnight.","being_processed","N",NA,NA
+"38",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10661","SO","fatty_acid","S10661FA1","BFA41","G5","BFA41-G5","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample. Sample accidentally left in dry ice cooler at -65C overnight.","being_processed","N",NA,NA
+"39",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10669","SO","fatty_acid","S10669FA1","BFA41","G6","BFA41-G6","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample. Sample accidentally left in dry ice cooler at -65C overnight.","being_processed","N",NA,NA
+"40",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10662","SO","fatty_acid","S10662FA1","BFA41","G7","BFA41-G7","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample. Sample accidentally left in dry ice cooler at -65C overnight.","being_processed","N",NA,NA
+"41",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10667","SO","fatty_acid","S10667FA1","BFA41","G8","BFA41-G8","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample. Sample accidentally left in dry ice cooler at -65C overnight.","being_processed","N",NA,NA
+"42",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10665","SO","fatty_acid","S10665FA1","BFA41","G9","BFA41-G9","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample. Sample accidentally left in dry ice cooler at -65C overnight.","being_processed","N",NA,NA
+"43",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10664","SO","fatty_acid","S10664FA1","BFA41","H1","BFA41-H1","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample. Sample accidentally left in dry ice cooler at -65C overnight.","being_processed","N",NA,NA
+"44",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10666","SO","fatty_acid","S10666FA1","BFA41","H2","BFA41-H2","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample. Sample accidentally left in dry ice cooler at -65C overnight.","being_processed","N",NA,NA
+"45",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10668","SO","fatty_acid","S10668FA1","BFA41","H3","BFA41-H3","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample. Sample accidentally left in dry ice cooler at -65C overnight.","being_processed","N",NA,NA
+"46",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10732","SO","fatty_acid","S10732FA1","BFA41","H7","BFA41-H7","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample","being_processed","N",NA,NA
+"47",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10738","SO","fatty_acid","S10738FA1","BFA41","H8","BFA41-H8","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample","being_processed","N",NA,NA
+"48",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10733","SO","fatty_acid","S10733FA1","BFA41","H9","BFA41-H9","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample","being_processed","N",NA,NA
+"49",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10737","SO","fatty_acid","S10737FA1","BFA41","I1","BFA41-I1","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample","being_processed","N",NA,NA
+"50",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10731","SO","fatty_acid","S10731FA1","BFA41","I2","BFA41-I2","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample","being_processed","N",NA,NA
+"51",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10735","SO","fatty_acid","S10735FA1","BFA41","I3","BFA41-I3","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample","being_processed","N",NA,NA
+"52",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10739","SO","fatty_acid","S10739FA1","BFA41","I4","BFA41-I4","most of posterior of flank taken as sample, behind RNA:DNA sample, and ISO sample","being_processed","N",NA,NA
+"53",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10106","SO","fatty_acid","S10106FA1","BFA42","A5","BFA42-A5",NA,"being_processed","N",NA,NA
+"54",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10109","SO","fatty_acid","S10109FA1","BFA42","A4","BFA42-A4",NA,"being_processed","N",NA,NA
+"55",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10104","SO","fatty_acid","S10104FA1","BFA42","A3","BFA42-A3",NA,"being_processed","N",NA,NA
+"56",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10101","SO","fatty_acid","S10101FA1","BFA42","A2","BFA42-A2",NA,"being_processed","N",NA,NA
+"57",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10102","SO","fatty_acid","S10102FA1","BFA42","A1","BFA42-A1",NA,"being_processed","N",NA,NA
+"58",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10105","SO","fatty_acid","S10105FA1","BFA41","I9","BFA41-I9",NA,"being_processed","N",NA,NA
+"59",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10107","SO","fatty_acid","S10107FA1","BFA41","I8","BFA41-I8",NA,"being_processed","N",NA,NA
+"60",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10108","SO","fatty_acid","S10108FA1","BFA41","I7","BFA41-I7",NA,"being_processed","N",NA,NA
+"61",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10571","SO","fatty_acid","S10571FA1","BFA40","C5","BFA40-C5",NA,"being_processed","N",NA,NA
+"62",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10580","SO","fatty_acid","S10580FA1","BFA40","C6","BFA40-C6",NA,"being_processed","N",NA,NA
+"63",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10572","SO","fatty_acid","S10572FA1","BFA40","C7","BFA40-C7",NA,"being_processed","N",NA,NA
+"64",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10573","SO","fatty_acid","S10573FA1","BFA40","C8","BFA40-C8",NA,"being_processed","N",NA,NA
+"65",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10574","SO","fatty_acid","S10574FA1","BFA40","C9","BFA40-C9",NA,"being_processed","N",NA,NA
+"66",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10575","SO","fatty_acid","S10575FA1","BFA40","D1","BFA40-D1",NA,"being_processed","N",NA,NA
+"67",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10576","SO","fatty_acid","S10576FA1","BFA40","D2","BFA40-D2",NA,"being_processed","N",NA,NA
+"68",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10577","SO","fatty_acid","S10577FA1","BFA40","D3","BFA40-D3",NA,"being_processed","N",NA,NA
+"69",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10578","SO","fatty_acid","S10578FA1","BFA40","D4","BFA40-D4",NA,"being_processed","N",NA,NA
+"70",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10579","SO","fatty_acid","S10579FA1","BFA40","D5","BFA40-D5",NA,"being_processed","N",NA,NA
+"71",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10742","SO","fatty_acid","S10742FA1","BFA41","I5","BFA41-I5",NA,"being_processed","N",NA,NA
+"72",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10741","SO","fatty_acid","S10741FA1","BFA41","I6","BFA41-I6",NA,"being_processed","N",NA,NA
+"73",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10725","SO","fatty_acid","S10725FA1","BFA42","A6","BFA42-A6",NA,"being_processed","N",NA,NA
+"74",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10724","SO","fatty_acid","S10724FA1","BFA42","A7","BFA42-A7",NA,"being_processed","N",NA,NA
+"75",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10729","SO","fatty_acid","S10729FA1","BFA42","A8","BFA42-A8",NA,"being_processed","N",NA,NA
+"76",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10726","SO","fatty_acid","S10726FA1","BFA42","A9","BFA42-A9",NA,"being_processed","N",NA,NA
+"77",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10728","SO","fatty_acid","S10728FA1","BFA42","B1","BFA42-B1",NA,"being_processed","N",NA,NA
+"78",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10723","SO","fatty_acid","S10723FA1","BFA42","B2","BFA42-B2",NA,"being_processed","N",NA,NA
+"79",2017-05-29,"QUADRA","DI_C","D09","DE367","DE367N1","U10248","SO","fatty_acid","S10248FA1","BFA42","E3","BFA42-E3",NA,"being_processed","N",NA,NA
+"80",2017-05-29,"QUADRA","DI_C","D09","DE367","DE367N1","U10246","SO","fatty_acid","S10246FA1","BFA42","E4","BFA42-E4",NA,"being_processed","N",NA,NA
+"81",2017-05-29,"QUADRA","DI_C","D09","DE367","DE367N1","U10243","SO","fatty_acid","S10243FA1","BFA42","E5","BFA42-E5",NA,"being_processed","N",NA,NA
+"82",2017-05-29,"QUADRA","DI_C","D09","DE367","DE367N1","U10242","SO","fatty_acid","S10242FA1","BFA42","E6","BFA42-E6",NA,"being_processed","N",NA,NA
+"83",2017-06-20,"QUADRA","DI_C","D09","DE378","DE378N1","U11128","SO","fatty_acid","S11128FA1","BFA42","C1","BFA42-C1",NA,"being_processed","N",NA,NA
+"84",2017-06-20,"QUADRA","DI_C","D09","DE378","DE378N1","U11122","SO","fatty_acid","S11122FA1","BFA12","7","BFA12-7",NA,"being_processed","N",NA,NA
+"85",2017-06-20,"QUADRA","DI_C","D09","DE378","DE378N1","U11121","SO","fatty_acid","S11121FA1","BFA12","8","BFA12-8",NA,"being_processed","N",NA,NA
+"86",2017-06-20,"QUADRA","DI_C","D09","DE378","DE378N1","U11129","SO","fatty_acid","S11129FA1","BFA42","C2","BFA42-C2",NA,"being_processed","N",NA,NA
+"87",2017-06-20,"QUADRA","DI_C","D09","DE378","DE378N1","U11123","SO","fatty_acid","S11123FA1","BFA12","9","BFA12-9",NA,"being_processed","N",NA,NA
+"88",2017-06-20,"QUADRA","DI_C","D09","DE378","DE378N1","U11125","SO","fatty_acid","S11125FA1","BFA42","C3","BFA42-C3",NA,"being_processed","N",NA,NA
+"89",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10650","SO","fatty_acid","S10650FA1","BFA42","C4","BFA42-C4",NA,"being_processed","N",NA,NA
+"90",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10642","SO","fatty_acid","S10642FA1","BFA42","C5","BFA42-C5",NA,"being_processed","N",NA,NA
+"91",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10641","SO","fatty_acid","S10641FA1","BFA42","C6","BFA42-C6",NA,"being_processed","N",NA,NA
+"92",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10648","SO","fatty_acid","S10648FA1","BFA42","C7","BFA42-C7",NA,"being_processed","N",NA,NA
+"93",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10090","SO","fatty_acid","S10090FA1","BFA42","G5","BFA42-G5",NA,"being_processed","N",NA,NA
+"94",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10087","SO","fatty_acid","S10087FA1","BFA42","B3","BFA42-B3",NA,"being_processed","N",NA,NA
+"95",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10081","SO","fatty_acid","S10081FA1","BFA12","1","BFA12-1",NA,"being_processed","N",NA,NA
+"96",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10088","SO","fatty_acid","S10088FA1","BFA42","B4","BFA42-B4",NA,"being_processed","N",NA,NA
+"97",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10082","SO","fatty_acid","S10082FA1","BFA12","2","BFA12-2",NA,"being_processed","N",NA,NA
+"98",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10563","SO","fatty_acid","S10563FA1","BFA12","3","BFA12-3",NA,"being_processed","N",NA,NA
+"99",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10568","SO","fatty_acid","S10568FA1","BFA42","B5","BFA42-B5",NA,"being_processed","N",NA,NA
+"100",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10561","SO","fatty_acid","S10561FA1","BFA12","4","BFA12-4",NA,"being_processed","N",NA,NA
+"101",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10567","SO","fatty_acid","S10567FA1","BFA42","B6","BFA42-B6",NA,"being_processed","N",NA,NA
+"102",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10570","SO","fatty_acid","S10570FA1","BFA42","B7","BFA42-B7",NA,"being_processed","N",NA,NA
+"103",2017-05-29,"QUADRA","DI_C","D09","DE367","DE367N1","U10244","SO","fatty_acid","S10244FA1","BFA42","E7","BFA42-E7",NA,"being_processed","N",NA,NA
+"104",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10562","SO","fatty_acid","S10562FA1","BFA12","10","BFA12-10",NA,"being_processed","N",NA,NA
+"105",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10564","SO","fatty_acid","S10564FA1","BFA12","11","BFA12-11",NA,"being_processed","N",NA,NA
+"106",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10569","SO","fatty_acid","S10569FA1","BFA42","C8","BFA42-C8",NA,"being_processed","N",NA,NA
+"107",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10565","SO","fatty_acid","S10565FA1","BFA12","12","BFA12-12",NA,"being_processed","N",NA,NA
+"108",2017-06-07,"QUADRA","DI_C","D09","DE371","DE371N1","U10566","SO","fatty_acid","S10566FA1","BFA12","13","BFA12-13",NA,"being_processed","N",NA,NA
+"109",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10083","SO","fatty_acid","S10083FA1","BFA12","6","BFA12-6",NA,"being_processed","N",NA,NA
+"110",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10089","SO","fatty_acid","S10089FA1","BFA42","B8","BFA42-B8",NA,"being_processed","N",NA,NA
+"111",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10086","SO","fatty_acid","S10086FA1","BFA42","B9","BFA42-B9",NA,"being_processed","N",NA,NA
+"112",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10085","SO","fatty_acid","S10085FA1","BFA42","E8","BFA42-E8",NA,"being_processed","N",NA,NA
+"113",2017-05-25,"QUADRA","DI_C","D09","DE365","DE365N1","U10084","SO","fatty_acid","S10084FA1","BFA42","E9","BFA42-E9",NA,"being_processed","N",NA,NA
+"114",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10722","SO","fatty_acid","S10722FA1","BFA42","F1","BFA42-F1",NA,"being_processed","N",NA,NA
+"115",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10730","SO","fatty_acid","S10730FA1","BFA42","F2","BFA42-F2",NA,"being_processed","N",NA,NA
+"116",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10721","SO","fatty_acid","S10721FA1","BFA42","F3","BFA42-F3",NA,"being_processed","N",NA,NA
+"117",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10727","SO","fatty_acid","S10727FA1","BFA42","F4","BFA42-F4",NA,"being_processed","N",NA,NA
+"118",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N2","U10796","SO","fatty_acid","S10796FA1","BFA42","C9","BFA42-C9",NA,"being_processed","N",NA,NA
+"119",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N2","U10795","SO","fatty_acid","S10795FA1","BFA42","D1","BFA42-D1",NA,"being_processed","N",NA,NA
+"120",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N2","U10794","SO","fatty_acid","S10794FA1","BFA42","D2","BFA42-D2",NA,"being_processed","N",NA,NA
+"121",2017-05-29,"QUADRA","DI_C","D09","DE367","DE367N1","U10241","SO","fatty_acid","S10241FA1","BFA42","F5","BFA42-F5",NA,"being_processed","N",NA,NA
+"122",2017-05-29,"QUADRA","DI_C","D09","DE367","DE367N1","U10247","SO","fatty_acid","S10247FA1","BFA42","F6","BFA42-F6",NA,"being_processed","N",NA,NA
+"123",2017-05-29,"QUADRA","DI_C","D09","DE367","DE367N1","U10245","SO","fatty_acid","S10245FA1","BFA42","F7","BFA42-F7",NA,"being_processed","N",NA,NA
+"124",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N2","U10792","SO","fatty_acid","S10792FA1","BFA42","D3","BFA42-D3",NA,"being_processed","N",NA,NA
+"125",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N2","U10797","SO","fatty_acid","S10797FA1","BFA42","D4","BFA42-D4",NA,"being_processed","N",NA,NA
+"126",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N1","U10791","SO","fatty_acid","S10791FA1","BFA42","D5","BFA42-D5",NA,"being_processed","N",NA,NA
+"127",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N2","U10793","SO","fatty_acid","S10793FA1","BFA42","D6","BFA42-D6",NA,"being_processed","N",NA,NA
+"128",2017-06-26,"QUADRA","DI_C","D09","DE373","DE373N2","U10798","SO","fatty_acid","S10798FA1","BFA42","D7","BFA42-D7",NA,"being_processed","N",NA,NA
+"129",2017-06-20,"QUADRA","DI_C","D09","DE378","DE378N1","U11130","SO","fatty_acid","S11130FA1","BFA42","E2","BFA42-E2",NA,"being_processed","N",NA,NA
+"130",2017-06-20,"QUADRA","DI_C","D09","DE378","DE378N1","U11124","SO","fatty_acid","S11124FA1","BFA42","E1","BFA42-E1",NA,"being_processed","N",NA,NA
+"131",2017-06-20,"QUADRA","DI_C","D09","DE378","DE378N1","U11126","SO","fatty_acid","S11126FA1","BFA42","D9","BFA42-D9",NA,"being_processed","N",NA,NA
+"132",2017-06-20,"QUADRA","DI_C","D09","DE378","DE378N1","U11127","SO","fatty_acid","S11127FA1","BFA42","D8","BFA42-D8",NA,"being_processed","N",NA,NA
+"133",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10645","SO","fatty_acid","S10645FA1","BFA42","F8","BFA42-F8",NA,"being_processed","N",NA,NA
+"134",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10644","SO","fatty_acid","S10644FA1","BFA42","F9","BFA42-F9",NA,"being_processed","N",NA,NA
+"135",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10646","SO","fatty_acid","S10646FA1","BFA42","G1","BFA42-G1",NA,"being_processed","N",NA,NA
+"136",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10649","SO","fatty_acid","S10649FA1","BFA42","G2","BFA42-G2",NA,"being_processed","N",NA,NA
+"137",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10643","SO","fatty_acid","S10643FA1","BFA42","G3","BFA42-G3",NA,"being_processed","N",NA,NA
+"138",2017-06-12,"QUADRA","DI_C","D09","DE372","DE372N1","U10647","SO","fatty_acid","S10647FA1","BFA42","G4","BFA42-G4",NA,"being_processed","N",NA,NA
+"139",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17429","SO","fatty_acid","S17429FA1","BFA40","F3","BFA40-F3",NA,"being_processed","N",NA,NA
+"140",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17425","SO","fatty_acid","S17425FA1","BFA40","F4","BFA40-F4",NA,"being_processed","N",NA,NA
+"141",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17422","SO","fatty_acid","S17422FA1","BFA40","F5","BFA40-F5",NA,"being_processed","N",NA,NA
+"142",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17423","SO","fatty_acid","S17423FA1","BFA40","F6","BFA40-F6",NA,"being_processed","N",NA,NA
+"143",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17426","SO","fatty_acid","S17426FA1","BFA40","F7","BFA40-F7",NA,"being_processed","N",NA,NA
+"144",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17421","SO","fatty_acid","S17421FA1","BFA40","F8","BFA40-F8",NA,"being_processed","N",NA,NA
+"145",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17430","SO","fatty_acid","S17430FA1","BFA40","F9","BFA40-F9",NA,"being_processed","N",NA,NA
+"146",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17424","SO","fatty_acid","S17424FA1","BFA40","G1","BFA40-G1",NA,"being_processed","N",NA,NA
+"147",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17427","SO","fatty_acid","S17427FA1","BFA40","G2","BFA40-G2",NA,"being_processed","N",NA,NA
+"148",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17428","SO","fatty_acid","S17428FA1","BFA40","G3","BFA40-G3",NA,"being_processed","N",NA,NA
+"149",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17197","SO","fatty_acid","S17197FA1","BFA40","G4","BFA40-G4",NA,"being_processed","N",NA,NA
+"150",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17198","SO","fatty_acid","S17198FA1","BFA40","G5","BFA40-G5",NA,"being_processed","N",NA,NA
+"151",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17199","SO","fatty_acid","S17199FA1","BFA40","G6","BFA40-G6",NA,"being_processed","N",NA,NA
+"152",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17192","SO","fatty_acid","S17192FA1","BFA40","G7","BFA40-G7",NA,"being_processed","N",NA,NA
+"153",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17191","SO","fatty_acid","S17191FA1","BFA40","G8","BFA40-G8",NA,"being_processed","N",NA,NA
+"154",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17193","SO","fatty_acid","S17193FA1","BFA40","G9","BFA40-G9",NA,"being_processed","N",NA,NA
+"155",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17196","SO","fatty_acid","S17196FA1","BFA40","H1","BFA40-H1",NA,"being_processed","N",NA,NA
+"156",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17195","SO","fatty_acid","S17195FA1","BFA40","H2","BFA40-H2",NA,"being_processed","N",NA,NA
+"157",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17194","SO","fatty_acid","S17194FA1","BFA40","H3","BFA40-H3",NA,"being_processed","N",NA,NA
+"158",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17200","SO","fatty_acid","S17200FA1","BFA40","H4","BFA40-H4",NA,"being_processed","N",NA,NA
+"159",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17411","SO","fatty_acid","S17411FA1","BFA40","E7","BFA40-E7",NA,"being_processed","N",NA,NA
+"160",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17412","SO","fatty_acid","S17412FA1","BFA40","E8","BFA40-E8",NA,"being_processed","N",NA,NA
+"161",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17413","SO","fatty_acid","S17413FA1","BFA40","E9","BFA40-E9",NA,"being_processed","N",NA,NA
+"162",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17414","SO","fatty_acid","S17414FA1","BFA40","F1","BFA40-F1",NA,"being_processed","N",NA,NA
+"163",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17415","SO","fatty_acid","S17415FA1","BFA40","F2","BFA40-F2",NA,"being_processed","N",NA,NA
+"164",2018-06-11,"QUADRA","DI_C","D09","DE523","DE523N3","U17416","SO","fatty_acid","S17416FA1","BFA41","A7","BFA41-A7",NA,"being_processed","N",NA,NA
+"165",2018-06-04,"QUADRA","DI_C","D09","DE520","DE520N3","U16291","SO","fatty_acid","S16291FA1","BFA41","A8","BFA41-A8",NA,"being_processed","N",NA,NA
+"166",2018-06-04,"QUADRA","DI_C","D09","DE520","DE520N3","U16292","SO","fatty_acid","S16292FA1","BFA41","A9","BFA41-A9",NA,"being_processed","N",NA,NA
+"167",2018-06-04,"QUADRA","DI_C","D09","DE520","DE520N3","U16293","SO","fatty_acid","S16293FA1","BFA41","B1","BFA41-B1",NA,"being_processed","N",NA,NA
+"168",2018-06-04,"QUADRA","DI_C","D09","DE520","DE520N3","U16294","SO","fatty_acid","S16294FA1","BFA41","B2","BFA41-B2",NA,"being_processed","N",NA,NA
+"169",2018-06-04,"QUADRA","DI_C","D09","DE520","DE520N3","U16295","SO","fatty_acid","S16295FA1","BFA41","B3","BFA41-B3",NA,"being_processed","N",NA,NA
+"170",2018-06-04,"QUADRA","DI_C","D09","DE520","DE520N3","U16296","SO","fatty_acid","S16296FA1","BFA41","B4","BFA41-B4",NA,"being_processed","N",NA,NA
+"171",2018-06-04,"QUADRA","DI_C","D09","DE520","DE520N3","U16297","SO","fatty_acid","S16297FA1","BFA41","B5","BFA41-B5",NA,"being_processed","N",NA,NA
+"172",2018-06-04,"QUADRA","DI_C","D09","DE520","DE520N3","U16298","SO","fatty_acid","S16298FA1","BFA41","B6","BFA41-B6",NA,"being_processed","N",NA,NA
+"173",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16151","SO","fatty_acid","S16151FA1","BFA40","H5","BFA40-H5",NA,"being_processed","N",NA,NA
+"174",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16157","SO","fatty_acid","S16157FA1","BFA40","H6","BFA40-H6",NA,"being_processed","N",NA,NA
+"175",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16158","SO","fatty_acid","S16158FA1","BFA40","H7","BFA40-H7",NA,"being_processed","N",NA,NA
+"176",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16159","SO","fatty_acid","S16159FA1","BFA40","H8","BFA40-H8",NA,"being_processed","N",NA,NA
+"177",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16152","SO","fatty_acid","S16152FA1","BFA40","H9","BFA40-H9",NA,"being_processed","N",NA,NA
+"178",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16160","SO","fatty_acid","S16160FA1","BFA40","I1","BFA40-I1",NA,"being_processed","N",NA,NA
+"179",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16153","SO","fatty_acid","S16153FA1","BFA40","I2","BFA40-I2",NA,"being_processed","N",NA,NA
+"180",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16156","SO","fatty_acid","S16156FA1","BFA40","I3","BFA40-I3",NA,"being_processed","N",NA,NA
+"181",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16155","SO","fatty_acid","S16155FA1","BFA40","I4","BFA40-I4",NA,"being_processed","N",NA,NA
+"182",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16154","SO","fatty_acid","S16154FA1","BFA40","I5","BFA40-I5",NA,"being_processed","N",NA,NA
+"183",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16342","SO","fatty_acid","S16342FA1","BFA40","I6","BFA40-I6",NA,"being_processed","N",NA,NA
+"184",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16350","SO","fatty_acid","S16350FA1","BFA40","I7","BFA40-I7",NA,"being_processed","N",NA,NA
+"185",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16344","SO","fatty_acid","S16344FA1","BFA40","I8","BFA40-I8",NA,"being_processed","N",NA,NA
+"186",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16341","SO","fatty_acid","S16341FA1","BFA40","I9","BFA40-I9",NA,"being_processed","N",NA,NA
+"187",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16343","SO","fatty_acid","S16343FA1","BFA41","A1","BFA41-A1",NA,"being_processed","N",NA,NA
+"188",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16345","SO","fatty_acid","S16345FA1","BFA41","A2","BFA41-A2",NA,"being_processed","N",NA,NA
+"189",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16346","SO","fatty_acid","S16346FA1","BFA41","A3","BFA41-A3",NA,"being_processed","N",NA,NA
+"190",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16349","SO","fatty_acid","S16349FA1","BFA41","A4","BFA41-A4",NA,"being_processed","N",NA,NA
+"191",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16348","SO","fatty_acid","S16348FA1","BFA41","A5","BFA41-A5",NA,"being_processed","N",NA,NA
+"192",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16347","SO","fatty_acid","S16347FA1","BFA41","A6","BFA41-A6",NA,"being_processed","N",NA,NA
+"193",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16167","SO","fatty_acid","S16167FA1","BFA41","B7","BFA41-B7",NA,"being_processed","N",NA,NA
+"194",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16169","SO","fatty_acid","S16169FA1","BFA41","B8","BFA41-B8",NA,"being_processed","N",NA,NA
+"195",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16170","SO","fatty_acid","S16170FA1","BFA41","B9","BFA41-B9",NA,"being_processed","N",NA,NA
+"196",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16166","SO","fatty_acid","S16166FA1","BFA41","C1","BFA41-C1",NA,"being_processed","N",NA,NA
+"197",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16164","SO","fatty_acid","S16164FA1","BFA41","C2","BFA41-C2",NA,"being_processed","N",NA,NA
+"198",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16162","SO","fatty_acid","S16162FA1","BFA41","C3","BFA41-C3",NA,"being_processed","N",NA,NA
+"199",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16168","SO","fatty_acid","S16168FA1","BFA41","C4","BFA41-C4",NA,"being_processed","N",NA,NA
+"200",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16163","SO","fatty_acid","S16163FA1","BFA41","C5","BFA41-C5",NA,"being_processed","N",NA,NA
+"201",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16161","SO","fatty_acid","S16161FA1","BFA41","C6","BFA41-C6",NA,"being_processed","N",NA,NA
+"202",2018-05-28,"QUADRA","DI_C","D09","DE513","DE513N2","U16165","SO","fatty_acid","S16165FA1","BFA41","C7","BFA41-C7",NA,"being_processed","N",NA,NA
+"203",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16194","SO","fatty_acid","S16194FA1","BFA41","C8","BFA41-C8",NA,"being_processed","N",NA,NA
+"204",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16191","SO","fatty_acid","S16191FA1","BFA41","C9","BFA41-C9",NA,"being_processed","N",NA,NA
+"205",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16192","SO","fatty_acid","S16192FA1","BFA41","D1","BFA41-D1",NA,"being_processed","N",NA,NA
+"206",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16193","SO","fatty_acid","S16193FA1","BFA41","D2","BFA41-D2",NA,"being_processed","N",NA,NA
+"207",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16195","SO","fatty_acid","S16195FA1","BFA41","D3","BFA41-D3",NA,"being_processed","N",NA,NA
+"208",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16196","SO","fatty_acid","S16196FA1","BFA41","D4","BFA41-D4",NA,"being_processed","N",NA,NA
+"209",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16197","SO","fatty_acid","S16197FA1","BFA41","D5","BFA41-D5",NA,"being_processed","N",NA,NA
+"210",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16198","SO","fatty_acid","S16198FA1","BFA41","D6","BFA41-D6",NA,"being_processed","N",NA,NA
+"211",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16199","SO","fatty_acid","S16199FA1","BFA41","D7","BFA41-D7",NA,"being_processed","N",NA,NA
+"212",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16200","SO","fatty_acid","S16200FA1","BFA41","D8","BFA41-D8",NA,"being_processed","N",NA,NA
+"213",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16257","SO","fatty_acid","S16257FA1","BFA41","D9","BFA41-D9",NA,"being_processed","N",NA,NA
+"214",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16256","SO","fatty_acid","S16256FA1","BFA41","E1","BFA41-E1",NA,"being_processed","N",NA,NA
+"215",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16258","SO","fatty_acid","S16258FA1","BFA41","E2","BFA41-E2",NA,"being_processed","N",NA,NA
+"216",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16252","SO","fatty_acid","S16252FA1","BFA41","E3","BFA41-E3",NA,"being_processed","N",NA,NA
+"217",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16251","SO","fatty_acid","S16251FA1","BFA41","E4","BFA41-E4",NA,"being_processed","N",NA,NA
+"218",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16254","SO","fatty_acid","S16254FA1","BFA41","E5","BFA41-E5",NA,"being_processed","N",NA,NA
+"219",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16253","SO","fatty_acid","S16253FA1","BFA41","E6","BFA41-E6",NA,"being_processed","N",NA,NA
+"220",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16255","SO","fatty_acid","S16255FA1","BFA41","E7","BFA41-E7",NA,"being_processed","N",NA,NA
+"221",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16259","SO","fatty_acid","S16259FA1","BFA41","E8","BFA41-E8",NA,"being_processed","N",NA,NA
+"222",2018-06-27,"QUADRA","DI_C","D09","DE536","DE536N1","U17072","SO","fatty_acid","S17072FA1","BFA42","G6","BFA42-G6",NA,"being_processed","N",NA,NA
+"223",2018-06-27,"QUADRA","DI_C","D09","DE536","DE536N1","U17071","SO","fatty_acid","S17071FA1","BFA42","G7","BFA42-G7",NA,"being_processed","N",NA,NA
+"224",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16065","SO","fatty_acid","S16065FA1","BFA40","D6","BFA40-D6",NA,"being_processed","N",NA,NA
+"225",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16069","SO","fatty_acid","S16069FA1","BFA40","D7","BFA40-D7",NA,"being_processed","N",NA,NA
+"226",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16064","SO","fatty_acid","S16064FA1","BFA40","D8","BFA40-D8",NA,"being_processed","N",NA,NA
+"227",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16068","SO","fatty_acid","S16068FA1","BFA40","D9","BFA40-D9",NA,"being_processed","N",NA,NA
+"228",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16062","SO","fatty_acid","S16062FA1","BFA40","E1","BFA40-E1",NA,"being_processed","N",NA,NA
+"229",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16070","SO","fatty_acid","S16070FA1","BFA40","E2","BFA40-E2",NA,"being_processed","N",NA,NA
+"230",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16066","SO","fatty_acid","S16066FA1","BFA40","E3","BFA40-E3",NA,"being_processed","N",NA,NA
+"231",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16063","SO","fatty_acid","S16063FA1","BFA40","E4","BFA40-E4",NA,"being_processed","N",NA,NA
+"232",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16067","SO","fatty_acid","S16067FA1","BFA40","E5","BFA40-E5",NA,"being_processed","N",NA,NA
+"233",2018-05-22,"QUADRA","DI_C","D09","DE517","DE517N2","U16061","SO","fatty_acid","S16061FA1","BFA40","E6","BFA40-E6",NA,"being_processed","N",NA,NA

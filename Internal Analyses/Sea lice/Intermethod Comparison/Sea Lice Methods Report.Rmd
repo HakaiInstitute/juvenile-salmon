@@ -1,0 +1,98 @@
+---
+title: "Sea Lice Method Comparison Study for 2017 Sockeye"
+author: "Julian Gan, Krystal Bachen, Carly Janusson, Lauren Portner, Brett Johnson"
+date: "March 19, 2018"
+output: html_document
+---
+<style>
+p.caption {
+  font-size: 0.8em;
+}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+library(kableExtra)
+library(ggplot2)
+library(plotly)
+```
+
+## Overview
+
+In February 2018, the SEMSP lab crew ran a comparison study to determine the compatibility of integrating data obtained from three different methods of sea louse identification. The three protocols are summarized as follows:
+
+1. In-lab enumeration of all sea louse life stages for both species of lice. Fine-scale ID was conducted by Lauren Portner for a subset of samples that underwent this protocol.
+
+2. In-lab identification and enumeration of both species' motile life stages only. There is no differentiation between *Caligus* pre-adult and adult males, but *Lep* males are separate into pre-adult and adults, and *Caligus* and *Lep* females are broken down into pre-adult, adult, and gravid categories.
+
+3. Field identification and enumeration of all sea louse lifes stages. Attached stages were identified at a coarser level than Method 1, and there was no class or age differention for motile *Caligus* of either sex (with the exception of gravid females). This method was a direct adaptation of the Salmon Coast Field Station ID protocol.
+
+## Protocol
+
+The method comparison study was designed to re-create Method 1 as closely as possible in order to compare its results with Method 3. Seventy sockeye that underwent Method 3 ID from the 2017 field season were randomly chosen for this study (Table 1). The dissection crew consisted of Krystal Bachen, Julian Gan, and Carly Janusson. Lauren Portner performed the fine-scale enumeration and identification in accordance with Method 1 parameters.
+
+```{r, echo=FALSE}
+Region <- c("Discovery Islands","Johnstone Strait")
+n <- c(47,23)
+fish <- data.frame(Region,n)
+kable(fish, format="html", caption = "Table 1. Geographic breakdown of subsampled sockeye") %>% 
+  kable_styling(full_width = F, position = "left")
+```
+# 
+Prior to dissection, fish were inspected for sea lice along the left flank, belly, and top of the head. Any sea lice that were found were picked off and placed in a petri dish for later identification. After dissection, the technician scanned the carcass, chamois, and bag under a microscope for additional sea lice (both attached and motile stages), and placed any additional lice in the petri dish, as well. Following this first post-dissection scan, the carcass was handed off to Lauren for a secondary scan and identification.
+
+
+## Results
+We found there was no significant difference in counts between attached and motile stages of sea lice when identified using the fine-scale lab or field protocol (Methods 1 and 3, respectfully) (Figure 1). 
+```{r mean_counts_attached_vs_motile, echo=FALSE, fig.width=5, fig.cap="Figure 1. Mean counts +/- standard error of attached and motile sea lice per fish, via Field ID and Fine-Scale Lab ID. Attached stages encompass all non-motile stages from copepodid to chalimus. Motile stages encompass all pre-adult and adult stages, including gravid females."}
+load(file="lab_vs_field_summary.RData")
+lab_vs_field_plot <- ggplot(lab_vs_field_summary, aes(x=stage, y=mean_count, fill=method)) +
+  geom_bar(position=position_dodge(), stat="identity") +
+  geom_errorbar(aes(ymin=mean_count-se, ymax=mean_count+se),
+                width=.2,
+                position=position_dodge(0.9))
+ggplotly(lab_vs_field_plot)
+```
+<br>  
+
+While Methods 1 and 2 provided finer-scale identification of attached and motile life stages, count data was grouped according to Method 3's classifications due to the more general categories (Figure 1). For example, there was no species differentiation for chalimus stages in the field, and all motile *Caligus* lifes stages (with the exception of gravid females) were grouped together.  
+```{r mean_counts_stage_specific, echo=FALSE, fig.width=10, fig.cap="Figure 2. Mean counts +/- SE of different sea lice stages per fish, via Field ID and Fine-Scale Lab ID. *Caligus* motiles (cal_mot) encompass all pre-adult and adult stages for both sexes, excluding gravid females (cgf). Chalimus A includes both *Caligus* chalimus stages 1 and 2, whilst Chalimus B includes stages 3 and 4. *Lepeophtheirus* pre-adult classes include both stages 1 and 2."}
+load(file="all_lice_summary.RData")
+count_plot <- ggplot(sealice_summary, aes(x=class, y=mean_count, fill=method)) +
+  geom_bar(position=position_dodge(), stat="identity") +
+  geom_errorbar(aes(ymin=mean_count-se, ymax=mean_count+se),
+                width=.2,
+                position=position_dodge(0.9))
+ggplotly(count_plot)
+```
+<br>
+
+We assumed that if there were discrepancies in counts or identification between the two methods, we would defer to the results of Method 3 (i.e. Fine-Scale Lab ID) to be correct. To determine the mean difference in counts between field-liced and lab-liced fish, fish that were found to have no lice of a specific stage in both the field _and_ lab were excluded from this comparison (Figure 3). The only *Lepeophtheirus* motile that was found amongst the sample set was a single pre-adult female. 
+```{r mean_diff, echo=FALSE, fig.width=5, fig.cap="Figure 3. Mean differences +/- SE in lab-based sea lice counts compared to field-based ID. Values above zero indicate more lice of that category were counted in the lab than in the field. The copepodid class includes both *Caligus* and *Lepeophtheirus* lice. The chalimus class is comprised of stages A and B from both species."}
+load(file="count_differences_summary.RData")
+diff_plot <- ggplot(count_differences_summary, aes(x=class, y=mean_diff)) +
+  geom_bar(position=position_dodge(), stat="identity") +
+  geom_errorbar(aes(ymin=mean_diff-se, ymax=mean_diff+se),
+                width=.2,
+                position=position_dodge(0.9))
+ggplotly(diff_plot)
+```
+<br>
+
+Identification accuracy and error rates were calculated for all observations in which the lab and/or field method detected 1 or more sea louse (i.e., if no lice were found on a fish in either the field or lab, then that fish was excluded) (Table 2).
+
+```{r id_errors, echo=FALSE, results='asis'}
+load(file="error_rate.RData")
+kable(error_rate, format="html", digits=2, caption = "Table 2. Sea Lice ID Error Rates. n = the number of fish found to have a particular class of sea louse. Correct = % of fish that had the same number of lice reported both in Lab and Field. L>F = more lice were found in the lab (Method 1). F>L = more lice were found in the field (Method 3).") %>% 
+  kable_styling(bootstrap_options = c("striped","hover", "condensed"), full_width = F, position = "left")
+```
+
+## Discussion
+We predicted that that it would have been more likely that sea lice were underestimated in the field, when compared to counts performed in the lab. This would have been due to time constraints (i.e. minimizing handling time and ensuring RNA quality did not degrade) and variable experience levels identifying sea lice in the field. Figure 1 demonstrates that at a coarse scale, there is no significant difference in counts of attached or motile stages between the two methods. This suggests that a technician's ability to enumerate all sea lice in the field is not significantly diminished compared to enumerating in-lab, though the lab ID still results in higher counts, on average.
+
+However, subsequent figures indicate that attached stages are more subsceptible to misidentification in the field. Figure 2 shows that more Chalimus B lice were identified in the lab, whilst more *Caligus* copepodids were identified in the field. Figure 3 further highlights the discrepancy between copepodid and chalimus identification in the lab and in the field.
+
+While Table 2 breaks down how often a fish had correct (or incorrect) enumeration of each life stage, there is no way to determine which individual sea lice are being potentially misidentified in the field. This is because lice are not being sampled and segregated into class-specific vials or containers in the field, so there is no way to verify in-lab whether a technician mis-identified some copepodids as chalimus A's, or chalimus A's as chalimus B's, etc. 
+
+We weren't able to examine identification accuracy of *Caligus* motiles to any finer granularity due to the coarser scale of field classification. However, we remain confident in our ability to identify *Caligus* and *Lep.* motiles as per Method 2. However, due to the very low prevalence of *Lep.* motiles that we've observed on 2017 fish, we weren't able to obtain any meaningful data about detection or identification accuracy for this species. 

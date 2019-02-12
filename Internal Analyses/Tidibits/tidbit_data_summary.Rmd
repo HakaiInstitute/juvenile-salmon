@@ -1,0 +1,47 @@
+---
+title: "Hakai Institute Juvenile Salmon Report"
+author: "Brett Johnson"
+date: '`r date()`'
+output:
+ html_document:
+   theme: cosmo
+   code_folding: show
+   toc: true
+   toc_float: true
+   number_sections: true
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, error = FALSE)
+library(hakaisalmon)
+library(tidyverse)
+library(lubridate)
+library(here)
+library(googlesheets)
+```
+
+```{r}
+
+tidbit_150_wb <- gs_key("1fG7woIzwXmi8PK0SXKMHfuG2DW0tUDkYx0OLYrlpQvc", lookup = FALSE, visibility = "private")
+
+tidbit_150 <- gs_read(tidbit_150_wb, ws = "20337752_150")
+
+tidbit_30_wb <- gs_key("1SvNRXjCWutr3Ye_-eicNjV9dTYPfsVMSfbL3H4K77Vo", lookup = FALSE, visibility = "private")
+tidbit_30 <- gs_read(tidbit_30_wb, gs = "20337751_30cm")
+
+tidbit_250_wb <- gs_key("1tDJL2PMTEthdaOEvX_1zOZ-qF6EV_abP5hj5Eb3wmuw", lookup = FALSE, visibility = "private")
+tidbit_250 <- gs_read(tidbit_250_wb, gs = "20337753-250cm")
+
+
+diamond_bay_data <- rbind(tidbit_30, tidbit_150, tidbit_250) %>% 
+  mutate(date = date(date)) %>% 
+  group_by(date) %>% 
+  summarize(temp = mean(temp))
+  
+  
+  ggplot(diamond_bay_data, aes(x = date, y = temp)) +
+  geom_point() +
+  geom_line()
+
+```
+

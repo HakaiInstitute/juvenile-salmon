@@ -1,0 +1,91 @@
+---
+title: "2015 and 2016 Sockeye Condition"
+author: "Brett Johnson"
+date: "November 6, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lubridate)
+library(ggridges)
+
+fish_data <- read_csv("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Report/raw_data/fish_data.csv")
+seine_data <- read_csv("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Report/raw_data/seine_data.csv")
+stock_id <- read_csv("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Report/raw_data/stock_id.csv")
+survey_data <- read_csv("~/Google Drive/SEMSP/SEMSP Data/Analyses/Public Analyses/Time Series/Interactive Report/raw_data/survey_data.csv")
+
+# Below are joins that create views of the data to work with directly
+survey_seines <- full_join(survey_data, seine_data, by = "survey_id")
+survey_seines_fish <- full_join(survey_seines, fish_data, by = "seine_id")
+survey_seines_fish_stock <- full_join(survey_seines_fish, stock_id, by= "ufn") %>% 
+    mutate(k = 10^5*(weight / fork_length ^ 3))
+
+mutate_cond <- function(.data, condition, ..., envir = parent.frame()) {
+  condition <- eval(substitute(condition), .data, envir)
+  .data[condition, ] <- .data[condition, ] %>% mutate(...)
+  .data
+}
+```
+
+
+```{r}
+so_stock_cond_tbl <- survey_seines_fish_stock %>% 
+  drop_na(stock_1) %>% 
+  filter(prob_1 >= .5) %>% 
+  filter(stock_1 %in% c("Chilko", "L_Adams",
+                          "Horsefly", "L_Shuswap",
+                          "MiddleShuswap", "Mitchell",
+                          "Pitt" , "Quesnel_Horsef", 
+                          "Scotch")) %>% 
+  mutate(year = year(survey_date)) %>% 
+  select(stock_1, sampling_week, region, k, year) %>% 
+  drop_na(k)
+
+
+so_cond_plot <- ggplot(data = so_stock_cond_tbl, aes(x = k, y = as.factor(stock_1), fill = stock_1)) +
+           geom_density_ridges() +
+  facet_grid(region ~ year) +
+  xlim(.5:1.5)
+
+so_cond_plot
+ggsave("~Google Drive/SEMSP/SEMSP Data/Analyses/Internal Analyses/Condition Factor/2015 and 2016/figures/so_stock_condition.png")
+
+
+```
+
+```{r sockeye condition all stocks}
+
+survey_seines_fish$standard_length <- as.numeric(survey_seines_fish$standard_length)
+
+# Subset a test data set for creating a linear model for fork length as a function of 
+# standard length. Necessary because caudal fin was often broken during freezing.
+modelled_so_fl_tbl <- survey_seines_fish %>% 
+  filter(species == "SO") %>% 
+  drop_na(fork_length) %>% 
+  drop_na(standard_length) %>% 
+  select(standard_length, fork_length)
+
+lm <- lm(fork_length ~ standard_length , data = modelled_so_fl_tbl)
+
+# Because not all 2017 fish have been processed yet, I need to include the weight 
+# we measured in the field for interannual comparisons (this may be dangerous if fish lose weight after
+# being frozen. May have to apply correction to frozen samples.
+# Also I apply here a function for modelling fork lengths when that measure wasn't possible
+survey_seines_fish <- survey_seines_fish %>% 
+  mutate_cond(is.na(weight), weight = as.numeric(weight_field)) %>% 
+  mutate_cond(is.na(fork_length), fork_length = as.numeric(fork_length_field)) %>% 
+  mutate_cond(is.na(fork_length), fork_length = coef(lm)[[2]] * standard_length + coef(lm)[[1]]) %>%  
+  mutate(k = 10^5*(weight / fork_length ^ 3)) 
+
+survey_seines_fish %>%
+  filter(species == "SO") %>% 
+  mutate(year = as.factor(year(survey_date))) %>% 
+  ggplot(aes(x = k)) +
+    geom_density(aes(group = year, colour = year, fill = year), alpha = 0.4) +
+    facet_wrap(~region, ncol = 1) +
+  xlim(0.5:1.5)
+
+```
+

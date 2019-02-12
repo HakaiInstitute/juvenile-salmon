@@ -1,0 +1,15 @@
+year,spp,liced,protocol,lice.location,n
+2015,CU,no,NA,vials,2
+2015,CU,yes,lab_motiles,NA,93
+2015,PI,no,NA,vials,15
+2015,PI,yes,lab_motiles,NA,142
+2015,SO,no,NA,vials,144
+2015,SO,yes,lab_lportnerID,NA,189
+2015,SO,yes,lab_motiles,NA,47
+2016,CU,yes,lab_motiles,NA,171
+2016,PI,yes,lab_motiles,NA,168
+2016,SO,yes,lab_motiles,NA,863
+2017,CU,no,NA,freezer,50
+2017,PI,no,NA,freezer,40
+2017,SO,yes,field_liced,NA,30
+2017,SO,no,NA,freezer,79
