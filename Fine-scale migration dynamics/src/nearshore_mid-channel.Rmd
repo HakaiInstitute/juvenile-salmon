@@ -21,6 +21,7 @@ library(here)
 library(hakaiApi)
 library(DescTools)
 
+
 theme_set(ggsidekick::theme_sleek()) #Thanks Sean Anderson
 
 client <- hakaiApi::Client$new()
@@ -36,32 +37,41 @@ finclip_dna <- client$get(finclip_endpoint)
 
 # Bind both data sets together
 dna <- bind_rows(ethanol_dna, finclip_dna) %>% 
-  select(fish_id, stock_1, prob_1)
+  select(fish_id, stock_1, prob_1) %>% 
+  mutate(stock_1 = toupper(stock_1))
 
+# Download seines and Fish Data to join to DNA results
 
-# Download Fish Data to join to DNA results
-fish_endpoint <- sprintf("%s/%s", client$api_root, 
-                        'eims/views/output/jsp_fish?site_id%26%26{"D09"}&limit=-1')
+seines <- sprintf("%s/%s", client$api_root, 'eims/views/output/jsp_seine?date>=2015-05-01&date<2016-07-31&site_id~~*"D09"&limit=-1') %>% 
+  client$get(.) 
 
-fish <- client$get(fish_endpoint) %>% 
-  select(survey_date = date, site_id, species, fork_length, weight, ufn = hakai_id) %>% 
+seines <- seines %>% 
+  select(seine_id, lat = gather_lat, lon = gather_long)
+
+fish <- sprintf("%s/%s", client$api_root,
+                'eims/views/output/jsp_fish?site_id%26%26{"D09"}&limit=-1') %>% client$get(.) %>% 
+  select(survey_date = date, seine_id, site_id, species, fork_length, weight, ufn = hakai_id) %>% 
+  left_join(seines) %>% 
   left_join(dna, by = c("ufn" = "fish_id")) %>% 
+    # Remove 'nearshore' seines that were actually overlapping with mid-channel sites:
+    filter(!seine_id %in% c("DE231N2", "DE151N1", "DE301N1", "DE290N2", "DE236N1", "DE361N2", "DE220N1")) %>% 
   add_column(Habitat = "Nearshore", .after = "ufn") %>% 
   add_column(DNA = NA, .after = "weight") %>% 
   add_column(year_tow = NA, .before = "survey_date") %>% 
-  add_column(lat = NA, .before = "species") %>% 
-  add_column(lon = NA, .after = "lat") %>% 
-  mutate(collapsed_fraser_stocks = lump_fraser_sockeye_stocks(stock_1)) 
+  mutate(collapsed_fraser_stocks = lump_fraser_sockeye_stocks(stock_1)) %>% 
+  select(year_tow, survey_date, site_id, lat, lon, species, fork_length, weight, DNA, stock_1, prob_1, Habitat, seine_id)
 
 # Read in DFO data from D09
 dfo_data <- read_csv(here("data", "dfo_data.csv")) %>% 
   add_column(ufn = "ufn", .before = "Habitat") %>% 
+  mutate(stock_1 = toupper(stock_1)) %>% 
   mutate(collapsed_fraser_stocks = lump_fraser_sockeye_stocks(stock_1)) %>% 
   # Filter out sits that arent from the same DFO sampling station
   filter(!year_tow %in% c("2016_109", "2015_78", "2016_34", "2015_5", "2015_73",
                           "2015_9", "2015_37", "2015_20", "2016-106")) %>% 
   mutate(prob_1 = as.numeric(prob_1),
-         survey_date = as_date(survey_date))
+         survey_date = as_date(survey_date),
+         seine_id = NA) 
 
 # Join Hakai and DFO data into one dataframe
 okisollo <- bind_rows(fish, dfo_data) %>%
@@ -92,6 +102,73 @@ okisollo <- bind_rows(fish, dfo_data) %>%
 # Remove intermediate dataframes
 rm(ethanol_dna, finclip_dna,fish, dna, dfo_data)  
 ```
+
+# Map
+
+```{r}
+library(maps) 
+library(mapdata)
+library(maptools)
+library(rgeos)
+library(rgdal)
+library(ggplot2)
+library(ggsn)
+library(dplyr)
+library(raster)
+library(here)
+
+# Download sampling coordinates
+coords <- googlesheets::gs_key("157froMwaYUlXTCkGRBrFcQzTlrZEJZmWn89P-xAO1v0", visibility = "private", lookup = FALSE)
+
+dfo_coords <- googlesheets::gs_read(coords, ws = "dfo") %>% 
+  mutate(org = "Mid Channel",
+         seine_id = NA) %>% 
+  dplyr::select(seine_id, lat, lon, org) %>% 
+  filter(lat > 50.3, lon < -125.315) 
+  
+
+hakai_coords <- okisollo %>% 
+  dplyr::filter(Habitat == "Nearshore") %>% 
+  mutate(org = "Nearshore") %>% 
+  # Remove 'nearshore' seines that were actually overlapping with mid-channel sites:
+ dplyr::filter(!seine_id %in% c("DE231N2", "DE151N1", "DE301N1", "DE290N2", "DE236N1", "DE361N2", "DE220N1")) %>% 
+  dplyr::select(seine_id, org, lon = lat, lat = lon) %>% 
+  dplyr::filter(lat > 50.3, lon < -125.315)
+
+
+#TODO: Once Nate fixes the lat/lon reversal in the portal I need to fix the above select statement
+both_coords <- rbind(hakai_coords, dfo_coords) %>% 
+  distinct()
+
+
+# Download shape file and plot map
+
+BC.shp <- readOGR(here("data","2_Shapefile", "COAST_TEST2.shp"))
+okisollo <- extent(-125.340, -125.320,50.303, 50.310)
+quadra <- extent(-125.340, -125.320,50.303, 50.310)
+okisollo_shp <- crop(BC.shp, okisollo) 
+okisollo_df <- fortify(okisollo_shp)
+
+plotly::ggplotly(ggplot() +
+   geom_point(data = both_coords, aes(x = lon, y = lat, colour = org), 
+              size = 3) +
+  geom_polygon(data= okisollo_df, aes(x=long,y=lat,group= group),
+  colour= "black", size=0.1, fill='grey95')+
+  #coord_cartesian(xlim = c(-125.340, -125.320), ylim=c(50.303, 50.310)) +
+  ggsn::scalebar(okisollo_df, dist = .5, st.size=4, height=0.01, dd2km = TRUE, 
+                 model = 'WGS84', anchor = c(x = -125.320, y = 50.304))+
+  north(data = okisollo_df, scale = 0.1, symbol = 3, anchor= c(x = -125.338, 
+                                                         y = 50.310)) +
+    theme(panel.grid.minor = element_line(colour = NA),
+          panel.grid.major = element_line(colour = NA),
+          axis.title.y= element_blank(), axis.title.x = element_blank(),
+          axis.text.y= element_text(size=10), axis.text.x = element_text(size=10)) +
+  scale_colour_hakai())
+
+detach("package:raster", unload=TRUE)
+beepr::beep(2)
+```
+
 
 # Sockeye Stock Composition
 

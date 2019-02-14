@@ -1142,7 +1142,7 @@ coords <- googlesheets::gs_title("dfo_hakai_coordinates")
 dfo_coords <- googlesheets::gs_read(coords, ws = "dfo") %>% 
   mutate(org = "dfo") %>% 
   select(lat, lon, org, seine_id) 
-  #filter(lat > 50.3, lon < -125.315) 
+  filter(lat > 50.3, lon < -125.315) 
 
 
 hakai_coords <- googlesheets::gs_read(coords, ws = "semsp")
@@ -1166,8 +1166,8 @@ ggmap::ggmap(okisollo_get_map) +
   
 ggplot(both_coords, aes(x = lon, y = lat, colour = org, group = seine_id)) +
   geom_point() +
-  stat_density2d(aes(fill=..level..,alpha=..level..,group = org, colour = org),geom='polygon', na.rm = TRUE)+ 
-  scale_fill_continuous(low="green",high="red")+
+  stat_density2d(aes(fill=..level..,alpha=..level..,group = org, colour = org),geom='polygon', na.rm = TRUE) + 
+  scale_fill_continuous(low="green",high="red") +
   ylim(50.303, 50.31) +
   xlim(-125.340, -125.320) +
   guides(alpha="none")
