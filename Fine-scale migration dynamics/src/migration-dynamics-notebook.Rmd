@@ -1541,19 +1541,16 @@ okisollo %>%
 Not sure if below is the best method. I should consider rarefaction
 
 ```{r species}
-# Create dataset of comparable species matrices
 
+# Create dataset of comparable species matrices
 library(vegan)
-BCI
-diversity(BCI)
 
 dfo_diversity <- dfo_data %>% 
   filter(site_id == "D09") %>% 
-  group_by(year_tow, species) %>% 
+  group_by(species) %>% 
   summarize(n = n()) %>% 
   spread(key = species, value = n, fill = 0) %>% 
-  ungroup() %>% 
-  select(-year_tow)
+  ungroup()
   
 H_dfo <- diversity(dfo_diversity)
 H_dfo
@@ -1561,21 +1558,18 @@ H_dfo
 J_dfo <- H_dfo / log(specnumber(dfo_diversity))
 J_dfo 
 
-hakai_diversity <- hakai_okisollo %>% 
-  group_by(survey_date, species) %>% 
+hakai_diversity <- okisollo %>% 
+  filter(Habitat == "Nearshore") %>% 
+  group_by(species) %>% 
   summarize(n = n()) %>% 
   spread(key = species, value = n, fill = 0) %>% 
-  ungroup() %>% 
-  select(-survey_date)
+  ungroup()
 
 H_hakai <- diversity(hakai_diversity) 
 H_hakai
 
 J_hakai <- H_hakai / log(specnumber(hakai_diversity))
 J_hakai
-
-
-t.test(H_hakai, H_dfo)
 ```
 
 ## Stock Diversity

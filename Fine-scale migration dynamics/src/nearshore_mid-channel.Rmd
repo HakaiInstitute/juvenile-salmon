@@ -20,7 +20,10 @@ library(lubridate)
 library(here)
 library(hakaiApi)
 library(DescTools)
+library(car)
 
+spp_labels <- c(CU = "Chum", PI = "Pink", SO = "Sockeye", DI = "Discovery Islands", 
+                JS = "Johnstone Strait", "dfo" = "Mid Channel", "hakai" = "Nearshore")
 
 theme_set(ggsidekick::theme_sleek(base_size = 16)) #Thanks Sean Anderson
 
@@ -45,16 +48,17 @@ dna <- bind_rows(ethanol_dna, finclip_dna) %>%
 seines <- sprintf("%s/%s", client$api_root, 'eims/views/output/jsp_seine?date>=2015-05-01&date<2016-07-31&site_id~~*"D09"&limit=-1') %>% 
   client$get(.) 
 
-seines <- seines %>% 
+seines_selected <- seines %>% 
   select(seine_id, lat = gather_lat, lon = gather_long)
 
 fish <- sprintf("%s/%s", client$api_root,
                 'eims/views/output/jsp_fish?site_id%26%26{"D09"}&limit=-1') %>% client$get(.) %>%
   select(survey_date = date, seine_id, site_id, species, fork_length, weight, ufn = hakai_id) %>%
-  left_join(seines) %>% 
+  left_join(seines_selected) %>% 
   left_join(dna, by = c("ufn" = "fish_id")) %>% 
     # Remove 'nearshore' seines that were actually overlapping with mid-channel sites:
-    dplyr::filter(!seine_id %in% c("DE231N2", "DE151N1", "DE301N1", "DE290N2", "DE236N1", "DE361N2", "DE220N1")) %>% 
+    dplyr::filter(!seine_id %in% c("DE231N2", "DE151N1", "DE301N1", "DE290N2", "DE236N1",
+                                   "DE361N2", "DE220N1")) %>% 
   add_column(Habitat = "Nearshore", .after = "ufn") %>% 
   add_column(DNA = NA, .after = "weight") %>% 
   add_column(year_tow = NA, .before = "survey_date") %>% 
@@ -182,7 +186,7 @@ beepr::beep(2)
 
 # Condition
 
-```{r}
+```{r condition}
 # Compare annual average condition for each habitat and each species with 95 % CIs
 library(dplyr)
 condition <- okisollo %>% 
@@ -209,6 +213,7 @@ condition %>% ggplot(aes(x = species, y = mean, colour = Habitat)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         legend.direction = "horizontal", legend.position = "bottom")
 ```
+
 
 # Lengths
 
@@ -260,7 +265,6 @@ lengths %>% ggplot(aes(x = species, y = mean, fill = Habitat)) +
 # Sockeye Stock Composition
 
 ```{r annual gsi}
-
 gsi_okisollo <- okisollo %>%
   dplyr::filter(collapsed_fraser_stocks != 0, collapsed_fraser_stocks != "") %>% 
   drop_na(site_id) %>% 
@@ -366,7 +370,118 @@ Late Shuswap Portage Stocks are shorter than the rest in the mid-channel habitat
 
 # Migration Timing
 
+```{r}
+#build dataset of tidy catches per seine per species
+dfo_2015_tidy_catch <- read_csv(here::here("data", "dfo_2015_tidy_catch.csv")) %>% 
+  mutate(yday = yday(date)) %>% 
+  group_by(species) %>% 
+  mutate(org = "dfo", percent = cumsum(n / sum(n) * 100), non_cumul_prop = n / sum(n)) %>% 
+  ungroup()
+  
+dfo_2015_tidy_catch <- dfo_2015_tidy_catch %>% 
+  dplyr::select(species, yday, n, org, percent, non_cumul_prop) 
+
+hakai_2015 <- seines %>% 
+  filter(site_id == "D09", year(date) == 2015, collection_protocol == "SEMSP") %>%
+  select(date, so_total, cu_total) %>% 
+  gather(`so_total`, `cu_total`, key = "species", value = "n") %>% 
+  drop_na() %>% 
+  mutate(species = dplyr::recode(species, "so_total" = "SO", "cu_total" = "CU")) %>% 
+  mutate(yday = yday(date)) %>% 
+  group_by(species) %>% 
+  arrange(yday, species) %>% 
+  mutate(org = "hakai", percent = cumsum(n / sum(n) * 100), non_cumul_prop = n / sum(n)) %>% 
+  ungroup()
+
+hakai_2015 <- hakai_2015 %>% 
+  select(species, yday, n, org, percent, non_cumul_prop)
+
+tidy_okisollo_catch_2015 <- rbind(hakai_2015, dfo_2015_tidy_catch)
+
+
+# MODEL MIGRATION TIMING
+
+# chum
+chum_dfo <- tidy_okisollo_catch_2015 %>% 
+  filter(species == "CU", org == "dfo")
+
+chum_dfo_predicted <- log_cumul_abund(chum_dfo$percent, chum_dfo$yday) %>% 
+  mutate(org = "dfo", species = "CU") %>% 
+  mutate(daily_percent = y - lag(y)) 
+
+#chum hakai
+chum_hakai <- tidy_okisollo_catch_2015 %>% 
+  filter(species == "CU", org == "hakai")
+
+chum_hakai_predicted <- log_cumul_abund(chum_hakai$percent, chum_hakai$yday) %>% 
+  mutate(org = "hakai", species = "CU") %>% 
+  mutate(daily_percent = y - lag(y)) 
+
+# sockeye dfo
+sockeye_dfo <- tidy_okisollo_catch_2015 %>% 
+  filter(species == "SO", org == "dfo")
+
+sockeye_dfo_predicted <- log_cumul_abund(sockeye_dfo$percent, sockeye_dfo$yday) %>% 
+  mutate(org = "dfo", species = "SO") %>% 
+  mutate(daily_percent = y - lag(y)) 
+
+#sockeye hakai
+sockeye_hakai <- tidy_okisollo_catch_2015 %>% 
+  filter(species == "SO", org == "hakai")
+
+sockeye_hakai_predicted <- log_cumul_abund(sockeye_hakai$percent, sockeye_hakai$yday) %>% 
+  mutate(org = "hakai", species = "SO") %>% 
+  mutate(daily_percent = y - lag(y)) 
+
+predicted <- rbind(chum_dfo_predicted, chum_hakai_predicted, sockeye_dfo_predicted, sockeye_hakai_predicted) %>% 
+  select(x, y, Habitat = org, species, daily_percent)
+
+predicted$Habitat <- dplyr::recode(predicted$Habitat, hakai = "Nearshore", dfo = "Mid Channel")
+
+medians_2 <- tidy_okisollo_catch_2015 %>% 
+  select(org, species, yday, n) 
+
+medians_2 <- medians_2[rep(row.names(medians_2), medians_2$n), 1:3] %>% 
+  group_by(org, species) %>% 
+  summarize(median = median(yday))
+
+tidy_okisollo_catch_2015 <- tidy_okisollo_catch_2015 %>% 
+  select(yday, percent, Habitat = org, species)
+
+tidy_okisollo_catch_2015$Habitat <- dplyr::recode(tidy_okisollo_catch_2015$Habitat, hakai = "Nearshore", dfo = "Mid Channel")
+
+ggplot() +
+  geom_line(data = predicted, aes(x = x, y = y, colour = Habitat)) +
+  geom_point(data = tidy_okisollo_catch_2015, aes(x = yday, y = percent, colour = Habitat))+
+  facet_wrap(species ~ ., nrow = 2, labeller = labeller(species = spp_labels)) +
+  #geom_vline(data = medians_2, aes(xintercept = median, colour = org),
+             # size=.75) +
+  ylab("Cumulative Abundance (%)") +
+  xlab("Julian Day") +
+  scale_colour_hakai() +
+  ggtitle("2015 Migration Timing")
+```
+
+Migration Timing was not different 
+
 # Catch Composition
 
+```{r}
+(annual_prop <- okisollo %>% 
+  group_by(year, Habitat, species) %>% 
+  summarize(n = n()) %>% 
+  mutate(prop = n / sum(n)) %>% 
+  ggplot(aes(x = Habitat, y = prop, fill = species)) +
+    geom_bar(stat="identity")) +
+    facet_wrap(. ~ year) + 
+  scale_fill_hakai() +
+  ylab("Proportion")
+```
+
+
 # Diversity
+
+```{r}
+
+```
 
