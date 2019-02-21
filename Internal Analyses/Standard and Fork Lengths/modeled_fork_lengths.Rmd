@@ -1,0 +1,115 @@
+---
+title: "Linear Regression Model of Fork Lengths"
+author: "Julian Gan"
+date: '`r date()`'
+output:
+ html_document:
+   theme: cosmo
+   code_folding: show
+   toc: true
+   toc_float: true
+   number_sections: true
+---
+
+# Setup
+
+```{r setup}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, error = FALSE)
+library(hakaisalmon)
+library(tidyverse)
+library(readxl)
+library(ggplot2)
+
+# Reads from the EIMS Data Portal snapshot of lab dissection results from 2015 to February 2019
+fish <- read_excel("2019-02-01_144827_HakaiData_jsp_fish.xlsx", sheet = "Hakai Data") %>% 
+  mutate(fork_length = as.numeric(fork_length))
+```
+
+
+# Fork Length vs. Standard Length
+Linear regression of all species' fork length (FL) vs. standard length (SL) as measured in-lab from 2015 to February 2019.
+```{r graph}
+ggplot(fish, aes(x=standard_length, y = fork_length)) +
+  geom_point(shape=1)+
+  geom_smooth(method=lm)
+
+```
+
+# Linear Models
+```{r model}
+# Each species will have its own length regression model
+so_len <- fish %>% 
+  filter(species == "SO") 
+
+pi_len <- fish %>% 
+  filter(species == "PI")
+
+cu_len <- fish %>% 
+  filter(species == "CU")
+
+co_len <- fish %>% 
+  filter(species == "CO")
+
+ck_len <- fish %>% 
+  filter(species == "CK")
+
+he_len <- fish %>% 
+  filter(species == "HE")
+
+modlen_so <- lm(fork_length ~ standard_length, data = so_len)
+
+modlen_pi <- lm(fork_length ~ standard_length, data = pi_len)
+
+modlen_cu <- lm(fork_length ~ standard_length, data = cu_len)
+
+modlen_co <- lm(fork_length ~ standard_length, data = co_len)
+
+modlen_he <- lm(fork_length ~ standard_length, data = he_len)
+
+modlen_ck <- lm(fork_length ~ standard_length, data = ck_len)
+```
+
+```{r coefficients, include = FALSE}
+so_slope <- modlen_so$coef[2]
+so_int <- modlen_so$coef[1]
+
+pi_slope <- modlen_pi$coef[2]
+pi_int <- modlen_pi$coef[1]
+
+cu_slope <- modlen_cu$coef[2]
+cu_int <- modlen_cu$coef[1]
+
+co_slope <- modlen_co$coef[2]
+co_int <- modlen_co$coef[1]
+
+he_slope <- modlen_he$coef[2]
+he_int <- modlen_he$coef[1]
+
+ck_slope <- modlen_ck$coef[2]
+ck_int <- modlen_ck$coef[1]
+```
+
+
+**Sockeye**
+
+FL =  `r so_slope` * SL + `r so_int` 
+
+**Pink**
+
+FL =  `r pi_slope` * SL + `r pi_int` 
+
+**Chum**
+
+FL =  `r cu_slope` * SL + `r cu_int` 
+ 
+**Coho**
+
+FL =  `r co_slope` * SL + `r co_int` 
+
+**Herring**
+
+FL =  `r he_slope` * SL + `r he_int` 
+
+**Chinook**
+
+FL =  `r ck_slope` * SL + `r ck_int` 
