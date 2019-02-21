@@ -1,0 +1,60 @@
+---
+title: "Hakai Institute Juvenile Salmon Report"
+author: "Brett Johnson"
+date: '`r date()`'
+output:
+ html_document:
+   theme: cosmo
+   code_folding: show
+   toc: true
+   toc_float: true
+   number_sections: true
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, error = FALSE)
+library(hakaisalmon)
+library(tidyverse)
+library(lubridate)
+library(here)
+library(readxl)
+library(ggplot2)
+
+fish_2017 <- read_excel("2017_fish.xlsx", sheet = "Hakai Data") %>% 
+  filter(!is.na(`Weight Lab (g)`)) %>% 
+  select(`Hakai ID`, `Species`, `Date Caught` = `Date`, `Site ID`, `Date Processed`, `Fork Length Field (mm)`, `Fork Length Lab (mm)`, weight_wet = `Weight Field (g)`, weight_freezer = `Weight Lab (g)`)
+
+fish_2018_field <- read_excel("2018_fish.xlsx", sheet = "Hakai Data") %>% 
+  select(`Hakai ID`, `Species`, `Date Caught` = `Date`, `Site ID`, `Fork Length Field (mm)`, weight_wet = `Weight Field (g)`) %>% 
+  filter(!is.na(weight_wet))
+fish_2018_lab <- read_excel("2018-19_semsp_lab_data.xlsx", sheet = "fish_lab_data") %>% 
+  select(`Hakai ID` = `ufn`, weight_freezer = `weight_lab`, `Date Processed` = date_processed, `Fork Length Lab (mm)` = fork_length)
+fish_2018 <- left_join(fish_2018_field,fish_2018_lab) %>% 
+  filter(!is.na(weight_freezer) & weight_freezer != "NA") %>% 
+  mutate(weight_freezer = as.numeric(weight_freezer))
+```
+
+```{r weights}
+# Calculate the difference and % difference between wet & freezer weights
+fish_weights <- rbind(fish_2017,fish_2018) %>% 
+  mutate(storage_time = as.numeric(`Date Processed` - `Date Caught`)) %>% 
+  mutate(weight_diff = weight_wet - weight_freezer) %>% 
+  mutate(weight_diff_percent = (weight_wet - weight_freezer)/weight_freezer*100) %>% 
+  filter(!`Hakai ID` %in% c("U17302", "U16916", "U10246", "U17739", "U17087", "U10247")) # Remove outliers where weight difference > 50%, which is more likely due to field measurement error than actual weight loss from the freezer
+
+
+ggplot(fish_weights, aes(x=storage_time, y = weight_diff_percent)) +
+  geom_point(shape=1)+
+  geom_smooth(method=lm)+
+  ggtitle("Plot of field weight - freezer weight by storage time")+
+  xlab("Storage time (days)")+
+  ylab("% Weight difference (field - lab) (grams)")
+```
+
+```{r model}
+mod1 <- lm(weight_diff_percent ~ storage_time+ weight_freezer, data = fish_weights)
+summary(mod1)
+plot(mod1)
+
+
+```
