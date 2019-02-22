@@ -1,6 +1,6 @@
 ---
-title: "Hakai Institute Juvenile Salmon Report"
-author: "Brett Johnson"
+title: "Assessment of Weight Gain/Loss from Fish in Long-Term Cold Storage"
+author: "Julian Gan"
 date: '`r date()`'
 output:
  html_document:
@@ -11,12 +11,12 @@ output:
    number_sections: true
 ---
 
-```{r setup, include = FALSE}
+# Setup
+```{r setup}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, error = FALSE)
 library(hakaisalmon)
 library(tidyverse)
 library(lubridate)
-library(here)
 library(readxl)
 library(ggplot2)
 
@@ -34,6 +34,7 @@ fish_2018 <- left_join(fish_2018_field,fish_2018_lab) %>%
   mutate(weight_freezer = as.numeric(weight_freezer))
 ```
 
+# Weight Differences
 ```{r weights}
 # Calculate the difference and % difference between wet & freezer weights
 fish_weights <- rbind(fish_2017,fish_2018) %>% 
@@ -41,7 +42,6 @@ fish_weights <- rbind(fish_2017,fish_2018) %>%
   mutate(weight_diff = weight_wet - weight_freezer) %>% 
   mutate(weight_diff_percent = (weight_wet - weight_freezer)/weight_freezer*100) %>% 
   filter(!`Hakai ID` %in% c("U17302", "U16916", "U10246", "U17739", "U17087", "U10247")) # Remove outliers where weight difference > 50%, which is more likely due to field measurement error than actual weight loss from the freezer
-
 
 ggplot(fish_weights, aes(x=storage_time, y = weight_diff_percent)) +
   geom_point(shape=1)+
@@ -51,10 +51,44 @@ ggplot(fish_weights, aes(x=storage_time, y = weight_diff_percent)) +
   ylab("% Weight difference (field - lab) (grams)")
 ```
 
-```{r model}
-mod1 <- lm(weight_diff_percent ~ storage_time+ weight_freezer, data = fish_weights)
-summary(mod1)
-plot(mod1)
+## Statistics
+```{r t-test}
+# Conduct a paired t-test to determine if there is a significant difference in weights after long-term freezer storage, compared to freshly-caught fish
+t.test(fish_weights$weight_wet,fish_weights$weight_freezer, paired=TRUE, conf.level=0.95)
+hist(fish_weights$weight_diff, freq=FALSE, xlab="Field Weight - Freezer Weight (g)", main="Distribution of Weight Differences from Field to Freezer")
+curve(dnorm(x, mean=mean(fish_weights$weight_diff),sd=sd(fish_weights$weight_diff)),col="blue",add=TRUE)
 
+shapiro.test(fish_weights$weight_diff)
+
+wilcox.test(fish_weights$weight_wet,fish_weights$weight_freezer, paired=T)
+```
+Shapiro test found that the weight differences are severely non-normal, and therefore a paired t-test would not be appropriate for this dataset. Non-parametric Wilcox Signed Rank Test found that the difference is significant. However, additional variable of storage time should be considered.
+
+## Model
+```{r aic}
+# Create an AICc table to determine the best model
+
+library(AICcmodavg)
+mods <- list()
+mods[[1]] <- lm(log(weight_diff_percent+1) ~ log(storage_time) + weight_freezer, data = fish_weights) # Credit to David Patterson at DFO
+mods[[2]] <- lm(log(weight_diff_percent+1) ~ weight_freezer, data = fish_weights)
+mods[[3]] <- lm(log(weight_diff_percent+1) ~ log(storage_time) + weight_wet, data = fish_weights)
+mods[[4]] <- lm(log(weight_diff_percent+1) ~ log(storage_time), data = fish_weights)
+
+## Create a vector of names to trace back models in set
+modnames <- paste("mod", 1:length(mods), sep = " ")
+
+## Generate AICc table
+aictab(cand.set = mods, modnames = modnames, sort = TRUE)
+```
+The best-fit model is:
+
+&nbsp; &nbsp; &nbsp; &nbsp; log(fish weight~field-freezer~) ~ log(storage time (d)) + fish weight~freezer~
+
+```{r model}
+summary(mods[[1]])
+par(mfrow=c(2,2))
+plot(mods[[1]])
 
 ```
+
