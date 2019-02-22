@@ -83,7 +83,11 @@ aictab(cand.set = mods, modnames = modnames, sort = TRUE)
 ```
 The best-fit model is:
 
-&nbsp; &nbsp; &nbsp; &nbsp; log(fish weight~field-freezer~) ~ log(storage time (d)) + fish weight~freezer~
+&nbsp; &nbsp; &nbsp; &nbsp; **log(fish weight~field-freezer~ +1) ~ log(storage time (d)) + fish weight~freezer~**
+
+where
+
+&nbsp; &nbsp; &nbsp; &nbsp; fish weight~field-freezer~ = (fish weight~field~ - fish weight~freezer~) / fish weight~freezer~ * 100%
 
 ```{r model}
 summary(mods[[1]])

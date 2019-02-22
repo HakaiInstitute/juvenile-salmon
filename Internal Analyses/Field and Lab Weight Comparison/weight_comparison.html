@@ -238,7 +238,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Assessment of Weight Gain/Loss from Fish in Long-Term Cold Storage</h1>
 <h4 class="author"><em>Julian Gan</em></h4>
-<h4 class="date"><em>Fri Feb 22 11:15:20 2019</em></h4>
+<h4 class="date"><em>Fri Feb 22 11:23:41 2019</em></h4>
 
 </div>
 
@@ -353,7 +353,9 @@ aictab(cand.set = mods, modnames = modnames, sort = TRUE)</code></pre>
 ## mod 3 4 1393.05      17.92   0.00   1.00 -692.48
 ## mod 4 3 1420.26      45.13   0.00   1.00 -707.10</code></pre>
 <p>The best-fit model is:</p>
-<p>        log(fish weight<sub>field-freezer</sub>) ~ log(storage time (d)) + fish weight<sub>freezer</sub></p>
+<p>        <strong>log(fish weight<sub>field-freezer</sub> +1) ~ log(storage time (d)) + fish weight<sub>freezer</sub></strong></p>
+<p>where</p>
+<p>        fish weight<sub>field-freezer</sub> = (fish weight<sub>field</sub> - fish weight<sub>freezer</sub>) / fish weight<sub>freezer</sub> * 100%</p>
 <pre class="r"><code>summary(mods[[1]])</code></pre>
 <pre><code>## 
 ## Call:
