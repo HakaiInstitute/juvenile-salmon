@@ -12,8 +12,8 @@ output:
 ---
 # Setup
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, error = FALSE)
+```{r echo FALSE}
+# read in data files
 library(hakaisalmon)
 library(tidyverse)
 library(lubridate)
@@ -22,90 +22,19 @@ library(hakaiApi)
 library(DescTools)
 library(car)
 
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE, paged.print=TRUE)
+theme_set(ggsidekick::theme_sleek(base_size = 16)) #Thanks Sean Anderson
+
+
 spp_labels <- c(CU = "Chum", PI = "Pink", SO = "Sockeye", DI = "Discovery Islands", 
                 JS = "Johnstone Strait", "dfo" = "Mid Channel", "hakai" = "Nearshore")
 
-theme_set(ggsidekick::theme_sleek(base_size = 16)) #Thanks Sean Anderson
+okisollo <- read_csv(here("processed_data", "okisollo.csv"))
+dfo_coords <- read_csv(here("processed_data", "dfo_coords"))
+seines <- read_csv(here("processed_data", "seines.csv"))
 
-client <- hakaiApi::Client$new()
-
-# Download stock ID dna (ethanol liver samples) results from EIMS Data Portal
-dna_endpoint <- sprintf("%s/%s", client$api_root, 'eims/views/output/jsp_dna?site_id%26%26{"D09"}&limit=-1')
-ethanol_dna <- client$get(dna_endpoint)
-
-# Download stock ID finclip (whatman adhered caudal fins) results
-finclip_endpoint <-  sprintf("%s/%s", client$api_root, 
-                    'eims/views/output/jsp_fin_clip?site_id%26%26{"D09"}&limit=-1')
-finclip_dna <- client$get(finclip_endpoint)
-
-# Bind both data sets together
-dna <- bind_rows(ethanol_dna, finclip_dna) %>% 
-  select(fish_id, stock_1, prob_1) %>% 
-  mutate(stock_1 = toupper(stock_1))
-
-# Download seines and Fish Data to join to DNA results
-
-seines <- sprintf("%s/%s", client$api_root, 'eims/views/output/jsp_seine?date>=2015-05-01&date<2016-07-31&site_id~~*"D09"&limit=-1') %>% 
-  client$get(.) 
-
-seines_selected <- seines %>% 
-  select(seine_id, lat = gather_lat, lon = gather_long)
-
-fish <- sprintf("%s/%s", client$api_root,
-                'eims/views/output/jsp_fish?site_id%26%26{"D09"}&limit=-1') %>% client$get(.) %>%
-  select(survey_date = date, seine_id, site_id, species, fork_length, weight, ufn = hakai_id) %>%
-  left_join(seines_selected) %>% 
-  left_join(dna, by = c("ufn" = "fish_id")) %>% 
-    # Remove 'nearshore' seines that were actually overlapping with mid-channel sites:
-    dplyr::filter(!seine_id %in% c("DE231N2", "DE151N1", "DE301N1", "DE290N2", "DE236N1",
-                                   "DE361N2", "DE220N1")) %>% 
-  add_column(Habitat = "Nearshore", .after = "ufn") %>% 
-  add_column(DNA = NA, .after = "weight") %>% 
-  add_column(year_tow = NA, .before = "survey_date") %>% 
-  mutate(stock_1 = toupper(stock_1)) %>% 
-  mutate(collapsed_fraser_stocks = lump_fraser_sockeye_stocks(stock_1)) %>% 
-  select(year_tow, survey_date, site_id, lat, lon, species, fork_length, weight, DNA, stock_1, prob_1, Habitat, seine_id)
-
-# Read in DFO data from D09
-dfo_data <- read_csv(here("data", "dfo_data.csv")) %>% 
-  add_column(ufn = "ufn", .before = "Habitat") %>% 
-  # dplyr::filter out sits that arent from the same DFO sampling station
-  dplyr::filter(!year_tow %in% c("2016_109", "2015_78", "2016_34", "2015_5", "2015_73",
-                          "2015_9", "2015_37", "2015_20", "2016-106")) %>% 
-  mutate(prob_1 = as.numeric(prob_1),
-         survey_date = as_date(survey_date),
-         seine_id = NA) 
-
-# Join Hakai and DFO data into one dataframe
-okisollo <- bind_rows(fish, dfo_data) %>%
-  mutate(stock_1 = toupper(stock_1)) %>% 
-  mutate(collapsed_fraser_stocks = lump_fraser_sockeye_stocks(stock_1)) %>% 
-  mutate(k = 10^5*(weight / fork_length ^ 3)) %>% 
-  mutate(year = year(survey_date)) %>% 
-  dplyr::filter(year %in% c(2016, 2015)) %>% 
-  # categorize sampling events into categorical week and recod the categories so
-  # that the middle of the week is the label
-  mutate(sampling_week = as.numeric((yday(survey_date) + 4) %/% 7)) %>%
-  mutate(
-  sampling_week = recode_factor(sampling_week,
-  `18` = "May 5",
-  `19` = "May 12" ,
-  `20` = "May 19",
-  `21` = "May 26",
-  `22` = "June 2",
-  `23` = "June 9",
-  `24` = "June 16",
-  `25` = "June 23",
-  `26` = "June 30",
-  `27` = "July 6",
-  `28` = "July 13"
-  )
-  ) %>% 
-  #Looks like dfo data has errors in it with a fork_length of 9 and 18
-  dplyr::filter(fork_length > 20)
-
-# Remove intermediate dataframes
-#rm(ethanol_dna, finclip_dna,fish, dna, dfo_data)  
+dfo_data <- okisollo %>% 
+  filter(Habitat == "Mid Channel")
 ```
 
 # Map
@@ -121,16 +50,6 @@ library(ggsn)
 library(dplyr)
 library(raster)
 library(here)
-
-# Download sampling coordinates
-coords <- googlesheets::gs_key("157froMwaYUlXTCkGRBrFcQzTlrZEJZmWn89P-xAO1v0", visibility = "private", lookup = FALSE)
-
-dfo_coords <- googlesheets::gs_read(coords, ws = "dfo") %>% 
-  mutate(org = "Mid Channel",
-         seine_id = NA) %>% 
-  dplyr::select(seine_id, lat, lon, org) %>% 
-  dplyr::filter(lat > 50.3, lon < -125.315) 
-  
 
 hakai_coords <- okisollo %>% 
   dplyr::filter(Habitat == "Nearshore") %>% 
@@ -163,8 +82,8 @@ ggplot() +
   geom_polygon(data= okisollo_df, aes(x=long,y=lat,group= group),
                colour= "black", size=0.1, fill='grey95') +
   coord_cartesian(xlim = c(-125.340, -125.320), ylim = c(50.303, 50.310)) +
-  ggsn::scalebar(okisollo_df, dist = .5, st.size=4, height=0.005, dd2km = TRUE, 
-                 model = 'WGS84', anchor = c(x = -125.320, y = 50.3035))+
+  #ggsn::scalebar(okisollo_df, dist = .5, st.size=4, height=0.005, dd2km = TRUE, 
+                # model = 'WGS84', anchor = c(x = -125.320, y = 50.3035))+
   north(data = okisollo_df, scale = 0.1, symbol = 3, anchor= c(x = -125.340, 
                                                          y = 50.310)) +
   theme(panel.grid.minor = element_line(colour = NA),
@@ -245,6 +164,7 @@ lengths %>% ggplot(aes(x = species, y = mean, fill = Habitat)) +
         legend.direction = "horizontal", legend.position = "bottom")
 
 ```
+
 
 ```{r annual species lengths stats}
 
@@ -481,7 +401,78 @@ Migration Timing was not different
 
 # Diversity
 
-```{r}
 
+```{r stock diversity}
+dfo_diversity <- dfo_data %>% 
+  drop_na(stock_1) %>% 
+  group_by(stock_1) %>% 
+  summarize(n = n()) %>% 
+  spread(key = stock_1, value = n) %>% 
+  ungroup() %>%
+  #TODO: Figure out where these 0 and Xs are comning from
+  dplyr::select(- "0", - X)
+
+hakai_diversity <- okisollo %>% 
+  drop_na(stock_1) %>% 
+  group_by(stock_1) %>% 
+  summarize(n = n()) %>% 
+  spread(key = stock_1, value = n, fill = 0) %>% 
+  ungroup() %>% 
+  #TODO: Figure out where these 0 and Xs are comning from
+  dplyr::select(- "0", - X)
+
+```
+
+
+```{r}
+library(iNEXT)
+# Mid Channel
+dfo_rarefy <- dfo_diversity %>% 
+  gather(key = "stock", value = "Mid Channel")
+
+hakai_rarefy <- hakai_diversity %>% 
+  gather(key = "stock", value = "Nearshore")
+
+rarefy <- full_join(dfo_rarefy, hakai_rarefy) %>% 
+  replace_na(list("Mid Channel" = 0, Nearshore = 0)) %>% 
+  as.data.frame()
+
+rownames(rarefy) <- rarefy[,1]
+rarefy[,1] <- NULL
+output_all <- iNEXT(rarefy, q = c(0, 1, 2), datatype = "abundance")
+
+output_rich <- iNEXT(rarefy, q = 0, datatype = "abundance")
+
+# Stock richness
+ggiNEXT(output_rich, type = 1) +
+  ggsidekick::theme_sleek() +
+  scale_colour_hakai() +
+  ggtitle("Sockeye Genetic Stock Richness") +
+  ylab("Unique stocks") +
+  ggsidekick::theme_sleek(base_size = 14)
+
+
+
+
+rarefaction_tbl <- estimateD(rarefy, datatype = "abundance", base = "size",
+                             level=NULL, conf = 0.95) 
+
+rarefaction_tbl$order <- dplyr::recode_factor(rarefaction_tbl$order, `0` = "Spp. Richness", `1` = "Shannon", `2` = "Simpson")
+
+rarefaction_tbl <- rarefaction_tbl %>% 
+  dplyr::rename(Hill_Number = order, Site = site)
+
+ggplot(rarefaction_tbl, aes(x = Hill_Number, y = qD, fill = Site)) +
+  geom_bar(stat = "identity", position = position_dodge(0.9)) +
+  geom_errorbar(aes(ymin = qD.LCL, ymax = qD.UCL), width = 0.5, position = position_dodge(.9)) +
+  ylab("Diversity") +
+  scale_fill_hakai()+
+  xlab("Diversity measure") +
+  ggtitle("Asymptotic Sockeye Genetic Stock ID Diversity")
+
+```
+
+```{r end}
+beepr::beep(8)
 ```
 
