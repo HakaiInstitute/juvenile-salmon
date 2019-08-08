@@ -1,0 +1,120 @@
+---
+title: "2019 End of Season Report"
+author: "Sam James, Julian Gan, Brett Johnson"
+date: "08 August 2019"
+output: github_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+
+library(lubridate)
+library(dplyr)
+library(tidyverse)
+library(googlesheets)
+library(here)
+library(knitr)
+library(RColorBrewer)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r import data, include=FALSE}
+data <- gs_key("1cHgZszv--FlV207cwSpe9hFJipb7HhS4IW9vVrUNg8M", visibility = "private", lookup= FALSE)
+
+surveys <- gs_read(data, ws = "survey_data")
+seines <- gs_read(data, ws = "seine_data")
+surveys_seines <- left_join(seines, surveys, by = "survey_id")
+write_csv(surveys_seines, here("Internal Reports/End of Field Season Reports/2019/Raw Data/surveys_seines_2019.csv"))
+surveys_seines <- read_csv(here("Internal Reports/End of Field Season Reports/2019/Raw Data/surveys_seines_2019.csv"))
+
+fish <- gs_read(data, ws = "fish_field_data")
+fish_2019 <- left_join(fish, surveys_seines)
+write_csv(fish_2019, here("Internal Reports/End of Field Season Reports/2019/Raw Data/fish_2019.csv"))
+fish_2019 <- read_csv(here("Internal Reports/End of Field Season Reports/2019/Raw Data/fish_2019.csv"))
+
+lice <- gs_read(data, ws = "sealice_field_data")
+lice_2019 <- left_join(lice, fish_2019, by = "ufn")
+write_csv(lice_2019, here("Internal Reports/End of Field Season Reports/2019/Raw Data/lice_2019.csv"))
+lice_2019 <- read_csv(here("Internal Reports/End of Field Season Reports/2019/Raw Data/lice_2019.csv"))
+```
+
+```{r sea lice}
+
+lice_sample_size <- lice_2019 %>%
+        select(ufn, region, zone, site_id, species, lice_id_protocol) %>%
+        group_by(region, species, lice_id_protocol) %>%
+        summarise(n_loused = n())
+
+knitr::kable(lice_sample_size)
+
+```
+
+
+```{r Catch statistics}
+
+# Summary table of number of each species retained
+field_2019_sites_spp_summary <- surveys_seines %>% 
+  select(survey_id, survey_date, site_id, so_taken, pi_taken, cu_taken, co_taken, he_taken, ck_taken, region, zone) %>%
+  mutate(survey = paste(region, zone, sep = '_')) %>% 
+   rename(chinook = ck_taken,
+         coho = co_taken,
+         chum = cu_taken,
+         herring = he_taken,
+         pink = pi_taken,
+         sockeye = so_taken) %>% 
+  replace_na(list( n = 0)) %>% na.omit() %>% 
+  gather(sockeye, pink, chum, coho, chinook, herring, key = "species", value = "n") %>%
+  group_by(survey_id, survey, survey_date, site_id, species) %>% 
+  summarize(total_retained = sum(n))
+
+species_summary <- field_2019_sites_spp_summary %>%
+  group_by(species) %>%
+  summarize(n = sum(total_retained)) %>%
+  rename(total = n) %>%
+  arrange(desc(total))
+
+knitr::kable(species_summary)
+
+field_2019_sites_spp_summary$species <-
+  factor(field_2019_sites_spp_summary$species, levels = c("sockeye", "chum", "pink", "coho", "chinook", "herring"))
+
+field_2019_sites_spp_summary$site_id <- 
+  factor(field_2019_sites_spp_summary$site_id, levels = c("D27", "D22", "D09", "D10", "D35", "J03", "J02", "J09", "J11"))
+
+ggplot(field_2019_sites_spp_summary, aes(x = survey_date, y = fct_rev(site_id), label = site_id, fill = total_retained, color = survey)) +
+  geom_point(size = 3, shape = 21) +
+  scale_fill_gradient(low = "white", high = "black") +
+  facet_wrap( ~ species) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  xlab("Survey Date") +
+  ylab("Site ID") +
+  labs(fill = "Total Retained", color = "Survey")
+ggsave(here("Internal Reports", "End of Field Season Reports", "2019", "Figures", "site_success.png"), height = 6, width = 6)
+```
+
+```{r logistic regression model}
+library(MASS)
+library(reshape2)
+
+sreg <- surveys_seines %>% 
+  dplyr::select(set_sliders, so_total, cu_total, pi_total)
+
+sreg$set_sliders <- as.factor(sreg$set_sliders)
+slider <- sreg$set_sliders
+sototal <- sreg$so_total
+
+### Perforoming Ordered Logisitic Regression on slider activity and total sockeye catch.
+slider_so_logit <- polr(slider ~ sototal, data = sreg, Hess = T)
+summary (slider_so_logit)
+oddsratio <- exp(coef(slider_so_logit)) #coeffecients are log odds so I exponentitate them (with base e) to get odds ratio 
+oddsratio
+##storing table
+(slider_so_table <- coef(summary(slider_so_logit)))
+slider_so_p <- pnorm(abs(slider_so_table[,"t value"]), lower.tail = FALSE) * 2
+(slider_so_table <- cbind(slider_so_table, "p value" = slider_so_p))
+(slider_so_ci <- confint(slider_so_logit))
+exp(cbind(OR = coef(slider_so_logit), slider_so_ci))
+
+detach("package:MASS", unload = TRUE)
+```
