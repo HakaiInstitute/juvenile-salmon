@@ -24,3 +24,11 @@ so_d09_subset <- so_d09 %>%
   distinct(ufn, .keep_all = TRUE)
 
 write.csv(so_d09_subset, "2019-08-13_cjanusson_RNA-DNA_2019_D09_SO.csv")
+
+elab <- mydata <-read.delim("Sample Requests/RNA-DNA/elab_2019-08-13_cjanusson_RNA-DNA_2019_D09_SO.csv", header = TRUE, sep = "\t")
+
+so_d09_subset_loc <- so_d09_subset %>% 
+  left_join(elab) %>% 
+  select(1:5,21:25)
+
+write.csv(so_d09_subset_loc, "Sample Requests/RNA-DNA/2019-08-13_cjanusson_RNA-DNA_2019_D09_SO.csv", row.names=FALSE)
