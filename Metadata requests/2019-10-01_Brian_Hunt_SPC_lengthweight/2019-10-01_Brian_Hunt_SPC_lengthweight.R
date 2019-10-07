@@ -33,4 +33,10 @@ spc_lw_all <- bind_rows(spc_lw_2015_2018, spc_lw_2019) %>%
   select(ufn, species, survey_date, site_id, region, zone, wt_field, fl_field, K_field, wt_lab, fl_lab, K_lab)
 
 write_csv(spc_lw_all, here("Metadata requests", "2019-10-01_Brian_Hunt_SPC_lengthweight", "2019-10-01_Brian_Hunt_SPC_lengthweight.csv"))
+
+jg_subsample <- c("U20096", "U20127", "U20138", "U20228", "U20230", "U20234", "U20236", "U20582", "U20587", "U20592", "U20595", "U20598", "U20711", "U20712", "U20719", "U20749", "U20750", "U20831", "U20833", "U21211", "U21213", "U21214", "U21604", "U21609", "U21610")
   
+fish_2019_jg <- fish_2019 %>% 
+  filter(ufn %in% jg_subsample) %>% 
+  select(1:7)
+write_csv(fish_2019_jg, "2019-10-06_Jessica_Garzke_2019_subsample.csv")
