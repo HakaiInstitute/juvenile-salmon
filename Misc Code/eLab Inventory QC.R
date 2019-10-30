@@ -76,3 +76,20 @@ elab_xm <- read_tsv(here("data","elab_export","elab_xm.csv")) %>%
 xm_qc <- full_join(xm, elab_xm, by = "sample_id") %>% 
   mutate(match = ifelse(pos_gs == pos_el, "Y", "N")) %>% 
   filter(match == "N")
+
+
+# DNA ---------------------------------------------------------------------
+
+dna <- gs_read(lab, ws = "DNA") %>% 
+  left_join(fish, by = "ufn") %>% 
+  mutate(pos_gs = ifelse(is.na(input.col), paste(container.id, `elab.position`, sep="."), paste(container.id, input.col, input.row, sep="."))) %>% 
+  select(sample_id, dissector, date_processed, pos_gs)
+
+elab_dna <- read_tsv(here("data", "elab_export", "elab_dna.csv")) %>% 
+  mutate(pos_el = paste(storageLayerName, `Storage Position`, sep=".")) %>% 
+  select(sample_id = name, pos_el)
+
+dna_qc <- full_join(dna, elab_dna, by = "sample_id") %>% 
+  mutate(match = ifelse(pos_gs == pos_el, "Y", "N")) %>% 
+  filter(match == "N")
+
