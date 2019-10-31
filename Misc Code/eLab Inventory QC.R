@@ -139,3 +139,13 @@ elab_stom_up <- read_tsv(here("data", "elab_export", "elab_stom_up.csv")) %>%
 stom_up_qc <- full_join(stom_up, elab_stom_up, by = "sample_id_1") %>% 
   mutate(match = ifelse(stomach.bag.number == storageLayerName, "Y", "N")) %>% 
   filter(match == "N" | is.na(match))
+
+
+# Carcasses ---------------------------------------------------------------
+
+carcass <- gs_read(lab, ws = "carcass") %>% 
+  left_join(fish, by = "ufn") %>% 
+  select(ufn, dissector, date_processed, container.id)
+
+elab_carcass <- read_tsv(here("data", "elab_export", "elab_fish_dissected.csv")) %>% 
+  select(ufn = name, storageLayerName, `Storage`, `Dissection Status`)
