@@ -93,3 +93,49 @@ dna_qc <- full_join(dna, elab_dna, by = "sample_id") %>%
   mutate(match = ifelse(pos_gs == pos_el, "Y", "N")) %>% 
   filter(match == "N")
 
+
+# Scale -------------------------------------------------------------------
+
+scale <- gs_read(lab, ws = "scale") %>% 
+  left_join(fish, by = "ufn") %>% 
+  mutate(pos_gs = paste(container.id, elab.position, sep=".")) %>% 
+  select(sample_id, dissector, date_processed, pos_gs)
+
+elab_scale <- read_tsv(here("data", "elab_export", "elab_scale.csv")) %>% 
+  mutate(pos_el = paste(storageLayerName, `Storage Position`, sep=".")) %>% 
+  select(sample_id = name, pos_el)
+
+scale_qc <- full_join(scale, elab_scale, by = "sample_id") %>% 
+  mutate(match = ifelse(pos_gs == pos_el, "Y", "N")) %>% 
+  filter(match == "N")
+
+
+# Sea Lice Microbiome -----------------------------------------------------
+
+sl <- gs_read(lab, ws = "sea_lice") %>% 
+  left_join(fish, by = "ufn") %>% 
+  mutate(pos_gs = ifelse(is.na(input.col), paste(container.id, `elab.position`, sep="."), paste(container.id, input.col, input.row, sep="."))) %>% 
+  select(sample_id, dissector, date_processed, pos_gs)
+
+elab_slmicro <- read_tsv(here("data", "elab_export", "elab_slmicro.csv")) %>% 
+  mutate(pos_el = paste(storageLayerName, `Storage Position`, sep=".")) %>% 
+  select(sample_id = name, pos_el)
+
+slmicro_qc <- full_join(sl, elab_slmicro, by = "sample_id") %>% 
+  mutate(match = ifelse(pos_gs == pos_el, "Y", "N")) %>% 
+  filter(match == "N")
+
+
+# Stomachs ----------------------------------------------------------------
+
+stom_up <- gs_read(lab, ws = "stomach_unprocessed") %>% 
+  left_join(fish, by = "ufn") %>% 
+  filter(is.na(sample_id_2)) %>% 
+  select(sample_id_1, dissector, date_processed, stomach.bag.number, sample_id_2)
+
+elab_stom_up <- read_tsv(here("data", "elab_export", "elab_stom_up.csv")) %>% 
+  select(sample_id_1 = name, storageLayerName)
+
+stom_up_qc <- full_join(stom_up, elab_stom_up, by = "sample_id_1") %>% 
+  mutate(match = ifelse(stomach.bag.number == storageLayerName, "Y", "N")) %>% 
+  filter(match == "N" | is.na(match))
