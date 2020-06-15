@@ -73,6 +73,9 @@ general_collection_data <- ss %>%
                           "he" = "herring"
                           ),
          life_stage = "Juvenile",
+         no_released_good = total - taken,
+         no_released_poor = 0,
+         no_released_dead = 0,
          bio_sample = recode(fish_retained,
                              "yes" = "Yes",
                              "no" = "No"),
@@ -93,7 +96,9 @@ general_collection_data <- ss %>%
          species,
          life_stage,
          no_retained = taken,
-         no_released = total,
+         no_released_good,
+         no_released_poor,
+         no_released_dead,
          bio_sample,
          comments = seine_comments
   )
