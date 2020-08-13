@@ -3,6 +3,7 @@ library(googlesheets4)
 library(lubridate)
 library(sp)
 library(here)
+library(xlsx)
 
 # Read in 2020 seine & survey data from Google sheets
 surveys <- read_sheet("https://docs.google.com/spreadsheets/d/1F04L3heVXck9Co6THrE8vMzuu3O4zq4NwxC8FJdL5Uk/edit#gid=0", sheet = "survey_data")
@@ -45,8 +46,8 @@ ss <- seines %>%
                    pfma),
             by = "site_id")
 
-# Create the "General Collection Data" sheet. Copy and paste the results into the Excel file.
-general_collection_data <- ss %>% 
+# Wrangle the ss dat frame to fit the the "General Collection Data" sheet.
+ss_wrangle <- ss %>% 
   pivot_longer(cols = so_taken:ck_total, names_to = "species", values_to = "count") %>% 
   separate(species, into = c("species", "taken_total"), sep = "_") %>% 
   pivot_wider(names_from = "taken_total", values_from = "count") %>% 
@@ -73,9 +74,9 @@ general_collection_data <- ss %>%
                           "he" = "herring"
                           ),
          life_stage = "Juvenile",
-         no_released_good = total - taken,
-         no_released_poor = 0,
-         no_released_dead = 0,
+         num_released_good = total - taken,
+         num_released_poor = 0,
+         num_released_dead = 0,
          bio_sample = recode(fish_retained,
                              "yes" = "Yes",
                              "no" = "No"),
@@ -95,17 +96,72 @@ general_collection_data <- ss %>%
          collection_method,
          species,
          life_stage,
-         no_retained = taken,
-         no_released_good,
-         no_released_poor,
-         no_released_dead,
+         num_retained = taken,
+         num_released_good,
+         num_released_poor,
+         num_released_dead,
          bio_sample,
          comments = seine_comments
   )
 
+
+# Read in the bycatch data
+bycatch <- read_sheet("https://docs.google.com/spreadsheets/d/1F04L3heVXck9Co6THrE8vMzuu3O4zq4NwxC8FJdL5Uk/edit#gid=1766714177", sheet = "bycatch_mort") %>%
+  filter(bm_status == "B") %>% 
+  left_join(ss, by = "seine_id") %>% 
+  left_join(convert, by = "seine_id") %>% 
+  mutate(name = "Hakai Institute", # Make sure this is updated every year
+         license_number = "XR 96 2020", # Make sure this is updated every year
+         site = paste(site_id, site_name, sep = " - "),
+         marine_freshwater = "Marine",
+         watershed_code = "NA",
+         sampling_date = format(as.Date(survey_date), format = "%d-%b-%Y"),
+         sampling_time = format(as.POSIXct(strptime(set_time, 
+                                                    format = "%Y-%m-%d %H:%M", 
+                                                    tz = "America/Vancouver")
+         ), 
+         format = "%H:%M"),
+         collection_method = "purse seine",
+         species = bm_species,
+         life_stage = recode(bm_ageclass,
+                             "A" = "Adult",
+                             "J" = "Juvenile",
+                             "Y" = "Jack"),
+         num_retained = 0,
+         num_released_good = bm_count,
+         num_released_poor = 0,
+         num_released_dead = 0,
+         bio_sample = "No",
+         comments = ""
+  ) %>% 
+  select(name,
+         license_number,
+         site,
+         marine_freshwater,
+         watershed_code,
+         pfma,
+         zone,
+         Easting = UTM_E,
+         Northing = UTM_N,
+         sampling_date,
+         sampling_time,
+         collection_method,
+         species,
+         life_stage,
+         num_retained,
+         num_released_good,
+         num_released_poor,
+         num_released_dead,
+         bio_sample,
+         comments
+  )
+
+# Join ss_wrangle with bycatch to create the "General Collection Data" sheet.
+# Copy and paste the results into the Excel file. Make sure to edit the mortality/condition data in the csv where appropriate.
+general_collection_data <- bind_rows(ss_wrangle, bycatch)
+
 write_csv(general_collection_data, here("data", "DFO_general_collection_data_2020.csv"))
-# If there are notes in the data about fish being released in poor condition and/or dead, the numbers need to be manually adjusted.
-# Make sure to add any bycatch/mortality data to the final spreadsheet.
+
 
 
 # Read in 2020 fish & fin clip data from Google Sheets
@@ -113,7 +169,9 @@ fish <- read_sheet("https://docs.google.com/spreadsheets/d/1F04L3heVXck9Co6THrE8
 finclips <- read_sheet("https://docs.google.com/spreadsheets/d/1F04L3heVXck9Co6THrE8vMzuu3O4zq4NwxC8FJdL5Uk/edit#gid=1147885945", sheet = "fin_clips")
 
 # Create the "Biological Data" sheet.
-biological_data <- left_join(fish, ss, by = "seine_id") %>% 
+biological_data <- left_join(select(fish, -survey_id, -survey_date, -site_id),
+                             ss, 
+                             by = "seine_id") %>% 
   drop_na(ufn) %>% 
   mutate(license_number = "XR 96 2020",
          sampling_date = format(as.Date(survey_date), format = "%d-%b-%Y"),
@@ -131,7 +189,9 @@ biological_data <- left_join(fish, ss, by = "seine_id") %>%
                           "HE" = "herring"
                           ),
          retained_or_released = "Retained",
+         fork_length = as.character(fork_length_field),
          fork_length_units = "millimetres (mm)",
+         weight = as.character(weight_field),
          weight_units = "grams (g)",
          adipose_clipped = "no",
          fish_health = "good",
@@ -142,14 +202,15 @@ biological_data <- left_join(fish, ss, by = "seine_id") %>%
          sampling_time,
          species,
          retained_or_released,
-         fork_length_field,
+         fork_length,
          fork_length_units,
-         weight_field,
+         weight,
          weight_units,
          adipose_clipped,
          fish_health, # Edit as necessary if the fish was caught in fair or poor condition
          comments
          )
 
-
 write_csv(biological_data, here("data", "DFO_biological_data_2020.csv"))
+
+
