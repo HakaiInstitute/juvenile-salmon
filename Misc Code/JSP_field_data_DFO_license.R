@@ -3,7 +3,6 @@ library(googlesheets4)
 library(lubridate)
 library(sp)
 library(here)
-library(xlsx)
 
 # Read in 2020 seine & survey data from Google sheets
 surveys <- read_sheet("https://docs.google.com/spreadsheets/d/1F04L3heVXck9Co6THrE8vMzuu3O4zq4NwxC8FJdL5Uk/edit#gid=0", sheet = "survey_data")
