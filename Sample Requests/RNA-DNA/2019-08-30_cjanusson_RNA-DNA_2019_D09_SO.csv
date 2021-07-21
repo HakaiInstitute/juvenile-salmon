@@ -1,0 +1,46 @@
+ufn,species,survey_date,site_id,date_processed,sample_comments,Storage,storageLayerName,Storage Position
+U20236,SO,2019-05-21,D09,2019-08-27,NA,Prep -80 Freezer #3 - Shelf 3 - Working Section,BRN84M,D.3
+U20234,SO,2019-05-21,D09,2019-08-27,NA,Prep -80 Freezer #3 - Shelf 3 - Working Section,BRN84M,A.3
+U20230,SO,2019-05-21,D09,2019-08-27,NA,Prep -80 Freezer #3 - Shelf 3 - Working Section,BRN84M,E.7
+U20202,SO,2019-05-21,D09,2019-08-27,NA,Prep -80 Freezer #3 - Shelf 3 - Working Section,BRN84M,D.6
+U20228,SO,2019-05-21,D09,2019-08-28,NA,Prep -80 Freezer #3 - Shelf 3 - Working Section,BRN84M,C.7
+U20348,SO,2019-05-25,D09,2019-08-21,NA,Prep -80 Freezer #3 - Shelf 3 - Working Section,BRN84M,H.4
+U20326,SO,2019-05-25,D09,2019-08-29,NA,Prep -80 Freezer #3 - Shelf 3 - Working Section,BRN84M,B.11
+U20327,SO,2019-05-25,D09,2019-08-29,NA,Prep -80 Freezer #3 - Shelf 3 - Working Section,BRN84M,B.8
+U20329,SO,2019-05-25,D09,2019-08-29,NA,Prep -80 Freezer #3 - Shelf 3 - Working Section,BRN84M,G.12
+U20346,SO,2019-05-25,D09,2019-08-21,NA,Prep -80 Freezer #3 - Shelf 3 - Working Section,BRN84M,C.4
+U20127,SO,2019-05-28,D09,2019-08-21,NA,Prep -80 Freezer #3 - Shelf 1 - Tray 74,BRN83M,B.11
+U20106,SO,2019-05-28,D09,2019-08-21,NA,Prep -80 Freezer #3 - Shelf 1 - Tray 74,BRN83M,B.12
+U20138,SO,2019-05-28,D09,2019-08-21,NA,Prep -80 Freezer #3 - Shelf 3 - Working Section,BRN84M,E.1
+U20109,SO,2019-05-28,D09,2019-08-21,NA,Prep -80 Freezer #3 - Shelf 3 - Working Section,BRN84M,A.2
+U20103,SO,2019-05-28,D09,2019-08-21,NA,Prep -80 Freezer #3 - Shelf 3 - Working Section,BRN84M,D.2
+U20750,SO,2019-06-02,D09,2019-08-22,NA,Prep -80 Freezer #3 - Shelf 3 - Working Section,BRN84M,G.5
+U20749,SO,2019-06-02,D09,2019-08-27,Dropped RNA sample on dissection tray,Prep -80 Freezer #3 - Shelf 3 - Working Section,BRN84M,C.5
+U20712,SO,2019-06-02,D09,2019-08-14,NA,Prep -80 Freezer #3 - Shelf 1 - Tray 74,BRN83M,B.6
+U20711,SO,2019-06-02,D09,2019-08-14,Fish touched lab bench,Prep -80 Freezer #3 - Shelf 1 - Tray 74,BRN83M,G.6
+U20719,SO,2019-06-02,D09,2019-08-14,NA,Prep -80 Freezer #3 - Shelf 1 - Tray 74,BRN83M,D.6
+U21610,SO,2019-06-05,D09,2019-08-15,NA,Prep -80 Freezer #3 - Shelf 1 - Tray 74,BRN83M,D.8
+U20096,SO,2019-06-05,D09,2019-08-21,NA,Prep -80 Freezer #3 - Shelf 1 - Tray 74,BRN83M,D.12
+U20043,SO,2019-06-05,D09,2019-08-20,NA,Prep -80 Freezer #3 - Shelf 1 - Tray 74,BRN83M,B.9
+U21609,SO,2019-06-05,D09,2019-08-15,NA,Prep -80 Freezer #3 - Shelf 1 - Tray 74,BRN83M,B.7
+U21604,SO,2019-06-05,D09,2019-08-15,NA,Prep -80 Freezer #3 - Shelf 1 - Tray 74,BRN83M,A.7
+U20562,SO,2019-06-10,D09,2019-07-12,Fish fell on bench,Marna -80 Freezer,BRN80M,11.H
+U20570,SO,2019-06-10,D09,2019-07-05,NA,Marna -80 Freezer,BRN72M,9.E
+U20592,SO,2019-06-10,D09,2019-07-09,NA,Marna -80 Freezer,BRN80M,4.G
+U20582,SO,2019-06-10,D09,2019-06-28,Dropped RNA muscle sample on bench,Marna -80 Freezer,BRN72M,4.H
+U20584,SO,2019-06-10,D09,2019-06-28,NA,Marna -80 Freezer,BRN72M,4.E
+U20870,SO,2019-06-17,D09,2019-07-17,NA,Marna -80 Freezer,BRN81M,6.C
+U20868,SO,2019-06-17,D09,2019-07-18,NA,Marna -80 Freezer,BRN81M,9.A
+U20863,SO,2019-06-17,D09,2019-07-18,Fish fell on bench,Marna -80 Freezer,BRN81M,6.G
+U20865,SO,2019-06-17,D09,2019-07-17,NA,Marna -80 Freezer,BRN81M,6.A
+U20833,SO,2019-06-17,D09,2019-07-16,NA,Marna -80 Freezer,BRN81M,3.A
+U21182,SO,2019-07-02,D09,2019-08-15,NA,Prep -80 Freezer #3 - Shelf 1 - Tray 74,BRN83M,B.8
+U21181,SO,2019-07-02,D09,2019-08-15,NA,Prep -80 Freezer #3 - Shelf 1 - Tray 74,BRN83M,C.8
+U21183,SO,2019-07-02,D09,2019-08-15,NA,Prep -80 Freezer #3 - Shelf 1 - Tray 74,BRN83M,A.8
+U21213,SO,2019-07-02,D09,2019-08-15,NA,Prep -80 Freezer #3 - Shelf 1 - Tray 74,BRN83M,E.5
+U21211,SO,2019-07-02,D09,2019-08-13,NA,Prep -80 Freezer #3 - Shelf 1 - Tray 74,BRN83M,A.4
+U21201,SO,2019-07-02,D09,2019-07-23,fish fell on bench on right side,Marna -80 Freezer,BRN81M,11.C
+U21214,SO,2019-07-02,D09,2019-08-13,NA,Prep -80 Freezer #3 - Shelf 1 - Tray 74,BRN83M,B.4
+U21205,SO,2019-07-02,D09,2019-07-23,NA,Marna -80 Freezer,BRN81M,12.G
+U21521,SO,2019-07-22,D09,2019-08-29,NA,Prep -80 Freezer #3 - Shelf 3 - Working Section,BRN84M,D.10
+U21522,SO,2019-07-22,D09,2019-08-29,NA,Prep -80 Freezer #3 - Shelf 3 - Working Section,BRN84M,C.10

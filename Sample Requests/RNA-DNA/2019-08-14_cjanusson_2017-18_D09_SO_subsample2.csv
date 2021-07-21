@@ -1,0 +1,7 @@
+"","seine_id","ufn","species","survey_date","site_id","date_processed","dissection_protocol","comments_protocol","sample_id","container_id","container_cell","sample_location","comments_sample","current_location","date_updated","storage_unit","storage_tier_1","storage_tier_2"
+"1","DE373N1","U10723","SO","2017-06-26","D09","2018-02-13","full_2","Sea lice intermethod comparison","S10723RD1","BRN54M","C1","BRN54M-C1",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"2","DE367N1","U10245","SO","2017-05-29","D09","2018-03-05","full_2",NA,"S10245RD1","BRN58M","F8","BRN58M-F8",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"3","DE373N2","U10797","SO","2017-06-26","D09","2018-03-05","full_2",NA,"S10797RD1","BRN58M","G7","BRN58M-G7",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"4","DE523N3","U17194","SO","2018-06-11","D09","2018-10-24","streamlined_2",NA,"S17194RD1","BRN67M","F1","BRN67M-F1",NA,"Hakai Quadra Marna Lab",2018-11-19,"-80 Freezer 4","Shelf 3",NA
+"5","DE520N3","U16298","SO","2018-06-04","D09","2018-10-26","streamlined_2",NA,"S16298RD1","BRN67M","E9","BRN67M-E9",NA,"Hakai Quadra Marna Lab",2018-11-19,"-80 Freezer 4","Shelf 3",NA
+"6","DE520N3","U16292","SO","2018-06-04","D09","2018-10-26","streamlined_2",NA,"S16292RD1","BRN67M","C7","BRN67M-C7",NA,"Hakai Quadra Marna Lab",2018-11-19,"-80 Freezer 4","Shelf 3",NA

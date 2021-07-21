@@ -1,0 +1,21 @@
+region,species,age_class,n_taken,n_total
+Discovery Islands,Kelp greenling,J,0,2
+Discovery Islands,Lingcod,J,0,1
+Discovery Islands,Pacific Herring,J,51,77
+Discovery Islands,"Salmon, Chinook",J,12,17
+Discovery Islands,"Salmon, Chum",J,283,5984
+Discovery Islands,"Salmon, Coho",J,6,13
+Discovery Islands,"Salmon, Pink",J,230,13369
+Discovery Islands,"Salmon, Sockeye",J,446,5846
+Discovery Islands,Sand lance,A,0,310
+Discovery Islands,Threespine stickleback,A,0,11
+Discovery Islands,Threespine stickleback,J,0,150
+Discovery Islands,Threespine stickleback,NA,0,1
+Discovery Islands,Tubesnout,A,0,30
+Johnstone Strait,Dolly Varden,A,0,2
+Johnstone Strait,Pacific Herring,J,65,115
+Johnstone Strait,"Salmon, Chinook",J,1,3
+Johnstone Strait,"Salmon, Chum",J,151,2571
+Johnstone Strait,"Salmon, Coho",J,18,73
+Johnstone Strait,"Salmon, Pink",J,70,550
+Johnstone Strait,"Salmon, Sockeye",J,296,4523

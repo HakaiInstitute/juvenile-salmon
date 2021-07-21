@@ -1,0 +1,52 @@
+"","ufn","species","seine_id","survey_date","site_id","date_processed","dissection_protocol","comments_protocol","sample_id","container_id","container_cell","sample_location","comments_sample","current_location","date_updated","storage_unit","storage_tier_1","storage_tier_2"
+"1","U10106","SO","DE365N1","2017-05-25","D09","2018-01-23","full_2",NA,"S10106RD1","BRN51M","F6","BRN51M-F6",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"2","U10107","SO","DE365N1","2017-05-25","D09","2018-01-24","full_2",NA,"S10107RD1","BRN52M","H5","BRN52M-H5",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"3","U10083","SO","DE365N1","2017-05-25","D09","2018-02-21","full_3","weight and two isotope samples taken for David by CVJ, rest of dissection by KDB","S10083RD1","BRN58M","H1","BRN58M-H1",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"4","U10092","SO","DE365N1","2017-05-25","D09","2018-01-08","full_2",NA,"S10092RD1","BRN50M","B8","BRN50M-B8",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"5","U10101","SO","DE365N1","2017-05-25","D09","2018-01-23","full_2",NA,"S10101RD1","BRN51M","C6","BRN51M-C6",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"6","U10241","SO","DE367N1","2017-05-29","D09","2018-03-05","full_2",NA,"S10241RD1","BRN58M","H8","BRN58M-H8",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"7","U10246","SO","DE367N1","2017-05-29","D09","2018-02-14","full_2","Sea lice intermethod comparison","S10246RD1","BRN54M","B3","BRN54M-B3",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"8","U10247","SO","DE367N1","2017-05-29","D09","2018-03-05","full_2",NA,"S10247RD1","BRN58M","G8","BRN58M-G8",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"9","U10243","SO","DE367N1","2017-05-29","D09","2018-02-15","full_2","Sea lice intermethod comparison","S10243RD1","BRN54M","A3","BRN54M-A3",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"10","U10589","SO","DE371N1","2017-06-07","D09","2018-01-17","full_2",NA,"S10589RD1","BRN51M","C4","BRN51M-C4",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"11","U10578","SO","DE371N1","2017-06-07","D09","2018-01-24","full_2",NA,"S10578RD1","BRN52M","H8","BRN52M-H8",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"12","U10570","SO","DE371N1","2017-06-07","D09","2018-02-16","full_2","Sea lice intermethod comparison","S10570RD1","BRN54M","F9","BRN54M-F9","Left in coolbox in -20 freezer for 40 hrs; likely not useable","UBC Hunt Lab",2018-04-27,NA,NA,NA
+"13","U10586","SO","DE371N1","2017-06-07","D09","2018-01-17","full_2",NA,"S10586RD1","BRN51M","D4","BRN51M-D4",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"14","U10569","SO","DE371N1","2017-06-07","D09","2018-02-23","full_2",NA,"S10569RD1","BRN54M","H12","BRN54M-H12","Fish stored at -60C for 40 hrs; may be compromised","UBC Hunt Lab",2018-04-27,NA,NA,NA
+"15","U10650","SO","DE372N1","2017-06-12","D09","2018-02-16","full_2","Sea lice intermethod comparison","S10650RD1","BRN54M","H10","BRN54M-H10",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"16","U10657","SO","DE372N1","2017-06-12","D09","2018-01-08","full_2",NA,"S10657RD1","BRN50M","A9","BRN50M-A9",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"17","U10648","SO","DE372N1","2017-06-12","D09","2018-02-16","full_2","Sea lice intermethod comparison","S10648RD1","BRN54M","E10","BRN54M-E10",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"18","U10670","SO","DE372N1","2017-06-12","D09","2018-01-17","full_2",NA,"S10670RD1","BRN51M","B4","BRN51M-B4",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"19","U10658","SO","DE372N1","2017-06-12","D09","2018-01-19","full_2",NA,"S10658RD1","BRN50M","D12","BRN50M-D12",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"20","U10721","SO","DE373N1","2017-06-26","D09","2018-03-02","full_2",NA,"S10721RD1","BRN58M","G4","BRN58M-G4",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"21","U10741","SO","DE373N1","2017-06-26","D09","2018-01-29","full_2",NA,"S10741RD1","BRN52M","D7","BRN52M-D7",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"22","U10728","SO","DE373N1","2017-06-26","D09","2018-02-13","full_2","Sea lice intermethod comparison","S10728RD1","BRN54M","D1","BRN54M-D1",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"23","U10737","SO","DE373N1","2017-06-26","D09","2018-01-20","full_2",NA,"S10737RD1","BRN51M","G11","BRN51M-G11",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"24","U10792","SO","DE373N2","2017-06-26","D09","2018-03-05","full_2",NA,"S10792RD1","BRN58M","H7","BRN58M-H7",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"25","U10795","SO","DE373N2","2017-06-26","D09","2018-03-02","full_2","Weight estimated; took after removing RNA-muscle sample, gill & brain","S10795RD1","BRN58M","B3","BRN58M-B3",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"26","U10796","SO","DE373N2","2017-06-26","D09","2018-03-02","full_2",NA,"S10796RD1","BRN58M","C3","BRN58M-C3",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"27","U10793","SO","DE373N2","2017-06-26","D09","2018-03-05","full_2",NA,"S10793RD1","BRN58M","E7","BRN58M-E7","Muscle from U10798 touched inside of kidney tube","UBC Hunt Lab",2018-04-27,NA,NA,NA
+"28","U11123","SO","DE378N1","2017-06-20","D09","2018-02-16","full_3","Sea lice intermethod comparison","S11123RD1","BRN54M","B6","BRN54M-B6",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"29","U11124","SO","DE378N1","2017-06-20","D09","2018-03-05","full_2",NA,"S11124RD1","BRN58M","G6","BRN58M-G6",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"30","U11125","SO","DE378N1","2017-06-20","D09","2018-02-16","full_2","Sea lice intermethod comparison","S11125RD1","BRN54M","A6","BRN54M-A6",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"31","U11130","SO","DE378N1","2017-06-20","D09","2018-03-05","full_2",NA,"S11130RD1","BRN58M","H6","BRN58M-H6",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"32","U11126","SO","DE378N1","2017-06-20","D09","2018-03-05","full_2",NA,"S11126RD1","BRN58M","F6","BRN58M-F6",NA,"UBC Hunt Lab",2018-04-27,NA,NA,NA
+"33","U16158","SO","DE513N2","2018-05-28","D09","2018-10-29","streamlined_2",NA,"S16158RD1","BRN67M","G12","BRN67M-G12",NA,"Hakai Quadra Marna Lab",2018-11-19,"-80 Freezer 4","Shelf 3",NA
+"34","U16167","SO","DE513N2","2018-05-28","D09","2018-11-01","streamlined_2",NA,"S16167RD1","BRN68M","D7","BRN68M-D7",NA,"Hakai Quadra Marna Lab",2018-11-19,"-80 Freezer 4","Shelf 3",NA
+"35","U16342","SO","DE513N2","2018-05-28","D09","2018-10-29","streamlined_2",NA,"S16342RD1","BRN68M","G1","BRN68M-G1",NA,"Hakai Quadra Marna Lab",2018-11-19,"-80 Freezer 4","Shelf 3",NA
+"36","U16348","SO","DE513N2","2018-05-28","D09","2018-10-31","streamlined_2","head in CWT bag 1","S16348RD1","BRN68M","G4","BRN68M-G4",NA,"Hakai Quadra Marna Lab",2018-11-19,"-80 Freezer 4","Shelf 3",NA
+"37","U16164","SO","DE513N2","2018-05-28","D09","2018-11-01","streamlined_2",NA,"S16164RD1","BRN68M","H9","BRN68M-H9",NA,"Hakai Quadra Marna Lab",2018-11-19,"-80 Freezer 4","Shelf 3",NA
+"38","U16193","SO","DE517N2","2018-05-22","D09","2018-11-01","streamlined_2",NA,"S16193RD1","BRN68M","G11","BRN68M-G11",NA,"Hakai Quadra Marna Lab",2018-11-19,"-80 Freezer 4","Shelf 3",NA
+"39","U16192","SO","DE517N2","2018-05-22","D09","2018-11-01","streamlined_2",NA,"S16192RD1","BRN68M","H11","BRN68M-H11",NA,"Hakai Quadra Marna Lab",2018-11-19,"-80 Freezer 4","Shelf 3",NA
+"40","U16259","SO","DE517N2","2018-05-22","D09","2018-11-02","streamlined_2",NA,"S16259RD1","BRN61M","C4","BRN61M-C4",NA,"Hakai Quadra Marna Lab",2018-11-27,"-80 Freezer 4","Shelf 3",NA
+"41","U16252","SO","DE517N2","2018-05-22","D09","2018-11-02","streamlined_2",NA,"S16252RD1","BRN61M","H4","BRN61M-H4",NA,"Hakai Quadra Marna Lab",2018-11-27,"-80 Freezer 4","Shelf 3",NA
+"42","U16061","SO","DE517N2","2018-05-22","D09","2018-11-23","streamlined_2",NA,"S16061RD1","BRN72M","F1","BRN72M-F1",NA,"Hakai Quadra Marna Lab",2018-11-27,"-80 Freezer 4","Shelf 3",NA
+"43","U16297","SO","DE520N3","2018-06-04","D09","2018-10-26","streamlined_2",NA,"S16297RD1","BRN67M","F9","BRN67M-F9",NA,"Hakai Quadra Marna Lab",2018-11-19,"-80 Freezer 4","Shelf 3",NA
+"44","U16296","SO","DE520N3","2018-06-04","D09","2018-10-26","streamlined_2",NA,"S16296RD1","BRN67M","G9","BRN67M-G9",NA,"Hakai Quadra Marna Lab",2018-11-19,"-80 Freezer 4","Shelf 3",NA
+"45","U16293","SO","DE520N3","2018-06-04","D09","2018-10-26","streamlined_2",NA,"S16293RD1","BRN67M","B7","BRN67M-B7",NA,"Hakai Quadra Marna Lab",2018-11-19,"-80 Freezer 4","Shelf 3",NA
+"46","U17427","SO","DE523N3","2018-06-11","D09","2018-10-23","streamlined_2",NA,"S17427RD1","BRN62M","H11","BRN62M-H11",NA,"Hakai Quadra Marna Lab",2018-11-19,"-80 Freezer 4","Shelf 3",NA
+"47","U17192","SO","DE523N3","2018-06-11","D09","2018-10-24","streamlined_2",NA,"S17192RD1","BRN62M","C11","BRN62M-C11",NA,"Hakai Quadra Marna Lab",2018-11-19,"-80 Freezer 4","Shelf 3",NA
+"48","U17198","SO","DE523N3","2018-06-11","D09","2018-10-24","streamlined_2",NA,"S17198RD1","BRN62M","E11","BRN62M-E11",NA,"Hakai Quadra Marna Lab",2018-11-19,"-80 Freezer 4","Shelf 3",NA
+"49","U17414","SO","DE523N3","2018-06-11","D09","2018-10-25","streamlined_2",NA,"S17414RD1","BRN67M","A3","BRN67M-A3",NA,"Hakai Quadra Marna Lab",2018-11-19,"-80 Freezer 4","Shelf 3",NA
+"50","U17071","SO","DE536N1","2018-06-27","D09","2018-11-05","streamlined_2",NA,"S17071RD1","BRN61M","E8","BRN61M-E8",NA,"Hakai Quadra Marna Lab",2018-11-27,"-80 Freezer 4","Shelf 3",NA
+"51","U17072","SO","DE536N1","2018-06-27","D09","2018-11-05","streamlined_2",NA,"S17072RD1","BRN61M","F8","BRN61M-F8",NA,"Hakai Quadra Marna Lab",2018-11-27,"-80 Freezer 4","Shelf 3",NA
