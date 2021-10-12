@@ -1,0 +1,2 @@
+survey_id,survey_date,site_id,site_name.x,crew,precip,cloud_cover,sea_state,wind_speed,wind_direction,tide_state,survey_time_start,survey_time_end,net_sets,survey_type,ysi_drop,ctd_drop,survey_comments,qc.x,site_name.y,region,zone,set_number,seine_id,set_type,lat,lon,set_time,set_sliders,set_poppers,set_dimpling,fish_retained,so_taken,so_total,pi_taken,pi_total,cu_taken,cu_total,co_taken,co_total,he_taken,he_total,ck_taken,ck_total,total_caught,collection_protocol,seine_comments,qc.y
+DE700,2020-05-15,D07,NA,Brett Johnson; Krystal Bachen; Nick Sinclair,none,50,1,
