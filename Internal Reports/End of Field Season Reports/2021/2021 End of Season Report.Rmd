@@ -37,10 +37,10 @@ fish <- rbind(fish_2020, fish_2021)
 
 survey_seines <- left_join(surveys, sites, by = "site_id") %>% 
   right_join(seines, by = "survey_id")
-write_csv(survey_seines, here("2021", "raw_data", "survey_seines.csv"))
+write_csv(survey_seines, here("Internal Reports", "End of Field Season Reports", "2021", "raw_data", "survey_seines.csv"))
 
 fish_ss <- left_join(fish, seines, by = "seine_id")
-write_csv(fish, here("2021", "raw_data", "fish.csv"))
+write_csv(fish, here("Internal Reports", "End of Field Season Reports", "2021", "raw_data", "fish.csv"))
 ```
 
 ```{r catch statistics}
@@ -120,7 +120,7 @@ ggplot(data = sites_spp_summary %>% filter(year == 2020),
                                     colour = "white")
   )
 
-ggsave(here("2021", "figures", "site_success_2020.png"), height = 5, width = 6)
+ggsave(here("Internal Reports", "End of Field Season Reports", "2020", "figures", "site_success_2020.png"), height = 5, width = 6)
 
 # Create separate plot for 2021: 
 ggplot(data = sites_spp_summary %>% filter(year == 2021), 
@@ -148,6 +148,6 @@ ggplot(data = sites_spp_summary %>% filter(year == 2021),
                                     colour = "white")
   )
 
-ggsave(here("2021", "figures", "site_success_2021.png"), height = 5, width = 6)
+ggsave(here("Internal Reports", "End of Field Season Reports", "2021", "figures", "site_success_2021.png"), height = 5, width = 6)
 ```
 
