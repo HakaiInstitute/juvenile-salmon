@@ -33,7 +33,11 @@ survey_seines <- left_join(surveys_2022, sites, by = "site_id") %>%
 
 write_csv(survey_seines, here("2022", "raw_data", "survey_seines.csv"))
 
-fish_ss <- left_join(fish_2022, seines_2022, by = "seine_id")
+fish_ss <- left_join(fish_2022, seines_2022, by = "seine_id") 
+fish_ss <- fish_ss[fish_ss$species != "", ]
+
+#TODO: Figure out why initial left_join created blank species rows.
+
 write_csv(fish_ss, here("2022", "raw_data", "fish.csv"))
 ```
 
