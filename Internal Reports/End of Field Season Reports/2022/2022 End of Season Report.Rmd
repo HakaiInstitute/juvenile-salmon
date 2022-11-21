@@ -1,0 +1,118 @@
+---
+title: "2022 End of Season Field Report"
+author: "Brett Johnson, Tim van der Stap and Krystal Bachen"
+date: "Sys.Date()"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(lubridate)
+library(dplyr)
+library(tidyverse)
+library(googlesheets4)
+library(here)
+library(knitr)
+library(RColorBrewer)
+library(hakaiR)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r import data, include=FALSE}
+sites <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/master/supplemental_materials/raw_data/sites.csv") %>% 
+  select(site_id, site_name, region, zone)
+
+surveys_2022 <- read_sheet("https://docs.google.com/spreadsheets/d/1ezxMrD7g-0ExabJv6mLWg4gPthOSiEyLo5vi-D-BGxI/edit#gid=0", sheet = "survey_data") %>%
+  mutate(survey_date = as.Date(survey_date))
+
+seines_2022 <- read_sheet("https://docs.google.com/spreadsheets/d/1ezxMrD7g-0ExabJv6mLWg4gPthOSiEyLo5vi-D-BGxI/edit#gid=0", sheet = "seine_data", na = "NA")
+
+fish_2022 <- read_sheet("https://docs.google.com/spreadsheets/d/1ezxMrD7g-0ExabJv6mLWg4gPthOSiEyLo5vi-D-BGxI/edit#gid=0", sheet = "fish_field_data", na = "NA")
+
+survey_seines <- left_join(surveys_2022, sites, by = "site_id") %>% 
+  right_join(seines_2022, by = "survey_id")
+
+write_csv(survey_seines, here("2022", "raw_data", "survey_seines.csv"))
+
+fish_ss <- left_join(fish_2022, seines_2022, by = "seine_id")
+write_csv(fish_ss, here("2022", "raw_data", "fish.csv"))
+```
+
+```{r catch statistics}
+# Summary table of each species retained
+sites_spp_summary <- survey_seines %>% 
+  select(survey_id, survey_date, site_id, ends_with("taken"), region, zone) %>% 
+  mutate(survey = paste(region, zone, sep = '_')) %>% 
+  rename(sockeye = so_taken,
+         pink = pi_taken,
+         chum = cu_taken,
+         coho = co_taken,
+         chinook = ck_taken,
+         herring = he_taken
+         ) %>% 
+  replace_na(list(n = 0)) %>% 
+  na.omit() %>% 
+  gather(sockeye, pink, chum, coho, chinook, herring, key = "species", value = "n") %>%
+  group_by(survey_id, survey, survey_date, site_id, species) %>% 
+  summarize(total_retained = sum(n)) %>% 
+  ungroup() %>% 
+  filter(site_id != "D07")
+
+spp_summary <- sites_spp_summary %>% 
+  group_by(species) %>% 
+  summarize(n = sum(total_retained)) %>% 
+  rename(total = n) %>% 
+  arrange(desc(total))
+
+knitr::kable(spp_summary)
+
+sites_spp_summary$species <-
+  factor(
+    sites_spp_summary$species,
+    levels = c("sockeye", "pink", "chum", "coho", "chinook", "herring"),
+    labels = c("Sockeye", "Pink", "Chum", "Coho", "Chinook", "Herring")
+  )
+
+sites_spp_summary$site_id <-
+  factor(
+    sites_spp_summary$site_id,
+    levels = c("D27","D09", "D10", "D35")
+  )
+
+sites_spp_summary$survey <- 
+  factor(
+    sites_spp_summary$survey, 
+    levels = c("DI_W", "DI_C", "DI_E"),
+    labels = c("DI_West", "DI_Central", "DI_East"))
+
+# Separate years so you can filter by year:
+sites_spp_summary$year <- format(sites_spp_summary$survey_date, format="%Y")
+
+# Create separate plot for 2022:
+ggplot(data = sites_spp_summary %>% filter(year == 2022), 
+       aes(x = survey_date, y = fct_rev(site_id), label = site_id, fill = total_retained, color = survey)) +
+  geom_point(size = 3, shape = 21) +
+  scale_fill_gradient(low = "white", high = "black") +
+  guides(fill = guide_colourbar(order = 1),
+         color = guide_legend(order = 2)) +
+  facet_wrap( ~ species) +
+  scale_x_date(limits = c(as.Date("2022-05-15"), NA)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  xlab("Survey Date") +
+  ylab("Site ID") +
+  labs(fill = "Total Retained", color = "Survey") +
+  theme(
+    strip.background =element_rect(fill="lightgray"),
+    strip.text = element_text(face = "bold"),
+    panel.background = element_rect(fill = "gray90",
+                                    colour = "gray90",
+                                    size = 0.5, linetype = "solid"),
+    panel.border = element_blank(),
+    panel.grid.major = element_line(size = 0.5, linetype = 'solid',
+                                    colour = "white"), 
+    panel.grid.minor = element_line(size = 0.25, linetype = 'solid',
+                                    colour = "white")
+  )
+
+ggsave(here("2022", "figures", "site_success_2022.png"), height = 5, width = 6)
+```
+
