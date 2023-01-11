@@ -1,0 +1,73 @@
+---
+title: "GSI re-run QC"
+author: "Brett Johnson"
+date: "2023-01-11"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lubridate)
+
+survey_data <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/supplemental_materials/raw_data/survey_data.csv")
+seine_data <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/supplemental_materials/raw_data/seine_data.csv")
+fish_field_data <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/supplemental_materials/raw_data/fish_field_data.csv")
+fish_lab_data <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/supplemental_materials/raw_data/fish_lab_data.csv")
+
+dna_samples <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/supplemental_materials/raw_data/sample_inventory/dna_samples.csv")
+
+stock_id <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/supplemental_materials/raw_data/sample_results/stock_id.csv") 
+
+stock_id <- stock_id |> drop_na(stock_1)
+re_run_stock_id <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/supplemental_materials/raw_data/sample_results/rerun_stock_id.csv") |> 
+  drop_na(Stock_1)
+
+old_stock_id <- right_join(dna_samples, stock_id, by = "sample_id") |> 
+  left_join(fish_field_data) |> 
+  left_join(seine_data) |> 
+  left_join(survey_data) |> 
+  mutate(run = "old",
+         year = year(survey_date),
+         stock_1 = tolower(stock_1))
+
+new_stock_id <- left_join(re_run_stock_id, fish_field_data) |> 
+  left_join(seine_data) |> 
+  left_join(survey_data) |> 
+  mutate(run = "new",
+        Stock_1 = tolower(Stock_1))
+
+```
+
+
+```{r plot}
+
+table(year(old_stock_id$survey_date))
+table(year(new_stock_id$survey_date))
+
+ggplot(data =old_stock_id) +
+  geom_bar(aes(x = region_1)) +
+  facet_wrap(.~year(survey_date))
+
+comp_new <- new_stock_id |> 
+  mutate(year = year(survey_date)) |> 
+  filter(!year %in% c(2020, 2021)) |> 
+  rename(stock_1 = Stock_1)
+
+ggplot(data = comp_new) +
+  geom_bar(aes(x = Region_1)) +
+  facet_wrap(.~year(survey_date))
+
+# No major differences in n regions by year
+combo <- bind_rows(select(comp_new, stock_1, year, run), select(old_stock_id, stock_1, year, run))
+
+table <- combo |> 
+  count(year, stock_1, run) |> 
+  pivot_wider(names_from = run, values_from = n) |> 
+  mutate(abs_diff = abs(new - old)) |> 
+  drop_na(abs_diff)
+
+
+write_csv(table, here::here("Internal Analyses", "gsi_same_baseline_rerun", "gsi_rerun_comparison.csv"))
+
+```
