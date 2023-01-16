@@ -1,0 +1,288 @@
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = TRUE, message = FALSE, error = TRUE)
+library(dm)
+library(tidyverse)
+library(lubridate)
+library(here)
+library(googlesheets4)
+library(ggpubr)
+```
+
+First, let's plot CPUE vs site activity:
+
+```{r CPUE vs site activity}
+# Read in required tables
+seine_data <- read_csv(here("supplemental_materials", "tidy_data", "seine_data.csv"))
+site_activity <- read_csv(here("supplemental_materials", "tidy_data", "site_activity.csv"))
+survey_data <- read_csv(here("supplemental_materials", "tidy_data", "survey_data.csv"))
+
+survey_seine <- left_join(survey_data, seine_data, by = "survey_id")
+cpue_site_activity <- left_join(survey_seine, site_activity, by = "survey_id")
+
+# Pre-2017 the visual survey was done differently, so only use site activity data 2017-2022. I will also only focus on the main sampling sites: D09, D10, D35 and D27. Filter for surveys where fish were retained.
+cpue_site_activity <- cpue_site_activity %>%
+  mutate(year = year(survey_date)) %>%
+  filter(year >= 2017, fish_retained == "yes", site_id %in% c("D09", "D10", "D35", "D27"))
+
+DI_cpue_site_activity <-  cpue_site_activity %>%
+  select(survey_id, site_id, survey_date, school_id, school_sliders,
+         school_poppers, school_dimpling, so_taken:ck_total) %>%
+  group_by(survey_date, survey_id) %>%
+  mutate(schools_observed = n()) %>%
+  select(site_id, survey_id, schools_observed) %>%
+  distinct()
+
+# Create temporary object specific to total salmon caught after each survey.
+temp <- cpue_site_activity %>%
+  select(survey_id, so_total, pi_total, cu_total, co_total, he_total, ck_total) %>% distinct()
+all_salmon <- rowSums(temp[,2:6], na.rm = TRUE)
+temp <- cbind(temp, all_salmon)
+
+DI_cpue_site_activity <- left_join(DI_cpue_site_activity, temp, by = "survey_id")
+```
+
+CPUE vs. n_activity (number of rows) - filter for surveys where the net was set and by site?
+
+```{r}
+# Method 1 - list of values to loop over
+for (i in unique(DI_cpue_site_activity$site_id)) {
+
+  cpue_site <-    ggplot(data = subset(DI_cpue_site_activity, site_id == i)) + 
+                  geom_point(size=3, aes(x=schools_observed, 
+                                         y=all_salmon)) +
+                  ggtitle(i) +
+                  xlab("Number of schools observed") +
+                  ylab("Total salmon caught") +
+                  labs(caption = "Salmon catches by site activity, without taking into account size of activity \n Data from 2017 - 2022") +
+                  theme(plot.caption = element_text(hjust = 0.5))
+
+  ggsave(cpue_site, 
+         filename = here("./supplemental_materials/figs/cpue_site_activity", file=paste0("plot_", i,".png")))
+}
+
+DI_cpue <- ggplot(data = DI_cpue_site_activity, aes(x = schools_observed, y = all_salmon)) +
+  geom_point() +
+  geom_smooth(method = lm, formula = y ~ x) +
+  facet_wrap(~site_id, scales = 'free', nrow = 2) +
+  xlab("Number of schools observed along transect") +
+  ylab("Total Salmon Caught") +
+  labs(caption = "Salmon catches by site activity, without taking into account size of activity \n Data from 2017 - 2022 for Discovery Islands sites D09, D10, D27 and D35") +
+  theme(plot.caption = element_text(hjust = 0.5))
+
+ggsave(DI_cpue, filename = here("./supplemental_materials/figs/cpue_site_activity", file=paste("DI_cpue", ".png")))
+
+# Different ways to generate the maps - method 3:
+cpue_site_maps <- 
+  map(.x = unique(DI_cpue_site_activity$site_id), ~ DI_cpue_site_activity %>%
+        dplyr::filter(site_id == .x) %>%
+        ggplot(mapping = aes(x = all_salmon,
+                             y = schools_observed)) +
+    geom_point() +
+    ggtitle(.x) +
+    xlab("Total salmon caught") +
+    ylab("Number of schools observed") +
+    labs(caption = "Salmon catches by site activity, without taking into account size of activity \n Data from 2017 - 2022") +
+    theme(plot.caption = element_text(hjust = 0.5)))
+
+for(i in 1:length(DI_cpue_site_maps)){
+  ggsave(plot = DI_cpue_site_maps[[i]],
+         filename = here("./supplemental_materials/figs/cpue_site_activity", file=paste0("plot_", i, ".png")))
+}
+```
+
+Number of schools observed along a transect and the estimated total and mean size of these groups:
+
+```{r}
+size_activity <- cpue_site_activity %>%
+  select(survey_id, site_id, school_sliders, school_poppers, school_dimpling)
+
+total_size_activity <- rowSums(size_activity[,3:5])
+
+size_activity <- cbind(size_activity, total_size_activity) %>%
+  group_by(survey_id) %>%
+  mutate(total_activity_observed = sum(total_size_activity, na.rm = TRUE),
+         schools_observed = n(),
+         mean_school_observed = total_activity_observed / schools_observed) %>%
+  select(survey_id, site_id, schools_observed, total_activity_observed, mean_school_observed) %>%
+  distinct()
+
+DI_mean_schoolsize <- ggplot(data = size_activity, aes(x = schools_observed, y = mean_school_observed)) +
+  geom_point() +
+  geom_smooth(method = lm, formula = y ~ x) +
+  facet_wrap(~site_id, scales = 'free', nrow = 2) +
+  xlab("Number of schools observed") +
+  ylab("Mean size of school") +
+  labs(caption = "Mean size of schools by number of schools observed along transect \n Data from 2017 - 2022") +
+  theme(plot.caption = element_text(hjust = 0.5))
+
+DI_mean_schoolsize
+
+ggsave(DI_mean_schoolsize, filename = here("./supplemental_materials/figs/cpue_site_activity", 
+                                           file=paste("DI_mean_schoolsize", ".png")))
+
+DI_total_schoolsize <- ggplot(data = size_activity, aes(x = schools_observed, y = total_activity_observed)) +
+  geom_point() +
+  geom_smooth(method = lm, formula = y ~ x) +
+  facet_wrap(~site_id, scales = 'free', nrow = 2) +
+  xlab("Number of schools observed") +
+  ylab("Total accumulated size of schools observed") +
+  labs(caption = "Total accumulated size of schools observed along a transect plotted by the number of schools observed \n Data from 2017 - 2022") +
+  theme(plot.caption = element_text(hjust = 0.5))
+
+DI_total_schoolsize
+
+ggsave(DI_total_schoolsize, filename = here("./supplemental_materials/figs/cpue_site_activity", 
+                                                file=paste("DI_total_schoolsize", ".png")))
+```
+
+Relationship between number of schools observed during a survey and salmon caught following that survey:
+
+```{r}
+observations_vs_catch <- cpue_site_activity %>%
+  select(survey_id, site_id, so_total, pi_total, cu_total, co_total, he_total, ck_total) %>% 
+  group_by(survey_id) %>%
+  mutate(schools_observed = n()) %>%
+  distinct()
+
+all_salmon <- rowSums(observations_vs_catch[,3:8], na.rm = TRUE)
+observations_vs_catch <- cbind(observations_vs_catch, all_salmon)
+colnames(observations_vs_catch)[10] <- "all_salmon"
+
+plot_observations_catch <- ggplot(data = observations_vs_catch, 
+                                  aes(x = schools_observed, y = all_salmon)) +
+  geom_point() +
+  geom_smooth(method = lm, formula = y ~ x) +
+  facet_wrap(~site_id, scales = 'free', nrow = 2) +
+  xlab("Number of schools observed") +
+  ylab("Total salmon caught") +
+  labs(caption = "Total salmon caught after visual survey plotted by the number of schools observed \n Data from 2017 - 2022") +
+  theme(plot.caption = element_text(hjust = 0.5))
+
+plot_observations_catch
+
+ggsave(plot_observations_catch, filename = here("./supplemental_materials/figs/cpue_site_activity", 
+                                                file=paste("plot_observations_catch", ".png")))
+```
+
+Relationship between the mean estimated size of schools observed during a survey and salmon caught following that survey:
+
+```{r}
+mean_activity_vs_catch <- cpue_site_activity %>%
+  select(survey_id, site_id, school_sliders, school_poppers, school_dimpling,
+         so_total, pi_total, cu_total, co_total, he_total, ck_total) %>%
+  group_by(survey_id) %>%
+  mutate(schools_observed = n())
+
+total_size_activity <- rowSums(mean_activity_vs_catch[,3:5])
+all_salmon <- rowSums(mean_activity_vs_catch[,6:11], na.rm = TRUE)
+
+mean_activity_vs_catch <- cbind(mean_activity_vs_catch, total_size_activity, all_salmon)
+colnames(mean_activity_vs_catch)[13] <- "total_size_activity"
+colnames(mean_activity_vs_catch)[14] <- "all_salmon" 
+
+mean_activity_vs_catch <- mean_activity_vs_catch %>%
+  group_by(survey_id) %>%
+  mutate(total_activity_observed = sum(total_size_activity, na.rm = TRUE),
+         mean_school_observed = total_activity_observed / schools_observed) %>%
+  select(survey_id, site_id, mean_school_observed, all_salmon) %>%
+  distinct()
+
+plot_mean_activity_catch <- ggplot(data = mean_activity_vs_catch, 
+                                  aes(x = mean_school_observed, y = all_salmon)) +
+  geom_point() +
+  geom_smooth(method = lm, formula = y ~ x) +
+  facet_wrap(~site_id, scales = 'free', nrow = 2) +
+  xlab("Mean estimated size of schools") +
+  ylab("Total salmon caught") +
+  labs(caption = "Mean estimated size of schools observed along the visual transect plotted to the number of salmon caught in the net \n Data from 2017 - 2022") +
+  theme(plot.caption = element_text(hjust = 0.5))
+
+plot_mean_activity_catch
+
+ggsave(plot_mean_activity_catch, filename = here("./supplemental_materials/figs/cpue_site_activity", 
+                                                file=paste("plot_mean_activity_catch", ".png")))
+```
+
+Salmon catch by _net set_ activity (rather than activity throughout the visual transect):
+
+```{r}
+netset_vs_catch <- cpue_site_activity %>%
+  select(survey_id, site_id, set_sliders, set_poppers, set_dimpling,
+         so_total, pi_total, cu_total, co_total, he_total, ck_total) %>%
+  group_by(survey_id) %>% 
+  distinct()
+
+netset_activity <- rowSums(netset_vs_catch[,3:5])
+all_salmon <- rowSums(netset_vs_catch[,6:11], na.rm = TRUE)
+
+netset_vs_catch <- cbind(netset_vs_catch, netset_activity, all_salmon)
+colnames(netset_vs_catch)[12] <- "total_netset_activity"
+colnames(netset_vs_catch)[13] <- "all_salmon" 
+
+plot_netset_catch <- ggplot(data = netset_vs_catch, 
+                                  aes(x = total_netset_activity, y = all_salmon)) +
+  geom_point() +
+  geom_smooth(method = lm, formula = y ~ x) +
+  xlab("Total accumulated net set activity") +
+  ylab("Total salmon caught") +
+  labs(caption = "MTotal accumulated net set activity that the net was set on plotted by the number of salmon caught in that net \n Data from 2017 - 2022") +
+  theme(plot.caption = element_text(hjust = 0.5))
+
+plot_netset_catch
+
+ggsave(plot_netset_catch, filename = here("./supplemental_materials/figs/cpue_site_activity", 
+                                                file=paste("plot_netset_catch", ".png")))
+```
+
+
+
+Sockeye salmon caught plotted against slider activity throughout the visual transect:
+
+```{r}
+sockeye <- cpue_site_activity %>%
+  group_by(survey_id) %>%
+  mutate(slider_activity = sum(school_sliders, na.rm = TRUE),
+         schools_observed = n(),
+         mean_slider_activity = slider_activity / schools_observed) %>%
+  select(survey_id, so_total, slider_activity, mean_slider_activity) %>%
+  distinct()
+
+sockeye_plot <- ggplot(data = sockeye, aes(x = mean_slider_activity, y = so_total)) +
+  geom_point() +
+  geom_smooth(method = lm, formula = y ~ x) +
+  xlab("Mean slider activity observed across the schools during visual survey") +
+  ylab("Total Sockeye Salmon Caught") +
+  labs(caption = "Total sockeye caught plotted to slider activity \n Data from 2017 - 2022") +
+  theme(plot.caption = element_text(hjust = 0.5))
+
+sockeye_plot
+
+ggsave(sockeye_plot, filename = here("./supplemental_materials/figs/cpue_site_activity", file=paste("SO_by_Slider_Activity", ".png")))
+```
+
+Sockeye salmon caught plotted against slider activity immediately prior to the net set: 
+
+
+```{R}
+sockeye_netset <- cpue_site_activity %>%
+  select(survey_id, so_total, set_sliders) %>%
+  distinct()
+
+sockeye_plot_2 <- ggplot(data = sockeye_netset, aes(x = set_sliders, y = so_total)) +
+  geom_point() +
+  geom_smooth(method = lm, formula = y ~ x) +
+  xlab("Sliding activity prior to setting the net") +
+  ylab("Total Sockeye Salmon Caught") +
+  labs(caption = "Total sockeye caught plotted to slider activity prior to setting the net \n Data from 2017 - 2022") +
+  theme(plot.caption = element_text(hjust = 0.5)) +
+  ggpubr::stat_cor(aes(label = ..rr.label..), color = "red", geom = "label")
+
+sockeye_plot_2
+
+ggsave(sockeye_plot_2, filename = here("./supplemental_materials/figs/cpue_site_activity", 
+                                       file=paste("SO_by_Slider_Activity_netset", ".png")))
+```
+
+#TODO: CPUE vs. type of activity (dimpling, sliding, popping)
+#TODO: CPUE vs. size/type of activity that we actually set the net on. 
+#TODO: Sockeye salmon caught plotted against slider activity
