@@ -2,6 +2,7 @@
 knitr::opts_chunk$set(echo = TRUE, warning = TRUE, message = FALSE, error = TRUE)
 library(dm)
 library(tidyverse)
+library(RCurl)
 library(lubridate)
 library(here)
 library(googlesheets4)
@@ -11,10 +12,15 @@ library(ggpubr)
 First, let's plot CPUE vs site activity:
 
 ```{r CPUE vs site activity}
-# Read in required tables
-seine_data <- read_csv(here("supplemental_materials", "tidy_data", "seine_data.csv"))
-site_activity <- read_csv(here("supplemental_materials", "tidy_data", "site_activity.csv"))
-survey_data <- read_csv(here("supplemental_materials", "tidy_data", "survey_data.csv"))
+# Read in required tables: seine data, site_activity, survey_data
+seine_data <- RCurl::getURL("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/master/supplemental_materials/tidy_data/seine_data.csv")
+seine_data <- read.csv(text = seine_data)
+
+site_activity <- RCurl::getURL("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/master/supplemental_materials/tidy_data/site_activity.csv")
+site_activity <- read.csv(text = site_activity)
+
+survey_data <- RCurl::getURL("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/master/supplemental_materials/tidy_data/survey_data.csv")
+survey_data <- read.csv(text = survey_data)
 
 survey_seine <- left_join(survey_data, seine_data, by = "survey_id")
 cpue_site_activity <- left_join(survey_seine, site_activity, by = "survey_id")
@@ -57,7 +63,7 @@ for (i in unique(DI_cpue_site_activity$site_id)) {
                   theme(plot.caption = element_text(hjust = 0.5))
 
   ggsave(cpue_site, 
-         filename = here("./supplemental_materials/figs/cpue_site_activity", file=paste0("plot_", i,".png")))
+         filename = here("./figs/cpue_site_activity", file=paste0("plot_", i,".png")))
 }
 
 DI_cpue <- ggplot(data = DI_cpue_site_activity, aes(x = schools_observed, y = all_salmon)) +
@@ -69,7 +75,7 @@ DI_cpue <- ggplot(data = DI_cpue_site_activity, aes(x = schools_observed, y = al
   labs(caption = "Salmon catches by site activity, without taking into account size of activity \n Data from 2017 - 2022 for Discovery Islands sites D09, D10, D27 and D35") +
   theme(plot.caption = element_text(hjust = 0.5))
 
-ggsave(DI_cpue, filename = here("./supplemental_materials/figs/cpue_site_activity", file=paste("DI_cpue", ".png")))
+ggsave(DI_cpue, filename = here("./figs/cpue_site_activity", file=paste("DI_cpue", ".png")))
 
 # Different ways to generate the maps - method 3:
 cpue_site_maps <- 
@@ -86,7 +92,7 @@ cpue_site_maps <-
 
 for(i in 1:length(DI_cpue_site_maps)){
   ggsave(plot = DI_cpue_site_maps[[i]],
-         filename = here("./supplemental_materials/figs/cpue_site_activity", file=paste0("plot_", i, ".png")))
+         filename = here("./figs/cpue_site_activity", file=paste0("plot_", i, ".png")))
 }
 ```
 
@@ -117,7 +123,7 @@ DI_mean_schoolsize <- ggplot(data = size_activity, aes(x = schools_observed, y =
 
 DI_mean_schoolsize
 
-ggsave(DI_mean_schoolsize, filename = here("./supplemental_materials/figs/cpue_site_activity", 
+ggsave(DI_mean_schoolsize, filename = here("./figs/cpue_site_activity", 
                                            file=paste("DI_mean_schoolsize", ".png")))
 
 DI_total_schoolsize <- ggplot(data = size_activity, aes(x = schools_observed, y = total_activity_observed)) +
@@ -131,7 +137,7 @@ DI_total_schoolsize <- ggplot(data = size_activity, aes(x = schools_observed, y 
 
 DI_total_schoolsize
 
-ggsave(DI_total_schoolsize, filename = here("./supplemental_materials/figs/cpue_site_activity", 
+ggsave(DI_total_schoolsize, filename = here("./figs/cpue_site_activity", 
                                                 file=paste("DI_total_schoolsize", ".png")))
 ```
 
@@ -160,7 +166,7 @@ plot_observations_catch <- ggplot(data = observations_vs_catch,
 
 plot_observations_catch
 
-ggsave(plot_observations_catch, filename = here("./supplemental_materials/figs/cpue_site_activity", 
+ggsave(plot_observations_catch, filename = here("./figs/cpue_site_activity", 
                                                 file=paste("plot_observations_catch", ".png")))
 ```
 
@@ -199,7 +205,7 @@ plot_mean_activity_catch <- ggplot(data = mean_activity_vs_catch,
 
 plot_mean_activity_catch
 
-ggsave(plot_mean_activity_catch, filename = here("./supplemental_materials/figs/cpue_site_activity", 
+ggsave(plot_mean_activity_catch, filename = here("./figs/cpue_site_activity", 
                                                 file=paste("plot_mean_activity_catch", ".png")))
 ```
 
@@ -230,7 +236,7 @@ plot_netset_catch <- ggplot(data = netset_vs_catch,
 
 plot_netset_catch
 
-ggsave(plot_netset_catch, filename = here("./supplemental_materials/figs/cpue_site_activity", 
+ggsave(plot_netset_catch, filename = here("./figs/cpue_site_activity", 
                                                 file=paste("plot_netset_catch", ".png")))
 ```
 
@@ -257,7 +263,8 @@ sockeye_plot <- ggplot(data = sockeye, aes(x = mean_slider_activity, y = so_tota
 
 sockeye_plot
 
-ggsave(sockeye_plot, filename = here("./supplemental_materials/figs/cpue_site_activity", file=paste("SO_by_Slider_Activity", ".png")))
+ggsave(sockeye_plot, filename = here("./figs/cpue_site_activity", 
+                                     file=paste("SO_by_Slider_Activity", ".png")))
 ```
 
 Sockeye salmon caught plotted against slider activity immediately prior to the net set: 
