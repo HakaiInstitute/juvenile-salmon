@@ -1,0 +1,410 @@
+---
+title: "Hakai Institute Juvenile Salmon Report"
+author: "Brett Johnson"
+date: '`r date()`'
+output:
+ html_document:
+   theme: cosmo
+   code_folding: hide
+   toc: true
+   toc_float: true
+   number_sections: true
+---
+
+```{r setup, include = FALSE}
+
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, error = FALSE)
+library(hakaisalmon)
+library(tidyverse)
+library(lubridate)
+library(here)
+library(iNEXT)
+
+client <- hakaiApi::Client$new()
+
+# Download stock ID dna (ethanol liver samples) results from EIMS Data Portal
+ethanol_dna_endpoint <- sprintf("%s/%s", client$api_root, 
+                                'eims/views/output/jsp_dna?limit=-1')
+ethanol_dna <- client$get(ethanol_dna_endpoint)
+
+# Download stock ID finclip (whatman adhered caudal fins) results
+finclip_endpoint <-  sprintf("%s/%s", client$api_root, 
+                             'eims/views/output/jsp_fin_clip?limit=-1')
+finclip_dna <- client$get(finclip_endpoint)
+
+
+# Bind both data sets together
+dna <- bind_rows(ethanol_dna, finclip_dna) %>% 
+  select(fish_id, work_area, survey, date, stock_1, prob_1) %>% 
+  mutate(stock_1 = toupper(stock_1),
+         year = year(date),
+         yday = yday(date)) #%>% 
+  #filter(yday <= 158 & yday >= 143)
+
+# Download seines and Fish Data to join to DNA results
+
+seines <- sprintf("%s/%s", client$api_root,
+                  'eims/views/output/jsp_seine?date>=2015-05-01&date<2016-07-31&site_id~~*"D09"&limit=-1') %>% 
+  client$get(.) 
+
+hill_labels <- function(x) {
+  x + 
+    guides(fill = guide_legend(title = "Hill number"), shape = guide_legend(title = "Hill number"), colour = guide_legend(title = "Hill number")) +
+    scale_fill_discrete(name = "Hill Number",
+                          breaks = c(0,1,2),
+                          labels = c("Richness", "Shannon Diversity", 
+                                     "Simpson Diversity")) +
+    scale_colour_discrete(name = "Hill Number",
+                          breaks = c(0,1,2),
+                          labels = c("Richness", "Shannon Diversity", 
+                                     "Simpson Diversity")) +
+    scale_shape_discrete(name = "Hill Number",
+                          breaks = c(0,1,2),
+                          labels = c("Richness", "Shannon Diversity", 
+                                     "Simpson Diversity"))+
+    ggsidekick::theme_sleek(base_size = 14)
+  }
+  
+
+```
+
+This analysis is based on the genetic stock ID assigned to sockeye salmon caught in the Discovery Islands and Johnstone Strait in 2015--2017 by the Hakai Institute Juvenile Salmon Program. The stock assignment for sockeye samples is provided by the Molecular Genetics Lab at PBS in Nanaimo. 
+
+The analysis uses Hill Numbers 0, 1, 2. Which are unified measures of species richness and Diversity. 0 is Species (stock) richness, 1 is Shannon Diversity, 2 is Simpsons Diversity.
+
+[iNEXT R package user guide](http://chao.stat.nthu.edu.tw/wordpress/wp-content/uploads/software/iNEXT_UserGuide.pdf)
+
+Chao, A., Gotelli, N.J., Hsieh, T.C., Sander, E.L., Ma, K.H., Colwell, R.K. & Ellison, A.M. (2014)
+Rarefaction and extrapolation with Hill numbers: a framework for sampling and
+estimation in species diversity studies. Ecological Monographs, 84, 45–67.
+
+# Compare Regions
+
+First lets look at all three years (2015--2017), dates, and sites grouped by regions.
+
+Not constrained to peak migration period
+
+```{r Both Regions All Years}
+
+# Start with comparing both regions and entire temporal coverage for all years
+all_dna_summary <- dna %>% 
+   drop_na(stock_1) %>% 
+   group_by(stock_1, work_area) %>% 
+   summarize(n = n()) %>% 
+   spread(key = work_area, value = n) %>% 
+   replace_na(list(QUADRA = 0, "JOHNSTONE STRAIT" = 0)) %>% 
+   as.data.frame()
+
+rownames(all_dna_summary) <- all_dna_summary[,1]
+all_dna_summary[,1] <- NULL
+
+output_all <- iNEXT(all_dna_summary, q = c(0, 1, 2), datatype = "abundance")
+
+p1 <- ggiNEXT(output_all, type=1, facet.var = "site") +
+  ggsidekick::theme_sleek() +
+  scale_colour_hakai() +
+  ggtitle("Sockeye Genetic Diversity Measures") +
+  ylab("Unique stocks") +
+  ggsidekick::theme_sleek(base_size = 14)+
+  labs(caption = "Figure 1. All years, all sites combined by region")
+
+p2 <- ggiNEXT(output_all, type=2, facet.var = "site") +
+  ggsidekick::theme_sleek() +
+  scale_colour_hakai() +
+  ggtitle("Sample coverage (completeness) curve") +
+  ggsidekick::theme_sleek(base_size = 14) +
+  labs(caption = "Figure 2. All years, all sites combined by region")
+
+p3 <- ggiNEXT(output_all, type=3, facet.var = "site") +
+  ggsidekick::theme_sleek() +
+  scale_colour_hakai() +
+  ggtitle("Coverage-based rarefaction and extrapolation curves") +
+  ggsidekick::theme_sleek(base_size = 14) +
+  labs(caption = "Figure 3. All years, all sites combined by region")
+
+hill_labels(p1)
+hill_labels(p2)
+hill_labels(p3)
+```
+
+Looks like Johnstone Strait has higher stock richness and diversities compared to Quadra when you very coarsely look at all years and sites combined.
+
+<!-- # Compare Years  -->
+
+<!-- Next let's broadly compare years by combing all sites and both regions. -->
+<!-- Not constrained to peak migration period. -->
+
+<!-- ```{r} -->
+
+<!-- # Compare 2015, 2016 and 2017 in Johnstone Strait -->
+<!-- regional_dna_summary <- dna %>%  -->
+<!--    drop_na(stock_1) %>%  -->
+<!--    group_by(stock_1, year(date)) %>%  -->
+<!--    summarize(n = n()) %>%  -->
+<!--    ungroup() %>%  -->
+<!--    spread(key = "year(date)", value = n) %>%  -->
+<!--    replace_na(list("2015" = 0, "2016" = 0, "2017" = 0)) %>%  -->
+<!--    as.data.frame()   -->
+
+<!-- rownames(regional_dna_summary) <- regional_dna_summary[,1] -->
+<!-- regional_dna_summary[,1] <- NULL -->
+
+<!-- output_regional <- iNEXT(regional_dna_summary, q = c(0, 1, 2), datatype = "abundance") -->
+
+<!-- p4 <- ggiNEXT(output_regional, type=3, facet.var = "site") + -->
+<!--   ggsidekick::theme_sleek() + -->
+<!--   scale_colour_hakai() + -->
+<!--   ggtitle("Sockeye Genetic Diversity Measures") + -->
+<!--   ylab("Unique stocks") + -->
+<!--   labs(caption = " Figure 4. All sites and both regions combined by year") + -->
+<!--   ggsidekick::theme_sleek(base_size = 14) -->
+
+
+<!-- hill_labels(p4) -->
+
+
+<!-- ``` -->
+
+# Compare Discovery Islands Channels
+
+## All years combined
+
+Comparing all years combined is not restricted to peak migration period.
+
+```{r}
+
+# Bind both data sets together
+di_dna <- bind_rows(ethanol_dna, finclip_dna) %>% 
+  select(fish_id, work_area, survey, date, stock_1, prob_1) %>% 
+  mutate(stock_1 = toupper(stock_1),
+         year = year(date),
+         yday = yday(date)) 
+  
+di <- di_dna %>% 
+   drop_na(stock_1) %>% 
+  filter(work_area == "QUADRA") %>% 
+   group_by(stock_1, survey) %>% 
+  filter(survey != "DI") %>% 
+   summarize(n = n()) %>% 
+   spread(key = survey, value = n) %>% 
+   replace_na(list("DI" = 0, "DI_C" = 0, "DI_E" =  0, "DI_W" =  0)) %>% 
+  as.data.frame() 
+
+rownames(di) <- di[,1]
+di[,1] <- NULL
+
+di_output <- iNEXT(di, q = c(0, 1, 2), datatype = "abundance") 
+
+di_output[["DataInfo"]][["site"]] <- fct_relevel(di_output[["DataInfo"]][["site"]],
+                                                 "DI_W", "DI_C", "DI_E")
+
+p7 <- ggiNEXT(di_output, type=3, facet.var = "site") +
+  ggtitle("Sockeye Genetic Diversity Measures") +
+  labs(caption = "Figure 5. All years split by migration corridor") 
+
+hill_labels(p7)
+```
+
+## Split by years
+
+The following statistics are sampled from the min and max date range for the 25th and 75th percentile of cumulative catch abundance of sockeye from 2015, 2016, and 2017. May 23 and  June 7 are the min and max dates for the Discovery Islands.
+
+### 2015
+
+```{r}
+di_dna <- bind_rows(ethanol_dna, finclip_dna) %>% 
+  select(fish_id, work_area, survey, date, stock_1, prob_1) %>% 
+  mutate(stock_1 = toupper(stock_1),
+         year = year(date),
+         yday = yday(date)) %>% 
+  filter(yday <= 158 & yday >= 143)
+
+di <- di_dna %>% 
+   drop_na(stock_1) %>% 
+  filter(work_area == "QUADRA",
+         year == 2015) %>% 
+   group_by(stock_1, survey) %>% 
+  filter(survey != "DI") %>% 
+   summarize(n = n()) %>% 
+   spread(key = survey, value = n) %>% 
+   replace_na(list("DI" = 0, "DI_C" = 0, "DI_E" =  0, "DI_W" =  0)) %>% 
+  as.data.frame()
+
+rownames(di) <- di[,1]
+di[,1] <- NULL
+
+di_output <- iNEXT(di, q = c(0, 1, 2), datatype = "abundance") 
+
+di_output[["DataInfo"]][["site"]] <- fct_relevel(di_output[["DataInfo"]][["site"]],
+                                                 "DI_W", "DI_C", "DI_E")
+
+p5 <- ggiNEXT(di_output, type=3, facet.var = "site") +
+  ggtitle("2015 Sockeye Genetic Diversity Measures") +
+  labs(caption = "Figure 5. All years split by migration corridor") 
+
+p6 <- ggiNEXT(di_output, type=2, facet.var = "site") +
+  ggtitle("2015 Sockeye Genetic Diversity Measures") +
+  labs(caption = "Figure 5. All years split by migration corridor") 
+
+hill_labels(p5)
+hill_labels(p6)
+```
+
+In 2015 we fell short of complete sample coverage in Discovery Passage. It looks like in Discovery Passage in 2015 we needed about 100 sockeye stock ID'd between May 23 and June 7 to get close to 100% sample coverage.
+### 2016
+
+```{r}
+di <- di_dna %>% 
+   drop_na(stock_1) %>% 
+  filter(work_area == "QUADRA",
+         year == 2016) %>% 
+   group_by(stock_1, survey) %>% 
+  filter(survey != "DI") %>% 
+   summarize(n = n()) %>% 
+   spread(key = survey, value = n) %>% 
+   replace_na(list("DI" = 0, "DI_C" = 0, "DI_E" =  0, "DI_W" =  0)) %>% 
+  as.data.frame()
+
+rownames(di) <- di[,1]
+di[,1] <- NULL
+
+di_output <- iNEXT(di, q = c(0, 1, 2), datatype = "abundance") 
+
+di_output[["DataInfo"]][["site"]] <- fct_relevel(di_output[["DataInfo"]][["site"]],
+                                                 "DI_W", "DI_C", "DI_E")
+
+p5 <- ggiNEXT(di_output, type=3, facet.var = "site") +
+  ggtitle("2016 Sockeye Genetic Diversity Measures") +
+  labs(caption = "Figure 5. All years split by migration corridor") 
+
+hill_labels(p5)
+
+```
+
+### 2017
+
+```{r}
+di <- di_dna %>% 
+   drop_na(stock_1) %>% 
+  filter(work_area == "QUADRA",
+         year == 2017) %>% 
+   group_by(stock_1, survey) %>% 
+  filter(survey != "DI") %>% 
+   summarize(n = n()) %>% 
+   spread(key = survey, value = n) %>% 
+   replace_na(list("DI" = 0, "DI_C" = 0, "DI_E" =  0, "DI_W" =  0)) %>% 
+  as.data.frame()
+
+rownames(di) <- di[,1]
+di[,1] <- NULL
+
+di_output <- iNEXT(di, q = c(0, 1, 2), datatype = "abundance") 
+
+di_output[["DataInfo"]][["site"]] <- fct_relevel(di_output[["DataInfo"]][["site"]],
+                                                 "DI_W", "DI_C", "DI_E")
+
+p5 <- ggiNEXT(di_output, type=3, facet.var = "site") +
+  ggtitle("2017 Sockeye Genetic Diversity Measures") +
+  labs(caption = "Figure 5. All years split by migration corridor") 
+
+hill_labels(p5)
+
+```
+
+DI Central is about 95% coverage in 2017, a little less than before but still good.
+
+Something weird is going on in DI West in 2017
+
+### Discovery Islands Summary
+
+DI Central and East appear to have higher Diversity than DI west. DI west was not sampled during peak migration period in 2016, and was poorly represented in 2017.
+
+We need to sample 60 sockeye per week in each migration channel between 2 week peak period (May 23 and June 7) to get close to a complete sample coverage. 
+
+The current plan permits max of 30 sockeye per migration channel per two weeks.
+We should double sampling efforts during peak migration period to get close to 100% sample coverage.
+
+I think when we get our first big seine of sockeye, we should collect 60 sockeye per seine for two weeks and we'd be good.
+
+# Johnstone Strait
+
+## All Years
+
+Comparing all years combined is not restricted to peak migration period.
+
+```{r}
+# Bind both data sets together
+js_dna <- bind_rows(ethanol_dna, finclip_dna) %>% 
+  select(fish_id, work_area, survey, date, stock_1, prob_1) %>% 
+  mutate(stock_1 = toupper(stock_1),
+         year = year(date),
+         yday = yday(date))
+
+js <- js_dna %>% 
+  filter(work_area == "JOHNSTONE STRAIT") %>% 
+  group_by(stock_1, survey) %>% 
+   summarize(n = n()) %>% 
+   spread(key = survey, value = n) %>% 
+   replace_na(list("JS_N" = 0, "JS_S" = 0)) %>% 
+  as.data.frame() %>% 
+  drop_na()
+  
+rownames(js) <- js[,1]
+js[,1] <- NULL
+
+js_output <- iNEXT(js, q = c(0, 1, 2), datatype = "abundance") 
+
+p5 <- ggiNEXT(js_output, type=3, facet.var = "site") +
+  ggtitle("2017 Sockeye Genetic Diversity Measures") +
+  labs(caption = "Figure 5. All years split North and South") 
+
+hill_labels(p5)
+```
+
+## Split by years
+
+The following statistics are sampled from the min and max date range for the 25th and 75th percentile of cumulative catch abundance of sockeye from 2015, 2016, and 2017. May 26 and  June 21 are the min and max dates for Johnstone Strait.
+
+```{r}
+js_dna <- bind_rows(ethanol_dna, finclip_dna) %>% 
+  select(fish_id, work_area, survey, date, stock_1, prob_1) %>% 
+  mutate(stock_1 = toupper(stock_1),
+         year = year(date),
+         yday = yday(date)) %>% 
+  filter(yday <= 169 & yday >= 157)
+
+js <- js_dna %>% 
+  filter(work_area == "JOHNSTONE STRAIT") %>% 
+  group_by(stock_1, year(date)) %>% 
+   summarize(n = n()) %>% 
+    spread(key = "year(date)", value = n) %>% 
+   replace_na(list("2015" = 0, "2016" = 0, "2017" = 0)) %>% 
+  as.data.frame() 
+  
+js <- js[-nrow(js),1:4]
+rownames(js) <- js[,1]
+js[,1] <- NULL
+
+js_output <- iNEXT(js, q = c(0, 1, 2), datatype = "abundance") 
+
+p5 <- ggiNEXT(js_output, type=3, facet.var = "site") +
+  ggtitle("2017 Sockeye Genetic Diversity Measures") +
+  labs(caption = "Figure 5. All years split North and South") 
+
+hill_labels(p5)
+p5 <- ggiNEXT(js_output, type=2, facet.var = "site") +
+  ggtitle("2017 Sockeye Genetic Diversity Measures") +
+  labs(caption = "Figure 5. All years split North and South") 
+
+hill_labels(p5)
+```
+
+
+### Johnstone Strait Summary
+
+After the first big seine of sockeye in Johnstone Strait, we need to collect 60 sockeye per seine for 2 weeks.
+
+```{r end}
+beepr::beep(8)
+```
+

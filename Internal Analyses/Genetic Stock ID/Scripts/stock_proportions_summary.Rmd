@@ -1,0 +1,111 @@
+---
+title: "GSI Summary"
+author: "Brett Johnson"
+date: "31/03/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(lubridate)
+library(hakaiR)
+
+survey_data <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/tidy_data/survey_data.csv")
+
+seine_data <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/tidy_data/seine_data.csv")
+
+fish_field_data <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/tidy_data/fish_field_data.csv", guess_max = 16000)
+
+fish_lab_data <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/tidy_data/fish_lab_data.csv", guess_max = 8000)
+
+dna_samples <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/tidy_data/dna_samples.csv")
+
+stock_id <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/tidy_data/stock_id.csv")
+
+survey_seines_fish_gsi_samples <- left_join(survey_data, seine_data,
+                                       by = "survey_id") %>% 
+  left_join(fish_field_data, by = 'seine_id') %>% 
+  left_join(fish_lab_data, by = 'ufn') %>% 
+  left_join(dna_samples, by = 'ufn') 
+
+so_gsi_samples <- survey_seines_fish_gsi_samples %>% 
+  filter(species == "SO") %>% 
+  group_by(year(survey_date)) %>% 
+  summarize(n = n()) %>% 
+  glimpse()
+
+survey_seines_fish_stocks <- survey_seines_fish_gsi_samples %>% 
+  left_join(stock_id, by = 'sample_id') %>% 
+  drop_na(stock_1) %>% 
+  mutate(lumped_stock = lump_fraser_sockeye_stocks(stock_1)) %>% 
+  select(survey_date, lat, long, stock_1, region_1, prob_1, lumped_stock)
+
+```
+
+
+```{r summary tables of stocks from Early Stuart and Bowron}
+
+
+es_b <- survey_seines_fish_stocks %>% 
+  select(survey_date, lat, long, stock_1, region_1, prob_1, lumped_stock) %>% 
+  filter(region_1 == 1 | stock_1 == "BOWRON")
+
+es_prop <- survey_seines_fish_stocks %>% 
+  select(survey_date, lat, long, stock_1, region_1, prob_1, lumped_stock) %>% 
+  filter(region_1 %in% c(1,2,3,4)) %>% 
+  group_by(year(survey_date), lumped_stock) %>% 
+  summarize(n = n()) %>% 
+  mutate(total_n = sum(n), prop = n / sum(n)) %>% 
+  filter(lumped_stock == "Early_Stuart")
+  
+b_prop <- survey_seines_fish_stocks %>% 
+  select(survey_date, lat, long, stock_1, region_1, prob_1, lumped_stock) %>% 
+  filter(region_1 %in% c(1,2,3,4)) %>% 
+  group_by(year(survey_date), stock_1) %>% 
+  summarize(n = n()) %>% 
+  mutate(total_n = sum(n), prop = n / sum(n)) %>% 
+  filter(stock_1 == "BOWRON")
+
+b_es_prop <- bind_rows(es_prop, b_prop)  
+
+write_csv(b_es_prop, here("hakai-jsp-bowron_es_prop.csv"))
+write_csv(es_b, here("hakai-jsp-bowron-es-occurrences.csv"))
+```
+
+
+```{r Big Bar Stocks}
+# This summary was produced for Dave Patterson to determine if there was a negative impact from the Big Bar landslide on outmigrating smolts in 2019 from above the slide. Dave's expectation is that the stock proprtion we catch should be 85% or greater of stocks from above the slide.
+
+fraser_props <- survey_seines_fish_stocks %>%
+  mutate(big_bar = ifelse(lumped_stock %in% c("Chilko", "Quesnel", 
+                                              "Late_Stuart_Stellako", "Nadina_Gates_Bowron_Nahatlatch", 
+                                              "Early_Stuart"), "North", "South")) %>% 
+  filter(region_1 %in% c(1:4)) 
+
+annual_stock_prop <- fraser_props %>% 
+  ungroup() %>% 
+  group_by(year(survey_date), big_bar) %>% 
+  summarize(n = n()) %>% 
+  mutate(prop = n / sum(n))
+
+annual_north_stock_prop <- annual_stock_prop %>% 
+  filter(big_bar == "North")
+
+all_socks_prop <- survey_seines_fish_stocks %>% 
+  group_by(year(survey_date), big_bar) %>% 
+  summarize(n = n()) %>% 
+  mutate(prop = n / sum(n)) %>% 
+  filter(big_bar == "North")
+  
+  
+catch_intensity <- read_csv(here::here("report_data", "catch_intensity.csv")) %>% 
+  filter(species == "Sockeye") %>% 
+  left_join(all_socks_prop,  by = c("year" = "year(survey_date)")) %>% 
+  mutate(mean_catch_N = mean_catch * prop) %>% 
+  select(year, mean_catch_N)
+  
+
+```
+

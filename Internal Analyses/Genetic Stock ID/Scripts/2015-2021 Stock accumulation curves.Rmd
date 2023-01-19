@@ -1,0 +1,435 @@
+---
+title: "Hakai Institute Juvenile Salmon Report"
+author: "Brett Johnson"
+date: '`r date()`'
+output:
+ html_document:
+   theme: cosmo
+   code_folding: hide
+   toc: true
+   toc_float: true
+   number_sections: true
+---
+
+```{r setup, include = FALSE}
+
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, error = FALSE)
+library(tidyverse)
+library(lubridate)
+library(here)
+library(iNEXT)
+
+survey_data <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/supplemental_materials/raw_data/survey_data.csv")
+
+seine_data <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/supplemental_materials/raw_data/seine_data.csv")
+
+sites <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/supplemental_materials/raw_data/sites.csv")
+
+fish_field_data <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/supplemental_materials/raw_data/fish_field_data.csv", guess_max = 16000)
+
+fish_lab_data <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/supplemental_materials/raw_data/fish_lab_data.csv", guess_max = 8000)
+
+dna_samples <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/supplemental_materials/raw_data/sample_inventory/dna_samples.csv")
+
+stock_id <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/supplemental_materials/raw_data/sample_results/stock_id.csv")
+
+survey_seines_fish_gsi_samples <- right_join(survey_data, seine_data,
+                                       by = "survey_id") %>% 
+  left_join(sites, by = 'site_id') |> 
+  left_join(fish_field_data, by = 'seine_id') %>% 
+  left_join(fish_lab_data, by = 'ufn') %>% 
+  left_join(dna_samples, by = 'ufn') |> 
+  right_join(stock_id, by = "sample_id")
+
+dna <- survey_seines_fish_gsi_samples |> 
+  select(ufn, region, zone, survey_date, stock_1, prob_1, site = site_id)
+```
+
+
+
+# Genetic Stock ID Diversity 
+
+This analysis is based on the genetic stock ID assigned to sockeye salmon caught in the Discovery Islands by the Hakai Institute Juvenile Salmon Program. The stock assignment for sockeye samples is provided by the Molecular Genetics Lab at PBS in Nanaimo. 
+
+The analysis uses Hill Numbers 0, 1, 2. Which are unified measures of species richness and Diversity. 0 is Species (stock) richness, 1 is Shannon Diversity, 2 is Simpsons Diversity.
+
+[iNEXT R package user guide](http://chao.stat.nthu.edu.tw/wordpress/wp-content/uploads/software/iNEXT_UserGuide.pdf)
+
+Chao, A., Gotelli, N.J., Hsieh, T.C., Sander, E.L., Ma, K.H., Colwell, R.K. & Ellison, A.M. (2014)
+Rarefaction and extrapolation with Hill numbers: a framework for sampling and
+estimation in species diversity studies. Ecological Monographs, 84, 45–67.
+
+## Migration corridors
+
+When comparing migration corridors across all years there does not appear to be a significant difference in species richness, however Shannon and Simpson diversity appears to be higher in the Central corridor compared to East and West (Figure 1).
+
+```{r all years}
+so_gsi_samples <- survey_seines_fish_gsi_samples %>% 
+  filter(species == "SO") %>% 
+  group_by(year(survey_date)) %>% 
+  summarize(n = n()) %>% 
+  glimpse()
+
+hill_labels <- function(x) {
+  x + 
+    guides(fill = guide_legend(title = "Hill number"), shape = guide_legend(title = "Hill number"), colour = guide_legend(title = "Hill number")) +
+    scale_fill_discrete(name = "Hill Number",
+                          breaks = c(0,1,2),
+                          labels = c("Richness", "Shannon Diversity", 
+                                     "Simpson Diversity")) +
+    scale_colour_discrete(name = "Hill Number",
+                          breaks = c(0,1,2),
+                          labels = c("Richness", "Shannon Diversity", 
+                                     "Simpson Diversity")) +
+    scale_shape_discrete(name = "Hill Number",
+                          breaks = c(0,1,2),
+                          labels = c("Richness", "Shannon Diversity", 
+                                     "Simpson Diversity"))
+  }
+  
+
+# di_combined <- dna |> 
+#   filter(region == "DI") |> 
+#   mutate(year = lubridate::year(survey_date),
+#          yday = lubridate::yday(survey_date)) |> 
+#   drop_na(stock_1) %>% 
+#   group_by(stock_1) %>% 
+#    summarize(n = n()) |> 
+#   as.data.frame() 
+# 
+# rownames(di_combined) <- di_combined[,1]
+# di_combined[,1] <- NULL 
+# 
+# di_combined_output <- iNEXT(di_combined, q = c(0, 1, 2), datatype = "abundance") 
+# 
+# p77 <- ggiNEXT(di_combined_output, type=1, color.var = "Order.q") +
+#   ggtitle("Sockeye Genetic Diversity Measures") +
+#   labs(caption = "Figure 1. All years Discovery Islands") 
+# 
+# hill_labels(p77) +
+#   ylab("Stock diversity")
+
+```
+
+
+```{r DI by migration corridor}
+di <- dna |> 
+  filter(region == "DI") |> 
+  mutate(year = lubridate::year(survey_date),
+         yday = lubridate::yday(survey_date)) |> 
+  drop_na(stock_1, zone) %>% 
+  group_by(stock_1, zone) %>% 
+   summarize(n = n()) %>% 
+   spread(key = zone, value = n) %>% 
+   replace_na(list("E" = 0, "W" =  0, "C" =  0)) %>% 
+  as.data.frame() 
+
+rownames(di) <- di[,1]
+di[,1] <- NULL
+
+di_output <- iNEXT(di, q = c(0, 1, 2), datatype = "abundance", endpoint = 1500) 
+
+di_output[["DataInfo"]][["site"]] <- fct_relevel(di_output[["DataInfo"]][["Assemblage"]],
+                                                 "W", "C", "E")
+
+p7 <- ggiNEXT(di_output, type=1, facet.var = "Assemblage") +
+  ggtitle("Sockeye Genetic Diversity Measures") +
+  labs(caption = "Figure 1. All years split by migration corridor") 
+
+hill_labels(p7) +
+  ylab("Stock diversity")
+```
+
+The central region contains some other sites such as D07, so to be prudent I looked at only D09 compared to everywhere else combining all years and saw that D09 did not have a significantly different stock richness, or diversity compared to everywhere else (Figure 2.)
+
+```{r D09 vs everything else}
+d9_vs <- dna |> 
+  filter(region == "DI") |> 
+  mutate(year = lubridate::year(survey_date),
+         yday = lubridate::yday(survey_date)) |> 
+  drop_na(stock_1, zone) %>% 
+  mutate(D09 = if_else(site == "D09", "D09", "Everywhere else")) |> 
+  group_by(stock_1, D09) |> 
+  summarize(n = n()) |> 
+    spread(key = D09, value = n) |> 
+    replace_na(list("D09" = 0, "Everywhere else" = 0)) |> 
+    as.data.frame()
+
+rownames(d9_vs) <- d9_vs[,1]
+d9_vs[,1] <- NULL
+
+d9_output <- iNEXT(d9_vs, q = c(0, 1, 2), datatype = "abundance", endpoint = 2000) 
+
+d9_output[["DataInfo"]][["site"]] <- fct_relevel(d9_output[["DataInfo"]][["Assemblage"]],
+                                                 "D09","Everywhere else")
+
+p8 <- ggiNEXT(d9_output, type=1, facet.var = "Assemblage") +
+  ggtitle("Sockeye Genetic Diversity Measures") +
+  labs(caption = "Figure 2. All years D09 compared with all other sites combined") 
+
+hill_labels(p8) +
+  ylab("Stock diversity")
+
+```
+
+## Annual Samplling Diversity and Completeness
+
+### Diversity
+
+Breaking out stock diversities by year you can see we are sampling different population structures across years that have different stock diversities (Figure 3).
+
+```{r diversity by year}
+all <- dna |> 
+  filter(region == "DI") |> 
+   mutate(year = lubridate::year(survey_date),
+         yday = lubridate::yday(survey_date)) |> 
+  drop_na(stock_1) |> 
+  group_by(year, stock_1) |> 
+  summarize(n = n()) |> 
+    spread(key = year, value = n) |> 
+    replace_na(list("2015" = 0, "2016" = 0, "2017" = 0, "2018" = 0, "2019" = 0, 
+                    "2020" = 0, "2021" = 0)) |> 
+    as.data.frame()
+
+rownames(all) <- all[,1]
+all[,1] <- NULL
+
+all_output <- iNEXT(all, q = c(0, 1, 2), datatype = "abundance", endpoint = 1000) 
+
+all_output[["DataInfo"]][["site"]] <- fct_relevel(all_output[["DataInfo"]][["Assemblage"]],
+                                                 "2015","2016", "2017", "2018", "2019", "2020", "2021")
+
+p13 <- ggiNEXT(all_output, type=1, facet.var = "Assemblage") +
+  ggtitle("Sockeye Genetic Diversity Measures") +
+  labs(caption = "Figure 3. Stock diversity of all sites combined across years.") 
+hill_labels(p13) +
+  ylab("Stock Diversity")
+```
+
+This graph is kind of hard to read if you want to compare diversities for the same sample size. So, Table 1 gives expected species richness (qD) for a given sample size (m).
+
+```{r Spp richness common sample size}
+annual_min_ss <-estimateD(all, datatype = "abundance", base = "size", q = 0) |> 
+  mutate(Assemblage = as.numeric(Assemblage))
+knitr::kable(annual_min_ss, caption = "Table 1. Modelled species richness using a common sample size (which is twice the size of the smallest sample size")
+```
+
+You may be wondering what the various sample sizes are for each year (Table 2) and whether sample size is correlated to diversity (Figure 4.) There is no significant correlation between sample size and species richness using resampling on a rarefied sample sizes. But it looks suspect, and if you look at at it based on the number of sampling events per year, the regression R2 0.52 and p = 0.04. 
+
+However, we are able to get higher sample sizes when there are more sockeye depending on the abundance of the year and the genetic cohort, and I suspect when there are more fish in the water there is a greater diversity. To test this I will also look at catch intensity as a proxy for fish abundance.
+
+```{r sample size vs diversity}
+#TODO look at sampling events rather than fish samples
+sample_sizes <- dna |> 
+  #distinct(survey_date, site) |> Use this to look by n sampling events
+  group_by(year(survey_date))|> 
+  summarize(n_samples = n()) |> 
+  left_join(select(annual_min_ss, Assemblage, qD, qD.LCL, qD.UCL), by = c('year(survey_date)' = "Assemblage"))
+
+knitr::kable(sample_sizes, caption = "Table 3. Number of genetic stock ID samples per year")
+
+ggplot(sample_sizes, aes(x = n_samples, y = qD)) +
+  geom_point() +
+  geom_smooth(method = 'lm') +
+  geom_errorbar(aes(ymin = qD.LCL, ymax = qD.UCL)) +
+  ggtitle(label = "R2 = 0.32, p value = 0.11") +
+  labs(caption = "Figure 4. Species richness as a function of total annual sample size") +
+  ylab("Stock Richness") +
+  xlab("Total annual samples")
+
+summary(lm(qD ~ n_samples, sample_sizes))
+
+catch_intensity <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/master/supplemental_materials/report_data/catch_intensity.csv") |> 
+  filter(species == "Sockeye") |> 
+  full_join(sample_sizes, by = c("year" = "year(survey_date)"))
+
+ggplot(catch_intensity, aes(x = mean_catch, y = qD)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+summary(lm(qD ~ mean_catch, catch_intensity))
+```
+
+
+## Sample coverage
+
+Chao et al. "Coverage is defined as the proportion of the total number of individuals in an assemblage that belong to species represented in the sample. Turing and Good derived a simple coverage estimator (of the reference sample of size n) as one minus the proportion of singletons. A tiny percentage of coverage can contain an infinite number of rare species. The estimated complement of coverage is not an estimate of the number of unseen species, but rather it estimates the proportion of the total individuals in the assemblage that belong to undetected species."
+
+So what has our sample coverage been throughout the years? The sample coverage ranges between 0.965 to 0.994 (Figure 5.)
+
+```{r annual sample coverage}
+
+p14 <- ggiNEXT(all_output, type=2, facet.var = "Assemblage") +
+  ggtitle("Sockeye Genetic Diversity Measures") +
+  labs(caption = "Figure 5. Sample completeness") +
+  coord_cartesian(ylim = c(.95, 1))
+hill_labels(p14)
+```
+
+So, what sample size would be required to attain a sample coverage of 0.99? See Table 4. 
+
+On average, looking at the whole year in aggregate (which is likely biased low and should be broken down by appropriate sample sizes per seine and per week) and calculating the median sample size required to reach 0.99 sample coverage we we end up at 509 samples per year. This is a broad look and certainly varies by sockeye cohort year.
+
+```{r annual .99 SC sample sizes}
+
+annual_closest_99 <- estimateD(all, datatype = "abundance", base = "coverage", level = 0.99, q = 0) 
+
+knitr::kable(annual_closest_99, caption = "Table 4. The number of samples required annualy to reach 0.99 sample coverage")
+
+annual_99_median <- as.numeric(median(annual_closest_99$m))
+
+high_sample_size <- mean(annual_closest_99[1:2, 2]) 
+
+```
+
+
+
+```{r weekly .99 SC sample sizes}
+weekly <- dna |> 
+  filter(region == "DI") |> 
+   mutate(year = lubridate::year(survey_date),
+         yday = lubridate::yday(survey_date),
+         week = week(survey_date),
+         year_week = paste(year, week, sep = "-")) |> 
+  drop_na(stock_1) |> 
+  group_by(year_week, stock_1) |> 
+  summarize(n = n()) |> 
+    ungroup() |> 
+    spread(key = year_week, value = n, fill = 0) |> 
+    as.data.frame()
+
+rownames(weekly) <- weekly[,1]
+weekly[,1] <- NULL
+
+weekly_output <- iNEXT(weekly, q = 0, datatype = "abundance", endpoint = 500) 
+weekly_output <- weekly_output[["iNextEst"]][["coverage_based"]]
+
+# .99 coverage
+weekly99_table <- estimateD(weekly, q = 0, datatype = "abundance", base = "coverage", level = 0.99) |> 
+  filter(SC == 0.99) |> 
+  mutate(week = as.numeric(substr(Assemblage, 6,7)))
+  
+high_weekly99 <- weekly99_table |> 
+  filter(substr(Assemblage, 1, 4) %in% c("2015", "2016")) 
+
+
+high_weekly_sample_sizes <- high_weekly99 |> 
+  group_by(week) |> 
+  summarize(mean_m = mean(m),
+            n = n(),
+            se = sd(m)/ sqrt(n),
+            CI = 1.96 * se
+  )
+
+high_weekly99_mean <- mean(high_weekly_sample_sizes$mean_m)
+
+ggplot(high_weekly_sample_sizes, aes(x = week, y = mean_m)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = mean_m - CI, ymax = mean_m + CI))
+
+
+weekly_sample_sizes <- weekly99_table |> 
+  group_by(week) |> 
+  summarize(mean_m = mean(m),
+            n = n(),
+            se = sd(m)/ sqrt(n),
+            CI = 1.96 * se
+  )
+
+ggplot(weekly_sample_sizes, aes(x = week, y = mean_m)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = mean_m - CI, ymax = mean_m + CI))
+
+weekly99_mean <- mean(weekly_sample_sizes$mean_m)
+
+beepr::beep(10)
+```
+
+
+```{r per seine .99 SC}
+daily <- dna |> 
+   mutate(year = lubridate::year(survey_date),
+         yday = lubridate::yday(survey_date),
+         week = week(survey_date),
+         year_day = paste(year, yday, sep = "-")) |>
+  #filter(year %in% c(2015, 2016)) |> 
+  drop_na(stock_1) |> 
+  group_by(year_day, stock_1) |>  
+  summarize(n = n()) |> 
+    ungroup() |> 
+    spread(key = year_day, value = n, fill = 0) |> 
+    as.data.frame()
+
+
+rownames(daily) <- daily[,1]
+daily[,1] <- NULL
+
+daily99 <- estimateD(daily, q = 0, datatype = "abundance", base = "coverage", level = 0.99) |> 
+  filter(SC == 0.99) |> 
+ mutate(day = as.numeric(substr(Assemblage, 6,8))) |> 
+  group_by(week) |> 
+  summarize(mean_m = mean(m),
+            CI = 1.96 * sd(m) / sqrt(n()))
+  
+daily_99 <- as.numeric(median(daily99$m))
+
+
+ggplot(daily99, aes(x = as.numeric(day), y = m)) +
+  stat_smooth(method = "loess" ) +
+  geom_point()
+
+beepr::beep(3)
+```
+
+
+In summary: 
+
+D09 appears to be as diverse or more than other regions.
+
+
+Median across the range of the migration period:
+
+For each season we need a minimum of 509 samples or 713 if you rely only on 2015 and 2016 estimates.
+
+For each week we need 150 samples per week on average or 200 during the peak migration and 100 otherwise. If you look at just 2015 that data infers we need 200 on average, 300 during the peak, 150 during not the peak.
+
+For each day we need 50 samples on average or 70 samples if you only use 2015 and 2016.
+
+I need to break it down by peak migration periods though
+
+Estimates are first derived from all years, and second from 2015/2016 only
+Annual: 500-700
+Weekly: 100 early/late & 200 peak or 150 early/late & 300 peak
+Daily: 50-70
+
+With 8 weeks total sampling, 
+  5 early/late 3 peak = 1100 or samples annually or 1650 total samples
+  
+
+## Empirical estimation of sample size required for 95% of reasonably expected stocks in 
+
+Seems excessive so lets just look at when our stock diversity becomes asymptotic using an asymptotic approach to identify the sample size when 95% of stocks were captured using an endpoint 0.999 sample coverage. Using this approach we end up with a nerly similar result of needing an average of 614 stocks per year to reach 90% of stocks 
+
+```{r}
+all_good <- iNEXT(all, q = c(0, 1, 2), datatype = "abundance", endpoint = 2000) 
+
+annual_closest_999 <- estimateD(all, datatype = "abundance", base = "coverage", level = 0.999, q = 0) 
+
+annual_richness <- all_good[["iNextEst"]][["size_based"]] |> 
+  filter(Order.q == 0) |> 
+  left_join(select(annual_closest_999, Assemblage, max_spp = qD), by = "Assemblage") |> 
+  group_by(Assemblage) |> 
+  mutate(percent_stocks = qD / max_spp) |> 
+  slice(which.min(abs(percent_stocks - 0.9)))
+
+mean(annual_richness$m)
+```
+
+# Migration Corridor Usage
+
+
+
+```{r}
+survey_seines_fish_gsi_samples 
+```
+
