@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r import data, include=FALSE}
-sites <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/master/data/sites.csv") %>% 
+sites <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/master/tidy_data/sites.csv") %>% 
   select(site_id, site_name, region, zone)
 
 surveys <- read_sheet("https://docs.google.com/spreadsheets/d/1F04L3heVXck9Co6THrE8vMzuu3O4zq4NwxC8FJdL5Uk/edit#gid=0", sheet = "survey_data") %>% 

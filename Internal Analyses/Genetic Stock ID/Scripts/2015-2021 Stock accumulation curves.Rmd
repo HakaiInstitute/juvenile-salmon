@@ -427,9 +427,83 @@ mean(annual_richness$m)
 
 # Migration Corridor Usage
 
+The main objective here is to see if some stocks consistently favour one migration route or the other. If not, we could potentially collapse sampling to one location.
 
+Look at the proportion of occurrences of every stock to see if any jump out.
 
 ```{r}
-survey_seines_fish_gsi_samples 
+
+corridor_use <- survey_seines_fish_gsi_samples |> 
+  filter(zone %in% c("C", "E", "W")) |> 
+  mutate(year = year(survey_date)) |> 
+  group_by(year, stock_1) |> 
+  mutate(n_total = n()) |> 
+  select(zone, stock_1, n_total) |> 
+  group_by(year, zone, stock_1) |> 
+  summarize(n = n(),
+    prop = n / n_total) |> 
+  distinct()
+
+corridor_use <- corridor_use[with(corridor_use, order(stock_1, year, zone)), ]
+  
+maxes <- corridor_use |> 
+  group_by(year, stock_1) |> 
+  slice(which.max(prop))
+
+grouped_maxes <- maxes |> 
+  group_by(zone, stock_1) |> 
+  summarize(n = n())
+
+
 ```
 
+- Chilko was found in the highest proportion in the central zone 4 out of 7 times
+- Chilko-North found in Central highest prop 3/4 times
+- Gates_Cr found 5/6 time highest in Central
+- L_Adams found highest in Central 3/5 times
+
+I need to account for sampling effort. Because we catch fish in the central region so much more than anywhere else
+
+Perhaps it makes more sense, and could control for uneven effort spread between migration channels, to look at stock proportions within each migration channel for each year. But it's hard to control for changes in proportions between stocks if there is preference.
+
+using stock specific catch per unit effort by zone would control unequal efforts. OK do that next
+
+```{r stock cpue by corridor}
+
+# First, calculate number of seines per migration corridor per year
+n_seines <- survey_seines_fish_gsi_samples |> 
+  filter(zone %in% c("W", "C", "E")) |> 
+  select(survey_date, zone, seine_id) |> 
+  mutate(year = year(survey_date)) |> 
+  distinct() |> 
+  count(year, zone)
+# Second calculate cpue per stock
+gsi_cpue <- survey_seines_fish_gsi_samples |> 
+  filter(zone %in% c("W", "C", "E")) |> 
+  mutate(year = year(survey_date)) |> 
+  group_by(year, zone, stock_1) |> 
+  summarize(n_fish = n()) |> 
+  left_join(n_seines) |> 
+  mutate(cpue = n_fish / n)
+
+# Third calculate mean CPUE over all years by channel to see if anything doesn't overlap
+mean_gsi_cpue <- gsi_cpue |> 
+  group_by(zone, stock_1) |> 
+  summarize(mean_cpue = mean(cpue),
+            n = n(),
+            CI = 1.96 * sd(cpue) / sqrt(n))
+
+
+stocks <- unique(mean_gsi_cpue$stock_1)
+
+for (i in stocks) {
+  df  <- mean_gsi_cpue |> filter(stock_1 == i)
+  
+  ggplot(df, aes(x = factor(zone), y = mean_cpue)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean_cpue - CI, ymax = mean_cpue + CI))
+  ggsave(here::here("Internal Analyses", "Genetic Stock ID", "figs", paste0(i, ".png")))
+}
+
+#TODO add n_seines and n_fish to plots, and make sure to plot CPUE = 0 if a fish has never been caught in a zone.
+```
