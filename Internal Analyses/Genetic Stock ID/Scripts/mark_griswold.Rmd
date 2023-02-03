@@ -1,0 +1,101 @@
+---
+title: "Summary for Mark Griswold"
+author: "Brett Johnson"
+date: "2023-01-24"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lubridate)
+library(here)
+
+
+survey_data <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/supplemental_materials/raw_data/survey_data.csv")
+
+seine_data <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/supplemental_materials/raw_data/seine_data.csv")
+
+sites <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/supplemental_materials/raw_data/sites.csv")
+
+fish_field_data <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/supplemental_materials/raw_data/fish_field_data.csv", guess_max = 16000)
+
+fish_lab_data <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/supplemental_materials/raw_data/fish_lab_data.csv", guess_max = 8000)
+
+dna_samples <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/supplemental_materials/raw_data/sample_inventory/dna_samples.csv")
+
+stock_id <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/jsp-data/develop/supplemental_materials/raw_data/sample_results/stock_id.csv")
+
+survey_seines_fish_gsi_samples <- right_join(survey_data, seine_data,
+                                       by = "survey_id") %>% 
+  left_join(sites, by = 'site_id') |> 
+  left_join(fish_field_data, by = 'seine_id') %>% 
+  left_join(fish_lab_data, by = 'ufn') %>% 
+  left_join(dna_samples, by = 'ufn') |> 
+  right_join(stock_id, by = "sample_id")
+```
+
+From Mike:
+"I am particularly concerned about Lake Shuswap stocks and whether the sampling concentrated on those or not. There was some significant variability in Fraser returns by stock with highs in Nadina and Weaver stocks and lows in both early and late Shuswap stocks. I was wondering if your samples could be broken out by specific system. I have told the Shuswap smolts migrated somewhat later than say Chilco- Quesnel smolts ( that met pre-season forecasts)." 
+
+Questions to answer:
+
+1. Relative proportions of both Early and Late Shuswap and Nadina and Weaver stocks.
+
+
+```{r}
+
+props <- survey_seines_fish_gsi_samples |> 
+  mutate(year = year(survey_date)) |> 
+  group_by(year) |> 
+  mutate(n_fish_analyzed = n()) |> 
+  group_by(year, stock_1) |> 
+  summarize(n_stock = n(),
+            percent = 100 * (n_stock / n_fish_analyzed)) |> 
+  distinct() |> 
+  filter(stock_1 %in% c("L_Shuswap", "MiddleShuswap", "Nadina", "Weaver")) |> 
+  mutate(year = as_factor(year),
+         percent = round(percent,2))
+
+
+ggplot(props, aes(x = year, y = percent, fill = stock_1)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  ylab("Percent")
+
+table <- props |> 
+  pivot_wider(names_from = year, values_from = percent, id_cols = stock_1, values_fill = 0)
+
+knitr::kable(table)
+```
+
+2. Timing of Shuswap smolt out migration in 2020 compared to Chilko and Quesnel smolts. 
+
+```{r}
+timing <- survey_seines_fish_gsi_samples |> 
+  mutate(year = year(survey_date),
+         yday = yday(survey_date)) |> 
+  filter(region == "DI",
+         stock_1 %in% c("L_Shuswap", "MiddleShuswap", "Chilko", "Chilko-North", "Quesnel_Decept", "Quesnel_Mitche", "Quesnel_Horsef", "Chilko_south", "Quesnel")) |> 
+  mutate(stock_1 = as_factor(stock_1))
+ 
+avg_timing <- timing |> 
+   group_by(year, stock_1) |> 
+  summarize(mean_yday = round(mean(yday),0))
+
+ggplot(timing, aes(x = stock_1, y = yday, fill = stock_1)) +
+  geom_boxplot() +
+  coord_flip() +
+  facet_grid(as_factor(year)~.) +
+  ylab("Julian Day of the Year")
+  
+timing_table <- avg_timing |> 
+  pivot_wider(id_cols = stock_1, names_from = year, values_from = mean_yday)
+
+knitr::kable(timing_table)
+  
+sample_sizes <- survey_seines_fish_gsi_samples |> 
+  mutate(year = year(survey_date)) |> 
+  group_by(year) |> 
+  count()
+```
+

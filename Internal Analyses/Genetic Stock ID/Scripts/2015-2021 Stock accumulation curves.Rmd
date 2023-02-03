@@ -12,7 +12,6 @@ output:
 ---
 
 ```{r setup, include = FALSE}
-
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, error = FALSE)
 library(tidyverse)
 library(lubridate)
@@ -42,7 +41,9 @@ survey_seines_fish_gsi_samples <- right_join(survey_data, seine_data,
   right_join(stock_id, by = "sample_id")
 
 dna <- survey_seines_fish_gsi_samples |> 
-  select(ufn, region, zone, survey_date, stock_1, prob_1, site = site_id)
+  select(ufn, region, zone, survey_date, stock_1, prob_1, region_1, site = site_id)
+
+stocks <- unique(dna$stock_1)
 ```
 
 
@@ -209,9 +210,10 @@ hill_labels(p13) +
 This graph is kind of hard to read if you want to compare diversities for the same sample size. So, Table 1 gives expected species richness (qD) for a given sample size (m).
 
 ```{r Spp richness common sample size}
-annual_min_ss <-estimateD(all, datatype = "abundance", base = "size", q = 0) |> 
+annual_min_ss <-estimateD(all, datatype = "abundance", base = "coverage", q = 0) |> 
   mutate(Assemblage = as.numeric(Assemblage))
-knitr::kable(annual_min_ss, caption = "Table 1. Modelled species richness using a common sample size (which is twice the size of the smallest sample size")
+knitr::kable(annual_min_ss, caption = "Table 1. Modelled species richness using a common sample size (which is twice the size of the smallest sample size") |> 
+  kableExtra::kable_styling()
 ```
 
 You may be wondering what the various sample sizes are for each year (Table 2) and whether sample size is correlated to diversity (Figure 4.) There is no significant correlation between sample size and species richness using resampling on a rarefied sample sizes. But it looks suspect, and if you look at at it based on the number of sampling events per year, the regression R2 0.52 and p = 0.04. 
@@ -219,20 +221,20 @@ You may be wondering what the various sample sizes are for each year (Table 2) a
 However, we are able to get higher sample sizes when there are more sockeye depending on the abundance of the year and the genetic cohort, and I suspect when there are more fish in the water there is a greater diversity. To test this I will also look at catch intensity as a proxy for fish abundance.
 
 ```{r sample size vs diversity}
-#TODO look at sampling events rather than fish samples
 sample_sizes <- dna |> 
   #distinct(survey_date, site) |> Use this to look by n sampling events
   group_by(year(survey_date))|> 
   summarize(n_samples = n()) |> 
   left_join(select(annual_min_ss, Assemblage, qD, qD.LCL, qD.UCL), by = c('year(survey_date)' = "Assemblage"))
 
-knitr::kable(sample_sizes, caption = "Table 3. Number of genetic stock ID samples per year")
+knitr::kable(sample_sizes, caption = "Table 3. Number of genetic stock ID samples per year") |> 
+  kableExtra::kable_styling()
 
 ggplot(sample_sizes, aes(x = n_samples, y = qD)) +
   geom_point() +
   geom_smooth(method = 'lm') +
   geom_errorbar(aes(ymin = qD.LCL, ymax = qD.UCL)) +
-  ggtitle(label = "R2 = 0.32, p value = 0.11") +
+  ggtitle(label = "Adjusted R2 = 0.32, p value = 0.11") +
   labs(caption = "Figure 4. Species richness as a function of total annual sample size") +
   ylab("Stock Richness") +
   xlab("Total annual samples")
@@ -245,7 +247,8 @@ catch_intensity <- read_csv("https://raw.githubusercontent.com/HakaiInstitute/js
 
 ggplot(catch_intensity, aes(x = mean_catch, y = qD)) +
   geom_point() +
-  geom_smooth(method = "lm")
+  geom_smooth(method = "lm") +
+  ggtitle(label = "Adjusted R2 = 0.26, p value = 0.14")
 
 summary(lm(qD ~ mean_catch, catch_intensity))
 ```
@@ -274,7 +277,8 @@ On average, looking at the whole year in aggregate (which is likely biased low a
 
 annual_closest_99 <- estimateD(all, datatype = "abundance", base = "coverage", level = 0.99, q = 0) 
 
-knitr::kable(annual_closest_99, caption = "Table 4. The number of samples required annualy to reach 0.99 sample coverage")
+knitr::kable(annual_closest_99, caption = "Table 4. The number of samples required annualy to reach 0.99 sample coverage") |> 
+  kableExtra::kable_styling()
 
 annual_99_median <- as.numeric(median(annual_closest_99$m))
 
@@ -340,11 +344,16 @@ ggplot(weekly_sample_sizes, aes(x = week, y = mean_m)) +
   geom_point() +
   geom_errorbar(aes(ymin = mean_m - CI, ymax = mean_m + CI))
 
+knitr::kable(weekly_sample_sizes) |> 
+  kableExtra::kable_styling()
+
 weekly99_mean <- mean(weekly_sample_sizes$mean_m)
 
 beepr::beep(10)
 ```
 
+
+# Per seine error estimates are too high to be useable
 
 ```{r per seine .99 SC}
 daily <- dna |> 
@@ -366,12 +375,22 @@ daily[,1] <- NULL
 
 daily99 <- estimateD(daily, q = 0, datatype = "abundance", base = "coverage", level = 0.99) |> 
   filter(SC == 0.99) |> 
- mutate(day = as.numeric(substr(Assemblage, 6,8))) |> 
-  group_by(week) |> 
+ mutate(week = week(as.Date(Assemblage, '%Y-%j')),
+        year = year(as.Date(Assemblage, '%Y-%j'))) |> 
+  group_by(year, week) |> 
   summarize(mean_m = mean(m),
             CI = 1.96 * sd(m) / sqrt(n()))
+
+(pretty_99 <- daily99 |> 
+  select(-CI) |> 
+  mutate(mean_m = round(mean_m, 0)) |> 
+  pivot_wider(names_from = week,
+              values_from = mean_m) |> 
+  knitr::kable() |> 
+  kableExtra::kable_styling())
   
-daily_99 <- as.numeric(median(daily99$m))
+daily_99 <- as.numeric(median(daily99$mean_m)) 
+  
 
 
 ggplot(daily99, aes(x = as.numeric(day), y = m)) +
@@ -408,9 +427,9 @@ With 8 weeks total sampling,
 
 ## Empirical estimation of sample size required for 95% of reasonably expected stocks in 
 
-Seems excessive so lets just look at when our stock diversity becomes asymptotic using an asymptotic approach to identify the sample size when 95% of stocks were captured using an endpoint 0.999 sample coverage. Using this approach we end up with a nerly similar result of needing an average of 614 stocks per year to reach 90% of stocks 
+Seems excessive so lets just look at when our stock diversity becomes asymptotic using an asymptotic approach to identify the sample size when 95% of stocks were captured using an endpoint 0.999 sample coverage. Using this approach we end up with a nearly similar result of needing an average of 614 stocks per year to reach 90% of stocks 
 
-```{r}
+```{r empirical 90th percentile curve}
 all_good <- iNEXT(all, q = c(0, 1, 2), datatype = "abundance", endpoint = 2000) 
 
 annual_closest_999 <- estimateD(all, datatype = "abundance", base = "coverage", level = 0.999, q = 0) 
@@ -422,8 +441,74 @@ annual_richness <- all_good[["iNextEst"]][["size_based"]] |>
   mutate(percent_stocks = qD / max_spp) |> 
   slice(which.min(abs(percent_stocks - 0.9)))
 
+knitr::kable(annual_richness) |> 
+  kableExtra::kable_styling()
+
 mean(annual_richness$m)
 ```
+
+Which years are dominated by which stocks?
+
+```{r}
+lump_fraser_20 <- function(stock_1) {
+  as.factor(stock_1)
+  forcats::fct_collapse(stock_1,
+                        Early_Stuart = c("DRIFTWOOD", "NARROWS", "DUST", "BIVOUAC", "ROSSETTE",
+                                         "SINTA", "PORTER_CR", "FORFAR", "BLACKWATER", "GLUSKIE",
+                                         "PAULA", "FELIX", "KYNOCK", "HUDSON_BAY", "SANDPOINT",
+                                         "FIVEMILE", "EARLY STUART"),
+                        Chilliwack = c("CHILLIW_LAKE", "DOLLYVARDEN_CR", "CHILLIWACK_KOK"),
+                        Pitt_Allouette_Coq = c("PITT", "COQUITLAM_KOK", "ALOUETE_KOK"),
+                        Nadina = c("NADINA"),
+                        Gates_Cr = c("GATES_CR"),
+                        Bowron = c("BOWRON"),
+                        Nathatlatch = c("NAHATLATCH"),
+                        Early_South_Thompson = c("SEYMOUR", "SCOTCH", "EAGLE", "U_ADAMS", "CAYENNE",
+                                                 "FENNELL", "EARLY THOMPSON"),
+                        Harrison = c("HARRISON"),
+                        Widgeon = c("WIDGEONSLOUGH"),
+                        Late_Stuart = c("MIDDLE", "PINCHI_CR", "TACHIE",
+                                        "KUZKWA_CR", "LATE STUART"),
+                        Stellako = c("STELLAKO"),
+                        Chilko = c("CHILKO", "CHILKO-NORTH", "CHILKO_SOUTH"),
+                        Horesefly = c("L_HORSEFLY", "U_HORSEFLY", "HORSEFLY", "MCKINLEY"),
+                        Mitchell = c("MITCHELL", "WASKO_CR", "BLUE_LEAD_CK", "ROARING"),
+                        Quesnel = c("QUESNEL_DECEPT", "QUESNEL_HORSEF", "QUESNEL_MITCHE", "QUESNEL"),
+                        Raft_North_Thompson = c("RAFT", "THOMPSON_N"),
+                        Birkenhead_Big_Silver = c("BIRKENHEAD", "BIG_SILVER"),
+                        Late_Shuswap_Portage = c("EAGLE_L", "LITTLE", "L_SHUSWAP", "MIDDLESHUSWAP",
+                                                 "L_ADAMS", "PORTAGE_CR", "LATE SHUSWAP", "SHUSWAP"),
+                        Weaver_Cultus = c("WEAVER", "CULTUS_LAKE")
+  )
+}
+
+```
+
+```{r dominant stocks by year}
+#dominant stocks by year
+
+uc_dna <- dna |> 
+  filter(region_1 %in% c(1,2,3,4)) |> 
+  mutate(stock_1 = toupper(stock_1),
+         stock_group = lump_fraser_20(stock_1))
+
+dsby <- uc_dna |> 
+  mutate(year = year(survey_date)) |> 
+  group_by(year) |> 
+  summarize(n_samples = n())
+
+dsby2 <- uc_dna |> 
+  mutate(year = year(survey_date)) |> 
+  left_join(dsby) |> 
+  group_by(year, stock_group) |> 
+  summarize(n_stocks = n(),
+            prop = n_stocks / n_samples) |>
+  distinct() |> 
+  group_by(year) |> 
+  slice_max(n_stocks, n = 3)
+
+```
+
 
 # Migration Corridor Usage
 
@@ -431,79 +516,218 @@ The main objective here is to see if some stocks consistently favour one migrati
 
 Look at the proportion of occurrences of every stock to see if any jump out.
 
-```{r}
 
-corridor_use <- survey_seines_fish_gsi_samples |> 
-  filter(zone %in% c("C", "E", "W")) |> 
-  mutate(year = year(survey_date)) |> 
-  group_by(year, stock_1) |> 
-  mutate(n_total = n()) |> 
-  select(zone, stock_1, n_total) |> 
-  group_by(year, zone, stock_1) |> 
-  summarize(n = n(),
-    prop = n / n_total) |> 
-  distinct()
-
-corridor_use <- corridor_use[with(corridor_use, order(stock_1, year, zone)), ]
-  
-maxes <- corridor_use |> 
-  group_by(year, stock_1) |> 
-  slice(which.max(prop))
-
-grouped_maxes <- maxes |> 
-  group_by(zone, stock_1) |> 
-  summarize(n = n())
-
-
-```
-
-- Chilko was found in the highest proportion in the central zone 4 out of 7 times
-- Chilko-North found in Central highest prop 3/4 times
-- Gates_Cr found 5/6 time highest in Central
-- L_Adams found highest in Central 3/5 times
-
-I need to account for sampling effort. Because we catch fish in the central region so much more than anywhere else
-
-Perhaps it makes more sense, and could control for uneven effort spread between migration channels, to look at stock proportions within each migration channel for each year. But it's hard to control for changes in proportions between stocks if there is preference.
-
-using stock specific catch per unit effort by zone would control unequal efforts. OK do that next
+Using stock specific catch per unit effort by zone would control unequal efforts. OK do that next
 
 ```{r stock cpue by corridor}
 
-# First, calculate number of seines per migration corridor per year
-n_seines <- survey_seines_fish_gsi_samples |> 
+# First, calculate number of seines per migration corridor per year and number of each stock captured where
+zones <- survey_seines_fish_gsi_samples |> 
   filter(zone %in% c("W", "C", "E")) |> 
-  select(survey_date, zone, seine_id) |> 
   mutate(year = year(survey_date)) |> 
-  distinct() |> 
-  count(year, zone)
-# Second calculate cpue per stock
+  select(zone, seine_id, year) |> 
+  distinct()
+  
+n_events_p_zone <- zones |> 
+  group_by(zone) |> 
+  count()
+
+# Second calculate cpue per stock per seine
 gsi_cpue <- survey_seines_fish_gsi_samples |> 
   filter(zone %in% c("W", "C", "E")) |> 
   mutate(year = year(survey_date)) |> 
-  group_by(year, zone, stock_1) |> 
-  summarize(n_fish = n()) |> 
-  left_join(n_seines) |> 
-  mutate(cpue = n_fish / n)
+  group_by(seine_id, stock_1) |> 
+  summarize(n_stock = n()) |> 
+  ungroup() |> 
+  complete(seine_id, stock_1, fill = list(n_stock = 0)) |> 
+  group_by(seine_id) |> 
+  mutate(n_fish_analyzed = sum(n_stock)) |> 
+  drop_na(stock_1) |> 
+  mutate(cpue = n_stock / n_fish_analyzed) |> 
+  left_join(zones, by = "seine_id")
+
+n_samples <- gsi_cpue |> 
+  group_by(stock_1, zone) |> 
+  summarize(n_stocks_p_ch = sum(n_stock))
+
 
 # Third calculate mean CPUE over all years by channel to see if anything doesn't overlap
 mean_gsi_cpue <- gsi_cpue |> 
   group_by(zone, stock_1) |> 
   summarize(mean_cpue = mean(cpue),
             n = n(),
-            CI = 1.96 * sd(cpue) / sqrt(n))
-
-
-stocks <- unique(mean_gsi_cpue$stock_1)
+            CI = 1.96 * sd(cpue) / sqrt(n)
+           ) |> 
+  left_join(n_samples)
 
 for (i in stocks) {
   df  <- mean_gsi_cpue |> filter(stock_1 == i)
   
   ggplot(df, aes(x = factor(zone), y = mean_cpue)) +
     geom_point() +
-    geom_errorbar(aes(ymin = mean_cpue - CI, ymax = mean_cpue + CI))
+    geom_errorbar(aes(ymin = mean_cpue - CI, ymax = mean_cpue + CI)) +
+    geom_text(aes(label = n_stocks_p_ch), size = 15) +
+    ggtitle("Number of seines per channel C:82, E:46, W:34")
   ggsave(here::here("Internal Analyses", "Genetic Stock ID", "figs", paste0(i, ".png")))
 }
 
-#TODO add n_seines and n_fish to plots, and make sure to plot CPUE = 0 if a fish has never been caught in a zone.
 ```
+
+It looks like there might be some stock specific migration corridor usage:
+
+- Chilko may avoid Central
+- L_Shuswap never in the East
+- Portage Creek only ever caught central
+- Seymour not in the East so much
+- Stellako rarely caught in the west
+- Upper horsefly never caught in the east
+
+Given these differences, it's worth looking to see if this is driven by specific years or whether this is consistent among years. 
+
+```{r annual stock specific gsi cpue}
+
+n_events_p_zone_p_year <- zones |> 
+  group_by(year, zone) |> 
+  summarize(n_events = n())
+
+agc <- gsi_cpue |> 
+  filter(stock_1 %in% c("Chilko", "L_Shuswap", "Portage_Cr", "Seymour", "Stellako", "U_Horsefly")) |> 
+  group_by(year, zone, stock_1) |> 
+  summarize(mean_cpue = mean(cpue),
+            n = n(),
+            CI = 1.96 * sd(cpue) / sqrt(n)) |> 
+  left_join(n_events_p_zone_p_year)
+
+agc_stocks <- unique(agc$stock_1)
+
+for (i in agc_stocks) {
+  df  <- agc |> filter(stock_1 == i)
+  
+  ggplot(df, aes(x = factor(zone), y = mean_cpue)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean_cpue - CI, ymax = mean_cpue + CI)) +
+    facet_grid(.~year)+
+    geom_text(aes(label = n_events), size = 5) +
+    #ggtitle("Number of seines per channel C:82, E:46, W:34")
+  ggsave(here::here("Internal Analyses", "Genetic Stock ID", "figs", paste0("annual", i, ".png")))
+}
+  
+ggplot(agc, aes(x = factor(zone), y = mean_cpue, fill = factor(stock_1))) +
+  geom_point() + 
+  geom_errorbar(aes(ymin = mean_cpue - CI, ymax = mean_cpue - CI)) +
+  facet_grid(.~year)
+```
+
+When you look at years individually:
+
+* It doesn't look like Chilko avoids the central route
+* There may be something to L_Shuswap rarely going east
+* Indeed Portage Creek was has only ever been caught in the central zone. 21 samples there over 2 years of capturing them (2015, 2019)
+* Seymour actually reasonably distributed
+* Stellako indeed rarely caught in the west
+* True that upper horsefly has never been caught in the east, but also just rarely caught in general
+
+So, we should probably keep sampling at different sites distributed throughout DI because we can't say for sure there is no difference in stock distribution between channels.
+
+# Length, Weight, Condition as a Function of Migration Corridor
+
+## Length
+
+
+```{r explore length data}
+
+fish <- left_join(survey_data, seine_data) |> 
+  left_join(sites) |> 
+  right_join(fish_field_data) |> 
+  left_join(fish_lab_data) |> 
+  mutate(combined_fork_length = coalesce(fork_length, fork_length_field),
+         weight = coalesce(weight, weight_field)) |> 
+  filter(zone %in% c("C", "E", "W"),
+         species == "SO") |> 
+  mutate(year = factor(year(survey_date)),
+         zone = factor(zone)) |> 
+  select(zone, year, combined_fork_length, weight)
+
+
+str(fish)
+hist(fish$combined_fork_length)
+
+boxplot(combined_fork_length ~ zone + year, data = fish)
+
+#two-way anova
+library(car)
+length_anova <- aov(combined_fork_length ~ zone * year, data = fish)
+summary(length_anova)
+
+ub_length_anova <- Anova(length_anova, type = "III")
+summary(ub_length_anova)
+
+TukeyHSD(length_anova, which = "zone")
+
+#annual mean length
+aml  <- fish |> group_by(year, zone) |> 
+  summarize(mean_fl = mean(combined_fork_length, na.rm = TRUE),
+            n=n(),
+            CI = 1.96 * sd(combined_fork_length, na.rm = TRUE) / sqrt(n))
+
+ggplot(aml, aes(x = zone, y = mean_fl)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = mean_fl - CI, ymax = mean_fl + CI)) +
+  facet_grid(.~year)
+
+# mean length by migration corridor annual averages averaged
+mlmc <- aml |> 
+  ungroup() |> 
+  group_by(zone) |> 
+  summarize(mean_of_mean_fl = mean(mean_fl),
+            n = n(),
+            CI = 1.96 * sd(mean_fl, na.rm = TRUE) / sqrt(n))
+
+ggplot(mlmc, aes(x = zone, y = mean_of_mean_fl)) +
+  geom_point() +
+  geom_errorbar(aes(ymin=mean_of_mean_fl - CI, ymax = mean_of_mean_fl + CI))
+
+
+ggplot(fish, aes(x = year, y = combined_fork_length, fill = zone)) +
+  geom_boxplot()
+```
+
+## Condition (Fulton's K)
+
+```{r}
+fish_k <- fish |> 
+  mutate(k = 10^5 * weight / combined_fork_length^3)
+
+hist(fish_k$k)
+
+ggplot(fish_k, aes(x = year, y = k, fill = zone)) +
+  geom_boxplot()
+
+library(car)
+k_anova <- aov(k ~ zone * year, data = fish_k)
+summary(k_anova)
+
+# ANova for unbalanced designs
+ub_k_anova <- Anova(k_anova, type = "III")
+summary(ub_k_anova)
+
+TukeyHSD(k_anova, which = "zone")
+
+```
+
+
+```{r}
+
+ggplot(fish, aes(x = year, y = weight, fill = zone)) + 
+  geom_boxplot()
+  
+weight_anova <- aov(weight ~ zone * year, data = fish)
+summary(weight_anova)
+
+ub_weight_anova <- Anova(weight_anova)
+summary(ub_weight_anova)
+
+TukeyHSD(weight_anova, which = "zone")
+
+```
+
